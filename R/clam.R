@@ -1,11 +1,99 @@
+# EPDr R-package developed by Diego Nieto-Lugilde (dnietolugilde@gmail.com) reusing code from:
 # clam, R code for classical (non-Bayesian) age-depth modelling, this version 2.2
 # Maarten Blaauw <maarten.blaauw@qub.ac.uk>
 # see accompanying manual.html and Blaauw 2010 (Quaternary Geochronology 5: 512-518)
 
-# do for future versions: add greyscale proxy graphs (add dat$model, dat$smooth & calculate required depths...), add reservoir option to clam (e.g. for all dates of a marine site, with a dR uncertainty)?, model acc.rates
-
-# this is the main age-depth modelling function
-# the default values can be changed permanently within this file or temporarily when calling clam()
+#' Calibrate C14 ages and calculate age-depth models
+#'
+#' Calibrate C14 ages and calculate age-depth models to calculate ages at C14 samples and companing files
+#'
+#' @author Maarten Blaauw \email{kbroman@@biostat.wisc.edu}, adapted by Diego Nieto-Lugilde \email{dnietolugilde@gmail.com}
+#' @references \url{http://chrono.qub.ac.uk/blaauw/clam.html}
+#'
+#' @keywords clam c14 calibration age
+#'
+#' @param name The name of a folder with the data as required by clam2.2 as character (e.g. "Example").
+#' @param type Method type for interpolation: 1 linear interpolation between neighbouring levels ("int", "inter", "interp"); 2 linear or higher polynomial regression ("reg", "regr", "poly" or "polyn", default linear); 3 cubic spline ("spl", "spline"); 4 smooth spline ("sm", "smooth", default smoothing 0.3); 5 locally weighted spline ("loess", "lowess", default smoothing 0.75, cannot extrapolate). Default is 1.
+#' @param smooth degree of smoothing. Gives polynomial degree for model type 2. Default are: 1 (linear) for type=2, 0.3 for type=4, 0.75 for type=5.
+#' @param prob Confidence interval (between 0 and 1). Default is 0.95
+#' @param its Amount of iterations. Default is 1000.
+#' @param wghts Weights as: 0 no weighting; 1 weighted to calibrated probabilities of sampled calendar years; 2 weighted to (inverse squared) errors of the dates. Default is 1.
+#' @param cc Calibration curve for C14 dates (1, 2 or 3). Alternatively also 4 and 5, but then cc4 and cc5 curves has to be supplied into the working directory. Default is 1
+#' @param cc1 Calibration curve for northern hemisphere terrestrial C14 dates. This calibration curve is included in the package and no need to be in the working directory. IntCal13.14C
+#' @param cc2 Calibration curve for marine C14 dates. This calibration curve is included in the package and no need to be in the working directory. Marine13.14C
+#' @param cc3 Calibration curve for southern hemisphere C14 dates. This calibration curve is included in the package and no need to be in the working directory. SHCal13.14C
+#' @param cc4 Calibration curve for mixed terrestrial/marine C14 dates. These two calibration curves are included in the package and no need to be in the working directory. mixed.14C
+#' @param cc5 Calibration curve for southern hemisphere C14 dates beyond 11 kcal BP. The new calibration curves extend until 50 kcal BP and, hence, this is not needed any more. However the option is keeped in the package for back compatibility. gluedHemispheres.14C
+#' @param postbomb Postbomb curve to be used for negative C14 ages. 0 = none. Default is 0.
+#' @param pb1 Postbomb curve for northern hemisphere region 1 postbomb C14 dates: postbomb_NH1.14C
+#' @param pb2 Postbomb curve for northern hemisphere region 2 postbomb C14 dates: postbomb_NH2.14C
+#' @param pb3 Postbomb curve for northern hemisphere region 3 postbomb C14 dates: postbomb_NH3.14C
+#' @param pb4 Postbomb curve for southern hemisphere postbomb region 3 C14 dates: postbomb_SH1-2.14C
+#' @param pb5 Postbomb curve for southern hemisphere postbomb regions 1-2 C14 dates: postbomb_SH3.14C
+#' @param outliers The number of any dates to be considered outlying, e.g. c(5,6) for the fifth and sixth date counting from the top of a core.
+#' @param ignore The number of any dates that should be ignored, e.g., c(5,6) for the fifth and sixth date counting from the top of a core.
+#' @param youngest The age beyond which dates should be truncated
+#' @param extradates Depths of any additional dates with their files of ages and probabilities.
+#' @param slump Upper and lower depths of sections of abrupt accumulation that should be excised, e.g., c(600, 550, 120, 100) for two sections of 600-550 and 120-100cm depth.
+#' @param est ????:	1 weighted averages of age-depth model derived ages; 2 midpoints of age-depth model derived ages; 3 midpoints of calibrated ranges; 4 weighted means of calibrated ranges; 5 medians of calibrated distributions; 6 maximum densities of calibrated distributions; 7 midpoints of entire calibrated distributions (with probabilities beyond threshold). Default is 1.
+#' @param calibt Logical, FALSE by default. Provide two parameters such as c(3,4).
+#' @param mixed.effect Set to TRUE to activate mixed-effect modelling. Default is FALSE
+#' @param dmin Minimum depth of age-depth model (e.g., extrapolate)
+#' @param dmax Maximum depth of age-depth model (e.g., extrapolate)
+#' @param every Resolution at which (ages for) depths are calculated. Default is 1.
+#' @param yrmin Minimum of calendar axis of age-depth plot (calculate automatically by default).
+#' @param yrmax Maximum of calendar axis of age-depth plot (calculated automatically by default).
+#' @param yrsteps Temporal resolution at which calibrated ages are calculated (in calendar years). Default is 1.
+#' @param pbsteps Temporal resolution at which postbomb C14 ages are calibrated (in calendar years). Default is 0.01.
+#' @param hpdsteps Temporal resolution at which highest posterior density ranges are calibrated (in calendar years). Default is 1.
+#' @param BCAD Logical indicating whether to use BC/AD instead of cal BP. Default is FALSE.
+#' @param decimals Amount of decimals for rounding. Default is 0.
+#' @param accrate Give accumulation rates in yr/cm (0) or cm/yr (1). Default is 0.
+#' @param ageofdepth Calculate age estimates of a specific depth.
+#' @param depth Depth units. Default is "cm".
+#' @param depthseq Sequence of depths for which age estimates are to be calculated (default: from dmin to dmax with steps of size every).
+#' @param depths.file Logical indicating whether to use a file with depths for depthseq. Default is FALSE.
+#' @param thickness Thickness of the dated samples. Default is 1.
+#' @param hiatus Depths of any hiatuses, e.g., c(500, 300). Each sub-section must have at least 2 dates (4 for smoothing spline; does not work with loess as it cannot extrapolate).
+#' @param remove.reverse Proportion of age-models with reversals that can be removed before prompting a warning. Set at FALSE to avoid removing models with reversals. Default is 0.5.
+#' @param times Half-range of calibration curve used to calibrate dates (multiplication factor for the dates' errors). Default is 5.
+#' @param sep Separator between the fields of the plain text file containing the dating information. Default is ",".
+#' @param ext Extension of the file containing the dating information. Default is ".csv".
+#' @param runname Text to add to the corename for specific runs, e.g., "MyCore_Test1".
+#' @param storedat Logical indicating whether to store the dates and age-model within R after a clam run. Default is FALSE.
+#' @param threshold Below which value should probabilities be excluded from calculations. Default is 1e-6.
+#' @param proxies Logical, default is FALSE. Set to TRUE to plot proxies against age after the run.
+#' @param revaxes Logical, default is FALSE. Set to TRUE to plot ages on the vertical axis and depth on the horizontal axis.
+#' @param revd Logical, default is TRUE. Plot depth axis in reverse.
+#' @param revyr Logical, default is TRUE. Plot age axis in reverse.
+#' @param calhght Heights of the calibrated distributions in the age-depth plot. Default is 1.
+#' @param maxhght Maximum height of age probability distributions. Default is 0.1.
+#' @param mirror Logical, default is TRUE. Plot the age distributions in "mirror" style (above and below depth).
+#' @param plotrange Logical, default is TRUE. Plot the confidence ranges of the age-model.
+#' @param bty Default is "1".
+#' @param mar Vector of 4 elements (c(3.5, 3, 2, 1)). Plot margins (amount of white space along edges of axes 1-4).
+#' @param mgp Axis text margins (where should titles, labels and tick marks be plotted).
+#' @param plotpdf Logical, default is TRUE. Produce a pdf file of the age-depth plot
+#' @param plotpng Logical, default is TRUE. Produce a png file of the age-depth plot
+#' @param greyscale Produce a grey-scale representation of all age-models (number gives resolution, e.g., 500 bins; will cancel plotting of the confidence intervals). Default is "none".
+#' @param yrlab Alternative names can be provided. Defaults are "cal BP" or "BC/AD", depending on BCAD value.
+#' @param dlab Alternative names can be provided. Default is "depth (cm)".
+#' @param calcol Colour of the calibrated distributions in the age-depth plot. Default is rgb(0,0.5,0.5,0.5) (transparent blue).
+#' @param C14col Colour of the calibrated ranges of the dates. Default is "blue".
+#' @param outcol Colour of outlying dates. Default is "red".
+#' @param outlsize Size of symbols outlying dates. Default is 1.
+#' @param bestcol Colour of the "best" age-depth model (based on chosen value for est). Default is "black".
+#' @param rangecol Colour of plotted confidence ranges. Default is rgb(0,0,0,0.3) (transparent grey).
+#' @param slumpcol Colour of slump. Default is grey(0.75).
+#' @param plotname Logical indicating whether to print the core name on the graph. Default is TRUE.
+#' @param ash Logical indicating whether to plot all distributions at the same height. Default is FALSE.
+#'
+#' @return This function does not return any value or R object, instead it creates a folder structure into the working directory. First it creates a folder called "Cores" in the working directory. In this folder it creates a new folder with the number specified in parameter "name". Inside this folder it creates several .txt and .csv files with the required information to
+#' @export
+#'
+#' @examples
+#' # Not run:
+#' # clam("Example")
 
 # start modification by DNL
 # clam <- function(name="Example", type=1, smooth=c(), prob=0.95, its=1000, wghts=1, cc=1, cc1="IntCal13.14C", cc2="Marine13.14C", cc3="SHCal13.14C", cc4="mixed.14C", cc5="gluedHemispheres.14C", postbomb=FALSE, pb1="postbomb_NH1.14C", pb2="postbomb_NH2.14C", pb3="postbomb_NH3.14C", pb4="postbomb_SH1-2.14C", pb5="postbomb_SH3.14C", outliers=c(), ignore=c(), youngest=c(), extradates=c(), slump=c(), est=1, calibt=FALSE, mixed.effect=FALSE, dmin=c(), dmax=c(), every=1, yrmin=c(), yrmax=c(), yrsteps=1, pbsteps=0.01, hpdsteps=1, BCAD=FALSE, decimals=0, accrate=0, ageofdepth=c(), depth="cm", depthseq=c(), depths.file=FALSE, thickness=1, hiatus=c(), remove.reverse=0.5, times=5, sep=",", ext=".csv", runname=c(), storedat=FALSE, threshold=1e-6, proxies=FALSE, revaxes=FALSE, revd=TRUE, revyr=TRUE, calhght=0.3, maxhght=0.01, mirror=TRUE, plotrange=TRUE, bty="l", mar=c(3.5,3,2,1), mgp=c(2,1,0), plotpdf=TRUE, plotpng=TRUE, greyscale=c(), yrlab=c(), dlab=c(), calcol=rgb(0,0.5,0.5,0.5), C14col=rgb(0,0,1,0.5), outcol="red", outlsize=1, bestcol="black", rangecol=rgb(0,0,0,0.3), slumpcol=grey(0.75), plotname=TRUE, ash=FALSE)
@@ -18,13 +106,15 @@ clam <- function(name="Example", type=1, smooth=c(), prob=0.95, its=1000, wghts=
 .clam <- function(name, type, smooth, prob, its, wghts, cc, cc1, cc2, cc3, cc4, cc5, postbomb, pb1, pb2, pb3, pb4, pb5, outliers, ignore, youngest, extradates, slump, est, calibt, mixed.effect, dmin, dmax, every, yrmin, yrmax, yrsteps, pbsteps, hpdsteps, BCAD, decimals, accrate, ageofdepth, depth, depthseq, depths.file, thickness, hiatus, remove.reverse, times, sep, ext, runname, storedat, threshold, proxies, revaxes, revd, revyr, calhght, maxhght, mirror, plotrange, bty, mar, mgp, plotpdf, plotpng, greyscale, yrlab, dlab, calcol, C14col, outcol, outlsize, bestcol, rangecol, slumpcol, plotname, ash)
 {
     # warn and stop if abnormal settings are provided
-    if(type > 5 || type < 1 || prob < 0 || prob > 1 || its < 100 || wghts < 0 || wghts > 1 || est < 1 || est > 7 || yrsteps <= 0 || hpdsteps <= 0 || every <= 0 || decimals < 0 || accrate < 0 || accrate > 1 || thickness < 0 || times < 1 || calhght < 0 || (type==5 && length(hiatus)>0))
-        stop("\n Warning, clam cannot run with these settings! Please check the manual.\n\n", call.=FALSE)
+    # start modification by DNL
+    if(type > 5 || type < 1 || prob < 0 || prob > 1 || its < 100 || wghts < 0 || wghts > 1 || est < 1 || est > 7 || yrsteps <= 0 || hpdsteps <= 0 || every <= 0 || decimals < 0 || accrate < 0 || accrate > 1 || thickness < 0 || times < 1 || calhght < 0 || (type==5 && length(hiatus)>0)){
+        stop("clam cannot run with these settings! Please check the manual.\n", call.=FALSE)
+    }
     dets <- suppressWarnings(read.csv(paste("Cores/", name, "/", name, ext, sep=""), sep=sep))
     d <- dets[,6]
-    if(min(diff(d)) < 0)
-        cat("\n Warning, depths not in ascending order (top ones should come first).\n\n")
-
+    if(min(diff(d)) < 0){
+        warning("Depths not in ascending order (top ones should come first).\n")
+    }
     # avoid confusing warning when using sample for first time in session
     tmp <- suppressWarnings(sample(1:1e3, 1, prob=rep(.001,1e3), replace=TRUE))
 
@@ -32,7 +122,7 @@ clam <- function(name="Example", type=1, smooth=c(), prob=0.95, its=1000, wghts=
     win <- list.files(paste("Cores/", name, sep=""), pattern=".csv.txt")
     if(length(win) > 0)
     {
-        cat("\nRemoving unnecessary .txt extension from .csv file", win[1], "\n")
+        cat("Removing unnecessary .txt extension from .csv file", win[1], "\n")
         file.rename(paste("Cores/", name, "/", name, ".csv.txt", sep=""),
                     paste("Cores/", name, "/", name, ".csv", sep=""))
     }
@@ -78,7 +168,7 @@ clam <- function(name="Example", type=1, smooth=c(), prob=0.95, its=1000, wghts=
     if(length(cdat[!is.na(cdat)]) > 0)
         if(min(cdat[!is.na(cdat)]) < 0)
             if(postbomb==FALSE)
-                cat("\n\n  Warning, negative 14C ages, should I use a postbomb curve?\n") else
+                warning("Negative 14C ages, should I use a postbomb curve?\n") else
                 {
                     if(postbomb>5)
                         stop("I do not understand which postbomb curve you mean, check the manual", call.=FALSE)
@@ -117,7 +207,7 @@ clam <- function(name="Example", type=1, smooth=c(), prob=0.95, its=1000, wghts=
     if(length(slump) > 0)
     {
         if(length(slump) %% 2 == 1)
-            stop("\n Warning, slumps need both upper and lower depths. Please check the manual", call.=FALSE)
+            stop("slumps need both upper and lower depths. Please check the manual", call.=FALSE)
         slump <- matrix(sort(slump), ncol=2, byrow=TRUE)
         if(length(dmax)==0)
             dmax <- max(dets[,6])
@@ -413,7 +503,7 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
                         if(postbomb==4) bomb <- get("postbomb_SH1_2.14C") else
                             if(postbomb==5) bomb <- get("postbomb_SH3.14C") else                      # end modification by DNL
 
-                                stop("Warning, cannot find postbomb curve #", postbomb, " (use values of 1 to 5 only)")
+                                stop("Cannot find postbomb curve #", postbomb, " (use values of 1 to 5 only)")
                             bomb.x <- seq(max(bomb[,1]), min(bomb[,1]), by=-.1) # interpolate
                             bomb.y <- approx(bomb[,1], bomb[,2], bomb.x)$y
                             bomb.z <- approx(bomb[,1], bomb[,3], bomb.x)$y
@@ -516,7 +606,7 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
     if(min(depthseq) < min(dat$depth) || max(depthseq) > max(dat$depth))
         if(type==5)
             stop(" cannot extrapolate using loess! Change settings.\n ", call.=FALSE) else
-                cat(" extrapolating beyond dated levels, dangerous!\n ")
+                warning(" extrapolating beyond dated levels, dangerous!\n ")
 
     # choose model: interpolation, (polynomial) regression, spline, smooth spline or loess
     chron <- array(0, dim=c(length(depthseq), its))
@@ -534,7 +624,7 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
                 warp <- c(warp, i)
     if(length(warp) > 0)
         if(length(warp) > remove.reverse*its)
-            cat("\n\n !!! Too many models with age reversals!!!\n") else
+            warning(" !!! Too many models with age reversals!!!\n") else
             {
                 cat("\n Removing", length(warp), "models with age reversals,", its-length(warp), "models left...")
                 chron <- chron[,-warp]
@@ -713,9 +803,9 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
     # read the file with the dating information
     dat <- list(coredir=paste("Cores/", name, "/", sep=""), name=name)
     if(!file.exists(paste("Cores/", name, sep="")))
-        stop(paste("\n\n Warning, cannot find a folder within Cores/ named ", name, ". Have you saved it in the right place and with the right name? Please check the manual\n\n", sep=""), call.=FALSE)
+        stop(paste("Cannot find a folder within Cores/ named ", name, ". Have you saved it in the right place and with the right name? Please check the manual\n\n", sep=""), call.=FALSE)
     if(!file.exists(paste(dat$coredir, name, ext, sep="")))
-        stop(paste(" \n\n Warning, cannot find file ", name, ".csv in folder Cores/", name, ". Have you saved it in the right place and named it correctly? Please check the manual\n\n", sep=""), call.=FALSE)
+        stop(paste("Cannot find file ", name, ".csv in folder Cores/", name, ". Have you saved it in the right place and named it correctly? Please check the manual\n\n", sep=""), call.=FALSE)
     dets <- suppressWarnings(read.table(paste(dat$coredir, name, ext, sep=""), comment.char="", header=TRUE, sep=sep, na.strings = c("#N/A!", "NA", "@NA")))
 
     # ignore dates if required, add thickness column if it was left out
@@ -778,13 +868,13 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
                 dat$cage[outside[i]]+times*dat$error[outside[i]] > rangecc[2]))
                 truncate <- truncate + 1
             if(truncate > 0)
-                cat("\n Warning, dates spanning beyond the calibration curve will be truncated! ")
+                warning("Dates spanning beyond the calibration curve will be truncated! ")
 
             # remove dates which lie entirely outside the limits of the calibration curve
             outside <- outside[c(which(dat$cage[outside]+qnorm(1-(1-prob)/2)*dat$error[outside] < rangecc[1]), which(dat$cage[outside]-qnorm(1-(1-prob)/2)*dat$error[outside] > rangecc[2]))]
             if(length(outside) > 0)
             {
-                cat("\n Warning, dates older than the calibration curve will be ignored! ")
+                warning("Dates older than the calibration curve will be ignored! ")
                 dets <- dets[-outside,]
                 dat$cage <- dat$cage[-outside]
                 dat$error <- dat$error[-outside]
@@ -1220,7 +1310,7 @@ calibrate <- function(cage=2450, error=50, reservoir=0, prob=0.95, cc=1, cc1="In
                         if(cage-reservoir-error < max(calcurve[,2]+calcurve[,3]))
                             border <- 1 else border <- 2
                     if(border==1)
-                        cat("\nDate falls partly beyond calibration curve and will be truncated!")
+                        warning("\nDate falls partly beyond calibration curve and will be truncated!")
                     if(border==2)
                         stop("\nCannot calibrate dates beyond calibration curve!\n\n")
 
@@ -1333,7 +1423,3 @@ calibrate <- function(cage=2450, error=50, reservoir=0, prob=0.95, cc=1, cc1="In
 
 # list the available cores
 cores <- list.files("Cores/")
-
-
-# welcome
-cat("Hi there, welcome to clam for age-depth modelling.\n")
