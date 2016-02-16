@@ -34,13 +34,13 @@ connectToEPD <- function(DB=NULL, US=NULL, PW=NULL, DRV="PostgreSQL", HOST="loca
 # Disconnect a connection to a EPD database
 #' Title
 #'
-#' @param con TBC
+#' @param con TBW
 #'
-#' @return TBC
+#' @return TBW
 #' @export
 #'
 #' @examples
-#' # TBC
+#' # TBW
 disconnectFromEPD <- function(con=NULL){
     # Close PostgreSQL connection
     if(is.null(con))stop("You have to define a working connection to the EPD to be stoped")
@@ -51,84 +51,110 @@ disconnectFromEPD <- function(con=NULL){
 # Mirar en la web http://www.europeanpollendatabase.net el c?digo del testigo que nos interesa, (usar ese c?digo en core.num)
 #' Title
 #'
-#' @param core.num TBC
-#' @param ddbb TBC
-#' @param get.dephts TBC
+#' @param core.num TBW
+#' @param conn TBW
+#' @param get.dephts TBW
 #'
-#' @return TBC
+#' @return TBW
 #' @export
 #'
 #' @examples
-#' # TBC
-getSiteForClam <- function(core.num, ddbb, get.dephts=TRUE){
-    # core.num <- "874"
-    # ddbb <- connEPD
+#' # TBW
+getSiteForClam <- function(core.num, conn, get.dephts=TRUE){
+    # Just for testing. Do no uncomment
+    # core.num <- "555"
+    # conn <- connEPD
     # get.dephts <- TRUE
-    
+
     sqlQuery <- paste("SELECT site_ FROM entity WHERE e_=", core.num, ";", sep="")
-    site.num <- as.character(dbGetQuery(ddbb, sqlQuery))
-    
-    # Creacion de las tablas siteTable y c14Table a partir de agebasis y c14 respectivamente
-    sqlQuery <- paste("SELECT * FROM agebasis WHERE e_=", core.num, ";", sep="")
-    agebasisTable <- dbGetQuery(ddbb, sqlQuery)
-    
-    sqlQuery <- paste("SELECT * FROM c14 WHERE e_=", core.num, ";", sep="")
-    c14Table <- dbGetQuery(ddbb, sqlQuery)
-    
-    sqlQuery <-paste("SELECT * FROM chron WHERE e_=", core.num, ";", sep="")
-    chronTable <- dbGetQuery(ddbb, sqlQuery)
+    site.num <- as.character(dbGetQuery(conn, sqlQuery))
     
     sqlQuery <-paste("SELECT * FROM siteloc WHERE site_=", site.num, ";", sep="")
-    sitelocTable <- dbGetQuery(ddbb, sqlQuery)
+    siteloc.table <- dbGetQuery(conn, sqlQuery)
+    
+    sqlQuery <- paste("SELECT * FROM agebasis WHERE e_=", core.num, ";", sep="")
+    agebasis.table <- dbGetQuery(conn, sqlQuery)
+    
+    sqlQuery <- paste("SELECT * FROM c14 WHERE e_=", core.num, ";", sep="")
+    c14.table <- dbGetQuery(conn, sqlQuery)
+    
+    sqlQuery <-paste("SELECT * FROM geochron WHERE e_=", core.num, ";", sep="")
+    geochron.table <- dbGetQuery(conn, sqlQuery)
+
+    c14geochron.table <- merge(c14.table, geochron.table, by=c("e_","sample_"))
+    
+    output.table <- data.frame(lab_ID=c14geochron.table$labnumber, C14_age=c14geochron.table$agebp)
+    output.table$cal_age <- NA        
+    output.table$error <- c14geochron.table$agesdup
+    output.table$reservoir <- NA
+    output.table$depth <- c14geochron.table$depthcm
+    output.table$thicknesses <- c14geochron.table$thickness
+    
+    sqlQuery <-paste("SELECT * FROM chron WHERE e_=", core.num, ";", sep="")
+    chron.table <- dbGetQuery(conn, sqlQuery)
+
+    sqlQuery <-paste("SELECT * FROM section WHERE e_=", core.num, ";", sep="")
+    section.table <- dbGetQuery(conn, sqlQuery)
 
     sqlQuery <-paste("SELECT * FROM synevent WHERE e_=", core.num, ";", sep="")
-    syneventTable <- dbGetQuery(ddbb, sqlQuery)
+    synevent.table <- dbGetQuery(conn, sqlQuery)
     
-    if(nrow(syneventTable != 0)){
-        sqlQuery <-paste("SELECT * FROM event WHERE event_ IN (", paste(syneventTable[,"event_"], collapse=","), ");", sep="")
-        eventTable <- dbGetQuery(ddbb, sqlQuery)
+    if(nrow(synevent.table) == 0){
+        cat("This core has not events in the chronology.")
+    }else{
+        sqlQuery <-paste("SELECT * FROM event WHERE event_ IN (", paste(synevent.table[,"event_"], collapse=","), ");", sep="")
+        event.table <- dbGetQuery(conn, sqlQuery)
+        event.table <- merge(synevent.table, event.table, by="event_")
+        warning("This core has events in the chronology.", immediate.=T, call.=F)
+
+        include.events <- readline("Do you want to include this information in the files? (Yes: Press Y then Intro, No: Anything else)")
+        if(include.events == "Y"){
+            warning("Functionality not implemented yet. Thank you and stay tuned.", call.=F)
+        }
     }
-        
-    # This has to be checked
-    # if(all(any(siteTable$age == 0), any(c14Table$agebp != 0))) c14Table$sample_ <- c14Table$sample_ + 1
-    # newTable <- merge(agebasisTable, c14Table, by=c("e_", "sample_"), all.x = T)
-    
-    # Combinaci?n de las tablas siteTable y c14Table (a partir de e_ y sample_ en la EPD)
-    c14Table$age <- c14Table$agebp
-    newTable <- merge(agebasisTable, c14Table, by=c("e_", "age"), all.x = T)
-    
-    # Extraer las columnas que interesan para el archivo .csv de clam
-    subNewTable <- newTable[,c("age", "agesdup", "depthcm", "thickness", "rcode")]
-    subNewTable$age[subNewTable$rcode != "C14"] <- NA
-    
-    # Renombrar las columnas seg?n los par?metros de clam.
-    
-    colnames(subNewTable) <- c("C14_age", "error", "depth", "thicknesses", "rcode")
-    
-    subNewTable$lab_ID <- paste(newTable$e_, "-", newTable$sample_.x, sep="")
-    subNewTable$cal_age <- NA
-    subNewTable$cal_age[subNewTable$rcode != "C14"] <- newTable$age[subNewTable$rcode != "C14"]
-    subNewTable$error[is.na(subNewTable$error)] <- 1
-    subNewTable$reservoir <- NA
-    
-    # Creaci?n del archivo .csv para el sitio seleccionado con las siguientes columnas.
-    subNewTable <- subNewTable[c("lab_ID","C14_age","cal_age","error","reservoir","depth","thicknesses")]
+
+
+    # # ALL THIS TO BE REMOVED
+    # # Combinaci?n de las tablas siteTable y c14Table (a partir de e_ y sample_ en la EPD)
+    # c14.table$age <- c14.table$agebp
+    # new.table <- merge(agebasis.table, c14.table, by=c("e_", "age"), all.x = T)
+    # 
+    # # Extraer las columnas que interesan para el archivo .csv de clam
+    # subNew.table <- new.table[,c("age", "agesdup", "depthcm", "thickness", "rcode")]
+    # subNew.table$age[subNew.table$rcode != "C14"] <- NA
+    # 
+    # # Renombrar las columnas seg?n los par?metros de clam.
+    # 
+    # colnames(subNew.table) <- c("C14_age", "error", "depth", "thicknesses", "rcode")
+    # 
+    # subNew.table$lab_ID <- paste(new.table$e_, "-", new.table$sample_.x, sep="")
+    # subNew.table$cal_age <- NA
+    # subNew.table$cal_age[subNew.table$rcode != "C14"] <- new.table$age[subNew.table$rcode != "C14"]
+    # subNew.table$error[is.na(subNew.table$error)] <- 1
+    # subNew.table$reservoir <- NA
+    # 
+    # # Creaci?n del archivo .csv para el sitio seleccionado con las siguientes columnas.
+    # subNew.table <- subNew.table[c("lab_ID","C14_age","cal_age","error","reservoir","depth","thicknesses")]
+    # # REMOVED UNTIL HERE
     
     # Creamos una carpeta para guardar los ficheros necesarios para lanzar clam
     if(!dir.exists(paste("Cores/", core.num, sep=""))){
         dir.create(paste("Cores/", core.num, sep=""), recursive=TRUE)
     }
     
-    # Extraer la columna de las profundidades y crear una tabla nombresitio_depths.txt.
-    write.csv(subNewTable, file=paste("Cores/", core.num, "/", core.num, ".csv", sep=""), na="", row.names=FALSE)
+    # Order dataframe by depths and write to the directory
+    output.table <- output.table[order(output.table$depth),]    
+    write.csv(output.table, file=paste("Cores/", core.num, "/", core.num, ".csv", sep=""), na="", row.names=FALSE)
     
+    # Extraer la columna de las profundidades y crear una tabla nombresitio_depths.txt.
     if(get.dephts==T){
         sqlQuery <- paste("select * from p_sample where e_=", core.num, ";", sep="")
-        depthTable <- dbGetQuery(ddbb, sqlQuery)
-        depthTable$lab_ID <- paste(depthTable$e_, "-", depthTable$sample_, sep="")
+        depth.table <- dbGetQuery(conn, sqlQuery)
+        depth.table$lab_ID <- paste(depth.table$e_, "-", depth.table$sample_, sep="")
+        depth.table <- depth.table[order(depth.table$depthcm),]
         
-        write.table(depthTable$depthcm, file=paste("Cores/", core.num, "/", core.num, "_depths.txt", sep=""), col.names=FALSE, na="", row.names=FALSE)
-        write.table(depthTable[,c("lab_ID", "depthcm")], file=paste("Cores/", siteNum, "/", siteNum, "_depths_ID.txt", sep=""), col.names = F, na="", row.names=FALSE)
+        write.table(depth.table$depthcm, file=paste("Cores/", core.num, "/", core.num, "_depths.txt", sep=""), col.names=FALSE, na="", row.names=FALSE)
+        write.table(depth.table[,c("lab_ID", "depthcm")], file=paste("Cores/", core.num, "/", core.num, "_depths_ID.txt", sep=""), col.names = F, na="", row.names=FALSE, sep=",")
     }
 }
 
