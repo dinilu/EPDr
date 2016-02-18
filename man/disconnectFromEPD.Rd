@@ -3,24 +3,24 @@
 \name{disconnectFromEPD}
 \alias{disconnectFromEPD}
 \title{Disconnect a connection to a EPD database
-\code{"disconnectFromEPD"} turn down a connection to a EPD DDBB server.}
+\code{disconnectFromEPD} turns down a connection to a EPD DDBB server.}
 \usage{
 disconnectFromEPD(connection = NULL)
 }
 \arguments{
-\item{connection}{The connection object created with \code{"connectToEPD"} to stablish the connection}
+\item{connection}{The connection object created with \code{\link[EPDr:connectToEPD]{connectToEPD}} to stablish the connection}
 }
 \value{
-NULL It just disconnect from the EPD DDBB server and
+NULL It just disconnect from the EPD DDBB server and modify the connection object to reflect the new status.
 }
 \description{
 Disconnect a connection to a EPD database
-\code{"disconnectFromEPD"} turn down a connection to a EPD DDBB server.
+\code{disconnectFromEPD} turns down a connection to a EPD DDBB server.
 }
 \examples{
-# Not run
-# epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#                                 password="epdrpw", host="diegonl.ugr.es")
-# disconnectFromEPD(connection=epd.connection)
+epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+                                 password="epdrpw", host="diegonl.ugr.es")
+disconnectFromEPD(connection=epd.connection)
+epd.connection
 }
 

@@ -2,22 +2,34 @@
 % Please edit documentation in R/EPDr.R
 \name{extractChronologies}
 \alias{extractChronologies}
-\title{Title}
+\title{Extract chronologies associated with a core (entity) in the pollen database}
 \usage{
-extractChronologies(core.num, conn)
+extractChronologies(core_number, connection)
 }
 \arguments{
-\item{core.num}{TBW}
+\item{core_number}{Integer or string with the core (entity) number for which C14 data want to be extracted.}
 
-\item{conn}{TBW}
+\item{connection}{Connection object to a EPD DDBB where the query is made.}
 }
 \value{
-TBW
+List with 5 elements:
+\itemize{
+  \item \code{number_of_chronologies}: Integer indicating the number of chronologies associated with the core (entity).
+  \item \code{default_chronology}: Integer indicating which is the default chronology according to the EPD DDBB.
+  \item \code{chron}: Data frame with the meta information on how each calibration was built.
+  \item \code{agebasis}: Data frame with all the information (depth and age for C14 and no-C14 data) used to build the chronologies.
+  \item \code{no_C14}: Data frame with no-C14 data used to build the chronologies.
+}
 }
 \description{
-Title
+Given a core (entity) number, \code{\link[EPDr:extractChronologies]{extractChronologies}} extract all the information about chronologies associated with this core
+in the EPD DDBB. This information comes from two different tables in the DDBB: chron and agebasis.
 }
 \examples{
-# TBW
+epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+                                 password="epdrpw", host="diegonl.ugr.es")
+extractChronologies(1, epd.connection)
+extractChronologies(400, epd.connection)
+disconnectFromEPD(connection=epd.connection)
 }
 

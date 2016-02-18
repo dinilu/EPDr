@@ -2,20 +2,25 @@
 % Please edit documentation in R/EPDr.R
 \name{c14toCLAM}
 \alias{c14toCLAM}
-\title{Title}
+\title{Reshape C14 data to CLAM format}
 \usage{
-c14toCLAM(c14geochron)
+c14toCLAM(C14)
 }
 \arguments{
-\item{c14geochron}{TBW}
+\item{C14}{Data frame with C14 data as those extracted from \code{\link[EPDr:extractC14]{extractC14}}.}
 }
 \value{
-TBW
+Data frame with C14 data in CLAM format.
 }
 \description{
-Title
+This function takes C14 data, as those extracted \code{\link[EPDr:extractC14]{extractC14}}, to fit into a new table that comply with
+CLAM format.
 }
 \examples{
-# TBW
+library(EPDr)
+epd.connection <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb",
+                               user="epdr", password="epdrpw")
+c14 <- extractC14(400, epd.connection)
+c14.clam <- c14toCLAM(c14)
 }
 

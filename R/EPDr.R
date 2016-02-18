@@ -1,12 +1,18 @@
 
 #' Conect to a EPD database
 #'
-#' \code{"connectToEPD"} establish a connection to a EPD data base that is stored in a DDBB server. By default it assume a local PostgreSQL server. The function can connect with remote servers in different formats (MySQL, etc; see RPostgreSQL documentation for supported formats). To connect to the DDBB the function need the DDBB name, the user name, and the user password. If any of the data are not passed as arguments the function will ask for them interactively.
+#' \code{connectToEPD} establish a connection to a EPD data base that is stored in a DDBB server. By default it assume a local
+#' PostgreSQL server. The function can connect with remote servers in different formats (MySQL, etc; see RPostgreSQL documentation
+#' for supported formats). To connect to the DDBB the function need the DDBB name, the user name, and the user password. If any of
+#' the data are not passed as arguments the function will ask for them interactively.
 #'
 #' @param database Character string with the DDBB name. If not provided the function will ask for it before establishing the connection.
-#' @param user Character string with the user name. A valid user in the DDBB server. If not provided the function will ask for it before establishing the connection.
-#' @param password Character string with the user password. A valid password for the user in the DDBB server. If not provided the function will ask for it before establishing the connection.
-#' @param driver Character string with the driver used to connect with the DDBB server (default: "PostgreSQL"). This value will depend on the DDBB server used to host the EPD database. For alternatives look at the \code{\link[DBI:dbConnect]{dbConnect}} function.
+#' @param user Character string with the user name. A valid user in the DDBB server. If not provided the function will ask for it
+#' before establishing the connection.
+#' @param password Character string with the user password. A valid password for the user in the DDBB server. If not provided the
+#' function will ask for it before establishing the connection.
+#' @param driver Character string with the driver used to connect with the DDBB server (default: "PostgreSQL"). This value will depend
+#' on the DDBB server used to host the EPD database. For alternatives look at the \code{\link[DBI:dbConnect]{dbConnect}} function.
 #' @param host Character string with the IP address of the DDBB server (default: "localhost").
 #'
 #' @return This function return a RPostgreSQL connection object.
@@ -15,8 +21,14 @@
 #' @examples
 #' # Not run
 #' # epd.connection <- connectToEPD()
-#' # epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#' #                                 password="epdrpw", host="diegonl.ugr.es")
+#' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#'                                  password="epdrpw", host="diegonl.ugr.es")
+#' epd.connection
+#' # To list all the tables in the database we have connected with
+#' dbListTables(epd.connection)
+#' # Query data from the connection with a SQL statement
+#' dbGetQuery(epd.connection, "SELECT e_ FROM synevent;")
+#' disconnectFromEPD(connection=epd.connection)
 connectToEPD <- function(database=NULL, user=NULL, password=NULL, driver="PostgreSQL", host="localhost"){
     # Ask interactively for parameters if they are not specified
     if(is.null(driver))driver <- readline("EPD DB driver:")
@@ -30,19 +42,21 @@ connectToEPD <- function(database=NULL, user=NULL, password=NULL, driver="Postgr
 }
 
 
+
 #' Disconnect a connection to a EPD database
-#' \code{"disconnectFromEPD"} turn down a connection to a EPD DDBB server.
+#' \code{disconnectFromEPD} turns down a connection to a EPD DDBB server.
 #'
-#' @param connection The connection object created with \code{"connectToEPD"} to stablish the connection
+#' @param connection The connection object created with \code{\link[EPDr:connectToEPD]{connectToEPD}} to stablish the connection
 #'
-#' @return NULL It just disconnect from the EPD DDBB server and 
+#' @return NULL It just disconnect from the EPD DDBB server and modify the connection object to reflect the new status.
+#' 
 #' @export
 #' 
 #' @examples
-#' # Not run
-#' # epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#' #                                 password="epdrpw", host="diegonl.ugr.es")
-#' # disconnectFromEPD(connection=epd.connection)
+#' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#'                                  password="epdrpw", host="diegonl.ugr.es")
+#' disconnectFromEPD(connection=epd.connection)
+#' epd.connection
 disconnectFromEPD <- function(connection=NULL){
     # Close PostgreSQL connection
     if(is.null(connection))stop("You have to define a working connection to the EPD to be stoped")
@@ -53,16 +67,40 @@ disconnectFromEPD <- function(connection=NULL){
 
 #' Extract C14 data for a particular core (entity in the EPD DDBB)
 #' 
-#' Given a core number (as in the EPD DDBB: e_) the function returns a matrix with the C14 data associated to this core
+#' Given a core number (as in the EPD DDBB: e_) the function returns a matrix with the C14 data associated to this core. This values
+#' come from two different tables of the EPD: c14 and geochron.
 #'
-#' @param core_number Integer or string with the core (entity) number for which C14 data want to be extracted
-#' @param connection Connection object to a EPD DDBB where the query is made
+#' @param core_number Integer or string with the core (entity) number for which C14 data want to be extracted.
+#' @param connection Connection object to a EPD DDBB where the query is made.
 #'
-#' @return Matrix with 
+#' @return Data frame with combined information from c14 and geochron tables in the EPD. Columns in the data frame follows terminology
+#' in the original database and are as follows:
+#' \itemize{
+#'  \item \code{e_}: Core (entity) identifier.
+#'  \item \code{sample_}: C14 sample identifier.
+#'  \item \code{agebp}: Uncalibrated C14 age.
+#'  \item \code{agesdup}:
+#'  \item \code{agesdlo}:
+#'  \item \code{grthanage}:
+#'  \item \code{basis}:
+#'  \item \code{enriched}:
+#'  \item \code{labnumber}:
+#'  \item \code{deltac13}:
+#'  \item \code{notes}:
+#'  \item \code{method}:
+#'  \item \code{depthcm}:
+#'  \item \code{thickness}:
+#'  \item \code{materialdated}:
+#'  \item \code{publ_}: Publication identifier.
+#' } 
 #' @export
 #'
 #' @examples
-#' # TBW
+#' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#'                                  password="epdrpw", host="diegonl.ugr.es")
+#' extractC14(1, epd.connection)
+#' extractC14(400, epd.connection)
+#' disconnectFromEPD(connection=epd.connection)
 extractC14 <- function(core_number, connection) {
     sqlQuery <- paste("SELECT * FROM c14 WHERE e_=", core_number, ";", sep="")
     c14 <- dbGetQuery(connection, sqlQuery)
@@ -75,27 +113,44 @@ extractC14 <- function(core_number, connection) {
     return(c14geochron)
 }
 
-#' Title
+
+
+#' Extract chronologies associated with a core (entity) in the pollen database
+#' 
+#' Given a core (entity) number, \code{\link[EPDr:extractChronologies]{extractChronologies}} extract all the information about chronologies associated with this core
+#' in the EPD DDBB. This information comes from two different tables in the DDBB: chron and agebasis.
 #'
-#' @param core.num TBW
-#' @param conn TBW
+#' @param core_number Integer or string with the core (entity) number for which C14 data want to be extracted.
+#' @param connection Connection object to a EPD DDBB where the query is made.
 #'
-#' @return TBW
+#' @return List with 5 elements:
+#' \itemize{
+#'   \item \code{number_of_chronologies}: Integer indicating the number of chronologies associated with the core (entity).
+#'   \item \code{default_chronology}: Integer indicating which is the default chronology according to the EPD DDBB.
+#'   \item \code{chron}: Data frame with the meta information on how each calibration was built.
+#'   \item \code{agebasis}: Data frame with all the information (depth and age for C14 and no-C14 data) used to build the chronologies.
+#'   \item \code{no_C14}: Data frame with no-C14 data used to build the chronologies.
+#' }
+#' 
 #' @export
 #'
 #' @examples
-#' # TBW
-extractChronologies <- function(core.num, conn) {
+#' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#'                                  password="epdrpw", host="diegonl.ugr.es")
+#' extractChronologies(1, epd.connection)
+#' extractChronologies(400, epd.connection)
+#' disconnectFromEPD(connection=epd.connection)
+extractChronologies <- function(core_number, connection) {
     output <- list()
     
-    sqlQuery <-paste("SELECT * FROM chron WHERE e_=", core.num, ";", sep="")
-    chron <- dbGetQuery(conn, sqlQuery)
+    sqlQuery <-paste("SELECT * FROM chron WHERE e_=", core_number, ";", sep="")
+    chron <- dbGetQuery(connection, sqlQuery)
     
-    sqlQuery <- paste("SELECT * FROM agebasis WHERE e_=", core.num, ";", sep="")
-    agebasis <- dbGetQuery(conn, sqlQuery)
+    sqlQuery <- paste("SELECT * FROM agebasis WHERE e_=", core_number, ";", sep="")
+    agebasis <- dbGetQuery(connection, sqlQuery)
     
-    output$num.chron <- nrow(chron)
-    output$chron.default <- chron$chron_[which(chron$defaultchron == "Y")]
+    output$number_of_chronologies <- nrow(chron)
+    output$default_chronology <- chron$chron_[which(chron$defaultchron == "Y")]
     
     output$chron <- chron
     output$agebasis <- agebasis
@@ -105,31 +160,102 @@ extractChronologies <- function(core.num, conn) {
     return(output)
 }
 
-#' Title
+
+
+#' Reshape C14 data to CLAM format
+#' 
+#' This function takes C14 data, as those extracted \code{\link[EPDr:extractC14]{extractC14}}, to fit into a new table that comply with
+#' CLAM format.
 #'
-#' @param c14geochron TBW
+#' @param C14 Data frame with C14 data as those extracted from \code{\link[EPDr:extractC14]{extractC14}}. 
 #'
-#' @return TBW
+#' @return Data frame with C14 data in CLAM format.
+#' 
 #' @export
 #'
 #' @examples
-#' # TBW
-c14toCLAM <- function(c14geochron) {
-    output <- data.frame(lab_ID=c14geochron$labnumber, C14_age=c14geochron$agebp)
+#' library(EPDr)
+#' epd.connection <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb",
+#'                                user="epdr", password="epdrpw")
+#' c14 <- extractC14(400, epd.connection)
+#' c14.clam <- c14toCLAM(c14)
+c14toCLAM <- function(C14) {
+    output <- data.frame(lab_ID=C14$labnumber, C14_age=C14$agebp)
     output$cal_age <- NA        
-    output$error <- c14geochron$agesdup
+    output$error <- C14$agesdup
     output$reservoir <- NA
-    output$depth <- c14geochron$depthcm
-    output$thicknesses <- c14geochron$thickness
-    
+    output$depth <- C14$depthcm
+    output$thickness <- C14$thickness
+    output <- output[,c("lab_ID", "C14_age", "cal_age", "error", "reservoir", "depth", "thickness")]
     return(output)
 }
 
 
-# Mirar en la web http://www.europeanpollendatabase.net el c?digo del testigo que nos interesa, (usar ese c?digo en core.num)
+
+#' Reshape no-C14 data to CLAM format
+#' 
+#' This function takes no-C14 data, that can be extracted from a chronology object, to fit into a new table that comply with
+#' CLAM format.
+#'
+#' @param noC14 Data frame with no-C14 data as those in a chronology list returned by \code{\link[EPDr:extractChronologies]{extractChronologies}}. 
+#'
+#' @return Data frame with no-C14 data in CLAM format. This data frame can be easily combined with C14 data from \code{\link[EPDr:extractChronologies]{c14toCLAM}} using \code{rbind}.
+#' 
+#' @export
+#'
+#' @examples
+#' library(EPDr)
+#' epd.connection <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb",
+#'                                user="epdr", password="epdrpw")
+#' c14 <- extractC14(400, epd.connection)
+#' c14.clam <- c14toCLAM(c14)
+#' chron <- extractChronologies(400, epd.connection)
+#' noc14.clam <- noC14toCLAM(chron$no_C14)
+#' all.clam <- rbind(c14.clam, noc14.clam)
+noC14toCLAM <- function(noC14){
+    output <- data.frame(lab_ID=paste("EPDr_", noC14$e_, "_CH", noC14$sample_, sep=""), cal_age=noC14$age, depth=noC14$depthcm, thickness=noC14$thickness)
+    output$C14_age <- NA
+    output$error <- 1
+    output$reservoir <- NA
+    output <- output[,c("lab_ID", "C14_age", "cal_age", "error", "reservoir", "depth", "thickness")]
+    return(output)
+}
+
+
+
+#' Reshape event data to CLAM format
+#' 
+#' This function takes event data to fit into a new table that comply with CLAM format.
+#'
+#' @param event Data frame with event data for a particular core (entity) in the EPD DDBB.
+#'
+#' @return Data frame with event data in CLAM format.
+#' 
+#' @export
+#'
+#' @examples
+#' epd.connection <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb",
+#'                                user="epdr", password="epdrpw")
+#' synevent <- dbGetQuery(epd.connection, "SELECT * FROM synevent WHERE e_ = 51;")
+#' event <- dbGetQuery(epd.connection, paste("SELECT * FROM event WHERE event_ = ",
+#'                     synevent$event_, ";", sep=""))
+#' event <- merge(synevent, event, by="event_")
+#' event.clam <- eventtoCLAM(event)
+eventtoCLAM <- function(event){
+    output <- data.frame(lab_ID=paste("EPDr_", event$e_, "_EV", event$event_, sep=""), cal_age=event$agebp, depth=event$depthcm, thickness=event$thickness)
+    output$C14_age <- NA
+    output$error <- 1
+    output$reservoir <- NA
+    output <- output[,c("lab_ID", "C14_age", "cal_age", "error", "reservoir", "depth", "thickness")]
+    return(output)
+}
+
+
+
+# Mirar en la web http://www.europeanpollendatabase.net el c?digo del testigo que nos interesa, (usar ese c?digo en core_number)
 #' Title
 #'
-#' @param core.num TBW
+#' @param core_number TBW
 #' @param conn TBW
 #' @param get.dephts TBW
 #'
@@ -138,9 +264,9 @@ c14toCLAM <- function(c14geochron) {
 #'  
 #' @examples
 #' # TBW
-core4Clam <- function(core.num, conn, get.dephts=TRUE){
+core4Clam <- function(core_number, conn, get.dephts=TRUE){
     # Just for testing. Do no uncomment
-    # core.num <- "1"
+    # core_number <- "1"
     # conn <- connEPD
     # get.dephts <- TRUE
     
@@ -164,39 +290,22 @@ core4Clam <- function(core.num, conn, get.dephts=TRUE){
         apply(event, "\n",  MARGIN=1, FUN=cat, sep="\t")
     }
     
-    .addExtraChronData <- function(c14, extra){
-        output <- data.frame(lab_ID=paste("EPDr_", extra$e_, "_CH", extra$sample_, sep=""), cal_age=extra$age, depth=extra$depthcm, thicknesses=extra$thickness)
-        output$C14_age <- NA
-        output$error <- 1
-        output$reservoir <- NA
-        output <- rbind(c14, output)
-        return(output)
-    }
-    
-    .addEventData <- function(c14, event){
-        output <- data.frame(lab_ID=paste("EPDr_", event$e_, "_EV", event$event_, sep=""), cal_age=event$agebp, depth=event$depthcm, thicknesses=event$thickness)
-        output$C14_age <- NA
-        output$error <- 1
-        output$reservoir <- NA
-        output <- rbind(c14, output)
-        return(output)
-    }
-    
+
     # Get C14 data for a specific core
-    c14geochron <- extractC14(core.num, conn)
+    c14geochron <- extractC14(core_number, conn)
     
     # Extract C14 data in CLAM format and plot them
     clam.table <- c14toCLAM(c14geochron)
-    cat("THESE ARE THE C14 DATA FOR CORE:", core.num, "\n")
+    cat("THESE ARE THE C14 DATA FOR CORE:", core_number, "\n")
     .printC14(clam.table)
     
     # Extract existing chronologies for this particular core in the DDBB
     cat("\nCOMPARING WITH PREVIOUS CHRONOLOGIES IN THE EPD DDBB:\n")
-    chrons <- extractChronologies(core.num, conn)
+    chrons <- extractChronologies(core_number, conn)
     
     # Check for information on the chronology object and interactively ask for data use if default is not specified
-    if(chrons$num.chron == 1){
-        cat("  Core", core.num, "has", chrons$num.chron,"chronology...\n")
+    if(chrons$number_of_chronologies == 1){
+        cat("  Core", core_number, "has", chrons$number_of_chronologies,"chronology...\n")
         cat("    with this NO C14 data:\n")
         .printNoC14(chrons)
         include.extradata <- as.logical(readline("Include extra data in the calibration files? (Yes: T then Intro, No: F then Intro)"))
@@ -205,10 +314,10 @@ core4Clam <- function(core.num, conn, get.dephts=TRUE){
             include.extradata <- as.logical(readline("Include extra data in the calibration files? (Yes: T then Intro, No: F then Intro)"))
         }
     }else{
-        cat("  Core", core.num, "has", chrons$num.chron, "chronologies...\n")
-        cat("  Default is chronology", chrons$chron.default, "\n")
+        cat("  Core", core_number, "has", chrons$number_of_chronologies, "chronologies...\n")
+        cat("  Default is chronology", chrons$default_chronology, "\n")
         
-        lapply(1:chrons$num.chron, function(x, y){.printNoC14(y, x)}, chrons)        
+        lapply(1:chrons$number_of_chronologies, function(x, y){.printNoC14(y, x)}, chrons)        
         
         include.extradata <- as.logical(readline("Include extra data in the calibration files? (Yes: T then Intro, No: F then Intro)"))
         while(!exists("include.extradata") | is.na(include.extradata) | !is.logical(include.extradata)){
@@ -236,22 +345,24 @@ core4Clam <- function(core.num, conn, get.dephts=TRUE){
     }
     
     # Add additional data (NO C14 and EVENTS) according to specified arguments
-    if(chrons$num.chron == 1){
+    if(chrons$number_of_chronologies == 1){
         if(include.extradata){
-            clam.table <- .addExtraChronData(clam.table, chrons$no_C14)
+            noC14.CLAM <- noC14toCLAM(chrons$no_C14)
+            clam.table <- rbind(clam.table, noC14.CLAM)
         }
     }else{
         if(include.extradata){
             if(use.all.chron){
-                which.chron <- 1:chrons$num.chron
+                which.chron <- 1:chrons$number_of_chronologies
             }
-            extradata <- subset(chrons$no_C14, chron_ %in% which.chron)
-            clam.table <- .addExtraChronData(clam.table, extradata)
+            noC14.data <- subset(chrons$no_C14, chrons$no_C14$chron_ %in% which.chron)
+            noC14.CLAM <- noC14toCLAM(noC14.data)
+            clam.table <- rbind(clam.table, noC14.CLAM)
         }
     }
 
     # Get events data
-    sqlQuery <-paste("SELECT * FROM synevent WHERE e_ =", core.num, ";", sep="")
+    sqlQuery <-paste("SELECT * FROM synevent WHERE e_ =", core_number, ";", sep="")
     synevent.table <- dbGetQuery(conn, sqlQuery)
     
     # Check for event data and ask interactively for data use
@@ -269,35 +380,36 @@ core4Clam <- function(core.num, conn, get.dephts=TRUE){
             include.events <- as.logical(readline("Do you want to include events information in the files? (Yes: T then Intro, No: F then Intro)"))
         }
         if(include.events){
-            clam.table <- .addEventData(clam.table, event.table)
+            event.CLAM <- eventtoCLAM(event.table)
+            clam.table <- rbind(clam.table, event.CLAM)
         }
     }
     
     # Create directory to save files for CLAM
-    if(!dir.exists(paste("Cores/", core.num, sep=""))){
-        dir.create(paste("Cores/", core.num, sep=""), recursive=TRUE)
+    if(!dir.exists(paste("Cores/", core_number, sep=""))){
+        dir.create(paste("Cores/", core_number, sep=""), recursive=TRUE)
     }
     
     # Order dataframe by depths and write to the directory
     clam.table <- clam.table[order(clam.table$depth),]    
-    write.csv(clam.table, file=paste("Cores/", core.num, "/", core.num, ".csv", sep=""), na="", row.names=FALSE)
+    write.csv(clam.table, file=paste("Cores/", core_number, "/", core_number, ".csv", sep=""), na="", row.names=FALSE)
     
     # Extract depth columns for pollen counts and create depths.txt files.
     if(get.dephts==T){
-        sqlQuery <- paste("select * from p_sample where e_=", core.num, ";", sep="")
+        sqlQuery <- paste("select * from p_sample where e_=", core_number, ";", sep="")
         depth.table <- dbGetQuery(conn, sqlQuery)
         depth.table$lab_ID <- paste("EPDr", depth.table$e_, "_PO", depth.table$sample_, sep="")
         depth.table <- depth.table[order(depth.table$depthcm),]
         
-        write.table(depth.table$depthcm, file=paste("Cores/", core.num, "/", core.num, "_depths.txt", sep=""), col.names=FALSE, na="", row.names=FALSE)
-        write.table(depth.table[,c("lab_ID", "depthcm")], file=paste("Cores/", core.num, "/", core.num, "_depths_ID.txt", sep=""), col.names = F, na="", row.names=FALSE, sep=",")
+        write.table(depth.table$depthcm, file=paste("Cores/", core_number, "/", core_number, "_depths.txt", sep=""), col.names=FALSE, na="", row.names=FALSE)
+        write.table(depth.table[,c("lab_ID", "depthcm")], file=paste("Cores/", core_number, "/", core_number, "_depths_ID.txt", sep=""), col.names = F, na="", row.names=FALSE, sep=",")
     }
 }
 
 
 # Creo que esto será necesario para cuando lancemos CLAM, pero no ahora
 #
-# sqlQuery <- paste("SELECT site_ FROM entity WHERE e_=", core.num, ";", sep="")
+# sqlQuery <- paste("SELECT site_ FROM entity WHERE e_=", core_number, ";", sep="")
 # site.num <- as.character(dbGetQuery(conn, sqlQuery))
 # 
 # sqlQuery <-paste("SELECT * FROM siteloc WHERE site_=", site.num, ";", sep="")

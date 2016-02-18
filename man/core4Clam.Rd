@@ -4,10 +4,10 @@
 \alias{core4Clam}
 \title{Title}
 \usage{
-core4Clam(core.num, conn, get.dephts = TRUE)
+core4Clam(core_number, conn, get.dephts = TRUE)
 }
 \arguments{
-\item{core.num}{TBW}
+\item{core_number}{TBW}
 
 \item{conn}{TBW}
 
