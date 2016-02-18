@@ -161,6 +161,51 @@ extractChronologies <- function(core_number, connection) {
 }
 
 
+#' Extract events associated with a specific core (entity) in the EPD DDBB
+#'
+#' Given a specific core number and connection to the EPD, this function return the information of events associated with the core.
+#'
+#' @param core_number Integer or string with the core (entity) number for which C14 data want to be extracted.
+#' @param connection Connection object to a EPD DDBB where the query is made.
+#'
+#' @return NA or data frame, depending on whether there are events associated with the requested core. If there are events the
+#' function return a data frame with combined information from synevent and event tables in the EPD. Columns in the data
+#' frame follows terminology in the original database and are as follows:
+#' \itemize{
+#'  \item \code{event_}: Event identifier.
+#'  \item \code{e_}: Core (entity) identifier.
+#'  \item \code{depthcm}: Depth of the event in cm.
+#'  \item \code{thickness}: Thickness of the event in cm.
+#'  \item \code{event}: Code for the type of event. See EPD documentation for details.
+#'  \item \code{name}: Name of the event.
+#'  \item \code{agebp}: Known age of the event in BP.
+#'  \item \code{ageuncertup}:
+#'  \item \code{ageuncertlo}:
+#'  \item \code{publ_}: Publication identifier.
+#' } 
+#' 
+#' @export
+#'
+#' @examples
+#' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#'                                  password="epdrpw", host="diegonl.ugr.es")
+#' extractEvents(1, epd.connection)
+#' extractEvents(51, epd.connection)
+#' disconnectFromEPD(connection=epd.connection)
+extractEvents <- function(core_number, connection){
+    sqlQuery <-paste("SELECT * FROM synevent WHERE e_ =", core_number, ";", sep="")
+    synevent <- dbGetQuery(connection, sqlQuery)
+    
+    # Check for event data and ask interactively for data use
+    if(nrow(synevent) == 0){
+        return(NA)
+    }else{
+        sqlQuery <- paste("SELECT * FROM event WHERE event_ IN (", paste(synevent$event_, collapse=","), ");", sep="")
+        event <- dbGetQuery(connection, sqlQuery)
+        event <- merge(synevent, event, by="event_")
+        return(event)
+    }
+}
 
 #' Reshape C14 data to CLAM format
 #' 
@@ -361,18 +406,12 @@ core4Clam <- function(core_number, conn, get.dephts=TRUE){
         }
     }
 
-    # Get events data
-    sqlQuery <-paste("SELECT * FROM synevent WHERE e_ =", core_number, ";", sep="")
-    synevent.table <- dbGetQuery(conn, sqlQuery)
+    event.table <- extractEvents(core_number, conn)
     
-    # Check for event data and ask interactively for data use
-    if(nrow(synevent.table) == 0){
+    if(is.na(event.table)){
         cat("This core has no events in the chronology.")
     }else{
         warning("This core has events in the chronology.", immediate.=T, call.=F)
-        sqlQuery <-paste("SELECT * FROM event WHERE event_ IN (", paste(synevent.table$event_, collapse=","), ");", sep="")
-        event.table <- dbGetQuery(conn, sqlQuery)
-        event.table <- merge(synevent.table, event.table, by="event_")
         .printEvents(event.table)
         include.events <- as.logical(readline("Include events information in the files? (Yes: T then Intro, No: F then Intro)"))
         while(!exists("include.events") | is.na(include.events) | !is.logical(include.events)){
@@ -384,6 +423,29 @@ core4Clam <- function(core_number, conn, get.dephts=TRUE){
             clam.table <- rbind(clam.table, event.CLAM)
         }
     }
+    # # Get events data
+    # sqlQuery <-paste("SELECT * FROM synevent WHERE e_ =", core_number, ";", sep="")
+    # synevent.table <- dbGetQuery(conn, sqlQuery)
+    # 
+    # # Check for event data and ask interactively for data use
+    # if(nrow(synevent.table) == 0){
+    #     cat("This core has no events in the chronology.")
+    # }else{
+    #     warning("This core has events in the chronology.", immediate.=T, call.=F)
+    #     sqlQuery <-paste("SELECT * FROM event WHERE event_ IN (", paste(synevent.table$event_, collapse=","), ");", sep="")
+    #     event.table <- dbGetQuery(conn, sqlQuery)
+    #     event.table <- merge(synevent.table, event.table, by="event_")
+    #     .printEvents(event.table)
+    #     include.events <- as.logical(readline("Include events information in the files? (Yes: T then Intro, No: F then Intro)"))
+    #     while(!exists("include.events") | is.na(include.events) | !is.logical(include.events)){
+    #         warning("Sorry! Invalid value.", call.=F, immediate.=T)
+    #         include.events <- as.logical(readline("Do you want to include events information in the files? (Yes: T then Intro, No: F then Intro)"))
+    #     }
+    #     if(include.events){
+    #         event.CLAM <- eventtoCLAM(event.table)
+    #         clam.table <- rbind(clam.table, event.CLAM)
+    #     }
+    # }
     
     # Create directory to save files for CLAM
     if(!dir.exists(paste("Cores/", core_number, sep=""))){
