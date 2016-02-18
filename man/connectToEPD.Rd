@@ -4,29 +4,30 @@
 \alias{connectToEPD}
 \title{Conect to a EPD database}
 \usage{
-connectToEPD(DB = NULL, US = NULL, PW = NULL, DRV = "PostgreSQL",
-  HOST = "localhost")
+connectToEPD(database = NULL, user = NULL, password = NULL,
+  driver = "PostgreSQL", host = "localhost")
 }
 \arguments{
-\item{DB}{Character string with the DDBB name. If not provided the function will ask for it before establishing the connection.}
+\item{database}{Character string with the DDBB name. If not provided the function will ask for it before establishing the connection.}
 
-\item{US}{Character string with the user name. A valid user in the DDBB server. If not provided the function will ask for it before establishing the connection.}
+\item{user}{Character string with the user name. A valid user in the DDBB server. If not provided the function will ask for it before establishing the connection.}
 
-\item{PW}{Character string with the user password. A valid password for the user in the DDBB server. If not provided the function will ask for it before establishing the connection.}
+\item{password}{Character string with the user password. A valid password for the user in the DDBB server. If not provided the function will ask for it before establishing the connection.}
 
-\item{DRV}{Character string with the driver used to connect with the DDBB server (default: "PostgreSQL"). This value will depend on the DDBB server used to host the EPD database. For alternatives look at the \code{\link[DBI:dbConnect]{dbConnect}} function.}
+\item{driver}{Character string with the driver used to connect with the DDBB server (default: "PostgreSQL"). This value will depend on the DDBB server used to host the EPD database. For alternatives look at the \code{\link[DBI:dbConnect]{dbConnect}} function.}
 
-\item{HOST}{Character string with the IP address of the DDBB server (default: "localhost").}
+\item{host}{Character string with the IP address of the DDBB server (default: "localhost").}
 }
 \value{
-This function return a connection
+This function return a RPostgreSQL connection object.
 }
 \description{
-\code{"connectToEPD"} establish a connection to a EPD data base that is stored in a DDBB server. By default it assume a local PostgreSQL server. Potentially the function should work with other servers, but it has not been tested. Similarly, the function could connect to remote servers, but this possibility has not been tested yet. To connect to the DDBB the function need the DDBB name, the user name, and the user password. If any of the data are not passed as arguments the function will ask for them interactively.
+\code{"connectToEPD"} establish a connection to a EPD data base that is stored in a DDBB server. By default it assume a local PostgreSQL server. The function can connect with remote servers in different formats (MySQL, etc; see RPostgreSQL documentation for supported formats). To connect to the DDBB the function need the DDBB name, the user name, and the user password. If any of the data are not passed as arguments the function will ask for them interactively.
 }
 \examples{
 # Not run
-# connectToEPD()
-# connectToEPD("", "", "")
+# epd.connection <- connectToEPD()
+# epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#                                 password="epdrpw", host="diegonl.ugr.es")
 }
 

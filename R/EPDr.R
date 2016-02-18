@@ -1,64 +1,90 @@
 
 #' Conect to a EPD database
 #'
-#' \code{"connectToEPD"} establish a connection to a EPD data base that is stored in a DDBB server. By default it assume a local PostgreSQL server. Potentially the function should work with other servers, but it has not been tested. Similarly, the function could connect to remote servers, but this possibility has not been tested yet. To connect to the DDBB the function need the DDBB name, the user name, and the user password. If any of the data are not passed as arguments the function will ask for them interactively.
+#' \code{"connectToEPD"} establish a connection to a EPD data base that is stored in a DDBB server. By default it assume a local PostgreSQL server. The function can connect with remote servers in different formats (MySQL, etc; see RPostgreSQL documentation for supported formats). To connect to the DDBB the function need the DDBB name, the user name, and the user password. If any of the data are not passed as arguments the function will ask for them interactively.
 #'
-#' @param DB Character string with the DDBB name. If not provided the function will ask for it before establishing the connection.
-#' @param US Character string with the user name. A valid user in the DDBB server. If not provided the function will ask for it before establishing the connection.
-#' @param PW Character string with the user password. A valid password for the user in the DDBB server. If not provided the function will ask for it before establishing the connection.
-#' @param DRV Character string with the driver used to connect with the DDBB server (default: "PostgreSQL"). This value will depend on the DDBB server used to host the EPD database. For alternatives look at the \code{\link[DBI:dbConnect]{dbConnect}} function.
-#' @param HOST Character string with the IP address of the DDBB server (default: "localhost").
+#' @param database Character string with the DDBB name. If not provided the function will ask for it before establishing the connection.
+#' @param user Character string with the user name. A valid user in the DDBB server. If not provided the function will ask for it before establishing the connection.
+#' @param password Character string with the user password. A valid password for the user in the DDBB server. If not provided the function will ask for it before establishing the connection.
+#' @param driver Character string with the driver used to connect with the DDBB server (default: "PostgreSQL"). This value will depend on the DDBB server used to host the EPD database. For alternatives look at the \code{\link[DBI:dbConnect]{dbConnect}} function.
+#' @param host Character string with the IP address of the DDBB server (default: "localhost").
 #'
-#' @return This function return a connection
+#' @return This function return a RPostgreSQL connection object.
 #' @export
 #'
 #' @examples
 #' # Not run
-#' # connectToEPD()
-#' # connectToEPD("", "", "")
-connectToEPD <- function(DB=NULL, US=NULL, PW=NULL, DRV="PostgreSQL", HOST="localhost"){
+#' # epd.connection <- connectToEPD()
+#' # epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#' #                                 password="epdrpw", host="diegonl.ugr.es")
+connectToEPD <- function(database=NULL, user=NULL, password=NULL, driver="PostgreSQL", host="localhost"){
     # Ask interactively for parameters if they are not specified
-    if(is.null(DRV))DRV <- readline("EPD DB driver:")
-    if(is.null(DB))DB <- readline("EPD DB name:")
-    if(is.null(US))US <- readline("EPD DB user:")
-    if(is.null(PW))PW <- readline("EPD DB password:")
+    if(is.null(driver))driver <- readline("EPD DB driver:")
+    if(is.null(database))database <- readline("EPD DB name:")
+    if(is.null(user))user <- readline("EPD DB user:")
+    if(is.null(password))password <- readline("EPD DB password:")
     
     # Establish connection to PoststgreSQL
-    con <- dbConnect(DRV, dbname=DB, host=HOST, user=US, password=PW)
+    con <- dbConnect(driver, dbname=database, host=host, user=user, password=password)
     return(con)
 }
 
 
-# Disconnect a connection to a EPD database
-#' Title
+#' Disconnect a connection to a EPD database
+#' \code{"disconnectFromEPD"} turn down a connection to a EPD DDBB server.
 #'
-#' @param con TBW
+#' @param connection The connection object created with \code{"connectToEPD"} to stablish the connection
 #'
-#' @return TBW
+#' @return NULL It just disconnect from the EPD DDBB server and 
 #' @export
-#'
+#' 
 #' @examples
-#' # TBW
-disconnectFromEPD <- function(con=NULL){
+#' # Not run
+#' # epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#' #                                 password="epdrpw", host="diegonl.ugr.es")
+#' # disconnectFromEPD(connection=epd.connection)
+disconnectFromEPD <- function(connection=NULL){
     # Close PostgreSQL connection
-    if(is.null(con))stop("You have to define a working connection to the EPD to be stoped")
-    dbDisconnect(con)
+    if(is.null(connection))stop("You have to define a working connection to the EPD to be stoped")
+    dbDisconnect(connection)
 }
 
 
 
-extractC14 <- function(core.num, conn) {
-    sqlQuery <- paste("SELECT * FROM c14 WHERE e_=", core.num, ";", sep="")
-    c14 <- dbGetQuery(conn, sqlQuery)
+#' Extract C14 data for a particular core (entity in the EPD DDBB)
+#' 
+#' Given a core number (as in the EPD DDBB: e_) the function returns a matrix with the C14 data associated to this core
+#'
+#' @param core_number Integer or string with the core (entity) number for which C14 data want to be extracted
+#' @param connection Connection object to a EPD DDBB where the query is made
+#'
+#' @return Matrix with 
+#' @export
+#'
+#' @examples
+#' # TBW
+extractC14 <- function(core_number, connection) {
+    sqlQuery <- paste("SELECT * FROM c14 WHERE e_=", core_number, ";", sep="")
+    c14 <- dbGetQuery(connection, sqlQuery)
     
-    sqlQuery <-paste("SELECT * FROM geochron WHERE e_=", core.num, ";", sep="")
-    geochron <- dbGetQuery(conn, sqlQuery)
+    sqlQuery <-paste("SELECT * FROM geochron WHERE e_=", core_number, ";", sep="")
+    geochron <- dbGetQuery(connection, sqlQuery)
     
     c14geochron <- merge(c14, geochron, by=c("e_","sample_"))
     
     return(c14geochron)
 }
 
+#' Title
+#'
+#' @param core.num TBW
+#' @param conn TBW
+#'
+#' @return TBW
+#' @export
+#'
+#' @examples
+#' # TBW
 extractChronologies <- function(core.num, conn) {
     output <- list()
     
@@ -79,6 +105,15 @@ extractChronologies <- function(core.num, conn) {
     return(output)
 }
 
+#' Title
+#'
+#' @param c14geochron TBW
+#'
+#' @return TBW
+#' @export
+#'
+#' @examples
+#' # TBW
 c14toCLAM <- function(c14geochron) {
     output <- data.frame(lab_ID=c14geochron$labnumber, C14_age=c14geochron$agebp)
     output$cal_age <- NA        
@@ -100,7 +135,7 @@ c14toCLAM <- function(c14geochron) {
 #'
 #' @return TBW
 #' @export
-#'
+#'  
 #' @examples
 #' # TBW
 core4Clam <- function(core.num, conn, get.dephts=TRUE){

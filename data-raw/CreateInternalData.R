@@ -39,5 +39,5 @@ library(maptools)
 postbomb.map <- readShapePoly("data-raw/PostBombZones")
 
 # Saving the data
-devtools::use_data(IntCal13.14C, Marine13.14C, SHCal13.14C, postbomb_NH1.14C, postbomb_NH2.14C, postbomb_NH3.14C, postbomb_SH1_2.14C, postbomb_SH3.14C, postbomb.map, internal=TRUE)
+devtools::use_data(IntCal13.14C, Marine13.14C, SHCal13.14C, postbomb_NH1.14C, postbomb_NH2.14C, postbomb_NH3.14C, postbomb_SH1_2.14C, postbomb_SH3.14C, postbomb.map, internal=TRUE, overwrite=T)
 

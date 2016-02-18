@@ -2,20 +2,25 @@
 % Please edit documentation in R/EPDr.R
 \name{disconnectFromEPD}
 \alias{disconnectFromEPD}
-\title{Title}
+\title{Disconnect a connection to a EPD database
+\code{"disconnectFromEPD"} turn down a connection to a EPD DDBB server.}
 \usage{
-disconnectFromEPD(con = NULL)
+disconnectFromEPD(connection = NULL)
 }
 \arguments{
-\item{con}{TBC}
+\item{connection}{The connection object created with \code{"connectToEPD"} to stablish the connection}
 }
 \value{
-TBC
+NULL It just disconnect from the EPD DDBB server and
 }
 \description{
-Title
+Disconnect a connection to a EPD database
+\code{"disconnectFromEPD"} turn down a connection to a EPD DDBB server.
 }
 \examples{
-# TBC
+# Not run
+# epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#                                 password="epdrpw", host="diegonl.ugr.es")
+# disconnectFromEPD(connection=epd.connection)
 }
 
