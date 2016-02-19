@@ -98,10 +98,10 @@ disconnectFromEPD <- function(connection=NULL){
 #' @examples
 #' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
 #'                                  password="epdrpw", host="diegonl.ugr.es")
-#' extractC14(1, epd.connection)
-#' extractC14(400, epd.connection)
+#' getC14(1, epd.connection)
+#' getC14(400, epd.connection)
 #' disconnectFromEPD(connection=epd.connection)
-extractC14 <- function(core_number, connection) {
+getC14 <- function(core_number, connection) {
     sqlQuery <- paste("SELECT * FROM c14 WHERE e_=", core_number, ";", sep="")
     c14 <- dbGetQuery(connection, sqlQuery)
     
@@ -117,7 +117,7 @@ extractC14 <- function(core_number, connection) {
 
 #' Extract chronologies associated with a core (entity) in the pollen database
 #' 
-#' Given a core (entity) number, \code{\link[EPDr:extractChronologies]{extractChronologies}} extract all the information about chronologies associated with this core
+#' Given a core (entity) number, \code{\link[EPDr:getChronologies]{getChronologies}} extract all the information about chronologies associated with this core
 #' in the EPD DDBB. This information comes from two different tables in the DDBB: chron and agebasis.
 #'
 #' @param core_number Integer or string with the core (entity) number for which C14 data want to be extracted.
@@ -137,10 +137,10 @@ extractC14 <- function(core_number, connection) {
 #' @examples
 #' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
 #'                                  password="epdrpw", host="diegonl.ugr.es")
-#' extractChronologies(1, epd.connection)
-#' extractChronologies(400, epd.connection)
+#' getChronologies(1, epd.connection)
+#' getChronologies(400, epd.connection)
 #' disconnectFromEPD(connection=epd.connection)
-extractChronologies <- function(core_number, connection) {
+getChronologies <- function(core_number, connection) {
     output <- list()
     
     sqlQuery <-paste("SELECT * FROM chron WHERE e_=", core_number, ";", sep="")
@@ -189,10 +189,10 @@ extractChronologies <- function(core_number, connection) {
 #' @examples
 #' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
 #'                                  password="epdrpw", host="diegonl.ugr.es")
-#' extractEvents(1, epd.connection)
-#' extractEvents(51, epd.connection)
+#' getEvents(1, epd.connection)
+#' getEvents(51, epd.connection)
 #' disconnectFromEPD(connection=epd.connection)
-extractEvents <- function(core_number, connection){
+getEvents <- function(core_number, connection){
     sqlQuery <-paste("SELECT * FROM synevent WHERE e_ =", core_number, ";", sep="")
     synevent <- dbGetQuery(connection, sqlQuery)
     
@@ -207,12 +207,64 @@ extractEvents <- function(core_number, connection){
     }
 }
 
+
+
+#' Depths of pollen samples
+#'
+#' Given a specific core (entity) this function return the information at which depths samples were taken for pollen data.
+#'
+#' @param core_number Integer or string with the core (entity) number for which C14 data want to be extracted.
+#' @param connection Connection object to a EPD DDBB where the query is made.
+#'
+#' @return Data frame with all the information for pollen samples as in the p_sample table of the EPD DDBB.
+#' 
+#' @export
+#'
+#' @examples
+#' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#'                                  password="epdrpw", host="diegonl.ugr.es")
+#' getDepths(1, epd.connection)
+#' getDepths(51, epd.connection)
+#' disconnectFromEPD(connection=epd.connection)
+getDepths <- function(core_number, connection){
+    sqlQuery <- paste("select * from p_sample where e_=", core_number, ";", sep="")
+    output <- dbGetQuery(connection, sqlQuery)
+    output$lab_ID <- paste("EPDr", output$e_, "_PO", output$sample_, sep="")
+    return(output)    
+}
+
+
+
+
+#' Reshape depths data to CLAM format
+#'
+#' This function takes depths data, as returned by \code{\link[EPDr:getDepths]{getDepths}}, to comply with CLAM format.
+#'
+#' @param depths Data frame with at least a column called depthcm.
+#'
+#' @return Vector with depths in ascending order.
+#' 
+#' @export
+#'
+#' @examples
+#' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#'                                  password="epdrpw", host="diegonl.ugr.es")
+#' depths.1 <- getDepths(1, epd.connection)
+#' depthstoCLAM(depths.1)
+#' disconnectFromEPD(connection=epd.connection)
+depthstoCLAM <- function(depths){
+    output <- depths[order(depths$depthcm),]
+    output <- output$depthcm
+    return(output)
+}
+
+
 #' Reshape C14 data to CLAM format
 #' 
-#' This function takes C14 data, as those extracted \code{\link[EPDr:extractC14]{extractC14}}, to fit into a new table that comply with
+#' This function takes C14 data, as those extracted \code{\link[EPDr:getC14]{getC14}}, to fit into a new table that comply with
 #' CLAM format.
 #'
-#' @param C14 Data frame with C14 data as those extracted from \code{\link[EPDr:extractC14]{extractC14}}. 
+#' @param C14 Data frame with C14 data as those extracted from \code{\link[EPDr:getC14]{getC14}}. 
 #'
 #' @return Data frame with C14 data in CLAM format.
 #' 
@@ -222,9 +274,9 @@ extractEvents <- function(core_number, connection){
 #' library(EPDr)
 #' epd.connection <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb",
 #'                                user="epdr", password="epdrpw")
-#' c14 <- extractC14(400, epd.connection)
-#' c14.clam <- c14toCLAM(c14)
-c14toCLAM <- function(C14) {
+#' c14 <- getC14(400, epd.connection)
+#' c14.clam <- C14toCLAM(c14)
+C14toCLAM <- function(C14) {
     output <- data.frame(lab_ID=C14$labnumber, C14_age=C14$agebp)
     output$cal_age <- NA        
     output$error <- C14$agesdup
@@ -242,9 +294,9 @@ c14toCLAM <- function(C14) {
 #' This function takes no-C14 data, that can be extracted from a chronology object, to fit into a new table that comply with
 #' CLAM format.
 #'
-#' @param noC14 Data frame with no-C14 data as those in a chronology list returned by \code{\link[EPDr:extractChronologies]{extractChronologies}}. 
+#' @param noC14 Data frame with no-C14 data as those in a chronology list returned by \code{\link[EPDr:getChronologies]{getChronologies}}. 
 #'
-#' @return Data frame with no-C14 data in CLAM format. This data frame can be easily combined with C14 data from \code{\link[EPDr:extractChronologies]{c14toCLAM}} using \code{rbind}.
+#' @return Data frame with no-C14 data in CLAM format. This data frame can be easily combined with C14 data from \code{\link[EPDr:getChronologies]{C14toCLAM}} using \code{rbind}.
 #' 
 #' @export
 #'
@@ -252,17 +304,54 @@ c14toCLAM <- function(C14) {
 #' library(EPDr)
 #' epd.connection <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb",
 #'                                user="epdr", password="epdrpw")
-#' c14 <- extractC14(400, epd.connection)
-#' c14.clam <- c14toCLAM(c14)
-#' chron <- extractChronologies(400, epd.connection)
+#' c14 <- getC14(400, epd.connection)
+#' c14.clam <- C14toCLAM(c14)
+#' chron <- getChronologies(400, epd.connection)
 #' noc14.clam <- noC14toCLAM(chron$no_C14)
 #' all.clam <- rbind(c14.clam, noc14.clam)
 noC14toCLAM <- function(noC14){
-    output <- data.frame(lab_ID=paste("EPDr_", noC14$e_, "_CH", noC14$sample_, sep=""), cal_age=noC14$age, depth=noC14$depthcm, thickness=noC14$thickness)
-    output$C14_age <- NA
+    output <- data.frame(lab_ID=paste("EPDr_", noC14$e_, "_CH", noC14$sample_, sep=""), C14_age=noC14$age, depth=noC14$depthcm, thickness=noC14$thickness)
+    output$cal_age <- NA
     output$error <- 1
     output$reservoir <- NA
     output <- output[,c("lab_ID", "C14_age", "cal_age", "error", "reservoir", "depth", "thickness")]
+    return(output)
+}
+
+
+
+#' Reshape a chronology object for CLAM
+#'
+#' @param chronology Chronology object as returned by \code{\link[EPDr:getChronologies]{getChronologies}}.
+#' @param C14 Data frame with C14 data as returned by \code{\link[EPDr:getC14]{getC14}}.
+#' @param chronology_number Integer indicating the number of the chronology to be used. By default it use the default chronology as in the EPD DDBB.
+#'
+#' @return Data frame with C14 and noC14 data ready for CLAM
+#' 
+#' @export
+#'
+#' @examples
+#' library(EPDr)
+#' epd.connection <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb",
+#'                                user="epdr", password="epdrpw")
+#' c14 <- getC14(4, epd.connection)
+#' chron <- getChronologies(4, epd.connection)
+#' chron.clam <- chrontoCLAM(chron, c14)
+chrontoCLAM <- function(chronology, C14, chronology_number=NA){
+    # chronology <- chron
+    # C14 <- c14
+    # chronology_number <- NA
+    agebasis <- chronology$agebasis
+    if(is.na(chronology_number)){
+        chronology_number <- chronology$default_chronology
+    }
+    agebasis <- subset(agebasis, chron_ == chronology_number)
+    output <- noC14toCLAM(agebasis)
+    c14.clam <- C14toCLAM(C14)
+    c14.clam$lab_ID <- sapply(c14.clam$lab_ID, as.character)
+    output$lab_ID <- sapply(output$lab_ID, as.character)
+    output[which(output$depth %in% c14.clam$depth),] <- c14.clam
+    output$lab_ID <- as.factor(output$lab_ID)
     return(output)
 }
 
@@ -287,8 +376,8 @@ noC14toCLAM <- function(noC14){
 #' event <- merge(synevent, event, by="event_")
 #' event.clam <- eventtoCLAM(event)
 eventtoCLAM <- function(event){
-    output <- data.frame(lab_ID=paste("EPDr_", event$e_, "_EV", event$event_, sep=""), cal_age=event$agebp, depth=event$depthcm, thickness=event$thickness)
-    output$C14_age <- NA
+    output <- data.frame(lab_ID=paste("EPDr_", event$e_, "_EV", event$event_, sep=""), C14_age=event$agebp, depth=event$depthcm, thickness=event$thickness)
+    output$cal_age <- NA
     output$error <- 1
     output$reservoir <- NA
     output <- output[,c("lab_ID", "C14_age", "cal_age", "error", "reservoir", "depth", "thickness")]
@@ -301,19 +390,20 @@ eventtoCLAM <- function(event){
 #' Title
 #'
 #' @param core_number TBW
-#' @param conn TBW
-#' @param get.dephts TBW
+#' @param connection TBW
+#' @param get_dephts TBW
 #'
 #' @return TBW
 #' @export
 #'  
 #' @examples
 #' # TBW
-core4Clam <- function(core_number, conn, get.dephts=TRUE){
+core4Clam <- function(core_number, connection, get_dephts=TRUE){
     # Just for testing. Do no uncomment
     # core_number <- "1"
-    # conn <- connEPD
-    # get.dephts <- TRUE
+    # connection <- connEPD
+    # get_dephts <- TRUE
+    
     
     # Define internal functions
     .printC14 <- function(data){
@@ -337,16 +427,16 @@ core4Clam <- function(core_number, conn, get.dephts=TRUE){
     
 
     # Get C14 data for a specific core
-    c14geochron <- extractC14(core_number, conn)
+    c14geochron <- getC14(core_number, connection)
     
     # Extract C14 data in CLAM format and plot them
-    clam.table <- c14toCLAM(c14geochron)
+    clam.table <- C14toCLAM(c14geochron)
     cat("THESE ARE THE C14 DATA FOR CORE:", core_number, "\n")
     .printC14(clam.table)
     
     # Extract existing chronologies for this particular core in the DDBB
     cat("\nCOMPARING WITH PREVIOUS CHRONOLOGIES IN THE EPD DDBB:\n")
-    chrons <- extractChronologies(core_number, conn)
+    chrons <- getChronologies(core_number, connection)
     
     # Check for information on the chronology object and interactively ask for data use if default is not specified
     if(chrons$number_of_chronologies == 1){
@@ -406,7 +496,7 @@ core4Clam <- function(core_number, conn, get.dephts=TRUE){
         }
     }
 
-    event.table <- extractEvents(core_number, conn)
+    event.table <- getEvents(core_number, connection)
     
     if(is.na(event.table)){
         cat("This core has no events in the chronology.")
@@ -423,30 +513,7 @@ core4Clam <- function(core_number, conn, get.dephts=TRUE){
             clam.table <- rbind(clam.table, event.CLAM)
         }
     }
-    # # Get events data
-    # sqlQuery <-paste("SELECT * FROM synevent WHERE e_ =", core_number, ";", sep="")
-    # synevent.table <- dbGetQuery(conn, sqlQuery)
-    # 
-    # # Check for event data and ask interactively for data use
-    # if(nrow(synevent.table) == 0){
-    #     cat("This core has no events in the chronology.")
-    # }else{
-    #     warning("This core has events in the chronology.", immediate.=T, call.=F)
-    #     sqlQuery <-paste("SELECT * FROM event WHERE event_ IN (", paste(synevent.table$event_, collapse=","), ");", sep="")
-    #     event.table <- dbGetQuery(conn, sqlQuery)
-    #     event.table <- merge(synevent.table, event.table, by="event_")
-    #     .printEvents(event.table)
-    #     include.events <- as.logical(readline("Include events information in the files? (Yes: T then Intro, No: F then Intro)"))
-    #     while(!exists("include.events") | is.na(include.events) | !is.logical(include.events)){
-    #         warning("Sorry! Invalid value.", call.=F, immediate.=T)
-    #         include.events <- as.logical(readline("Do you want to include events information in the files? (Yes: T then Intro, No: F then Intro)"))
-    #     }
-    #     if(include.events){
-    #         event.CLAM <- eventtoCLAM(event.table)
-    #         clam.table <- rbind(clam.table, event.CLAM)
-    #     }
-    # }
-    
+
     # Create directory to save files for CLAM
     if(!dir.exists(paste("Cores/", core_number, sep=""))){
         dir.create(paste("Cores/", core_number, sep=""), recursive=TRUE)
@@ -457,14 +524,12 @@ core4Clam <- function(core_number, conn, get.dephts=TRUE){
     write.csv(clam.table, file=paste("Cores/", core_number, "/", core_number, ".csv", sep=""), na="", row.names=FALSE)
     
     # Extract depth columns for pollen counts and create depths.txt files.
-    if(get.dephts==T){
-        sqlQuery <- paste("select * from p_sample where e_=", core_number, ";", sep="")
-        depth.table <- dbGetQuery(conn, sqlQuery)
-        depth.table$lab_ID <- paste("EPDr", depth.table$e_, "_PO", depth.table$sample_, sep="")
-        depth.table <- depth.table[order(depth.table$depthcm),]
-        
-        write.table(depth.table$depthcm, file=paste("Cores/", core_number, "/", core_number, "_depths.txt", sep=""), col.names=FALSE, na="", row.names=FALSE)
-        write.table(depth.table[,c("lab_ID", "depthcm")], file=paste("Cores/", core_number, "/", core_number, "_depths_ID.txt", sep=""), col.names = F, na="", row.names=FALSE, sep=",")
+    if(get_dephts==T){
+        depths.table <- getDepths(core_number, connection)
+        depths.CLAM <- depthstoCLAM(depths.table)
+                
+        write.table(depth.CLAM, file=paste("Cores/", core_number, "/", core_number, "_depths.txt", sep=""), col.names=FALSE, na="", row.names=FALSE)
+        write.table(depth.table, file=paste("Cores/", core_number, "/", core_number, "_depths_ID.txt", sep=""), col.names = F, na="", row.names=FALSE, sep=",")
     }
 }
 
@@ -472,8 +537,8 @@ core4Clam <- function(core_number, conn, get.dephts=TRUE){
 # Creo que esto será necesario para cuando lancemos CLAM, pero no ahora
 #
 # sqlQuery <- paste("SELECT site_ FROM entity WHERE e_=", core_number, ";", sep="")
-# site.num <- as.character(dbGetQuery(conn, sqlQuery))
+# site.num <- as.character(dbGetQuery(connection, sqlQuery))
 # 
 # sqlQuery <-paste("SELECT * FROM siteloc WHERE site_=", site.num, ";", sep="")
-# siteloc.table <- dbGetQuery(conn, sqlQuery)
+# siteloc.table <- dbGetQuery(connection, sqlQuery)
 #

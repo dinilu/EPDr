@@ -98,13 +98,13 @@
 # start modification by DNL
 # clam <- function(name="Example", type=1, smooth=c(), prob=0.95, its=1000, wghts=1, cc=1, cc1="IntCal13.14C", cc2="Marine13.14C", cc3="SHCal13.14C", cc4="mixed.14C", cc5="gluedHemispheres.14C", postbomb=FALSE, pb1="postbomb_NH1.14C", pb2="postbomb_NH2.14C", pb3="postbomb_NH3.14C", pb4="postbomb_SH1-2.14C", pb5="postbomb_SH3.14C", outliers=c(), ignore=c(), youngest=c(), extradates=c(), slump=c(), est=1, calibt=FALSE, mixed.effect=FALSE, dmin=c(), dmax=c(), every=1, yrmin=c(), yrmax=c(), yrsteps=1, pbsteps=0.01, hpdsteps=1, BCAD=FALSE, decimals=0, accrate=0, ageofdepth=c(), depth="cm", depthseq=c(), depths.file=FALSE, thickness=1, hiatus=c(), remove.reverse=0.5, times=5, sep=",", ext=".csv", runname=c(), storedat=FALSE, threshold=1e-6, proxies=FALSE, revaxes=FALSE, revd=TRUE, revyr=TRUE, calhght=0.3, maxhght=0.01, mirror=TRUE, plotrange=TRUE, bty="l", mar=c(3.5,3,2,1), mgp=c(2,1,0), plotpdf=TRUE, plotpng=TRUE, greyscale=c(), yrlab=c(), dlab=c(), calcol=rgb(0,0.5,0.5,0.5), C14col=rgb(0,0,1,0.5), outcol="red", outlsize=1, bestcol="black", rangecol=rgb(0,0,0,0.3), slumpcol=grey(0.75), plotname=TRUE, ash=FALSE)
 clam <- function(name="Example", type=1, smooth=c(), prob=0.95, its=1000, wghts=1, cc=1, cc1="IntCal13.14C", cc2="Marine13.14C", cc3="SHCal13.14C", cc4="mixed.14C", cc5="gluedHemispheres.14C", postbomb=FALSE, pb1="postbomb_NH1.14C", pb2="postbomb_NH2.14C", pb3="postbomb_NH3.14C", pb4="postbomb_SH1_2.14C", pb5="postbomb_SH3.14C", outliers=c(), ignore=c(), youngest=c(), extradates=c(), slump=c(), est=1, calibt=FALSE, mixed.effect=FALSE, dmin=c(), dmax=c(), every=1, yrmin=c(), yrmax=c(), yrsteps=1, pbsteps=0.01, hpdsteps=1, BCAD=FALSE, decimals=0, accrate=0, ageofdepth=c(), depth="cm", depthseq=c(), depths.file=FALSE, thickness=1, hiatus=c(), remove.reverse=0.5, times=5, sep=",", ext=".csv", runname=c(), storedat=FALSE, threshold=1e-6, proxies=FALSE, revaxes=FALSE, revd=TRUE, revyr=TRUE, calhght=0.3, maxhght=0.01, mirror=TRUE, plotrange=TRUE, bty="l", mar=c(3.5,3,2,1), mgp=c(2,1,0), plotpdf=TRUE, plotpng=TRUE, greyscale=c(), yrlab=c(), dlab=c(), calcol=rgb(0,0.5,0.5,0.5), C14col=rgb(0,0,1,0.5), outcol="red", outlsize=1, bestcol="black", rangecol=rgb(0,0,0,0.3), slumpcol=grey(0.75), plotname=TRUE, ash=FALSE){
-    .clam(name, type, smooth, prob, its, wghts, cc, cc1, cc2, cc3, cc4, cc5, postbomb, pb1, pb2, pb3, pb4, pb5, outliers, ignore, youngest, extradates, slump, est, calibt, mixed.effect, dmin, dmax, every, yrmin, yrmax, yrsteps, pbsteps, hpdsteps, BCAD, decimals, accrate, ageofdepth, depth, depthseq, depths.file, thickness, hiatus, remove.reverse, times, sep, ext, runname, storedat, threshold, proxies, revaxes, revd, revyr, calhght, maxhght, mirror, plotrange, bty, mar, mgp, plotpdf, plotpng, greyscale, yrlab, dlab, calcol, C14col, outcol, outlsize, bestcol, rangecol, slumpcol, plotname, ash)
-}
-# end modification by DNL
-
-
-.clam <- function(name, type, smooth, prob, its, wghts, cc, cc1, cc2, cc3, cc4, cc5, postbomb, pb1, pb2, pb3, pb4, pb5, outliers, ignore, youngest, extradates, slump, est, calibt, mixed.effect, dmin, dmax, every, yrmin, yrmax, yrsteps, pbsteps, hpdsteps, BCAD, decimals, accrate, ageofdepth, depth, depthseq, depths.file, thickness, hiatus, remove.reverse, times, sep, ext, runname, storedat, threshold, proxies, revaxes, revd, revyr, calhght, maxhght, mirror, plotrange, bty, mar, mgp, plotpdf, plotpng, greyscale, yrlab, dlab, calcol, C14col, outcol, outlsize, bestcol, rangecol, slumpcol, plotname, ash)
-{
+#     .clam(name, type, smooth, prob, its, wghts, cc, cc1, cc2, cc3, cc4, cc5, postbomb, pb1, pb2, pb3, pb4, pb5, outliers, ignore, youngest, extradates, slump, est, calibt, mixed.effect, dmin, dmax, every, yrmin, yrmax, yrsteps, pbsteps, hpdsteps, BCAD, decimals, accrate, ageofdepth, depth, depthseq, depths.file, thickness, hiatus, remove.reverse, times, sep, ext, runname, storedat, threshold, proxies, revaxes, revd, revyr, calhght, maxhght, mirror, plotrange, bty, mar, mgp, plotpdf, plotpng, greyscale, yrlab, dlab, calcol, C14col, outcol, outlsize, bestcol, rangecol, slumpcol, plotname, ash)
+# }
+# # end modification by DNL
+# 
+# 
+# .clam <- function(name, type, smooth, prob, its, wghts, cc, cc1, cc2, cc3, cc4, cc5, postbomb, pb1, pb2, pb3, pb4, pb5, outliers, ignore, youngest, extradates, slump, est, calibt, mixed.effect, dmin, dmax, every, yrmin, yrmax, yrsteps, pbsteps, hpdsteps, BCAD, decimals, accrate, ageofdepth, depth, depthseq, depths.file, thickness, hiatus, remove.reverse, times, sep, ext, runname, storedat, threshold, proxies, revaxes, revd, revyr, calhght, maxhght, mirror, plotrange, bty, mar, mgp, plotpdf, plotpng, greyscale, yrlab, dlab, calcol, C14col, outcol, outlsize, bestcol, rangecol, slumpcol, plotname, ash)
+# {
     # warn and stop if abnormal settings are provided
     # start modification by DNL
     if(type > 5 || type < 1 || prob < 0 || prob > 1 || its < 100 || wghts < 0 || wghts > 1 || est < 1 || est > 7 || yrsteps <= 0 || hpdsteps <= 0 || every <= 0 || decimals < 0 || accrate < 0 || accrate > 1 || thickness < 0 || times < 1 || calhght < 0 || (type==5 && length(hiatus)>0)){
@@ -386,13 +386,29 @@ clam <- function(name="Example", type=1, smooth=c(), prob=0.95, its=1000, wghts=
 }
 
 
+
+
+
+
+#' Title
+#'
+#' @param ratio 
+#' @param cc1 
+#' @param cc2 
+#' @param offset 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # if two curves need to be 'mixed' to calibrate, e.g. for dates of mixed terrestrial and marine carbon sources
 #
 # start modificaction by DNL
 # mix.curves <- function(ratio=.5, cc1="IntCal13.14C", cc2="Marine13.14C", name="mixed.14C", offset=c(0,0))
-mix.curves <- function(ratio=.5, cc1="IntCal13.14C", cc2="Marine13.14C", offset=c(0,0))
+mix.curves <- function(ratio=.5, cc1="IntCal13.14C", cc2="Marine13.14C", offset=c(0,0)){
 # end modification by DNL
-    {
+    
     # start modification by DNL
     # cc1 <- read.table(cc1)
     # cc2 <- read.table(cc2)
@@ -414,15 +430,27 @@ mix.curves <- function(ratio=.5, cc1="IntCal13.14C", cc2="Marine13.14C", offset=
 }
 
 
+
+
+
+#' Title
+#'
+#' @param nh 
+#' @param sh 
+#' @param offset 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # 'glue' two curves together, e.g., for calibrating southern hemisphere dates older than SHCal04
 #
 # start modification by DNL
 #
 #glue.curves <- function(nh="IntCal09.14C", sh="SHCal04.14C", offset=c(56, 24), name="gluedHemispheres.14C")
-glue.curves <- function(nh="IntCal09.14C", sh="SHCal04.14C", offset=c(56, 24))
-#
+glue.curves <- function(nh="IntCal09.14C", sh="SHCal04.14C", offset=c(56, 24)){
 # end modification by DNL
-{
     nh <- nh[nh[,1] > max(sh[,1]),] # only use years beyond SHCal04
     nh[,2] <- nh[,2] + offset[1] # nh to sh, means
     nh[,3] <- sqrt(nh[,3]^2 + offset[2]^2) # errors, squared summed
@@ -435,32 +463,100 @@ glue.curves <- function(nh="IntCal09.14C", sh="SHCal04.14C", offset=c(56, 24))
 }
 
 
+
+
+
+#' Title
+#'
+#' @param mn 
+#' @param sdev 
+#' @param ratio 
+#' @param decimals 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # calculate C14 ages from pmC values
-pMC.age <- function(mn, sdev, ratio=100, decimals=0)
-{
+pMC.age <- function(mn, sdev, ratio=100, decimals=0){
     y <- -8033*log(mn/ratio)
     sdev <- y - -8033*log((mn+sdev)/ratio)
     round(c(y, sdev), decimals)
 }
 
 
+
+
+
+#' Title
+#'
+#' @param mn 
+#' @param sdev 
+#' @param ratio 
+#' @param decimals 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # calculate pMC values from C14 ages
-age.pMC <- function(mn, sdev, ratio=100, decimals=3)
-{
+age.pMC <- function(mn, sdev, ratio=100, decimals=3){
     y <- exp(-mn/8033)
     sdev <- y - exp(-(mn+sdev)/8033)
     signif(ratio*c(y, sdev), decimals)
 }
 
 
+
+
+
+
+#' Title
+#'
+#' @param t.a 
+#' @param t.b 
+#' @param f.cage 
+#' @param f.error 
+#' @param theta 
+#' @param f.mu 
+#' @param f.sigma 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # See Christen and Perez 2009, Radiocarbon 51:1047-1059. Instead of assuming the standard Gaussian model (default in clam), a student t distribution can be used with two parameters. Christen and Perez 2009 suggest t.a = 3 and t.b = 4; this can be put as clam( calibt=c(3,4) )
-.calibt <- function(t.a, t.b, f.cage, f.error, theta, f.mu, f.sigma)
+.calibt <- function(t.a, t.b, f.cage, f.error, theta, f.mu, f.sigma){
     (t.b + ((f.cage-f.mu)^2) / (2*(f.sigma^2 + f.error^2))) ^ (-1*(t.a+0.5))
+}
+    
 
 
+
+#' Title
+#'
+#' @param y 
+#' @param error 
+#' @param t.a 
+#' @param t.b 
+#' @param cc 
+#' @param postbomb 
+#' @param cc1 
+#' @param cc2 
+#' @param cc3 
+#' @param cc4 
+#' @param Cutoff 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # should really be done in F14C
-student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="IntCal13", cc2="Marine13", cc3="SHCal13", cc4="ConstCal", Cutoff=1e-5)
-{
+student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="IntCal13", cc2="Marine13", cc3="SHCal13", cc4="ConstCal", Cutoff=1e-5){
     if(cc==0)
     {
         cc <- seq(y-10*error, y+10*error, length=1e3)
@@ -538,9 +634,28 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
 }
 
 
+
+
+#' Title
+#'
+#' @param f.cage 
+#' @param f.error 
+#' @param theta 
+#' @param f.mu 
+#' @param f.sigma 
+#' @param yrsteps 
+#' @param threshold 
+#' @param calibt 
+#' @param BCAD 
+#' @param normalise 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # find the calibrated distributions of 14C dates
-.caldist <- function(f.cage, f.error, theta, f.mu, f.sigma, yrsteps, threshold, calibt, BCAD, normalise=FALSE)
-{
+.caldist <- function(f.cage, f.error, theta, f.mu, f.sigma, yrsteps, threshold, calibt, BCAD, normalise=FALSE){
     if(f.cage > 1)
     {
         if(f.cage > 1) yrsteps <- min(yrsteps, .1)
@@ -571,9 +686,21 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
 }
 
 
+
+
+#' Title
+#'
+#' @param dat 
+#' @param prob 
+#' @param hpdsteps 
+#' @param yrsteps 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 # find the highest posterior density (hpd) of the calibrated distribution
-.hpd <- function(dat, prob, hpdsteps, yrsteps)
-{
+.hpd <- function(dat, prob, hpdsteps, yrsteps){
     # interpolate and rank the ages according to their calibrated distribution probabilities
     dat <- approx(dat[,1], dat[,2], seq(min(dat[,1]), max(dat[,1]), by=yrsteps))
     o <- order(dat$y, decreasing=TRUE)
@@ -599,9 +726,34 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
 }
 
 
+
+
+#' Title
+#'
+#' @param type 
+#' @param smooth 
+#' @param its 
+#' @param wghts 
+#' @param depths 
+#' @param errors 
+#' @param depthseq 
+#' @param prob 
+#' @param est 
+#' @param dat 
+#' @param smp 
+#' @param greyscale 
+#' @param remove.reverse 
+#' @param storedat 
+#' @param ageofdepth 
+#' @param BCAD 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # calculate the age-depth model and its uncertainty
-.model.clam <- function(type, smooth, its, wghts, depths, errors, depthseq, prob, est, dat, smp, greyscale, remove.reverse, storedat, ageofdepth, BCAD)
-{
+.model.clam <- function(type, smooth, its, wghts, depths, errors, depthseq, prob, est, dat, smp, greyscale, remove.reverse, storedat, ageofdepth, BCAD){
     # warn for extrapolation, refuse to do so for loess
     if(min(depthseq) < min(dat$depth) || max(depthseq) > max(dat$depth))
         if(type==5)
@@ -657,10 +809,22 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
 }
 
 
+
+#' Title
+#'
+#' @param its 
+#' @param depths 
+#' @param calibs 
+#' @param Est 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # sample point age estimates from the calibrated distributions ('its' times)
 # the probability of a year being sampled is proportional to its calibrated probability
-.smpl <- function(its, depths, calibs, Est)
-{
+.smpl <- function(its, depths, calibs, Est){
     smp <- array(1, dim=c(length(depths), 1+its, 2))
     smp[,1,1] <- Est
     for(i in 1:length(calibs))
@@ -669,9 +833,31 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
     smp
 }
 
+
+
+
+#' Title
+#'
+#' @param its 
+#' @param depths 
+#' @param cals 
+#' @param cages 
+#' @param errors 
+#' @param calibs 
+#' @param Est 
+#' @param theta 
+#' @param f.mu 
+#' @param f.sigma 
+#' @param yrsteps 
+#' @param calibt 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # akin to Heegaard et al.'s mixed effect modelling, but using calibrated dates
-.mixed.effect <- function(its, depths, cals, cages, errors, calibs, Est, theta, f.mu, f.sigma, yrsteps, calibt)
-{
+.mixed.effect <- function(its, depths, cals, cages, errors, calibs, Est, theta, f.mu, f.sigma, yrsteps, calibt){
     cat("\n Mixed effect modelling, this will take some time")
     smp <- array(1, dim=c(length(depths), 1+its, 2))
     smp[,1,1] <- Est
@@ -706,9 +892,23 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
 }
 
 
+
+
+#' Title
+#'
+#' @param depthseq 
+#' @param depths 
+#' @param its 
+#' @param chron 
+#' @param smp 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # interpolate linearly between the data (default)
-.interp <- function(depthseq, depths, its, chron, smp)
-{
+.interp <- function(depthseq, depths, its, chron, smp){
     cat(" Interpolating, sampling")
     for(i in 1:its)
     {
@@ -734,9 +934,25 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
 }
 
 
+
+#' Title
+#'
+#' @param depthseq 
+#' @param smooth 
+#' @param wghts 
+#' @param errors 
+#' @param depths 
+#' @param its 
+#' @param chron 
+#' @param smp 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # polynomial regressions of certain order through the data (default linear, y=ax+b)
-.poly <- function(depthseq, smooth, wghts, errors, depths, its, chron, smp)
-{
+.poly <- function(depthseq, smooth, wghts, errors, depths, its, chron, smp){
     if(length(smooth)==0)
         cat(" Using linear regression, sampling") else
             cat(paste(" Using polynomial regression (degree ", smooth, "), sampling", sep=""))
@@ -751,9 +967,23 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
 }
 
 
+
+#' Title
+#'
+#' @param depthseq 
+#' @param smooth 
+#' @param depths 
+#' @param its 
+#' @param chron 
+#' @param smp 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # fit cubic spline interpolations through the data
-.spline <- function(depthseq, smooth, depths, its, chron, smp)
-{
+.spline <- function(depthseq, smooth, depths, its, chron, smp){
     if(length(smooth) < 1) smooth <- .3
     cat(paste(" Using cubic spline sampling", sep=""))
     for(i in 1:its)
@@ -765,9 +995,24 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
 }
 
 
+#' Title
+#'
+#' @param depthseq 
+#' @param smooth 
+#' @param wghts 
+#' @param errors 
+#' @param depths 
+#' @param its 
+#' @param chron 
+#' @param smp 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # fit cubic smoothed splines through the data, with smoothing factor
-.smooth <- function(depthseq, smooth, wghts, errors, depths, its, chron, smp)
-{
+.smooth <- function(depthseq, smooth, wghts, errors, depths, its, chron, smp){
     if(length(smooth) < 1) smooth <- .3
     cat(paste(" Using smoothing spline (smoothing ", smooth, "), sampling", sep=""))
     if(wghts==0) w <- c() else w <- 1/errors^2
@@ -781,9 +1026,25 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
 }
 
 
+
+#' Title
+#'
+#' @param depthseq 
+#' @param smooth 
+#' @param wghts 
+#' @param errors 
+#' @param depths 
+#' @param its 
+#' @param chron 
+#' @param smp 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # fit locally weighted (1/errors^2) splines through the data, with smoothing factor
-.loess <- function(depthseq, smooth, wghts, errors, depths, its, chron, smp)
-{
+.loess <- function(depthseq, smooth, wghts, errors, depths, its, chron, smp){
     if(length(smooth) < 1) smooth <- .75
     cat(paste(" Using loess (smoothing ", smooth, "), sampling", sep=""))
     if(wghts==0) w <- c() else w <- 1/errors^2
@@ -797,9 +1058,38 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
 }
 
 
+
+#' Title
+#'
+#' @param name 
+#' @param ext 
+#' @param hpdsteps 
+#' @param yrsteps 
+#' @param prob 
+#' @param times 
+#' @param sep 
+#' @param BCAD 
+#' @param storedat 
+#' @param ignore 
+#' @param thickness 
+#' @param youngest 
+#' @param slump 
+#' @param threshold 
+#' @param theta 
+#' @param f.mu 
+#' @param f.sigma 
+#' @param calibt 
+#' @param extradates 
+#' @param calcurve 
+#' @param postbomb 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # read the data and perform first calculations incl. calibrations
-.read.clam <- function(name, ext, hpdsteps, yrsteps, prob, times, sep, BCAD, storedat, ignore, thickness, youngest, slump, threshold, theta, f.mu, f.sigma, calibt, extradates, calcurve, postbomb)
-{
+.read.clam <- function(name, ext, hpdsteps, yrsteps, prob, times, sep, BCAD, storedat, ignore, thickness, youngest, slump, threshold, theta, f.mu, f.sigma, calibt, extradates, calcurve, postbomb){
     # read the file with the dating information
     dat <- list(coredir=paste("Cores/", name, "/", sep=""), name=name)
     if(!file.exists(paste("Cores/", name, sep="")))
@@ -932,9 +1222,22 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
 }
 
 
+#' Title
+#'
+#' @param theta 
+#' @param f.mu 
+#' @param f.sigma 
+#' @param dat 
+#' @param calrange 
+#' @param outliers 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # calculate goodness-of-fit (small number, so calculate its -log)
-.gfit <- function(theta, f.mu, f.sigma, dat, calrange, outliers)
-{
+.gfit <- function(theta, f.mu, f.sigma, dat, calrange, outliers){
     gfit <- c()
     if(length(outliers) > 0)
     {
@@ -956,9 +1259,78 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
 }
 
 
+
+#' Title
+#'
+#' @param dat 
+#' @param runname 
+#' @param calrange 
+#' @param name 
+#' @param prob 
+#' @param type 
+#' @param remove.reverse 
+#' @param smooth 
+#' @param wghts 
+#' @param its 
+#' @param outliers 
+#' @param ignore 
+#' @param est 
+#' @param BCAD 
+#' @param yrsteps 
+#' @param every 
+#' @param decimals 
+#' @param accrate 
+#' @param depth 
+#' @param depthseq 
+#' @param hiatus 
+#' @param gfit 
+#' @param reversal 
+#' @param plotpdf 
+#' @param plotpng 
+#' @param yrmin 
+#' @param yrmax 
+#' @param dmin 
+#' @param dmax 
+#' @param yrlab 
+#' @param dlab 
+#' @param plotrange 
+#' @param greyscale 
+#' @param chron 
+#' @param C14col 
+#' @param outcol 
+#' @param outlsize 
+#' @param bestcol 
+#' @param rangecol 
+#' @param calhght 
+#' @param maxhght 
+#' @param mirror 
+#' @param calcol 
+#' @param slump 
+#' @param slumpcol 
+#' @param revaxes 
+#' @param revyr 
+#' @param revd 
+#' @param calibt 
+#' @param youngest 
+#' @param extradates 
+#' @param plotname 
+#' @param calcurve 
+#' @param ccname 
+#' @param postbomb 
+#' @param pbnames 
+#' @param depths.file 
+#' @param bty 
+#' @param mar 
+#' @param mgp 
+#' @param ash 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # write files of the age-depth model, calibrated ranges, and settings
-.write.clam <- function(dat, runname, calrange, name, prob, type, remove.reverse, smooth, wghts, its, outliers, ignore, est, BCAD, yrsteps, every, decimals, accrate, depth, depthseq, hiatus, gfit, reversal, plotpdf, plotpng, yrmin, yrmax, dmin, dmax, yrlab, dlab, plotrange, greyscale, chron, C14col, outcol, outlsize, bestcol, rangecol, calhght, maxhght, mirror, calcol, slump, slumpcol, revaxes, revyr, revd, calibt, youngest, extradates, plotname, calcurve, ccname, postbomb, pbnames, depths.file, bty, mar, mgp, ash)
-{
+.write.clam <- function(dat, runname, calrange, name, prob, type, remove.reverse, smooth, wghts, its, outliers, ignore, est, BCAD, yrsteps, every, decimals, accrate, depth, depthseq, hiatus, gfit, reversal, plotpdf, plotpng, yrmin, yrmax, dmin, dmax, yrlab, dlab, plotrange, greyscale, chron, C14col, outcol, outlsize, bestcol, rangecol, calhght, maxhght, mirror, calcol, slump, slumpcol, revaxes, revyr, revd, calibt, youngest, extradates, plotname, calcurve, ccname, postbomb, pbnames, depths.file, bty, mar, mgp, ash){
     # age-depth model; age estimates, accumulation rates and ranges for every analysed depth
     runnames <- c("_interpolated", "_polyn_regr", "_cubic_spline", "_smooth_spline", "_loess")
     calrange <- cbind(calrange, round(c(diff(calrange[,4])/diff(calrange[,1]), NA), decimals+2))
@@ -1066,8 +1438,51 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
 }
 
 
-.ageplot <- function(yrmin, yrmax, dmin, dmax, revaxes, revd, revyr, yrlab, dlab, hiatus, depthseq, outliers, plotrange, BCAD, greyscale, chron, C14col, outcol, outlsize, bestcol, rangecol, dat, calrange, depth, calhght, maxhght, mirror, calcol, slump, slumpcol, plotname, name, bty="l", mar, mgp, ash=FALSE)
-{
+
+#' Title
+#'
+#' @param yrmin 
+#' @param yrmax 
+#' @param dmin 
+#' @param dmax 
+#' @param revaxes 
+#' @param revd 
+#' @param revyr 
+#' @param yrlab 
+#' @param dlab 
+#' @param hiatus 
+#' @param depthseq 
+#' @param outliers 
+#' @param plotrange 
+#' @param BCAD 
+#' @param greyscale 
+#' @param chron 
+#' @param C14col 
+#' @param outcol 
+#' @param outlsize 
+#' @param bestcol 
+#' @param rangecol 
+#' @param dat 
+#' @param calrange 
+#' @param depth 
+#' @param calhght 
+#' @param maxhght 
+#' @param mirror 
+#' @param calcol 
+#' @param slump 
+#' @param slumpcol 
+#' @param plotname 
+#' @param name 
+#' @param bty 
+#' @param mar 
+#' @param mgp 
+#' @param ash 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+.ageplot <- function(yrmin, yrmax, dmin, dmax, revaxes, revd, revyr, yrlab, dlab, hiatus, depthseq, outliers, plotrange, BCAD, greyscale, chron, C14col, outcol, outlsize, bestcol, rangecol, dat, calrange, depth, calhght, maxhght, mirror, calcol, slump, slumpcol, plotname, name, bty="l", mar, mgp, ash=FALSE){
     # set up initial parameters
     if(length(dlab)==0) dlab <- paste("Depth (", depth, ")", sep="")
     ifelse(BCAD || !revyr, yr.lim <- c(yrmin, yrmax), yr.lim <- c(yrmax, yrmin))
@@ -1174,10 +1589,19 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
 }
 
 
+#' Title
+#'
+#' @param depth 
+#' @param yrcm 
+#' @param prob 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 ## calculates *for each iteration* the slope of a straight curve between depths above and below the desired point. Requires sufficiently dense density of depths, e.g. yrsteps=1
 # to calculate accumulation rates at a depth. Before running this, run your core in clam and store the data, so, provide the option storedat=TRUE
-accrate.depth <- function(depth, yrcm=TRUE, prob=.95)
-{
+accrate.depth <- function(depth, yrcm=TRUE, prob=.95){
     if(depth <= min(calrange[,1]) || depth >= max(calrange))
         stop("Accumulation rates cannot be calculated for the top or bottom of the core. Please check the manual", call.=FALSE)
     d <- max(which(calrange[,1] <= depth))
@@ -1195,10 +1619,20 @@ accrate.depth <- function(depth, yrcm=TRUE, prob=.95)
 }
 
 
+#' Title
+#'
+#' @param age 
+#' @param yrcm 
+#' @param prob 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 ## calculates *for each iteration* the slope of a straight curve between depths above and below the desired point. Requires sufficiently dense density of depths, e.g. steps=1
 # to calculate accumulation rate at an age. Before doing this, run your core in clam and store the data, so, provide the option storedat=TRUE
-accrate.age <- function(age, yrcm=TRUE, prob=.95)
-{
+accrate.age <- function(age, yrcm=TRUE, prob=.95){
     accrate <- c()
     for(i in 1:ncol(chron))
     {
@@ -1214,12 +1648,24 @@ accrate.age <- function(age, yrcm=TRUE, prob=.95)
     acc <- cbind(acc$x[o], cumsum(acc$y[o])/sum(acc$y))
     acc <- range(acc[acc[,2] <= prob,1])
     rect(acc[1], 0, acc[2], -999, col=grey(.5), border=grey(.5))
-    cat(100*prob, "% ranges: ", acc[1], " to ", acc[2], if(yrcm) " yr/cm\n" else " cm/yr\n", sep="")  }
+    cat(100*prob, "% ranges: ", acc[1], " to ", acc[2], if(yrcm) " yr/cm\n" else " cm/yr\n", sep="")
+}
 
 
+
+#' Title
+#'
+#' @param prox 
+#' @param errors 
+#' @param proxcol 
+#' @param revyr 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 # only works after doing a clam run with proxies=TRUE
-plot.proxies <- function(prox, errors=TRUE, proxcol=grey(0.5), revyr=TRUE)
-{
+plot.proxies <- function(prox, errors=TRUE, proxcol=grey(0.5), revyr=TRUE){
     prx <- dat$proxies
     if(length(prox)>1) layout(matrix(1:length(prox), ncol=1))
     for(j in 1:length(prox))
@@ -1240,17 +1686,69 @@ plot.proxies <- function(prox, errors=TRUE, proxcol=grey(0.5), revyr=TRUE)
     layout(1)
 }
 
+
+
+
+#' Title
+#'
+#' @param cage 
+#' @param error 
+#' @param reservoir 
+#' @param prob 
+#' @param cc 
+#' @param cc1 
+#' @param cc2 
+#' @param cc3 
+#' @param cc4 
+#' @param cc5 
+#' @param postbomb 
+#' @param pb1 
+#' @param pb2 
+#' @param pb3 
+#' @param pb4 
+#' @param pb5 
+#' @param yrsteps 
+#' @param pbsteps 
+#' @param hpdsteps 
+#' @param calibt 
+#' @param yrmin 
+#' @param yrmax 
+#' @param minC14 
+#' @param maxC14 
+#' @param times 
+#' @param calheight 
+#' @param expand 
+#' @param threshold 
+#' @param storedat 
+#' @param graph 
+#' @param xlab 
+#' @param ylab 
+#' @param BCAD 
+#' @param mar 
+#' @param mgp 
+#' @param bty 
+#' @param title 
+#' @param date.col 
+#' @param cc.col 
+#' @param dist.col 
+#' @param sd.col 
+#'
+#' @return
+#' 
+#' @export
+#'
+#' @examples
 # to calibrate individual 14C dates
+calibrate <- function(cage=2450, error=50, reservoir=0, prob=0.95, cc=1, cc1="IntCal13.14C", cc2="Marine13.14C", cc3="SHCal13.14C", cc4="mixed.14C", cc5="gluedHemispheres.14C", postbomb=FALSE, pb1="postbomb_NH1.14C", pb2="postbomb_NH2.14C", pb3="postbomb_NH3.14C", pb4="postbomb_SH1_2.14C", pb5="postbomb_SH3.14C", yrsteps=1, pbsteps=0.01, hpdsteps=1, calibt=FALSE, yrmin=c(), yrmax=c(), minC14=c(), maxC14=c(), times=5, calheight=0.3, expand=0.1, threshold=1e-6, storedat=FALSE, graph=TRUE, xlab=c(), ylab=c(), BCAD=FALSE, mar=c(3.5,3,2,1), mgp=c(2,1,0), bty="l", title=c(), date.col="red", cc.col=rgb(0,.5,0,0.7), dist.col=rgb(0,0,0,0.3), sd.col=rgb(0,0,0,0.5)){
 # start modification by DNL
 #calibrate <- function(cage=2450, error=50, reservoir=0, prob=0.95, cc=1, cc1="IntCal13.14C", cc2="Marine13.14C", cc3="SHCal13.14C", cc4="mixed.14C", cc5="gluedHemispheres.14C", postbomb=FALSE, pb1="postbomb_NH1.14C", pb2="postbomb_NH2.14C", pb3="postbomb_NH3.14C", pb4="postbomb_SH1-2.14C", pb5="postbomb_SH3.14C", yrsteps=1, pbsteps=0.01, hpdsteps=1, calibt=FALSE, yrmin=c(), yrmax=c(), minC14=c(), maxC14=c(), times=5, calheight=0.3, expand=0.1, threshold=1e-6, storedat=FALSE, graph=TRUE, xlab=c(), ylab=c(), BCAD=FALSE, mar=c(3.5,3,2,1), mgp=c(2,1,0), bty="l", title=c(), date.col="red", cc.col=rgb(0,.5,0,0.7), dist.col=rgb(0,0,0,0.3), sd.col=rgb(0,0,0,0.5))
-calibrate <- function(cage=2450, error=50, reservoir=0, prob=0.95, cc=1, cc1="IntCal13.14C", cc2="Marine13.14C", cc3="SHCal13.14C", cc4="mixed.14C", cc5="gluedHemispheres.14C", postbomb=FALSE, pb1="postbomb_NH1.14C", pb2="postbomb_NH2.14C", pb3="postbomb_NH3.14C", pb4="postbomb_SH1_2.14C", pb5="postbomb_SH3.14C", yrsteps=1, pbsteps=0.01, hpdsteps=1, calibt=FALSE, yrmin=c(), yrmax=c(), minC14=c(), maxC14=c(), times=5, calheight=0.3, expand=0.1, threshold=1e-6, storedat=FALSE, graph=TRUE, xlab=c(), ylab=c(), BCAD=FALSE, mar=c(3.5,3,2,1), mgp=c(2,1,0), bty="l", title=c(), date.col="red", cc.col=rgb(0,.5,0,0.7), dist.col=rgb(0,0,0,0.3), sd.col=rgb(0,0,0,0.5)){
-    .calibrate(cage, error, reservoir, prob, cc, cc1, cc2, cc3, cc4, cc5, postbomb, pb1, pb2, pb3, pb4, pb5, yrsteps, pbsteps, hpdsteps, calibt, yrmin, yrmax, minC14, maxC14, times, calheight, expand, threshold, storedat, graph, xlab, ylab, BCAD, mar, mgp, bty, title, date.col, cc.col, dist.col, sd.col)
-    }
-
-# end modification by DNL
-
-.calibrate <- function(cage, error, reservoir, prob, cc, cc1, cc2, cc3, cc4, cc5, postbomb, pb1, pb2, pb3, pb4, pb5, yrsteps, pbsteps, hpdsteps, calibt, yrmin, yrmax, minC14, maxC14, times, calheight, expand, threshold, storedat, graph, xlab, ylab, BCAD, mar, mgp, bty, title, date.col, cc.col, dist.col, sd.col)
-{
+#     .calibrate(cage, error, reservoir, prob, cc, cc1, cc2, cc3, cc4, cc5, postbomb, pb1, pb2, pb3, pb4, pb5, yrsteps, pbsteps, hpdsteps, calibt, yrmin, yrmax, minC14, maxC14, times, calheight, expand, threshold, storedat, graph, xlab, ylab, BCAD, mar, mgp, bty, title, date.col, cc.col, dist.col, sd.col)
+#     }
+# 
+# # end modification by DNL
+# 
+# .calibrate <- function(cage, error, reservoir, prob, cc, cc1, cc2, cc3, cc4, cc5, postbomb, pb1, pb2, pb3, pb4, pb5, yrsteps, pbsteps, hpdsteps, calibt, yrmin, yrmax, minC14, maxC14, times, calheight, expand, threshold, storedat, graph, xlab, ylab, BCAD, mar, mgp, bty, title, date.col, cc.col, dist.col, sd.col)
+# {
     # set calibration curve
 
     # start modification by DNL
@@ -1420,6 +1918,3 @@ calibrate <- function(cage=2450, error=50, reservoir=0, prob=0.95, cc=1, cc1="In
                     }
 }
 
-
-# list the available cores
-cores <- list.files("Cores/")
