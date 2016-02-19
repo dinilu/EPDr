@@ -338,9 +338,6 @@ noC14toCLAM <- function(noC14){
 #' chron <- getChronologies(4, epd.connection)
 #' chron.clam <- chrontoCLAM(chron, c14)
 chrontoCLAM <- function(chronology, C14, chronology_number=NA){
-    # chronology <- chron
-    # C14 <- c14
-    # chronology_number <- NA
     agebasis <- chronology$agebasis
     if(is.na(chronology_number)){
         chronology_number <- chronology$default_chronology
@@ -350,7 +347,7 @@ chrontoCLAM <- function(chronology, C14, chronology_number=NA){
     c14.clam <- C14toCLAM(C14)
     c14.clam$lab_ID <- sapply(c14.clam$lab_ID, as.character)
     output$lab_ID <- sapply(output$lab_ID, as.character)
-    output[which(output$depth %in% c14.clam$depth),] <- c14.clam
+    output[which(output$depth %in% c14.clam$depth),] <- c14.clam[which(c14.clam$depth %in% output$depth),]
     output$lab_ID <- as.factor(output$lab_ID)
     return(output)
 }
