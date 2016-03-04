@@ -2,18 +2,24 @@
 % Please edit documentation in R/clam.R
 \name{accrate.depth}
 \alias{accrate.depth}
-\title{Title}
+\title{Title #TBW}
 \usage{
 accrate.depth(depth, yrcm = TRUE, prob = 0.95)
 }
 \arguments{
-\item{depth}{}
+\item{depth}{#TBW}
 
-\item{yrcm}{}
+\item{yrcm}{#TBW}
 
-\item{prob}{}
+\item{prob}{#TBW}
+}
+\value{
+#TBW
 }
 \description{
-Title
+Title #TBW
+}
+\examples{
+ #TBW
 }
 

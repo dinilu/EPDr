@@ -2,7 +2,7 @@
 % Please edit documentation in R/clam.R
 \name{calibrate}
 \alias{calibrate}
-\title{Title}
+\title{Title #TBW}
 \usage{
 calibrate(cage = 2450, error = 50, reservoir = 0, prob = 0.95, cc = 1,
   cc1 = "IntCal13.14C", cc2 = "Marine13.14C", cc3 = "SHCal13.14C",
@@ -18,92 +18,95 @@ calibrate(cage = 2450, error = 50, reservoir = 0, prob = 0.95, cc = 1,
   0.7), dist.col = rgb(0, 0, 0, 0.3), sd.col = rgb(0, 0, 0, 0.5))
 }
 \arguments{
-\item{cage}{}
+\item{cage}{#TBW}
 
-\item{error}{}
+\item{error}{#TBW}
 
-\item{reservoir}{}
+\item{reservoir}{#TBW}
 
-\item{prob}{}
+\item{prob}{#TBW}
 
-\item{cc}{}
+\item{cc}{#TBW}
 
-\item{cc1}{}
+\item{cc1}{#TBW}
 
-\item{cc2}{}
+\item{cc2}{#TBW}
 
-\item{cc3}{}
+\item{cc3}{#TBW}
 
-\item{cc4}{}
+\item{cc4}{#TBW}
 
-\item{cc5}{}
+\item{cc5}{#TBW}
 
-\item{postbomb}{}
+\item{postbomb}{#TBW}
 
-\item{pb1}{}
+\item{pb1}{#TBW}
 
-\item{pb2}{}
+\item{pb2}{#TBW}
 
-\item{pb3}{}
+\item{pb3}{#TBW}
 
-\item{pb4}{}
+\item{pb4}{#TBW}
 
-\item{pb5}{}
+\item{pb5}{#TBW}
 
-\item{yrsteps}{}
+\item{yrsteps}{#TBW}
 
-\item{pbsteps}{}
+\item{pbsteps}{#TBW}
 
-\item{hpdsteps}{}
+\item{hpdsteps}{#TBW}
 
-\item{calibt}{}
+\item{calibt}{#TBW}
 
-\item{yrmin}{}
+\item{yrmin}{#TBW}
 
-\item{yrmax}{}
+\item{yrmax}{#TBW}
 
-\item{minC14}{}
+\item{minC14}{#TBW}
 
-\item{maxC14}{}
+\item{maxC14}{#TBW}
 
-\item{times}{}
+\item{times}{#TBW}
 
-\item{calheight}{}
+\item{calheight}{#TBW}
 
-\item{expand}{}
+\item{expand}{#TBW}
 
-\item{threshold}{}
+\item{threshold}{#TBW}
 
-\item{storedat}{}
+\item{storedat}{#TBW}
 
-\item{graph}{}
+\item{graph}{#TBW}
 
-\item{xlab}{}
+\item{xlab}{#TBW}
 
-\item{ylab}{}
+\item{ylab}{#TBW}
 
-\item{BCAD}{}
+\item{BCAD}{#TBW}
 
-\item{mar}{}
+\item{mar}{#TBW}
 
-\item{mgp}{}
+\item{mgp}{#TBW}
 
-\item{bty}{}
+\item{bty}{#TBW}
 
-\item{title}{}
+\item{title}{#TBW}
 
-\item{date.col}{}
+\item{date.col}{#TBW}
 
-\item{cc.col}{}
+\item{cc.col}{#TBW}
 
-\item{dist.col}{}
+\item{dist.col}{#TBW}
 
-\item{sd.col}{}
+\item{sd.col}{#TBW}
 }
 \value{
-
+#TBW
 }
 \description{
-Title
+Title #TBW
+}
+\examples{
+ #TBW
 }
 

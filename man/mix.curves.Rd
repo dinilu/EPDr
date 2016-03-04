@@ -2,24 +2,27 @@
 % Please edit documentation in R/clam.R
 \name{mix.curves}
 \alias{mix.curves}
-\title{Title}
+\title{Title TBW}
 \usage{
 mix.curves(ratio = 0.5, cc1 = "IntCal13.14C", cc2 = "Marine13.14C",
   offset = c(0, 0))
 }
 \arguments{
-\item{ratio}{}
+\item{ratio}{TBW}
 
-\item{cc1}{}
+\item{cc1}{TBW}
 
-\item{cc2}{}
+\item{cc2}{TBW}
 
-\item{offset}{}
+\item{offset}{TBW}
 }
 \value{
-
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+#TBW
 }
 

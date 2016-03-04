@@ -2,23 +2,26 @@
 % Please edit documentation in R/clam.R
 \name{age.pMC}
 \alias{age.pMC}
-\title{Title}
+\title{Title #TBW}
 \usage{
 age.pMC(mn, sdev, ratio = 100, decimals = 3)
 }
 \arguments{
-\item{mn}{}
+\item{mn}{#TBW}
 
-\item{sdev}{}
+\item{sdev}{#TBW}
 
-\item{ratio}{}
+\item{ratio}{#TBW}
 
-\item{decimals}{}
+\item{decimals}{#TBW}
 }
 \value{
-
+#TBW
 }
 \description{
-Title
+Title #TBW
+}
+\examples{
+ #TBW
 }
 

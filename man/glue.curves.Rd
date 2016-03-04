@@ -2,21 +2,24 @@
 % Please edit documentation in R/clam.R
 \name{glue.curves}
 \alias{glue.curves}
-\title{Title}
+\title{Title #TBW}
 \usage{
 glue.curves(nh = "IntCal09.14C", sh = "SHCal04.14C", offset = c(56, 24))
 }
 \arguments{
-\item{nh}{}
+\item{nh}{#TBW}
 
-\item{sh}{}
+\item{sh}{#TBW}
 
-\item{offset}{}
+\item{offset}{#TBW}
 }
 \value{
-
+#TBW
 }
 \description{
-Title
+Title #TBW
+}
+\examples{
+#TBW
 }
 

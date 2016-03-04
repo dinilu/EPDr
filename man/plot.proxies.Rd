@@ -2,21 +2,27 @@
 % Please edit documentation in R/clam.R
 \name{plot.proxies}
 \alias{plot.proxies}
-\title{Title}
+\title{Title #TBW}
 \usage{
 \method{plot}{proxies}(prox, errors = TRUE, proxcol = grey(0.5),
   revyr = TRUE)
 }
 \arguments{
-\item{prox}{}
+\item{prox}{#TBW}
 
-\item{errors}{}
+\item{errors}{#TBW}
 
-\item{proxcol}{}
+\item{proxcol}{#TBW}
 
-\item{revyr}{}
+\item{revyr}{#TBW}
+}
+\value{
+#TBW
 }
 \description{
-Title
+Title #TBW
+}
+\examples{
+ #TBW
 }
 

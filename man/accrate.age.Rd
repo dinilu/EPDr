@@ -2,21 +2,24 @@
 % Please edit documentation in R/clam.R
 \name{accrate.age}
 \alias{accrate.age}
-\title{Title}
+\title{Title #TBW}
 \usage{
 accrate.age(age, yrcm = TRUE, prob = 0.95)
 }
 \arguments{
-\item{age}{}
+\item{age}{#TBW}
 
-\item{yrcm}{}
+\item{yrcm}{#TBW}
 
-\item{prob}{}
+\item{prob}{#TBW}
 }
 \value{
-
+#TBW
 }
 \description{
-Title
+Title #TBW
+}
+\examples{
+ #TBW
 }
 
