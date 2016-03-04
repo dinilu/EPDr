@@ -44,7 +44,7 @@ getC14 <- function(core_number, connection) {
     geochron <- dbGetQuery(connection, sqlQuery)
     
     if(nrow(c14) == 0){
-        warning("This core (entity) does not have C14 data.", call. = FALSE)
+        warning("This core (entity) does not have C14 data.", call.=FALSE)
         c14 <- data.frame(e_=NA,sample_=NA,agebp=NA,agesdup=NA,agesdlo=NA,grthanage=NA,basis=NA,enriched=NA,labnumber=NA,
             deltac13=NA,notes=NA)[-1,] 
         geochron <- data.frame(e_=NA,sample_=NA,method=NA,depthcm=NA,thickness=NA,materialdated=NA,publ_=NA)[-1,]
@@ -205,7 +205,7 @@ getRestriction <- function(core_number, connection){
     output <- dbGetQuery(connection, sqlQuery)
     if(output$usestatus == "R"){
         warning(paste("Data for this core has restriction in their use. Please contact the data owner (", output$datasource,
-                      ") before publishing this data", sep=""))
+                      ") before publishing this data", sep=""), call.=F)
     }
     return(output)
 }

@@ -113,7 +113,7 @@ clam <- function(name="Example", type=1, smooth=c(), prob=0.95, its=1000, wghts=
     dets <- suppressWarnings(read.csv(paste("Cores/", name, "/", name, ext, sep=""), sep=sep))
     d <- dets[,6]
     if(min(diff(d)) < 0){
-        warning("Depths not in ascending order (top ones should come first).\n")
+        warning("Depths not in ascending order (top ones should come first).\n", call.=F)
     }
     # avoid confusing warning when using sample for first time in session
     tmp <- suppressWarnings(sample(1:1e3, 1, prob=rep(.001,1e3), replace=TRUE))
@@ -168,7 +168,7 @@ clam <- function(name="Example", type=1, smooth=c(), prob=0.95, its=1000, wghts=
     if(length(cdat[!is.na(cdat)]) > 0)
         if(min(cdat[!is.na(cdat)]) < 0)
             if(postbomb==FALSE)
-                warning("Negative 14C ages, should I use a postbomb curve?\n") else
+                warning("Negative 14C ages, should I use a postbomb curve?\n", call.=F) else
                 {
                     if(postbomb>5)
                         stop("I do not understand which postbomb curve you mean, check the manual", call.=FALSE)
@@ -382,7 +382,7 @@ clam <- function(name="Example", type=1, smooth=c(), prob=0.95, its=1000, wghts=
     rng <- round(calrange[,3]-calrange[,2])
     cat("\n  ", name, "'s ", 100*prob, "% confidence ranges span from ", min(rng), " to ", max(rng), " yr (average ", round(mean(rng)), " yr)", sep="")
     cat("\n  Fit (-log, lower is better):", gfit, "\n")
-    if(reversal) cat("  Age reversals occurred. Try other model?\n")
+    if(reversal) warning("  Age reversals occurred. Try other model?\n", call.=FALSE)
 }
 
 
@@ -766,7 +766,7 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
     if(min(depthseq) < min(dat$depth) || max(depthseq) > max(dat$depth))
         if(type==5)
             stop(" cannot extrapolate using loess! Change settings.\n ", call.=FALSE) else
-                warning(" extrapolating beyond dated levels, dangerous!\n ")
+                warning(" extrapolating beyond dated levels, dangerous!\n ", call.=F)
 
     # choose model: interpolation, (polynomial) regression, spline, smooth spline or loess
     chron <- array(0, dim=c(length(depthseq), its))
@@ -784,7 +784,7 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
                 warp <- c(warp, i)
     if(length(warp) > 0)
         if(length(warp) > remove.reverse*its)
-            warning(" !!! Too many models with age reversals!!!\n") else
+            warning(" !!! Too many models with age reversals!!!\n", call.=F) else
             {
                 cat("\n Removing", length(warp), "models with age reversals,", its-length(warp), "models left...")
                 chron <- chron[,-warp]
@@ -1174,13 +1174,13 @@ student.t <- function(y=2450, error=50, t.a=3, t.b=4, cc=1, postbomb=c(), cc1="I
                 dat$cage[outside[i]]+times*dat$error[outside[i]] > rangecc[2]))
                 truncate <- truncate + 1
             if(truncate > 0)
-                warning("Dates spanning beyond the calibration curve will be truncated! ")
+                warning("Dates spanning beyond the calibration curve will be truncated! ", call.=F)
 
             # remove dates which lie entirely outside the limits of the calibration curve
             outside <- outside[c(which(dat$cage[outside]+qnorm(1-(1-prob)/2)*dat$error[outside] < rangecc[1]), which(dat$cage[outside]-qnorm(1-(1-prob)/2)*dat$error[outside] > rangecc[2]))]
             if(length(outside) > 0)
             {
-                warning("Dates older than the calibration curve will be ignored! ")
+                warning("Dates older than the calibration curve will be ignored! ", call.=F)
                 dets <- dets[-outside,]
                 dat$cage <- dat$cage[-outside]
                 dat$error <- dat$error[-outside]
@@ -1834,9 +1834,9 @@ calibrate <- function(cage=2450, error=50, reservoir=0, prob=0.95, cc=1, cc1="In
                         if(cage-reservoir-error < max(calcurve[,2]+calcurve[,3]))
                             border <- 1 else border <- 2
                     if(border==1)
-                        warning("\nDate falls partly beyond calibration curve and will be truncated!")
+                        warning("\nDate falls partly beyond calibration curve and will be truncated!", call.=F)
                     if(border==2)
-                        stop("\nCannot calibrate dates beyond calibration curve!\n\n")
+                        stop("\nCannot calibrate dates beyond calibration curve!\n\n", call.=F)
 
                     # work in BC/AD if needed, and prepare for calculations in f14C
                     if(BCAD)
