@@ -35,13 +35,20 @@
 #' getC14(400, epd.connection)
 #' disconnectFromEPD(connection=epd.connection)
 getC14 <- function(core_number, connection) {
+    rest <- getRestriction(core_number, connection)
+
     sqlQuery <- paste("SELECT * FROM c14 WHERE e_=", core_number, ";", sep="")
     c14 <- dbGetQuery(connection, sqlQuery)
     
     sqlQuery <-paste("SELECT * FROM geochron WHERE e_=", core_number, ";", sep="")
     geochron <- dbGetQuery(connection, sqlQuery)
     
-    if(nrow(c14) == 0){stop("This core (entity) does not have C14 data.", call.=FALSE)}
+    if(nrow(c14) == 0){
+        warning("This core (entity) does not have C14 data.", call. = FALSE)
+        c14 <- data.frame(e_=NA,sample_=NA,agebp=NA,agesdup=NA,agesdlo=NA,grthanage=NA,basis=NA,enriched=NA,labnumber=NA,
+            deltac13=NA,notes=NA)[-1,] 
+        geochron <- data.frame(e_=NA,sample_=NA,method=NA,depthcm=NA,thickness=NA,materialdated=NA,publ_=NA)[-1,]
+    }
     
     c14geochron <- merge(c14, geochron, by=c("e_","sample_"))
     
@@ -76,7 +83,8 @@ getC14 <- function(core_number, connection) {
 #' getChronology(400, epd.connection)
 #' disconnectFromEPD(connection=epd.connection)
 getChronology <- function(core_number, connection) {
-
+    rest <- getRestriction(core_number, connection)
+    
     sqlQuery <-paste("SELECT * FROM chron WHERE e_=", core_number, ";", sep="")
     chron <- dbGetQuery(connection, sqlQuery)
     
@@ -86,7 +94,12 @@ getChronology <- function(core_number, connection) {
     number_of_chronologies <- nrow(chron)
     default_chronology <- chron$chron_[which(chron$defaultchron == "Y")]
     
-    output <- chronology(core_number=core_number, number_of_chronologies=number_of_chronologies, default_chronology=default_chronology, chron=chron, agebasis=agebasis)
+    if(number_of_chronologies == 0){
+        warning("This core (entity) does not have chronologies.", call.=F)
+        output <- chronology()
+    }else{
+        output <- chronology(core_number=core_number, number_of_chronologies=number_of_chronologies, default_chronology=default_chronology, chron=chron, agebasis=agebasis)
+    }
     
     return(output)
 }
@@ -126,6 +139,8 @@ getChronology <- function(core_number, connection) {
 #' getEvents(51, epd.connection)
 #' disconnectFromEPD(connection=epd.connection)
 getEvents <- function(core_number, connection){
+    rest <- getRestriction(core_number, connection)
+
     sqlQuery <-paste("SELECT * FROM synevent WHERE e_ =", core_number, ";", sep="")
     synevent <- dbGetQuery(connection, sqlQuery)
     
@@ -162,13 +177,37 @@ getEvents <- function(core_number, connection){
 #' getDepths(51, epd.connection)
 #' disconnectFromEPD(connection=epd.connection)
 getDepths <- function(core_number, connection){
+    rest <- getRestriction(core_number, connection)
+
     sqlQuery <- paste("select * from p_sample where e_=", core_number, ";", sep="")
     output <- dbGetQuery(connection, sqlQuery)
     output$lab_ID <- paste("EPDr", output$e_, "_PO", output$sample_, sep="")
+    
     return(output)    
 }
 
-
+#' Title TBW
+#'
+#' TBW
+#' 
+#' @param core_number TBW
+#' @param connection TBW
+#'
+#' @return TBW
+#' 
+#' @export
+#'
+#' @examples
+#' # TBW
+getRestriction <- function(core_number, connection){
+    sqlQuery <- paste("select * from p_entity where e_=", core_number, ";", sep="")
+    output <- dbGetQuery(connection, sqlQuery)
+    if(output$usestatus == "R"){
+        warning(paste("Data for this core has restriction in their use. Please contact the data owner (", output$datasource,
+                      ") before publishing this data", sep=""))
+    }
+    return(output)
+}
 
 #' Title TBW
 #'
@@ -184,6 +223,8 @@ getDepths <- function(core_number, connection){
 #' @examples
 #' # TBW
 getDatation <- function(core_number, connection){
+    rest <- getRestriction(core_number, connection)
+    
     chronology <- getChronology(core_number, connection)
     c14 <- getC14(core_number, connection)
     events <- getEvents(core_number, connection)

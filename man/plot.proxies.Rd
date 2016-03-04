@@ -4,8 +4,7 @@
 \alias{plot.proxies}
 \title{Title #TBW}
 \usage{
-\method{plot}{proxies}(prox, errors = TRUE, proxcol = grey(0.5),
-  revyr = TRUE)
+plot.proxies(prox, errors = TRUE, proxcol = grey(0.5), revyr = TRUE)
 }
 \arguments{
 \item{prox}{#TBW}

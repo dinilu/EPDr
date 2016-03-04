@@ -2,7 +2,7 @@
 % Please edit documentation in R/EPDr-epd2clam_functions.R
 \name{datation_epd2clam}
 \alias{datation_epd2clam}
-\title{TBW}
+\title{Title TBW}
 \usage{
 datation_epd2clam(x, chronology_number = NA, include_chron_not_in_c14 = NA,
   include_c14_not_in_chron = NA, use_c14_conf_age = NA,
@@ -29,7 +29,7 @@ datation_epd2clam(x, chronology_number = NA, include_chron_not_in_c14 = NA,
 TBW
 }
 \description{
-TBW
+Title TBW
 }
 \examples{
 # TBW
