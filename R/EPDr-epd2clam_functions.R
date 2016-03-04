@@ -88,7 +88,7 @@ agebasis_epd2clam <- function(agebasis){
 #' event.clam <- events_epd2clam(event)
 events_epd2clam <- function(event){
     if(nrow(event) == 0){
-        stop("Table without events. Not performing conversion, useless for CLAM.")
+        stop("Table without dated events. Not performing conversion, useless for CLAM.")
     }
     output <- data.frame(lab_ID=paste("EPDr_", event$e_, "_EV", event$event_, sep=""), C14_age=event$agebp, depth=event$depthcm, thickness=event$thickness)
     output$cal_age <- NA
@@ -291,7 +291,7 @@ datation_epd2clam <- function(x, chronology_number=NA, include_chron_not_in_c14=
 
     # Check for events in the datation object
     if(nrow(events) > 0){
-        warning("There are events data for this core (entity).", immediate.=T, call.=F)
+        warning("There are dated events for this core (entity).", immediate.=T, call.=F)
         cat("\n")
         cat("Events data:\n")
         .printEvents(events)

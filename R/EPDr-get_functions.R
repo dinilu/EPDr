@@ -153,6 +153,7 @@ getEvents <- function(core_number, connection){
         sqlQuery <- paste("SELECT * FROM event WHERE event_ IN (", paste(synevent$event_, collapse=","), ");", sep="")
         event <- dbGetQuery(connection, sqlQuery)
         event <- merge(synevent, event, by="event_")
+        event <- subset(event, agebp != 0)
         return(event)
     }
 }
