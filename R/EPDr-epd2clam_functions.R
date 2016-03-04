@@ -321,8 +321,8 @@ datation_epd2clam <- function(x, chronology_number=NA, include_chron_not_in_c14=
             try(include_events <- eval(parse(text=include_events)))
         }
     }
-    if(include_events == TRUE | is.vector(include_events)){
-        if(is.vector(include_events)){
+    if((is.logical(include_events) && include_events == TRUE) || is.numeric(include_events)){
+        if(is.numeric(include_events)){
             events <- events[include_events,]
         }
         events.clam <- events_epd2clam(events)
