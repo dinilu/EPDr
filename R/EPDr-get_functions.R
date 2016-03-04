@@ -1,0 +1,199 @@
+#' Extract C14 data for a particular core (entity in the EPD DDBB)
+#' 
+#' Given a core number (as in the EPD DDBB: e_) the function returns a matrix with the C14 data associated to this core. This values
+#' come from two different tables of the EPD: c14 and geochron.
+#'
+#' @param core_number Integer with the core (entity) number for which C14 data want to be extracted.
+#' @param connection Connection object to a EPD DDBB where the query is made.
+#'
+#' @return Data frame with combined information from c14 and geochron tables in the EPD. Columns in the data frame follows terminology
+#' in the original database and are as follows:
+#' \itemize{
+#'  \item \code{e_}: Core (entity) identifier.
+#'  \item \code{sample_}: C14 sample identifier.
+#'  \item \code{agebp}: Uncalibrated C14 age.
+#'  \item \code{agesdup}:
+#'  \item \code{agesdlo}:
+#'  \item \code{grthanage}:
+#'  \item \code{basis}:
+#'  \item \code{enriched}:
+#'  \item \code{labnumber}:
+#'  \item \code{deltac13}:
+#'  \item \code{notes}:
+#'  \item \code{method}:
+#'  \item \code{depthcm}:
+#'  \item \code{thickness}:
+#'  \item \code{materialdated}:
+#'  \item \code{publ_}: Publication identifier.
+#' } 
+#' @export
+#'
+#' @examples
+#' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#'                                  password="epdrpw", host="diegonl.ugr.es")
+#' getC14(1, epd.connection)
+#' getC14(400, epd.connection)
+#' disconnectFromEPD(connection=epd.connection)
+getC14 <- function(core_number, connection) {
+    sqlQuery <- paste("SELECT * FROM c14 WHERE e_=", core_number, ";", sep="")
+    c14 <- dbGetQuery(connection, sqlQuery)
+    
+    sqlQuery <-paste("SELECT * FROM geochron WHERE e_=", core_number, ";", sep="")
+    geochron <- dbGetQuery(connection, sqlQuery)
+    
+    if(nrow(c14) == 0){stop("This core (entity) does not have C14 data.", call.=FALSE)}
+    
+    c14geochron <- merge(c14, geochron, by=c("e_","sample_"))
+    
+    return(c14geochron)
+}
+
+
+
+#' Extract chronologies associated with a core (entity) in the pollen database
+#' 
+#' Given a core (entity) number, \code{\link[EPDr:getChronology]{getChronology}} extract all the information about chronologies associated with this core
+#' in the EPD DDBB. This information comes from two different tables in the DDBB: chron and agebasis.
+#'
+#' @param core_number Integer with the core (entity) number for which C14 data want to be extracted.
+#' @param connection Connection object to a EPD DDBB where the query is made.
+#'
+#' @return List with 5 elements:
+#' \itemize{
+#'   \item \code{number_of_chronologies}: Integer indicating the number of chronologies associated with the core (entity).
+#'   \item \code{default_chronology}: Integer indicating which is the default chronology according to the EPD DDBB.
+#'   \item \code{chron}: Data frame with the meta information on how each calibration was built.
+#'   \item \code{agebasis}: Data frame with all the information (depth and age for C14 and no-C14 data) used to build the chronologies.
+#'   \item \code{no_C14}: Data frame with no-C14 data used to build the chronologies.
+#' }
+#' 
+#' @export
+#'
+#' @examples
+#' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#'                                  password="epdrpw", host="diegonl.ugr.es")
+#' getChronology(1, epd.connection)
+#' getChronology(400, epd.connection)
+#' disconnectFromEPD(connection=epd.connection)
+getChronology <- function(core_number, connection) {
+
+    sqlQuery <-paste("SELECT * FROM chron WHERE e_=", core_number, ";", sep="")
+    chron <- dbGetQuery(connection, sqlQuery)
+    
+    sqlQuery <- paste("SELECT * FROM agebasis WHERE e_=", core_number, ";", sep="")
+    agebasis <- dbGetQuery(connection, sqlQuery)
+    
+    number_of_chronologies <- nrow(chron)
+    default_chronology <- chron$chron_[which(chron$defaultchron == "Y")]
+    
+    output <- chronology(core_number=core_number, number_of_chronologies=number_of_chronologies, default_chronology=default_chronology, chron=chron, agebasis=agebasis)
+    
+    return(output)
+}
+
+
+
+
+#' Extract events associated with a specific core (entity) in the EPD DDBB
+#'
+#' Given a specific core number and connection to the EPD, this function return the information of events associated with the core.
+#'
+#' @param core_number Integer with the core (entity) number for which C14 data want to be extracted.
+#' @param connection Connection object to a EPD DDBB where the query is made.
+#'
+#' @return NA or data frame, depending on whether there are events associated with the requested core. If there are events the
+#' function return a data frame with combined information from synevent and event tables in the EPD. Columns in the data
+#' frame follows terminology in the original database and are as follows:
+#' \itemize{
+#'  \item \code{event_}: Event identifier.
+#'  \item \code{e_}: Core (entity) identifier.
+#'  \item \code{depthcm}: Depth of the event in cm.
+#'  \item \code{thickness}: Thickness of the event in cm.
+#'  \item \code{event}: Code for the type of event. See EPD documentation for details.
+#'  \item \code{name}: Name of the event.
+#'  \item \code{agebp}: Known age of the event in BP.
+#'  \item \code{ageuncertup}:
+#'  \item \code{ageuncertlo}:
+#'  \item \code{publ_}: Publication identifier.
+#' } 
+#' 
+#' @export
+#'
+#' @examples
+#' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#'                                  password="epdrpw", host="diegonl.ugr.es")
+#' getEvents(1, epd.connection)
+#' getEvents(51, epd.connection)
+#' disconnectFromEPD(connection=epd.connection)
+getEvents <- function(core_number, connection){
+    sqlQuery <-paste("SELECT * FROM synevent WHERE e_ =", core_number, ";", sep="")
+    synevent <- dbGetQuery(connection, sqlQuery)
+    
+    # Check for event data and ask interactively for data use
+    if(nrow(synevent) == 0){
+        event <- data.frame(event_=NA, e_=NA, depthcm=NA, thickness=NA, event=NA, name=NA, agebp=NA, ageuncertup=NA, ageuncertlo=NA,
+                            publ_=NA)[-1,]
+        return(event)
+    }else{
+        sqlQuery <- paste("SELECT * FROM event WHERE event_ IN (", paste(synevent$event_, collapse=","), ");", sep="")
+        event <- dbGetQuery(connection, sqlQuery)
+        event <- merge(synevent, event, by="event_")
+        return(event)
+    }
+}
+
+
+
+#' Depths of pollen samples
+#'
+#' Given a specific core (entity) this function return the information at which depths samples were taken for pollen data.
+#'
+#' @param core_number Integer with the core (entity) number for which C14 data want to be extracted.
+#' @param connection Connection object to a EPD DDBB where the query is made.
+#'
+#' @return Data frame with all the information for pollen samples as in the p_sample table of the EPD DDBB.
+#' 
+#' @export
+#'
+#' @examples
+#' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#'                                  password="epdrpw", host="diegonl.ugr.es")
+#' getDepths(1, epd.connection)
+#' getDepths(51, epd.connection)
+#' disconnectFromEPD(connection=epd.connection)
+getDepths <- function(core_number, connection){
+    sqlQuery <- paste("select * from p_sample where e_=", core_number, ";", sep="")
+    output <- dbGetQuery(connection, sqlQuery)
+    output$lab_ID <- paste("EPDr", output$e_, "_PO", output$sample_, sep="")
+    return(output)    
+}
+
+
+
+#' Title TBW
+#'
+#' TBW
+#'
+#' @param core_number TBW
+#' @param connection TBW
+#'
+#' @return TBW
+#' 
+#' @export
+#'
+#' @examples
+#' # TBW
+getDatation <- function(core_number, connection){
+    chronology <- getChronology(core_number, connection)
+    c14 <- getC14(core_number, connection)
+    events <- getEvents(core_number, connection)
+    depths <- getDepths(core_number, connection)
+    output <-datation()
+    output@core_number <- core_number
+    output@chronology <- chronology
+    output@c14 <- c14
+    output@events <- events
+    output@depths <- depths
+    return(output)
+}
+    
