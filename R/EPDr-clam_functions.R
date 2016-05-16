@@ -6,6 +6,7 @@
 #'
 #' @param core_number Integer indicating the number of the core (entity) to be calibrated with CLAM
 #' @param connection The connection to the EPD to get the geographical position of the core
+#' @param ... Any argument for classical \code{\link[EPDr:clam]{clam}} function.
 #'
 #' @return The same set of 
 #' 
@@ -13,7 +14,7 @@
 #'
 #' @examples
 #' #TBW
-epdrClam <- function(core_number, connection){
+epdrClam <- function(core_number, connection, ...){
     sqlQuery <- paste("SELECT site_ FROM entity WHERE e_=", core_number, ";", sep="")
     site_num <- as.character(dbGetQuery(connection, sqlQuery))
     
@@ -29,5 +30,5 @@ epdrClam <- function(core_number, connection){
     if(pb_zone$Zone == "SH12") pb <- 4
     if(pb_zone$Zone == "SH3") pb <- 5
     
-    clam(as.character(core_number), postbomb=pb)
+    clam(as.character(core_number), postbomb=pb, ...)
 }

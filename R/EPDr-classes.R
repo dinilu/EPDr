@@ -1,6 +1,7 @@
 chronology <- setClass("chronology",
                        slots=c(
                            core_number="numeric",
+                           restriction="data.frame",
                            number_of_chronologies="numeric",
                            default_chronology="numeric",
                            chron="data.frame",
@@ -8,6 +9,14 @@ chronology <- setClass("chronology",
                        ),
                        prototype=list(
                            core_number=numeric(0),
+                           restriction=data.frame(
+                               e_=NA,
+                               contact_=NA,
+                               datasource=NA,
+                               dataform=NA,
+                               usestatus=NA,
+                               datacoop=NA
+                           )[-1,],
                            number_of_chronologies=numeric(0),
                            default_chronology=numeric(0),
                            chron=data.frame(
@@ -37,6 +46,7 @@ chronology <- setClass("chronology",
 datation <- setClass("datation",
                      slots=c(
                          core_number="numeric",
+                         restriction="data.frame",
                          chronology="chronology",
                          c14="data.frame",
                          events="data.frame",
@@ -44,6 +54,14 @@ datation <- setClass("datation",
                      ),
                      prototype=list(
                          core_number=numeric(0),
+                         restriction=data.frame(
+                             e_=NA,
+                             contact_=NA,
+                             datasource=NA,
+                             dataform=NA,
+                             usestatus=NA,
+                             datacoop=NA
+                         )[-1,],
                          chronology=chronology(),
                          c14=data.frame(
                              e_=NA,
@@ -87,3 +105,77 @@ datation <- setClass("datation",
                          )[-1,]
                      )
 )
+
+counts <- setClass("counts",
+                   slots=c(
+                       core_number="numeric",
+                       restriction="data.frame",
+                       taxa_names="character",
+                       taxa_groupid="character",
+                       sample_="numeric",
+                       counts="data.frame"
+                   ),
+                   prototype=list(
+                       core_number=numeric(0),
+                       restriction=data.frame(
+                           e_=NA,
+                           contact_=NA,
+                           datasource=NA,
+                           dataform=NA,
+                           usestatus=NA,
+                           datacoop=NA
+                       )[-1,],
+                       taxa_names=character(0),
+                       taxa_groupid=character(0),
+                       sample_=numeric(0),
+                       counts=data.frame()
+                   )
+)
+
+ages <- setClass("ages",
+                 slots=c(
+                     core_number="numeric",
+                     restriction="data.frame",
+                     default_chronology="numeric",
+                     sample_="numeric",
+                     depth_ages="data.frame"
+                 ),
+                 prototype=list(
+                     core_number=numeric(0),
+                     restriction=data.frame(
+                         e_=NA,
+                         contact_=NA,
+                         datasource=NA,
+                         dataform=NA,
+                         usestatus=NA,
+                         datacoop=NA
+                     )[-1,],
+                     default_chronology=numeric(0),
+                     sample_=numeric(0),
+                     depth_ages=data.frame()
+                 )
+)
+
+agedcounts <- setClass("agedcounts",
+                       slots=c(
+                           core_number="numeric",
+                           restriction="data.frame",
+                           ages="ages",
+                           counts="counts"
+                       ),
+                       prototype=list(
+                           core_number=numeric(0),
+                           restriction=data.frame(
+                               e_=NA,
+                               contact_=NA,
+                               datasource=NA,
+                               dataform=NA,
+                               usestatus=NA,
+                               datacoop=NA
+                           )[-1,],
+                           default_chronology=numeric(0),
+                           ages=ages(),
+                           counts=counts()
+                       )
+)
+

@@ -93,12 +93,12 @@ getChronology <- function(core_number, connection) {
     
     number_of_chronologies <- nrow(chron)
     default_chronology <- chron$chron_[which(chron$defaultchron == "Y")]
-    
+ 
     if(number_of_chronologies == 0){
         warning("This core (entity) does not have chronologies.", call.=F)
         output <- chronology()
     }else{
-        output <- chronology(core_number=core_number, number_of_chronologies=number_of_chronologies, default_chronology=default_chronology, chron=chron, agebasis=agebasis)
+        output <- chronology(core_number=core_number, restriction=rest, number_of_chronologies=number_of_chronologies, default_chronology=default_chronology, chron=chron, agebasis=agebasis)
     }
     
     return(output)
@@ -230,12 +230,110 @@ getDatation <- function(core_number, connection){
     c14 <- getC14(core_number, connection)
     events <- getEvents(core_number, connection)
     depths <- getDepths(core_number, connection)
-    output <-datation()
-    output@core_number <- core_number
-    output@chronology <- chronology
-    output@c14 <- c14
-    output@events <- events
-    output@depths <- depths
+    output <- datation(core_number=core_number, restriction=rest, chronology=chronology, c14=c14, events=events, depths=depths)
     return(output)
 }
     
+
+
+#' Title TBW
+#'
+#' @param core_number TBW
+#' @param connection TBW
+#'
+#' @return TBW
+#' 
+#' @export
+#'
+#' @examples
+#' # TBW
+getCounts <- function(core_number, connection){
+    rest <- getRestriction(core_number, connection)
+    
+    sqlQuery <- paste("SELECT sample_, count, varname FROM p_counts NATURAL JOIN p_vars WHERE e_=", core_number, ";", sep="")
+    counts.raw <- dbGetQuery(connection, sqlQuery)
+    if(is.data.frame(counts.raw) && nrow(counts.raw) == 0){
+        warning("This core does not have count data.", call.=FALSE)
+    }
+
+    counts.cast <- dcast(counts.raw, sample_ ~ varname, value.var='count')
+    counts.cast[is.na(counts.cast)] <- 0
+
+    sample_ <- counts.cast[,1]
+    counts.cast <- counts.cast[,-1]
+
+    taxa.names <- colnames(counts.cast)
+
+    sqlQuery <- paste("SELECT varname, groupid FROM p_vars NATURAL JOIN p_group WHERE varname IN ('", paste(taxa.names, collapse="','"), "');", sep="")
+    groupid <- dbGetQuery(connection, sqlQuery)
+    groupid <- groupid[match(taxa.names, groupid$varname),]
+    
+    taxa.groupid <- groupid$groupid
+    
+    counts <- counts(core_number=core_number, restriction=rest, taxa_names=taxa.names, taxa_groupid=taxa.groupid, sample_=sample_, counts=counts.cast)
+
+    return(counts)
+}
+
+#' Title TBW
+#'
+#' @param core_number  TBW
+#' @param connection  TBW
+#'
+#' @return TBW
+#' @export
+#'
+#' @examples
+#' # TBW
+getAges <- function(core_number, connection){
+    rest <- getRestriction(core_number, connection)
+    
+    sqlQuery<- paste("SELECT sample_, chron_, agebp FROM p_agedpt WHERE e_=", core_number, ";", sep="")
+    ages <- dbGetQuery(connection, sqlQuery)
+    
+    sqlQuery <-paste("SELECT * FROM chron WHERE e_=", core_number, ";", sep="")
+    chron <- dbGetQuery(connection, sqlQuery)
+
+    default_chronology <- chron$chron_[which(chron$defaultchron == "Y")]
+
+    if(is.data.frame(ages) && nrow(ages) == 0){
+        warning("This core  does not have age data.", call.=FALSE)
+    }
+    
+    ages.cast <- dcast(ages, sample_ ~ chron_, value.var='agebp')
+    
+    sample_ <- ages.cast[,1]
+    ages.cast <- ages.cast[,-1]
+    if(class(ages.cast) == "numeric"){
+        ages.cast <- data.frame(ages.cast)
+        colnames(ages.cast) <- 1
+    }
+    
+    ages.final <- ages(core_number=core_number, restriction=rest, default_chronology=default_chronology, sample_=sample_, depth_ages=ages.cast)
+    return(ages.final)
+}
+
+
+#' Title TBW
+#'
+#' @param core_number TBW
+#' @param connection TBW 
+#'
+#' @return TBW
+#' @export
+#'
+#' @examples
+#' # TBW
+getAgedCounts <- function(core_number, connection){
+    rest <- getRestriction(core_number, connection)
+    ages <- getAges(core_number, connection)
+    counts <- getCounts(core_number, connection)
+
+    agedcounts <- agedcounts(core_number=core_number, restriction=rest, ages=ages, counts=counts)  
+    return(agedcounts)
+}
+
+
+
+
+
