@@ -4,12 +4,14 @@
 \alias{epdrClam}
 \title{CLAM calibration with automatic postbomb zone selection}
 \usage{
-epdrClam(core_number, connection)
+epdrClam(core_number, connection, ...)
 }
 \arguments{
 \item{core_number}{Integer indicating the number of the core (entity) to be calibrated with CLAM}
 
 \item{connection}{The connection to the EPD to get the geographical position of the core}
+
+\item{...}{Any argument for classical \code{\link[EPDr:clam]{clam}} function.}
 }
 \value{
 The same set of
