@@ -15,11 +15,8 @@
 #' @examples
 #' #TBW
 epdrClam <- function(core_number, connection, ...){
-    sqlQuery <- paste("SELECT site_ FROM entity WHERE e_=", core_number, ";", sep="")
-    site_num <- as.character(dbGetQuery(connection, sqlQuery))
     
-    sqlQuery <-paste("SELECT * FROM siteloc WHERE site_=", site_num, ";", sep="")
-    siteloc <- dbGetQuery(connection, sqlQuery)
+    siteloc <- getSite(core_number, connection)
     
     coord <- siteloc[, c("londd", "latdd")]     
     

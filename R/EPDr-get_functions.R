@@ -1,3 +1,41 @@
+
+
+
+
+
+#' Title TBW
+#'
+#' TBW
+#'
+#' @param core_number TBW
+#' @param connection TBW
+#'
+#' @return TBW
+#' 
+#' @export
+#'
+#' @examples
+#' #TBW
+getSite <- function(core_number, connection){
+    sqlQuery <- paste("SELECT site_ FROM entity WHERE e_=", core_number, ";", sep="")
+    site_num <- as.character(dbGetQuery(connection, sqlQuery))
+    
+    sqlQuery <-paste("SELECT * FROM siteloc WHERE site_=", site_num, ";", sep="")
+    site <- dbGetQuery(connection, sqlQuery)   
+    
+    return(site)
+}
+
+
+
+
+
+
+
+
+
+
+
 #' Extract C14 data for a particular core (entity in the EPD DDBB)
 #' 
 #' Given a core number (as in the EPD DDBB: e_) the function returns a matrix with the C14 data associated to this core. This values
@@ -36,7 +74,7 @@
 #' disconnectFromEPD(connection=epd.connection)
 getC14 <- function(core_number, connection) {
     rest <- getRestriction(core_number, connection)
-
+    
     sqlQuery <- paste("SELECT * FROM c14 WHERE e_=", core_number, ";", sep="")
     c14 <- dbGetQuery(connection, sqlQuery)
     
@@ -85,6 +123,8 @@ getC14 <- function(core_number, connection) {
 getChronology <- function(core_number, connection) {
     rest <- getRestriction(core_number, connection)
     
+    site <- getSite(core_number, connection)
+    
     sqlQuery <-paste("SELECT * FROM chron WHERE e_=", core_number, ";", sep="")
     chron <- dbGetQuery(connection, sqlQuery)
     
@@ -98,7 +138,7 @@ getChronology <- function(core_number, connection) {
         warning("This core (entity) does not have chronologies.", call.=F)
         output <- chronology()
     }else{
-        output <- chronology(core_number=core_number, restriction=rest, number_of_chronologies=number_of_chronologies, default_chronology=default_chronology, chron=chron, agebasis=agebasis)
+        output <- chronology(core_number=core_number, restriction=rest, site=site, number_of_chronologies=number_of_chronologies, default_chronology=default_chronology, chron=chron, agebasis=agebasis)
     }
     
     return(output)
@@ -225,12 +265,12 @@ getRestriction <- function(core_number, connection){
 #' # TBW
 getDatation <- function(core_number, connection){
     rest <- getRestriction(core_number, connection)
-    
+    site <- getSite(core_number, connection)
     chronology <- getChronology(core_number, connection)
     c14 <- getC14(core_number, connection)
     events <- getEvents(core_number, connection)
     depths <- getDepths(core_number, connection)
-    output <- datation(core_number=core_number, restriction=rest, chronology=chronology, c14=c14, events=events, depths=depths)
+    output <- datation(core_number=core_number, restriction=rest, site=site, chronology=chronology, c14=c14, events=events, depths=depths)
     return(output)
 }
     
@@ -249,6 +289,8 @@ getDatation <- function(core_number, connection){
 #' # TBW
 getCounts <- function(core_number, connection){
     rest <- getRestriction(core_number, connection)
+    
+    site <- getSite(core_number, connection)
     
     sqlQuery <- paste("SELECT sample_, count, varname FROM p_counts NATURAL JOIN p_vars WHERE e_=", core_number, ";", sep="")
     counts.raw <- dbGetQuery(connection, sqlQuery)
@@ -270,7 +312,7 @@ getCounts <- function(core_number, connection){
     
     taxa.groupid <- groupid$groupid
     
-    counts <- counts(core_number=core_number, restriction=rest, taxa_names=taxa.names, taxa_groupid=taxa.groupid, sample_=sample_, counts=counts.cast)
+    counts <- counts(core_number=core_number, restriction=rest, site=site, taxa_names=taxa.names, taxa_groupid=taxa.groupid, sample_=sample_, counts=counts.cast)
 
     return(counts)
 }
@@ -287,6 +329,8 @@ getCounts <- function(core_number, connection){
 #' # TBW
 getAges <- function(core_number, connection){
     rest <- getRestriction(core_number, connection)
+    
+    site <- getSite(core_number, connection)
     
     sqlQuery<- paste("SELECT sample_, chron_, agebp FROM p_agedpt WHERE e_=", core_number, ";", sep="")
     ages <- dbGetQuery(connection, sqlQuery)
@@ -309,7 +353,7 @@ getAges <- function(core_number, connection){
         colnames(ages.cast) <- 1
     }
     
-    ages.final <- ages(core_number=core_number, restriction=rest, default_chronology=default_chronology, sample_=sample_, depth_ages=ages.cast)
+    ages.final <- ages(core_number=core_number, restriction=rest, site=site, default_chronology=default_chronology, sample_=sample_, depth_ages=ages.cast)
     return(ages.final)
 }
 
@@ -326,10 +370,12 @@ getAges <- function(core_number, connection){
 #' # TBW
 getAgedCounts <- function(core_number, connection){
     rest <- getRestriction(core_number, connection)
+    site <- getSite(core_number, connection)
+    
     ages <- getAges(core_number, connection)
     counts <- getCounts(core_number, connection)
 
-    agedcounts <- agedcounts(core_number=core_number, restriction=rest, ages=ages, counts=counts)  
+    agedcounts <- agedcounts(core_number=core_number, restriction=rest, site=site, ages=ages, counts=counts)  
     return(agedcounts)
 }
 
