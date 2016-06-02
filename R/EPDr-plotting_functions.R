@@ -16,8 +16,6 @@ mapTaxaAge <- function(list, taxa, age){
     
     dataList <- lapply(list, function(x, y, z){taxaAgeData(x, y, z)}, age, taxa)
     dataList <- do.call(rbind, dataList)
-    library(ggmap)
-    library(ggplot2)
     ggplot(dataList, aes(x=londd, y=latdd, colour=count, size=count)) +
         borders("world") +
         geom_point() +

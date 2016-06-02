@@ -19,7 +19,7 @@ Given a specific core (entity) this function return the information at which dep
 }
 \examples{
 #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#                                 password="epdrpw", host="diegonl.ugr.es")
+#                                 password="epdrpw", host="localhost")
 #getDepths(1, epd.connection)
 #getDepths(51, epd.connection)
 #disconnectFromEPD(connection=epd.connection)

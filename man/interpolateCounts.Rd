@@ -26,7 +26,7 @@ specific time periods defined by the user. This can be used to estimate counts f
 or cores in the database, standardizing them for integrative analysis.
 }
 \examples{
-#connEPD <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb", user="epdr",
+#connEPD <- connectToEPD(host="localhost", database="epd_ddbb", user="epdr",
 # password="epdrpw")
 #t <- c(seq(0, 21000, by=500))
 #ac.1 <- getAgedCounts(1, connEPD)

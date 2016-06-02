@@ -34,7 +34,7 @@ the data are not passed as arguments the function will ask for them interactivel
 # Not run
 # epd.connection <- connectToEPD()
 #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#                                 password="epdrpw", host="diegonl.ugr.es")
+#                                 password="epdrpw", host="localhost"))
 #epd.connection
 # To list all the tables in the database we have connected with
 #dbListTables(epd.connection)

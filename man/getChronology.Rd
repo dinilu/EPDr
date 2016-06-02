@@ -27,7 +27,7 @@ in the EPD DDBB. This information comes from two different tables in the DDBB: c
 }
 \examples{
 #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#                                 password="epdrpw", host="diegonl.ugr.es")
+#                                 password="epdrpw", host="localhost")
 #getChronology(1, epd.connection)
 #getChronology(400, epd.connection)
 #disconnectFromEPD(connection=epd.connection)

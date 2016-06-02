@@ -33,7 +33,7 @@ Given a specific core number and connection to the EPD, this function return the
 }
 \examples{
 #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#                                password="epdrpw", host="diegonl.ugr.es")
+#                                password="epdrpw", host="localhost")
 #getEvents(1, epd.connection)
 #getEvents(51, epd.connection)
 #disconnectFromEPD(connection=epd.connection)

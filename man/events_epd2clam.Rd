@@ -16,7 +16,7 @@ Data frame with event data in CLAM format.
 This function takes event data to fit into a new table that comply with CLAM format.
 }
 \examples{
-#epd.connection <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb",
+#epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
 #                               user="epdr", password="epdrpw")
 #synevent <- dbGetQuery(epd.connection, "SELECT * FROM synevent WHERE e_ = 51;")
 #event <- dbGetQuery(epd.connection, paste("SELECT * FROM event WHERE event_ = ",

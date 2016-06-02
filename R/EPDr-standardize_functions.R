@@ -21,7 +21,7 @@ trans2Percentages <- function(counts){}
 #' @export
 #'
 #' @examples
-#' #connEPD <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb", user="epdr",
+#' #connEPD <- connectToEPD(host="localhost", database="epd_ddbb", user="epdr",
 #' # password="epdrpw")
 #' #t <- c(seq(0, 21000, by=500))
 #' #ac.1 <- getAgedCounts(1, connEPD)

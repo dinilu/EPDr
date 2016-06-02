@@ -68,7 +68,7 @@ getSite <- function(core_number, connection){
 #'
 #' @examples
 #' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#' #                                 password="epdrpw", host="diegonl.ugr.es")
+#' #                                 password="epdrpw", host="localhost")
 #' #getC14(1, epd.connection)
 #' #getC14(400, epd.connection)
 #' #disconnectFromEPD(connection=epd.connection)
@@ -116,7 +116,7 @@ getC14 <- function(core_number, connection) {
 #'
 #' @examples
 #' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#' #                                 password="epdrpw", host="diegonl.ugr.es")
+#' #                                 password="epdrpw", host="localhost")
 #' #getChronology(1, epd.connection)
 #' #getChronology(400, epd.connection)
 #' #disconnectFromEPD(connection=epd.connection)
@@ -174,7 +174,7 @@ getChronology <- function(core_number, connection) {
 #'
 #' @examples
 #' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#' #                                password="epdrpw", host="diegonl.ugr.es")
+#' #                                password="epdrpw", host="localhost")
 #' #getEvents(1, epd.connection)
 #' #getEvents(51, epd.connection)
 #' #disconnectFromEPD(connection=epd.connection)
@@ -213,7 +213,7 @@ getEvents <- function(core_number, connection){
 #'
 #' @examples
 #' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#' #                                 password="epdrpw", host="diegonl.ugr.es")
+#' #                                 password="epdrpw", host="localhost")
 #' #getDepths(1, epd.connection)
 #' #getDepths(51, epd.connection)
 #' #disconnectFromEPD(connection=epd.connection)

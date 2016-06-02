@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' #library(EPDr)
-#' #epd.connection <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb",
+#' #epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
 #' #                               user="epdr", password="epdrpw")
 #' #c14 <- getC14(400, epd.connection)
 #' #c14.clam <- c14_epd2clam(c14)
@@ -45,7 +45,7 @@ c14_epd2clam <- function(C14) {
 #'
 #' @examples
 #' #library(EPDr)
-#' #epd.connection <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb",
+#' #epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
 #' #                               user="epdr", password="epdrpw")
 #' #c14 <- getC14(400, epd.connection)
 #' #c14.clam <- c14_epd2clam(c14)
@@ -79,7 +79,7 @@ agebasis_epd2clam <- function(agebasis){
 #' @export
 #'
 #' @examples
-#' #epd.connection <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb",
+#' #epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
 #' #                               user="epdr", password="epdrpw")
 #' #synevent <- dbGetQuery(epd.connection, "SELECT * FROM synevent WHERE e_ = 51;")
 #' #event <- dbGetQuery(epd.connection, paste("SELECT * FROM event WHERE event_ = ",
@@ -114,7 +114,7 @@ events_epd2clam <- function(event){
 #'
 #' @examples
 #' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#' #                                 password="epdrpw", host="diegonl.ugr.es")
+#' #                                 password="epdrpw", host="localhost")
 #' #depths.1 <- getDepths(1, epd.connection)
 #' #depths_epd2clam(depths.1)
 #' #disconnectFromEPD(connection=epd.connection)
