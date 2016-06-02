@@ -16,10 +16,10 @@ Vector with depths in ascending order.
 This function takes depths data, as returned by \code{\link[EPDr:getDepths]{getDepths}}, to comply with CLAM format.
 }
 \examples{
-epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-                                 password="epdrpw", host="diegonl.ugr.es")
-depths.1 <- getDepths(1, epd.connection)
-depths_epd2clam(depths.1)
-disconnectFromEPD(connection=epd.connection)
+#epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#                                 password="epdrpw", host="diegonl.ugr.es")
+#depths.1 <- getDepths(1, epd.connection)
+#depths_epd2clam(depths.1)
+#disconnectFromEPD(connection=epd.connection)
 }
 

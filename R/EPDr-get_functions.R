@@ -67,11 +67,11 @@ getSite <- function(core_number, connection){
 #' @export
 #'
 #' @examples
-#' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#'                                  password="epdrpw", host="diegonl.ugr.es")
-#' getC14(1, epd.connection)
-#' getC14(400, epd.connection)
-#' disconnectFromEPD(connection=epd.connection)
+#' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#' #                                 password="epdrpw", host="diegonl.ugr.es")
+#' #getC14(1, epd.connection)
+#' #getC14(400, epd.connection)
+#' #disconnectFromEPD(connection=epd.connection)
 getC14 <- function(core_number, connection) {
     rest <- getRestriction(core_number, connection)
     
@@ -115,11 +115,11 @@ getC14 <- function(core_number, connection) {
 #' @export
 #'
 #' @examples
-#' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#'                                  password="epdrpw", host="diegonl.ugr.es")
-#' getChronology(1, epd.connection)
-#' getChronology(400, epd.connection)
-#' disconnectFromEPD(connection=epd.connection)
+#' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#' #                                 password="epdrpw", host="diegonl.ugr.es")
+#' #getChronology(1, epd.connection)
+#' #getChronology(400, epd.connection)
+#' #disconnectFromEPD(connection=epd.connection)
 getChronology <- function(core_number, connection) {
     rest <- getRestriction(core_number, connection)
     
@@ -173,11 +173,11 @@ getChronology <- function(core_number, connection) {
 #' @export
 #'
 #' @examples
-#' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#'                                  password="epdrpw", host="diegonl.ugr.es")
-#' getEvents(1, epd.connection)
-#' getEvents(51, epd.connection)
-#' disconnectFromEPD(connection=epd.connection)
+#' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#' #                                password="epdrpw", host="diegonl.ugr.es")
+#' #getEvents(1, epd.connection)
+#' #getEvents(51, epd.connection)
+#' #disconnectFromEPD(connection=epd.connection)
 getEvents <- function(core_number, connection){
     rest <- getRestriction(core_number, connection)
 
@@ -212,11 +212,11 @@ getEvents <- function(core_number, connection){
 #' @export
 #'
 #' @examples
-#' epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#'                                  password="epdrpw", host="diegonl.ugr.es")
-#' getDepths(1, epd.connection)
-#' getDepths(51, epd.connection)
-#' disconnectFromEPD(connection=epd.connection)
+#' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#' #                                 password="epdrpw", host="diegonl.ugr.es")
+#' #getDepths(1, epd.connection)
+#' #getDepths(51, epd.connection)
+#' #disconnectFromEPD(connection=epd.connection)
 getDepths <- function(core_number, connection){
     rest <- getRestriction(core_number, connection)
 

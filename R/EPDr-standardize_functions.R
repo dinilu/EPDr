@@ -21,18 +21,19 @@ trans2Percentages <- function(counts){}
 #' @export
 #'
 #' @examples
-#' connEPD <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb", user="epdr", password="epdrpw")
-#' t <- c(seq(0, 21000, by=500))
-#' ac.1 <- getAgedCounts(1, connEPD)
-#' interpolateCounts(ac.1, t)
+#' #connEPD <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb", user="epdr",
+#' # password="epdrpw")
+#' #t <- c(seq(0, 21000, by=500))
+#' #ac.1 <- getAgedCounts(1, connEPD)
+#' #interpolateCounts(ac.1, t)
 #' 
-#' ac.2 <- getAgedCounts(2, connEPD)
-#' interpolateCounts(ac.2, t)
+#' #ac.2 <- getAgedCounts(2, connEPD)
+#' #interpolateCounts(ac.2, t)
 #' 
-#' ac.3 <- getAgedCounts(3, connEPD)
-#' interpolateCounts(ac.3, t)
-#' interpolateCounts(ac.3, t, 1)
-#' interpolateCounts(ac.3, t, 2)
+#' #ac.3 <- getAgedCounts(3, connEPD)
+#' #interpolateCounts(ac.3, t)
+#' #interpolateCounts(ac.3, t, 1)
+#' #interpolateCounts(ac.3, t, 2)
 interpolateCounts <- function(agedcount, time, chronology=NULL){
     ## extract ages and counts from the agedcount object
     if(is.null(chronology)){
@@ -44,7 +45,7 @@ interpolateCounts <- function(agedcount, time, chronology=NULL){
     ## set the time bounds
     min.time <- time[which(time >= min(sample.ages))[1]]
     max.time <- time[which(time <= max(sample.ages, na.rm=T))][length(which(time <= max(sample.ages, na.rm=T)))]
-    interp.ages <- seq(min.time, max.time, by=500)
+    interp.ages <- time[which(time >= min.time & time <= max.time)]
     
     ## interpolate the relative datas to the nearest 1000 years & create the final site data frame
     interp.counts <- matrix(nrow=length(interp.ages), ncol=ncol(sample.counts))
@@ -65,19 +66,6 @@ interpolateCounts <- function(agedcount, time, chronology=NULL){
     
     return(interp.agedcount)    
 }
-
-connEPD <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb", user="epdr", password="epdrpw")
-t <- c(seq(0, 21000, by=500))
-ac.1 <- getAgedCounts(1, connEPD)
-interpolateCounts(ac.1, t)
-
-ac.2 <- getAgedCounts(2, connEPD)
-interpolateCounts(ac.2, t)
-
-ac.3 <- getAgedCounts(3, connEPD)
-interpolateCounts(ac.3, t)
-interpolateCounts(ac.3, t, 1)
-interpolateCounts(ac.3, t, 2)
 
 standardizeTaxonomy <- function(counts){}
     

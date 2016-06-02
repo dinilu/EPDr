@@ -17,10 +17,10 @@ This function takes C14 data, as those extracted \code{\link[EPDr:getC14]{getC14
 CLAM format.
 }
 \examples{
-library(EPDr)
-epd.connection <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb",
-                               user="epdr", password="epdrpw")
-c14 <- getC14(400, epd.connection)
-c14.clam <- c14_epd2clam(c14)
+#library(EPDr)
+#epd.connection <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb",
+#                               user="epdr", password="epdrpw")
+#c14 <- getC14(400, epd.connection)
+#c14.clam <- c14_epd2clam(c14)
 }
 

@@ -33,13 +33,13 @@ the data are not passed as arguments the function will ask for them interactivel
 \examples{
 # Not run
 # epd.connection <- connectToEPD()
-epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-                                 password="epdrpw", host="diegonl.ugr.es")
-epd.connection
+#epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#                                 password="epdrpw", host="diegonl.ugr.es")
+#epd.connection
 # To list all the tables in the database we have connected with
-dbListTables(epd.connection)
+#dbListTables(epd.connection)
 # Query data from the connection with a SQL statement
-dbGetQuery(epd.connection, "SELECT e_ FROM synevent;")
-disconnectFromEPD(connection=epd.connection)
+#dbGetQuery(epd.connection, "SELECT e_ FROM synevent;")
+#disconnectFromEPD(connection=epd.connection)
 }
 

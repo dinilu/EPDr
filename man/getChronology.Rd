@@ -26,10 +26,10 @@ Given a core (entity) number, \code{\link[EPDr:getChronology]{getChronology}} ex
 in the EPD DDBB. This information comes from two different tables in the DDBB: chron and agebasis.
 }
 \examples{
-epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-                                 password="epdrpw", host="diegonl.ugr.es")
-getChronology(1, epd.connection)
-getChronology(400, epd.connection)
-disconnectFromEPD(connection=epd.connection)
+#epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#                                 password="epdrpw", host="diegonl.ugr.es")
+#getChronology(1, epd.connection)
+#getChronology(400, epd.connection)
+#disconnectFromEPD(connection=epd.connection)
 }
 

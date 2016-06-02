@@ -18,9 +18,9 @@ Disconnect a connection to a EPD database
 \code{disconnectFromEPD} turns down a connection to a EPD DDBB server.
 }
 \examples{
-epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-                                 password="epdrpw", host="diegonl.ugr.es")
-disconnectFromEPD(connection=epd.connection)
-epd.connection
+#epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#                                 password="epdrpw", host="diegonl.ugr.es")
+#disconnectFromEPD(connection=epd.connection)
+#epd.connection
 }
 

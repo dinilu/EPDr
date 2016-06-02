@@ -17,13 +17,13 @@ This function takes no-C14 data, that can be extracted from a chronology object,
 CLAM format.
 }
 \examples{
-library(EPDr)
-epd.connection <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb",
-                               user="epdr", password="epdrpw")
-c14 <- getC14(400, epd.connection)
-c14.clam <- c14_epd2clam(c14)
-chron <- getChronology(400, epd.connection)
-noc14.clam <- agebasis_epd2clam(chron@agebasis)
-all.clam <- rbind(c14.clam, noc14.clam)
+#library(EPDr)
+#epd.connection <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb",
+#                               user="epdr", password="epdrpw")
+#c14 <- getC14(400, epd.connection)
+#c14.clam <- c14_epd2clam(c14)
+#chron <- getChronology(400, epd.connection)
+#noc14.clam <- agebasis_epd2clam(chron@agebasis)
+#all.clam <- rbind(c14.clam, noc14.clam)
 }
 

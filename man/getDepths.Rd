@@ -18,10 +18,10 @@ Data frame with all the information for pollen samples as in the p_sample table 
 Given a specific core (entity) this function return the information at which depths samples were taken for pollen data.
 }
 \examples{
-epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-                                 password="epdrpw", host="diegonl.ugr.es")
-getDepths(1, epd.connection)
-getDepths(51, epd.connection)
-disconnectFromEPD(connection=epd.connection)
+#epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#                                 password="epdrpw", host="diegonl.ugr.es")
+#getDepths(1, epd.connection)
+#getDepths(51, epd.connection)
+#disconnectFromEPD(connection=epd.connection)
 }
 

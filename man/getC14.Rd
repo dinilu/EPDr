@@ -38,10 +38,10 @@ Given a core number (as in the EPD DDBB: e_) the function returns a matrix with 
 come from two different tables of the EPD: c14 and geochron.
 }
 \examples{
-epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-                                 password="epdrpw", host="diegonl.ugr.es")
-getC14(1, epd.connection)
-getC14(400, epd.connection)
-disconnectFromEPD(connection=epd.connection)
+#epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#                                 password="epdrpw", host="diegonl.ugr.es")
+#getC14(1, epd.connection)
+#getC14(400, epd.connection)
+#disconnectFromEPD(connection=epd.connection)
 }
 

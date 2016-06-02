@@ -26,17 +26,18 @@ specific time periods defined by the user. This can be used to estimate counts f
 or cores in the database, standardizing them for integrative analysis.
 }
 \examples{
-connEPD <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb", user="epdr", password="epdrpw")
-t <- c(seq(0, 21000, by=500))
-ac.1 <- getAgedCounts(1, connEPD)
-interpolateCounts(ac.1, t)
+#connEPD <- connectToEPD(host="diegonl.ugr.es", database="epd_ddbb", user="epdr",
+# password="epdrpw")
+#t <- c(seq(0, 21000, by=500))
+#ac.1 <- getAgedCounts(1, connEPD)
+#interpolateCounts(ac.1, t)
 
-ac.2 <- getAgedCounts(2, connEPD)
-interpolateCounts(ac.2, t)
+#ac.2 <- getAgedCounts(2, connEPD)
+#interpolateCounts(ac.2, t)
 
-ac.3 <- getAgedCounts(3, connEPD)
-interpolateCounts(ac.3, t)
-interpolateCounts(ac.3, t, 1)
-interpolateCounts(ac.3, t, 2)
+#ac.3 <- getAgedCounts(3, connEPD)
+#interpolateCounts(ac.3, t)
+#interpolateCounts(ac.3, t, 1)
+#interpolateCounts(ac.3, t, 2)
 }
 

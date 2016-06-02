@@ -32,10 +32,10 @@ frame follows terminology in the original database and are as follows:
 Given a specific core number and connection to the EPD, this function return the information of events associated with the core.
 }
 \examples{
-epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-                                 password="epdrpw", host="diegonl.ugr.es")
-getEvents(1, epd.connection)
-getEvents(51, epd.connection)
-disconnectFromEPD(connection=epd.connection)
+#epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#                                password="epdrpw", host="diegonl.ugr.es")
+#getEvents(1, epd.connection)
+#getEvents(51, epd.connection)
+#disconnectFromEPD(connection=epd.connection)
 }
 
