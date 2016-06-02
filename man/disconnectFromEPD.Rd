@@ -19,7 +19,7 @@ Disconnect a connection to a EPD database
 }
 \examples{
 #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
-#                                 password="epdrpw", host="localhost"))
+#                                 password="epdrpw", host="localhost")
 #disconnectFromEPD(connection=epd.connection)
 #epd.connection
 }
