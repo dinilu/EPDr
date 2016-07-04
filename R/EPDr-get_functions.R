@@ -1,8 +1,6 @@
 
 
 
-
-
 #' Title TBW
 #'
 #' TBW
@@ -28,6 +26,20 @@ getSite <- function(core_number, connection){
 
 
 
+#' Title
+#'
+#' @param core_number 
+#' @param connection 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+getEntity <- function(core_number, connection){
+    sqlQuery <- paste("SELECT * FROM entity WHERE e_=", core_number, ";", sep="")
+    results <- dbGetQuery(connection, sqlQuery)
+    return(results)
+}
 
 
 
@@ -64,6 +76,7 @@ getSite <- function(core_number, connection){
 #'  \item \code{materialdated}:
 #'  \item \code{publ_}: Publication identifier.
 #' } 
+#' 
 #' @export
 #'
 #' @examples
@@ -132,8 +145,11 @@ getChronology <- function(core_number, connection) {
     agebasis <- dbGetQuery(connection, sqlQuery)
     
     number_of_chronologies <- nrow(chron)
+
     default_chronology <- chron$chron_[which(chron$defaultchron == "Y")]
- 
+    if(is.null(default_chronology)){default_chronology <- 0}
+    if(length(default_chronology) == 0){default_chronology <- 0}
+    
     if(number_of_chronologies == 0){
         warning("This core (entity) does not have chronologies.", call.=F)
         output <- chronology()
@@ -266,11 +282,13 @@ getRestriction <- function(core_number, connection){
 getDatation <- function(core_number, connection){
     rest <- getRestriction(core_number, connection)
     site <- getSite(core_number, connection)
+    coord <- site[, c("londd", "latdd")]     
+    pb_zone <- over(SpatialPoints(coord), postbomb.map)$Zone
     chronology <- getChronology(core_number, connection)
     c14 <- getC14(core_number, connection)
     events <- getEvents(core_number, connection)
     depths <- getDepths(core_number, connection)
-    output <- datation(core_number=core_number, restriction=rest, site=site, chronology=chronology, c14=c14, events=events, depths=depths)
+    output <- datation(core_number=core_number, restriction=rest, site=site, postbomb_zone=pb_zone, chronology=chronology, c14=c14, events=events, depths=depths)
     return(output)
 }
     
@@ -296,23 +314,35 @@ getCounts <- function(core_number, connection){
     counts.raw <- dbGetQuery(connection, sqlQuery)
     if(is.data.frame(counts.raw) && nrow(counts.raw) == 0){
         warning("This core does not have count data.", call.=FALSE)
+        counts.cast <- data.frame(0)[,-1]
+        taxa.names <- character(0)
+        sample_ <- numeric(0)
+        taxa.groupid <- character(0)
+        taxa.accepted <- numeric(0)
+        taxa.mhvar <- numeric(0)
+    }else{
+        counts.cast <- dcast(counts.raw, sample_ ~ varname, value.var='count')
+        counts.cast[is.na(counts.cast)] <- 0
+        sample_ <- counts.cast[,1]
+        counts.cast <- counts.cast[,-1]
+        
+        taxa.names <- colnames(counts.cast)
+        
+        sqlQuery <- paste("SELECT varname, groupid, accvar_, mhvar_ FROM p_vars NATURAL JOIN p_group WHERE varname IN ('", paste(taxa.names, collapse="','"), "');", sep="")
+        groupid <- dbGetQuery(connection, sqlQuery)
+        groupid <- groupid[match(taxa.names, groupid$varname),]
+        
+        taxa.groupid <- groupid$groupid
+        taxa.accepted <- groupid$accvar_
+        taxa.mhvar <- groupid$mhvar_
     }
 
-    counts.cast <- dcast(counts.raw, sample_ ~ varname, value.var='count')
-    counts.cast[is.na(counts.cast)] <- 0
-
-    sample_ <- counts.cast[,1]
-    counts.cast <- counts.cast[,-1]
-
-    taxa.names <- colnames(counts.cast)
-
-    sqlQuery <- paste("SELECT varname, groupid FROM p_vars NATURAL JOIN p_group WHERE varname IN ('", paste(taxa.names, collapse="','"), "');", sep="")
-    groupid <- dbGetQuery(connection, sqlQuery)
-    groupid <- groupid[match(taxa.names, groupid$varname),]
     
-    taxa.groupid <- groupid$groupid
+    data_type <- factor("Counts", levels=c("Counts", "Percentages"))
+    data_processing <- factor("Samples", levels=c("Samples", "Interpolated", "Ranged means"))
+    sample_label <- as.character(sample_)
     
-    counts <- counts(core_number=core_number, restriction=rest, site=site, taxa_names=taxa.names, taxa_groupid=taxa.groupid, sample_=sample_, counts=counts.cast)
+    counts <- counts(core_number=core_number, restriction=rest, site=site, data_type=data_type, data_processing=data_processing, taxa_names=taxa.names, taxa_groupid=taxa.groupid, taxa_accepted=taxa.accepted, taxa_mhvar=taxa.mhvar, sample_=sample_, sample_label=sample_label, counts=counts.cast)
 
     return(counts)
 }
@@ -323,6 +353,7 @@ getCounts <- function(core_number, connection){
 #' @param connection  TBW
 #'
 #' @return TBW
+#' 
 #' @export
 #'
 #' @examples
@@ -338,22 +369,45 @@ getAges <- function(core_number, connection){
     sqlQuery <-paste("SELECT * FROM chron WHERE e_=", core_number, ";", sep="")
     chron <- dbGetQuery(connection, sqlQuery)
 
+    depths <- getDepths(core_number, connection)
+    
     default_chronology <- chron$chron_[which(chron$defaultchron == "Y")]
-
+    if(is.null(default_chronology)){default_chronology <- 0}
+    
+    sample_ <- depths$sample_
+    depthcm <- depths$depthcm
+    sample_label <- as.character(sample_)
+    
     if(is.data.frame(ages) && nrow(ages) == 0){
         warning("This core  does not have age data.", call.=FALSE)
+        ages.cast <- data.frame(a=NA)
+        colnames(ages.cast) <- c("1")
+    }else{
+        ages.cast <- dcast(ages, sample_ ~ chron_, value.var='agebp')
+        ages.cast <- ages.cast[match(sample_, ages.cast$sample_),]
+        ages.cast <- ages.cast[,-1]
     }
     
-    ages.cast <- dcast(ages, sample_ ~ chron_, value.var='agebp')
-    
-    sample_ <- ages.cast[,1]
-    ages.cast <- ages.cast[,-1]
     if(class(ages.cast) == "numeric"){
         ages.cast <- data.frame(ages.cast)
         colnames(ages.cast) <- 1
     }
     
-    ages.final <- ages(core_number=core_number, restriction=rest, site=site, default_chronology=default_chronology, sample_=sample_, depth_ages=ages.cast)
+    if(core_number %in% giesecke.EpdAgeCut$ID){
+        is.in.giesecke <- TRUE
+        ages.giesecke <- giesecke.EpdAgeCut[which(giesecke.EpdAgeCut$ID == core_number), c("ID", "Event", "Depth..m.", "Age.dated..ka.", "Age.min..ka.", "Age.max..ka.")]
+        ages.giesecke$depthcm <- ages.giesecke$Depth..m. * 100
+        ages.giesecke <- ages.giesecke[match(round(depths[,"depthcm"], 1), round(ages.giesecke$depthcm, 1)), ]
+        ages.giesecke$agesbp <- ages.giesecke$Age.dated..ka. * 1000
+
+        column.names <- colnames(ages.cast)
+        ages.cast <- cbind(ages.cast, ages.giesecke$agesbp)
+        colnames(ages.cast) <- c(column.names, "giesecke")
+    }else{
+        is.in.giesecke <- FALSE
+    }
+
+    ages.final <- ages(core_number=core_number, restriction=rest, site=site, default_chronology=default_chronology, giesecke=is.in.giesecke, sample_=sample_, sample_label=sample_label, depthcm=depthcm, depths=depths, depth_ages=ages.cast)
     return(ages.final)
 }
 
@@ -364,6 +418,7 @@ getAges <- function(core_number, connection){
 #' @param connection TBW 
 #'
 #' @return TBW
+#' 
 #' @export
 #'
 #' @examples

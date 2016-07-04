@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' #TBW
-epdrClam <- function(core_number, connection, ...){
+epdrClam <- function(core_number, connection){
     
     siteloc <- getSite(core_number, connection)
     
@@ -27,5 +27,5 @@ epdrClam <- function(core_number, connection, ...){
     if(pb_zone$Zone == "SH12") pb <- 4
     if(pb_zone$Zone == "SH3") pb <- 5
     
-    clam(as.character(core_number), postbomb=pb, ...)
+    clam(as.character(core_number), postbomb=pb)
 }

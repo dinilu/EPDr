@@ -4,7 +4,7 @@
 \alias{epdrClam}
 \title{CLAM calibration with automatic postbomb zone selection}
 \usage{
-epdrClam(core_number, connection, ...)
+epdrClam(core_number, connection)
 }
 \arguments{
 \item{core_number}{Integer indicating the number of the core (entity) to be calibrated with CLAM}

@@ -67,11 +67,13 @@ chronology <- setClass("chronology",
                        )
 )
 
+
 datation <- setClass("datation",
                      slots=c(
                          core_number="numeric",
                          restriction="data.frame",
                          site="data.frame",
+                         postbomb_zone="factor",
                          chronology="chronology",
                          c14="data.frame",
                          events="data.frame",
@@ -110,6 +112,7 @@ datation <- setClass("datation",
                              elevation=NA,
                              areaofsite=NA
                          )[-1,],
+                         postbomb_zone=factor(levels=c("NH1", "NH2", "NH3", "SH12", "SH3")),
                          chronology=chronology(),
                          c14=data.frame(
                              e_=NA,
@@ -159,9 +162,14 @@ counts <- setClass("counts",
                        core_number="numeric",
                        restriction="data.frame",
                        site="data.frame",
+                       data_type="factor",
+                       data_processing="factor",
                        taxa_names="character",
+                       taxa_accepted="numeric",
+                       taxa_mhvar="numeric",
                        taxa_groupid="character",
                        sample_="numeric",
+                       sample_label="character",
                        counts="data.frame"
                    ),
                    prototype=list(
@@ -197,9 +205,14 @@ counts <- setClass("counts",
                            elevation=NA,
                            areaofsite=NA
                        )[-1,],
+                       data_type=factor(levels=c("Counts", "Percentages")),
+                       data_processing=factor(levels=c("Samples", "Interpolated", "Ranged means")),
                        taxa_names=character(0),
+                       taxa_accepted=numeric(0),
+                       taxa_mhvar=numeric(0),
                        taxa_groupid=character(0),
                        sample_=numeric(0),
+                       sample_label=character(0),
                        counts=data.frame()
                    )
 )
@@ -210,7 +223,11 @@ ages <- setClass("ages",
                      restriction="data.frame",
                      site="data.frame",
                      default_chronology="numeric",
+                     giesecke="logical",
                      sample_="numeric",
+                     sample_label="character",
+                     depthcm="numeric",
+                     depths="data.frame",
                      depth_ages="data.frame"
                  ),
                  prototype=list(
@@ -247,7 +264,20 @@ ages <- setClass("ages",
                          areaofsite=NA
                      )[-1,],
                      default_chronology=numeric(0),
+                     giesecke=logical(0),
                      sample_=numeric(0),
+                     sample_label=character(0),
+                     depthcm=numeric(0),
+                     depth=data.frame(
+                         e_=NA,
+                         sample_=NA,
+                         depthcm=NA,
+                         thickness=NA,
+                         analyst_=NA,
+                         analydate=NA,
+                         notes=NA,
+                         lab_ID=NA
+                     )[-1,],
                      depth_ages=data.frame()
                  )
 )
