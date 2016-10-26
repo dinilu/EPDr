@@ -1,30 +1,32 @@
 
-#' Title
+#' Title TBW
 #'
-#' @param agedcounts 
-#' @param taxa 
-#' @param sample_label 
-#' @param pres_abse 
-#' @param pollen_thres 
-#' @param zoom_coord 
-#' @param points_pch 
-#' @param points_colour 
-#' @param points_fill 
-#' @param points_range_size 
-#' @param map_title 
-#' @param legend_range 
-#' @param legend_title 
-#' @param napoints_size 
-#' @param napoints_pch 
-#' @param napoints_colour 
-#' @param napoints_fill 
-#' @param countries_bg_colour 
-#' @param countries_border_colour 
+#' @param agedcounts TBW
+#' @param taxa TBW
+#' @param sample_label TBW
+#' @param pres_abse TBW
+#' @param pollen_thres TBW
+#' @param zoom_coord TBW
+#' @param points_pch TBW
+#' @param points_colour TBW
+#' @param points_fill TBW
+#' @param points_range_size TBW
+#' @param map_title TBW
+#' @param legend_range TBW
+#' @param legend_title TBW
+#' @param napoints_size TBW
+#' @param napoints_pch TBW
+#' @param napoints_colour TBW
+#' @param napoints_fill TBW
+#' @param countries_bg_colour TBW
+#' @param countries_border_colour TBW 
 #'
-#' @return
+#' @return TBW
+#' 
 #' @export
 #'
 #' @examples
+#' # TBW
 map_by_TaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, pollen_thres=NULL, zoom_coord=NULL,
                            points_pch=21, points_colour=NULL, points_fill=NULL, points_range_size=NULL, map_title=NULL,
                            legend_range=NULL, legend_title=NULL, napoints_size=0.75, napoints_pch=19, napoints_colour="grey45",
@@ -36,7 +38,7 @@ map_by_TaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, poll
             if(class(agedcounts[[1]]) == "agedcounts"){
                 dataList <- lapply(agedcounts, table_by_taxaAge, sample_label, taxa)    
             }else{
-                if(setequal(colnames(agedcounts[[1]]), c("core_number", "londd", "latdd", "count", "sample_label", "taxa"))){
+                if(setequal(colnames(agedcounts[[1]]), c("e_", "londd", "latdd", "count", "sample_label", "taxa"))){
                     dataList <- agedcounts
                 }else{
                     stop("data.frames in agedcounts of the wrong type. See ?table_by_taxaAge.")
@@ -61,9 +63,8 @@ map_by_TaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, poll
         ymax <- zoom_coord[4]
     }
     
-    data_type <- agedcounts[[1]]@counts@data_type
+    counts_type <- agedcounts[[1]]@counts@counts_type
     
-    library(ggplot2)
     if(pres_abse==TRUE){
         if(is.null(pollen_thres)){
             warning("Pollen threshold (pollen_thres) not provided as argment when requiring presence maps. Data maped using default threshold > 0%)")
@@ -71,7 +72,7 @@ map_by_TaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, poll
         }
         
         dataList$count <- dataList$count > pollen_thres
-        dataList_woNA <- subset(dataList, !is.na(dataList$count))
+        dataList_woNA <- dataList[!is.na(dataList$count),]
         
         if(is.null(map_title)){
             map_title <- paste(taxa, " (>", pollen_thres, "): ", sample_label, " cal BP", sep="")    
@@ -89,30 +90,30 @@ map_by_TaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, poll
             points_range_size <- c(2, 3.5)
         }
 
-        ggplot(dataList_woNA, aes(x=londd, y=latdd, fill=count, colour=count, size=count)) +
-            borders("world", fill=countries_bg_colour, colour=countries_border_colour) +
-            geom_point(data=dataList, pch=napoints_pch, colour=napoints_colour, fill=napoints_fill, size=napoints_size, show.legend=FALSE) +
-            geom_point(pch=points_pch) +
-            coord_fixed(xlim=c(xmin, xmax), ylim = c(ymin, ymax), ratio=1) +
-            ggtitle(map_title) +
-            guides(size=guide_legend(title=legend_title), fill=guide_legend(title=legend_title), colour=guide_legend(title=legend_title)) +
-            scale_fill_manual(values=points_fill) +
-            scale_colour_manual(values=points_colour) +
-            scale_size_discrete(range=points_range_size) +
-            theme_bw() 
+        ggplot2::ggplot(dataList_woNA, ggplot2::aes(x=dataList_woNA$londd, y=dataList_woNA$latdd, fill=dataList_woNA$count, colour=dataList_woNA$count, size=dataList_woNA$count)) +
+            ggplot2::borders("world", fill=countries_bg_colour, colour=countries_border_colour) +
+            ggplot2::geom_point(data=dataList, pch=napoints_pch, colour=napoints_colour, fill=napoints_fill, size=napoints_size, show.legend=FALSE) +
+            ggplot2::geom_point(pch=points_pch) +
+            ggplot2::coord_fixed(xlim=c(xmin, xmax), ylim = c(ymin, ymax), ratio=1) +
+            ggplot2::ggtitle(map_title) +
+            ggplot2::guides(size=ggplot2::guide_legend(title=legend_title), fill=ggplot2::guide_legend(title=legend_title), colour=ggplot2::guide_legend(title=legend_title)) +
+            ggplot2::scale_fill_manual(values=points_fill) +
+            ggplot2::scale_colour_manual(values=points_colour) +
+            ggplot2::scale_size_discrete(range=points_range_size) +
+            ggplot2::theme_bw() 
     }else{
         if(is.null(map_title)){
             map_title <- paste(taxa, ": ", sample_label, " cal BP", sep="")    
         }
         if(is.null(legend_title)){
-            if(data_type == "Percentages"){
-                legend_title <- paste(data_type, " (%)", sep="")
+            if(counts_type == "Percentages"){
+                legend_title <- paste(counts_type, " (%)", sep="")
             }else{
-                legend_title <- paste(data_type, " (n)", sep="")
+                legend_title <- paste(counts_type, " (n)", sep="")
             }
         }
         if(is.null(legend_range)){
-            if(data_type == "Percentages"){
+            if(counts_type == "Percentages"){
                 legend_range <- c(0, 100)
             }else{
                 legend_range <- c(0, max(dataList$count))
@@ -130,16 +131,16 @@ map_by_TaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, poll
         
         dataList_zero <- subset(dataList, dataList$count == 0)
         
-        ggplot(dataList, aes(x=londd, y=latdd, fill=count, colour=count, size=count)) +
-            borders("world", fill=countries_bg_colour, colour=countries_border_colour) +
-            geom_point(pch=napoints_pch, colour=napoints_colour, fill=napoints_fill, size=napoints_size, show.legend=FALSE) +
-            geom_point(pch=points_pch) +
-            coord_fixed(xlim=c(xmin, xmax), ylim = c(ymin, ymax), ratio=1) +
-            ggtitle(map_title) +
-            guides(size=guide_legend(title=legend_title), fill=guide_legend(title=legend_title), colour=guide_legend(title=legend_title)) +
-            scale_fill_gradient(low=points_fill[1], high=points_fill[2], limits=legend_range) +
-            scale_colour_gradient(low=points_colour[1], high=points_colour[2], limits=legend_range) +
-            scale_size(range=points_range_size, limits=legend_range) +
-            theme_bw() 
+        ggplot2::ggplot(dataList, ggplot2::aes(x=dataList$londd, y=dataList$latdd, fill=dataList$count, colour=dataList$count, size=dataList$count)) +
+            ggplot2::borders("world", fill=countries_bg_colour, colour=countries_border_colour) +
+            ggplot2::geom_point(pch=napoints_pch, colour=napoints_colour, fill=napoints_fill, size=napoints_size, show.legend=FALSE) +
+            ggplot2::geom_point(pch=points_pch) +
+            ggplot2::coord_fixed(xlim=c(xmin, xmax), ylim = c(ymin, ymax), ratio=1) +
+            ggplot2::ggtitle(map_title) +
+            ggplot2::guides(size=ggplot2::guide_legend(title=legend_title), fill=ggplot2::guide_legend(title=legend_title), colour=ggplot2::guide_legend(title=legend_title)) +
+            ggplot2::scale_fill_gradient(low=points_fill[1], high=points_fill[2], limits=legend_range) +
+            ggplot2::scale_colour_gradient(low=points_colour[1], high=points_colour[2], limits=legend_range) +
+            ggplot2::scale_size(range=points_range_size, limits=legend_range) +
+            ggplot2::theme_bw() 
     }
 }

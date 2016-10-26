@@ -1,15 +1,17 @@
-#' Title
+#' Title TBW
 #'
-#' @param agedcount 
-#' @param sample_label 
-#' @param taxa 
+#' @param agedcount TBW
+#' @param sample_label TBW
+#' @param taxa TBW
 #'
-#' @return
+#' @return TBW
+#' 
 #' @export
 #'
 #' @examples
+#' # TBW
 table_by_taxaAge <- function(agedcount, sample_label, taxa){
-    core_number <- agedcount@core_number
+    e_ <- agedcount@e_
     londd <- agedcount@site$londd
     latdd <- agedcount@site$latdd
     count <- agedcount@counts@counts[which(agedcount@counts@sample_label %in% sample_label), which(agedcount@counts@taxa_names %in% taxa)]
@@ -17,8 +19,8 @@ table_by_taxaAge <- function(agedcount, sample_label, taxa){
         count <- apply(count, MARGIN=1, FUN=sum)
     }
     if(length(count) == 0){count <- NA}
-    output <- data.frame(core_number, londd, latdd, count, sample_label, taxa[[1]])
-    colnames(output) <- c("core_number", "londd", "latdd", "count", "sample_label", "taxa")
+    output <- data.frame(e_, londd, latdd, count, sample_label, taxa[[1]])
+    colnames(output) <- c("e_", "londd", "latdd", "count", "sample_label", "taxa")
     return(output)
 }
 

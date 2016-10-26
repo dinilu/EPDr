@@ -145,15 +145,7 @@ depths_epd2clam <- function(depths){
 #' # TBW
 datation_epd2clam <- function(x, chronology_number=NA, include_chron_not_in_c14=NA, include_c14_not_in_chron=NA, 
                               use_c14_conf_age=NA, use_c14_conf_depth=NA, include_depths=T, include_events=NULL){
-    # x <- prueba
-    # chronology_number=NA
-    # include_chron_not_in_c14=NA
-    # include_c14_not_in_chron=NA
-    # use_c14_conf_age=NA
-    # use_c14_conf_depth=NA
-    # include_depths=T
-    
-    # Define internal functions
+  # Define internal functions
     .printCLAM <- function(data){
         cat(c("lab_ID", "C14_age", "cal_age", "error", "reserv.", "depth", "thickn.\n"), sep="\t")
         apply(data, "\n", MARGIN=1, FUN=cat, sep="\t")
@@ -174,7 +166,7 @@ datation_epd2clam <- function(x, chronology_number=NA, include_chron_not_in_c14=
     }
     
     # Get sub-objects from datation object
-    core_number <- x@core_number
+    e_ <- x@e_
     chronology <- x@chronology
     c14 <- x@c14
     events <- x@events
@@ -189,7 +181,7 @@ datation_epd2clam <- function(x, chronology_number=NA, include_chron_not_in_c14=
     
     # Get agebasis for the chronology and convert for clam
     agebasis <- chronology@agebasis
-    agebasis <- subset(agebasis, chron_ == chronology_number)
+    agebasis <- agebasis[agebasis$chron_ == chronology_number, ]
     
     chron <- agebasis_epd2clam(agebasis)
     c14 <- c14_epd2clam(c14)
@@ -315,19 +307,19 @@ datation_epd2clam <- function(x, chronology_number=NA, include_chron_not_in_c14=
     
     
     # Create directory to save files for CLAM
-    if(!dir.exists(paste("Cores/", core_number, sep=""))){
-        dir.create(paste("Cores/", core_number, sep=""), recursive=TRUE)
+    if(!dir.exists(paste("Cores/", e_, sep=""))){
+        dir.create(paste("Cores/", e_, sep=""), recursive=TRUE)
     }
     
     # Order dataframe by depths and write to the directory
     output <- output[order(output$depth),]    
-    write.csv(output, file=paste("Cores/", core_number, "/", core_number, ".csv", sep=""), na="", row.names=FALSE)
+    utils::write.csv(output, file=paste("Cores/", e_, "/", e_, ".csv", sep=""), na="", row.names=FALSE)
     
     # Extract depth columns for pollen counts and create depths.txt files.
     if(exists("include_depths")){
         depths.clam <- depths_epd2clam(depths)
-        write.table(depths.clam, file=paste("Cores/", core_number, "/", core_number, "_depths.txt", sep=""), col.names=FALSE, na="", row.names=FALSE)
-        write.table(depths, file=paste("Cores/", core_number, "/", core_number, "_depths_ID.txt", sep=""), col.names = F, na="", row.names=FALSE, sep=",")
+        utils::write.table(depths.clam, file=paste("Cores/", e_, "/", e_, "_depths.txt", sep=""), col.names=FALSE, na="", row.names=FALSE)
+        utils::write.table(depths, file=paste("Cores/", e_, "/", e_, "_depths_ID.txt", sep=""), col.names = F, na="", row.names=FALSE, sep=",")
     }
     return(output)
 }

@@ -36,7 +36,7 @@ connectToEPD <- function(database=NULL, user=NULL, password=NULL, driver="Postgr
     if(is.null(password))password <- readline("EPD DB password:")
     
     # Establish connection to PoststgreSQL
-    con <- dbConnect(driver, dbname=database, host=host, user=user, password=password)
+    con <- RPostgreSQL::dbConnect(driver, dbname=database, host=host, user=user, password=password)
     return(con)
 }
 
@@ -59,6 +59,6 @@ connectToEPD <- function(database=NULL, user=NULL, password=NULL, driver="Postgr
 disconnectFromEPD <- function(connection=NULL){
     # Close PostgreSQL connection
     if(is.null(connection))stop("You have to define a working connection to the EPD to be stoped")
-    dbDisconnect(connection)
+    RPostgreSQL::dbDisconnect(connection)
 }
 
