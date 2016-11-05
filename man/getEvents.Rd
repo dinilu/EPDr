@@ -4,10 +4,10 @@
 \alias{getEvents}
 \title{Extract events associated with a specific core (entity) in the EPD DDBB}
 \usage{
-getEvents(core_number, connection)
+getEvents(e_, connection)
 }
 \arguments{
-\item{core_number}{Integer with the core (entity) number for which C14 data want to be extracted.}
+\item{e_}{Integer with the core (entity) number for which C14 data want to be extracted.}
 
 \item{connection}{Connection object to a EPD DDBB where the query is made.}
 }

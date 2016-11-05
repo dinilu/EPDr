@@ -2,14 +2,20 @@
 % Please edit documentation in R/EPDr-list_functions.R
 \name{list_countries}
 \alias{list_countries}
-\title{Title}
+\title{Title TBW}
 \usage{
 list_countries(connection)
 }
 \arguments{
-\item{connection}{}
+\item{connection}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

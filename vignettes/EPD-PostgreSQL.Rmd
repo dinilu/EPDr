@@ -24,7 +24,8 @@ In this vignette we will explain and illustrate how to install a PostgreSQL serv
     + Create a database for EPD into the server
 4. Dump EPD data into the new database
 
-# Download and install PostgreSQL server {.tabset}
+
+# Download and install PostgreSQL server
 
 The first step is to download and install the PostgreSQL server. This step changes depending on your operating system (OS). Select your OS in the tabs below.
 
@@ -64,7 +65,7 @@ Now you have to download the lastest version of the EPD for Postgres from [http:
 
 ![Download EPD website.](img/EPD/EPDwebsite2.png)
 
-# Setup PostgreSQL for EPD: {.tabset}
+# Setup PostgreSQL for EPD:
 
 Before we can dump the EPD data into the server, you need to perform two basic configuration steps:
 
@@ -131,7 +132,7 @@ Repeat the same proccess to create a new role called `wwwadm`.
 
 To create a new database you have to right click in `Databases` element in the `Object browser` pannel and, then, left click on `New Database...`. A new window popup. In the first tab of the window (`Properties`) you have to provide a `Name` for the database. You can use any name of you choice, but it is a good practice to provide an informative name (e.g., `epd`). Do not change any other option and click `Ok`. 
 
-# Dump EPD data into the new database {.tabset}
+# Dump EPD data into the new database
 
 Dumping EPD data into the DDBB server requires to use the command line, and cannot be accomplished in pgAdminIII. To do so, once you are in the command line, use the `cd` command to move into the same folder you downloaded and uncompressed the EPD database for PostgreSQL. Then, you use the `psql` command to connect to the `epd` database in the PostgreSQL server as the `postgres` user. In the same line of code you use the `<` symbol to parse all the `dumpall_epd_db.sql` script for PostgreSQL into the database you just created (`epd`). 
 

@@ -4,10 +4,10 @@
 \alias{getCounts}
 \title{Title TBW}
 \usage{
-getCounts(core_number, connection)
+getCounts(e_, connection)
 }
 \arguments{
-\item{core_number}{TBW}
+\item{e_}{TBW}
 
 \item{connection}{TBW}
 }

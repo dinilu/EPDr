@@ -2,14 +2,20 @@
 % Please edit documentation in R/EPDr-standardize_functions.R
 \name{removeWithoutAges}
 \alias{removeWithoutAges}
-\title{Title}
+\title{Title TBW}
 \usage{
 removeWithoutAges(agedcounts)
 }
 \arguments{
-\item{agedcounts}{}
+\item{agedcounts}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

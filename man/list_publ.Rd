@@ -2,25 +2,31 @@
 % Please edit documentation in R/EPDr-list_functions.R
 \name{list_publ}
 \alias{list_publ}
-\title{Title}
+\title{Title TBW}
 \usage{
-list_publ(connection, e = NULL, countries = NULL, regions = NULL,
+list_publ(connection, e_ = NULL, countries = NULL, regions = NULL,
   sites = NULL, coords = NULL)
 }
 \arguments{
-\item{connection}{}
+\item{connection}{TBW}
 
-\item{e}{}
+\item{e_}{TBW}
 
-\item{countries}{}
+\item{countries}{TBW}
 
-\item{regions}{}
+\item{regions}{TBW}
 
-\item{sites}{}
+\item{sites}{TBW}
 
-\item{coords}{}
+\item{coords}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

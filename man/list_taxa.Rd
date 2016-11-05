@@ -2,16 +2,22 @@
 % Please edit documentation in R/EPDr-list_functions.R
 \name{list_taxa}
 \alias{list_taxa}
-\title{Title}
+\title{Title TBW}
 \usage{
 list_taxa(connection, groups = NULL)
 }
 \arguments{
-\item{connection}{}
+\item{connection}{TBW}
 
-\item{groups}{}
+\item{groups}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

@@ -2,14 +2,20 @@
 % Please edit documentation in R/EPDr-standardize_functions.R
 \name{checkDefaultChronology}
 \alias{checkDefaultChronology}
-\title{Title}
+\title{Title TBW}
 \usage{
 checkDefaultChronology(agedcount)
 }
 \arguments{
-\item{agedcount}{}
+\item{agedcount}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

@@ -2,16 +2,22 @@
 % Please edit documentation in R/EPDr-standardize_functions.R
 \name{filterTaxaGroups}
 \alias{filterTaxaGroups}
-\title{Title}
+\title{Title TBW}
 \usage{
 filterTaxaGroups(counts, taxa_groups)
 }
 \arguments{
-\item{counts}{}
+\item{counts}{TBW}
 
-\item{taxa_groups}{}
+\item{taxa_groups}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

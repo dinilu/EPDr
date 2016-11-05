@@ -2,18 +2,26 @@
 % Please edit documentation in R/EPDr-search_functions.R
 \name{e_by_worker}
 \alias{e_by_worker}
-\title{Title}
+\title{Title TBW}
 \usage{
 e_by_worker(lastname, connection, firstname = NULL, initials = NULL)
 }
 \arguments{
-\item{lastname}{}
+\item{lastname}{TBW}
 
-\item{connection}{}
+\item{connection}{TBW}
 
-\item{initials}{}
+\item{firstname}{TBW}
+
+\item{initials}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

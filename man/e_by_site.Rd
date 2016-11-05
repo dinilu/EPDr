@@ -2,19 +2,22 @@
 % Please edit documentation in R/EPDr-search_functions.R
 \name{e_by_site}
 \alias{e_by_site}
-\title{Title}
+\title{Title TBW}
 \usage{
 e_by_site(site, connection)
 }
 \arguments{
-\item{site}{}
+\item{site}{TBW}
 
-\item{connection}{}
+\item{connection}{TBW}
 }
 \value{
-
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

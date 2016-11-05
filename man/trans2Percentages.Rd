@@ -2,14 +2,20 @@
 % Please edit documentation in R/EPDr-standardize_functions.R
 \name{trans2Percentages}
 \alias{trans2Percentages}
-\title{Title}
+\title{Title TBW}
 \usage{
 trans2Percentages(counts)
 }
 \arguments{
-\item{counts}{}
+\item{counts}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

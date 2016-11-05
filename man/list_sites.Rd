@@ -2,20 +2,26 @@
 % Please edit documentation in R/EPDr-list_functions.R
 \name{list_sites}
 \alias{list_sites}
-\title{Title}
+\title{Title TBW}
 \usage{
 list_sites(connection, countries = NULL, regions = NULL, coords = NULL)
 }
 \arguments{
-\item{connection}{}
+\item{connection}{TBW}
 
-\item{countries}{}
+\item{countries}{TBW}
 
-\item{regions}{}
+\item{regions}{TBW}
 
-\item{coords}{}
+\item{coords}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

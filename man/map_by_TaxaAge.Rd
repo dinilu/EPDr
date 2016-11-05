@@ -2,7 +2,7 @@
 % Please edit documentation in R/EPDr-plotting_functions.R
 \name{map_by_TaxaAge}
 \alias{map_by_TaxaAge}
-\title{Title}
+\title{Title TBW}
 \usage{
 map_by_TaxaAge(agedcounts, taxa, sample_label, pres_abse = FALSE,
   pollen_thres = NULL, zoom_coord = NULL, points_pch = 21,
@@ -13,45 +13,51 @@ map_by_TaxaAge(agedcounts, taxa, sample_label, pres_abse = FALSE,
   countries_border_colour = "grey90")
 }
 \arguments{
-\item{agedcounts}{}
+\item{agedcounts}{TBW}
 
-\item{taxa}{}
+\item{taxa}{TBW}
 
-\item{sample_label}{}
+\item{sample_label}{TBW}
 
-\item{pres_abse}{}
+\item{pres_abse}{TBW}
 
-\item{pollen_thres}{}
+\item{pollen_thres}{TBW}
 
-\item{zoom_coord}{}
+\item{zoom_coord}{TBW}
 
-\item{points_pch}{}
+\item{points_pch}{TBW}
 
-\item{points_colour}{}
+\item{points_colour}{TBW}
 
-\item{points_fill}{}
+\item{points_fill}{TBW}
 
-\item{points_range_size}{}
+\item{points_range_size}{TBW}
 
-\item{map_title}{}
+\item{map_title}{TBW}
 
-\item{legend_range}{}
+\item{legend_range}{TBW}
 
-\item{legend_title}{}
+\item{legend_title}{TBW}
 
-\item{napoints_size}{}
+\item{napoints_size}{TBW}
 
-\item{napoints_pch}{}
+\item{napoints_pch}{TBW}
 
-\item{napoints_colour}{}
+\item{napoints_colour}{TBW}
 
-\item{napoints_fill}{}
+\item{napoints_fill}{TBW}
 
-\item{countries_bg_colour}{}
+\item{countries_bg_colour}{TBW}
 
-\item{countries_border_colour}{}
+\item{countries_border_colour}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

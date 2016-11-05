@@ -2,18 +2,24 @@
 % Please edit documentation in R/EPDr_export_functions.R
 \name{table_by_taxaAge}
 \alias{table_by_taxaAge}
-\title{Title}
+\title{Title TBW}
 \usage{
 table_by_taxaAge(agedcount, sample_label, taxa)
 }
 \arguments{
-\item{agedcount}{}
+\item{agedcount}{TBW}
 
-\item{sample_label}{}
+\item{sample_label}{TBW}
 
-\item{taxa}{}
+\item{taxa}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

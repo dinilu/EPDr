@@ -4,10 +4,10 @@
 \alias{getRestriction}
 \title{Title TBW}
 \usage{
-getRestriction(core_number, connection)
+getRestriction(e_, connection)
 }
 \arguments{
-\item{core_number}{TBW}
+\item{e_}{TBW}
 
 \item{connection}{TBW}
 }

@@ -2,18 +2,24 @@
 % Please edit documentation in R/EPDr-search_functions.R
 \name{e_by_countries}
 \alias{e_by_countries}
-\title{Title}
+\title{Title TBW}
 \usage{
 e_by_countries(countries, connection, regions = NULL)
 }
 \arguments{
-\item{countries}{}
+\item{countries}{TBW}
 
-\item{connection}{}
+\item{connection}{TBW}
 
-\item{regions}{}
+\item{regions}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

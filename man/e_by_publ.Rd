@@ -2,16 +2,22 @@
 % Please edit documentation in R/EPDr-search_functions.R
 \name{e_by_publ}
 \alias{e_by_publ}
-\title{Title}
+\title{Title TBW}
 \usage{
 e_by_publ(publ, connection)
 }
 \arguments{
-\item{publ}{}
+\item{publ}{TBW}
 
-\item{connection}{}
+\item{connection}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

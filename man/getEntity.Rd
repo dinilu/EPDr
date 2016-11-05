@@ -2,16 +2,22 @@
 % Please edit documentation in R/EPDr-get_functions.R
 \name{getEntity}
 \alias{getEntity}
-\title{Title}
+\title{Title TBW}
 \usage{
-getEntity(core_number, connection)
+getEntity(e_, connection)
 }
 \arguments{
-\item{core_number}{}
+\item{e_}{TBW}
 
-\item{connection}{}
+\item{connection}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

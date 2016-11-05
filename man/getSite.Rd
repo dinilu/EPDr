@@ -4,10 +4,10 @@
 \alias{getSite}
 \title{Title TBW}
 \usage{
-getSite(core_number, connection)
+getSite(e_, connection)
 }
 \arguments{
-\item{core_number}{TBW}
+\item{e_}{TBW}
 
 \item{connection}{TBW}
 }

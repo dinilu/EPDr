@@ -4,10 +4,10 @@
 \alias{getChronology}
 \title{Extract chronologies associated with a core (entity) in the pollen database}
 \usage{
-getChronology(core_number, connection)
+getChronology(e_, connection)
 }
 \arguments{
-\item{core_number}{Integer with the core (entity) number for which C14 data want to be extracted.}
+\item{e_}{Integer with the core (entity) number for which C14 data want to be extracted.}
 
 \item{connection}{Connection object to a EPD DDBB where the query is made.}
 }

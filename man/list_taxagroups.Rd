@@ -2,14 +2,20 @@
 % Please edit documentation in R/EPDr-list_functions.R
 \name{list_taxagroups}
 \alias{list_taxagroups}
-\title{Title}
+\title{Title TBW}
 \usage{
 list_taxagroups(connection)
 }
 \arguments{
-\item{connection}{}
+\item{connection}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 

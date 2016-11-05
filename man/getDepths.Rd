@@ -4,10 +4,10 @@
 \alias{getDepths}
 \title{Depths of pollen samples}
 \usage{
-getDepths(core_number, connection)
+getDepths(e_, connection)
 }
 \arguments{
-\item{core_number}{Integer with the core (entity) number for which C14 data want to be extracted.}
+\item{e_}{Integer with the core (entity) number for which C14 data want to be extracted.}
 
 \item{connection}{Connection object to a EPD DDBB where the query is made.}
 }

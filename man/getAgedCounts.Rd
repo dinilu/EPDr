@@ -4,10 +4,10 @@
 \alias{getAgedCounts}
 \title{Title TBW}
 \usage{
-getAgedCounts(core_number, connection)
+getAgedCounts(e_, connection)
 }
 \arguments{
-\item{core_number}{TBW}
+\item{e_}{TBW}
 
 \item{connection}{TBW}
 }

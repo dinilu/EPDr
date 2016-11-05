@@ -4,10 +4,10 @@
 \alias{getC14}
 \title{Extract C14 data for a particular core (entity in the EPD DDBB)}
 \usage{
-getC14(core_number, connection)
+getC14(e_, connection)
 }
 \arguments{
-\item{core_number}{Integer with the core (entity) number for which C14 data want to be extracted.}
+\item{e_}{Integer with the core (entity) number for which C14 data want to be extracted.}
 
 \item{connection}{Connection object to a EPD DDBB where the query is made.}
 }

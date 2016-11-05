@@ -2,20 +2,28 @@
 % Please edit documentation in R/EPDr-standardize_functions.R
 \name{intervalsCounts}
 \alias{intervalsCounts}
-\title{Title}
+\title{Title TBW}
 \usage{
 intervalsCounts(agedcount, tmin, tmax, labels = NULL, chronology = NULL)
 }
 \arguments{
-\item{agedcount}{}
+\item{agedcount}{TBW}
 
-\item{tmin}{}
+\item{tmin}{TBW}
 
-\item{tmax}{}
+\item{tmax}{TBW}
 
-\item{chronology}{}
+\item{labels}{TBW}
+
+\item{chronology}{TBW}
+}
+\value{
+TBW
 }
 \description{
-Title
+Title TBW
+}
+\examples{
+# TBW
 }
 
