@@ -2,6 +2,7 @@
 #'
 #' @slot e_ numeric. TBW
 #' @slot restriction data.frame. TBW
+#' @slot entity TBW
 #' @slot site data.frame. TBW
 #' @slot number_of_chronologies numeric. TBW
 #' @slot default_chronology numeric. TBW
@@ -11,10 +12,11 @@
 #' @return TBW
 #' 
 #' @export
-#'
+#' @import methods
+#' 
 #' @examples
 #' # TBW
-chronology <- methods::setClass("chronology",
+chronology <- setClass("chronology",
                                 slots=c(
                                     e_="numeric",
                                     restriction="data.frame",
@@ -106,6 +108,7 @@ chronology <- methods::setClass("chronology",
 #'
 #' @slot e_ numeric. TBW
 #' @slot restriction data.frame. TBW
+#' @slot entity TBW
 #' @slot site data.frame. TBW
 #' @slot postbomb_zone factor. TBW
 #' @slot chronology chronology. TBW
@@ -116,10 +119,11 @@ chronology <- methods::setClass("chronology",
 #' @return TBW
 #' 
 #' @export
+#' @import methods
 #'
 #' @examples
 #' # TBW
-datation <- methods::setClass("datation",
+datation <- setClass("datation",
                               slots=c(
                                   e_="numeric",
                                   restriction="data.frame",
@@ -233,6 +237,7 @@ datation <- methods::setClass("datation",
 #' @slot counts_processing factor. TBW
 #' @slot taxa_type factor. TBW
 #' @slot taxa_processing factor. TBW
+#' @slot entity TBW
 #' @slot site data.frame. TBW
 #' @slot taxa_names character. TBW
 #' @slot taxa_ numeric. TBW
@@ -247,11 +252,12 @@ datation <- methods::setClass("datation",
 #'
 #' @return TBW
 #' 
-#' @export
+#' @export 
+#' @import methods
 #'
 #' @examples
 #' # TBW
-counts <- methods::setClass("counts",
+counts <- setClass("counts",
                             slots=c(
                                 e_="numeric",
                                 restriction="data.frame",
@@ -344,6 +350,7 @@ counts <- methods::setClass("counts",
 #'
 #' @slot e_ numeric. TBW
 #' @slot restriction data.frame. TBW
+#' @slot entity TBW
 #' @slot site data.frame. TBW
 #' @slot default_chronology numeric. TBW
 #' @slot giesecke logical. TBW
@@ -356,11 +363,12 @@ counts <- methods::setClass("counts",
 #'
 #' @return TBW
 #' 
-#' @export
+#' @export 
+#' @import methods
 #'
 #' @examples
 #' # TBW
-ages <- methods::setClass("ages",
+ages <- setClass("ages",
                           slots=c(
                               e_="numeric",
                               restriction="data.frame",
@@ -449,17 +457,19 @@ ages <- methods::setClass("ages",
 #'
 #' @slot e_ numeric. TBW
 #' @slot restriction data.frame. TBW
+#' @slot entity TBW
 #' @slot site data.frame. TBW
 #' @slot ages ages. TBW
 #' @slot counts counts. TBW
 #'
 #' @return TBW
 #' 
-#' @export
+#' @export 
+#' @import methods
 #'
 #' @examples
 #' # TBW
-agedcounts <- methods::setClass("agedcounts",
+agedcounts <- setClass("agedcounts",
                                 slots=c(
                                     e_="numeric",
                                     restriction="data.frame",

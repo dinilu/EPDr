@@ -279,13 +279,13 @@ interpolateCounts <- function(agedcount, time, chronology=NULL){
     interp.depthcm <- numeric(0)
     if(length(interp.ages) != 0){
         
-        interp.counts <- apply(sample.counts, MARGIN=2, FUN=function(x, y, z){approx(y, x, xout=z)$y}, sample.ages, interp.ages)
+        interp.counts <- apply(sample.counts, MARGIN=2, FUN=function(x, y, z){stats::approx(y, x, xout=z)$y}, sample.ages, interp.ages)
         if(length(interp.ages) == 1){
             interp.counts <- as.data.frame(t(interp.counts))
         }else{
             interp.counts <- as.data.frame(interp.counts)
         }
-        interp.depthcm <- approx(sample.ages, sample.depthcm, xout=interp.ages)$y
+        interp.depthcm <- stats::approx(sample.ages, sample.depthcm, xout=interp.ages)$y
     }
     colnames(interp.counts) <- colnames(sample.counts)
     
@@ -395,14 +395,14 @@ intervalsCounts <- function(agedcount, tmin, tmax, labels=NULL, chronology=NULL)
         range.depthcm <- sample.depthcm[index]
         range.ages <- sample.ages[index]
 
-        range.means <- apply(range.counts, MARGIN=2, FUN=function(x, y, z){aggregate(x~y, FUN=z)}, intervalid, mean)
+        range.means <- apply(range.counts, MARGIN=2, FUN=function(x, y, z){stats::aggregate(x~y, FUN=z)}, intervalid, mean)
         range.means <- reshape2::dcast(reshape2::melt(range.means, id.vars="y"), y ~ L1)
         range.means <- range.means[,-which(colnames(range.means) == "y")]
         
-        range.depth.means <- aggregate(range.depthcm ~ intervalid, FUN=mean)
+        range.depth.means <- stats::aggregate(range.depthcm ~ intervalid, FUN=mean)
         range.depth.means <- range.depth.means$range.depthcm
         
-        range.ages.means <- aggregate(range.ages ~ intervalid, FUN=mean)
+        range.ages.means <- stats::aggregate(range.ages ~ intervalid, FUN=mean)
         range.ages.means <- range.ages.means$range.ages
     
         output.counts[unique(intervalid),] <- range.means
@@ -711,7 +711,7 @@ qualityIndex <- function(agedcount, datation, max_sample_dist=2000, max_c14_dist
     
     .mindiff <- function(x, y){
         sorted.y <- sort(y)
-        myfun <- stepfun(sorted.y, 0:length(y))
+        myfun <- stats::stepfun(sorted.y, 0:length(y))
         indices <- pmin(pmax(1, myfun(x)), length(sorted.y) - 1)
         mindist <- pmin(abs(x - sorted.y[indices]), abs(x - sorted.y[indices + 1]))
         return(mindist)

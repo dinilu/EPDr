@@ -18,6 +18,8 @@ TitleTBW
 
 \item{\code{restriction}}{data.frame. TBW}
 
+\item{\code{entity}}{TBW}
+
 \item{\code{site}}{data.frame. TBW}
 
 \item{\code{postbomb_zone}}{factor. TBW}

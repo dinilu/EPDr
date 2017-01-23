@@ -26,6 +26,8 @@ Title TBW
 
 \item{\code{taxa_processing}}{factor. TBW}
 
+\item{\code{entity}}{TBW}
+
 \item{\code{site}}{data.frame. TBW}
 
 \item{\code{taxa_names}}{character. TBW}

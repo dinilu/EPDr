@@ -18,6 +18,8 @@ Title TBW
 
 \item{\code{restriction}}{data.frame. TBW}
 
+\item{\code{entity}}{TBW}
+
 \item{\code{site}}{data.frame. TBW}
 
 \item{\code{number_of_chronologies}}{numeric. TBW}

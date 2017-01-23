@@ -164,7 +164,7 @@ list_e <- function(connection, countries=NULL, regions=NULL, sites=NULL, coords=
     if(is.null(sites)){
         sites <- suppressWarnings(list_sites(connection, countries, regions)$site_)
     }else{
-        tmp <- suppressWarnings(list_regions(connection, countries, regions))
+        tmp <- suppressWarnings(list_regions(connection, countries))
         sites <- tmp[tmp$site_ %in% sites | tmp$sitename %in% sites | tmp$sitecode %in% sites, "site_"]
     }
     sites.c <- paste(sites, collapse="','")

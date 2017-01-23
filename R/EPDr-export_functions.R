@@ -37,38 +37,19 @@ c14_export <- function(C14, format=c("clam","bacon")) {
     return(output)
 }
 
-# c14_epd2clam <- function(C14) {
-#     if(nrow(C14) == 0){
-#         stop("Table without c14 data. Not performing conversion, useless for CLAM.")
-#     }
-#     output <- data.frame(lab_ID=C14$labnumber, C14_age=C14$agebp, error=C14$agesdup, depth=C14$depthcm, thickness=C14$thickness)
-#     output$cal_age <- NA        
-#     output$reservoir <- NA
-#     output <- output[,c("lab_ID", "C14_age", "cal_age", "error", "reservoir", "depth", "thickness")]
-#     return(output)
-# }
-# 
-# c14_epd2bacon <- function(C14) {
-#     if(nrow(C14) == 0){
-#         stop("Table without c14 data. Not performing conversion, useless for BACON.")
-#     }
-#     output <- data.frame(labID=C14$labnumber, age=C14$agebp, error=C14$agesdup, depth=C14$depthcm)
-#     output <- output[,c("labID", "age", "error", "depth")]
-#     return(output)
-# }
 
 
-
-#' Reshape no-C14 data to CLAM or BACON format
+#' Title Reshape no-C14 data to CLAM or BACON format
 #' 
-#' This function takes no-C14 data, that can be extracted from a chronology object, to fit into a new table that comply with
-#' CLAM or BACON format.
+#' This function takes no-C14 data, that can be extracted from a chronology object, to fit into a new table that
+#' comply with CLAM or BACON format.
 #'
-#' @param agebasis Data frame with no-C14 data as those in a chronology list returned by \code{\link[EPDr:getChronology]{getChronology}}. 
+#' @param agebasis Data frame with no-C14 data as those in a chronology list returned by
+#' \code{\link[EPDr:getChronology]{getChronology}}.
 #' @param format Character string indicating whether to export to "clam" or to "bacon" format.
 #'
-#' @return Data frame with no-C14 data in CLAM or BACON format. This data frame can be easily combined with C14 data from \code{\link[EPDr:getChronology]{c14_epd2clam}} using \code{rbind}.
-#' 
+#' @return Data frame with no-C14 data in CLAM or BACON format. This data frame can be easily combined with C14
+#' data from \code{\link[EPDr:c14_export]{c14_export}} using \code{rbind}.
 #' @export
 #'
 #' @examples
@@ -83,6 +64,7 @@ c14_export <- function(C14, format=c("clam","bacon")) {
 #' #noc14.bacon <- agebasis_export(chron@agebasis, "bacon")
 #' #all.clam <- rbind(c14.clam, noc14.clam)
 #' #all.bacon <- rbind(c14.bacon, noc14.bacon)
+
 agebasis_export <- function(agebasis, format=c("clam", "bacon")){
     if(nrow(agebasis) == 0){
         stop("Table without data. Not performing conversion, useless for CLAM.")
@@ -103,28 +85,6 @@ agebasis_export <- function(agebasis, format=c("clam", "bacon")){
     }
     return(output)
 }
-
-# agebasis_epd2bacon <- function(agebasis){
-#     output <- data.frame(labID=paste("EPDr_", agebasis$e_, "_CH", agebasis$sample_, sep=""), age=agebasis$age, error=agebasis$ageup - agebasis$age, depth=agebasis$depthcm)
-#     output$error[which(is.na(output$error) | output$error == 0)] <- 1
-#     output <- output[,c("labID", "age", "error", "depth")]
-#     return(output)
-# }
-# 
-# agebasis_epd2clam <- function(agebasis){
-#     if(nrow(agebasis) == 0){
-#         stop("Table without data. Not performing conversion, useless for CLAM.")
-#     }
-#     output <- data.frame(lab_ID=paste("EPDr_", agebasis$e_, "_CH", agebasis$sample_, sep=""), C14_age=agebasis$age, error=agebasis$ageup - agebasis$age, depth=agebasis$depthcm, thickness=agebasis$thickness)
-#     output$cal_age <- NA
-#     output$error[which(is.na(output$error) | output$error == 0)] <- 1
-#     output$reservoir <- NA
-#     output <- output[,c("lab_ID", "C14_age", "cal_age", "error", "reservoir", "depth", "thickness")]
-#     return(output)
-# }
-
-
-
 
 
 #' Reshape events data to CLAM or BACON format
@@ -165,30 +125,6 @@ events_export <- function(event, format=c("clam", "bacon")){
         return(output)
 }
 
-# events_epd2bacon <- function(event){
-#     if(nrow(event) == 0){
-#         stop("Table without dated events. Not performing conversion, useless for BACON.")
-#     }
-#     output <- data.frame(labID=paste("EPDr_", event$e_, "_EV", event$event_, sep=""), age=event$agebp, error=event$ageuncertup, depth=event$depthcm)
-#     output$error[which(is.na(output$error) | output$error == 0)] <- 1
-#     output <- output[,c("labID", "age", "error", "depth")]
-#     return(output)
-# }
-# 
-# events_epd2clam <- function(event){
-#     if(nrow(event) == 0){
-#         stop("Table without dated events. Not performing conversion, useless for CLAM.")
-#     }
-#     output <- data.frame(lab_ID=paste("EPDr_", event$e_, "_EV", event$event_, sep=""), C14_age=event$agebp, error=event$ageuncertup, depth=event$depthcm, thickness=event$thickness)
-#     output$error[which(is.na(output$error) | output$error == 0)] <- 1
-#     output$cal_age <- NA
-#     output$reservoir <- NA
-#     output <- output[,c("lab_ID", "C14_age", "cal_age", "error", "reservoir", "depth", "thickness")]
-#     return(output)
-# }
-
-
-
 
 #' Reshape depths data to CLAM or BACON format
 #'
@@ -211,7 +147,6 @@ depths_export <- function(depths){
     output <- output$depthcm
     return(output)
 }
-
 
 
 #' Title TBW
