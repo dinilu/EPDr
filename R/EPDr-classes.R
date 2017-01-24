@@ -1,21 +1,30 @@
-#' Title TBW
-#'
-#' @slot e_ numeric. TBW
-#' @slot restriction data.frame. TBW
-#' @slot entity TBW
-#' @slot site data.frame. TBW
-#' @slot number_of_chronologies numeric. TBW
-#' @slot default_chronology numeric. TBW
-#' @slot chron data.frame. TBW
-#' @slot agebasis data.frame. TBW
-#'
-#' @return TBW
+#' Class for Chronologies of an entity
 #' 
+#' Class "chronology" store in an organized and systematic way information about 
+#' the chronologies for an specified entity in the European Pollen Database (EPD). This
+#' object is created by \code{\link[EPDr:getChronology]{getChronology}}.
+#'
+#' It has different elements all of which correspond to a unique entity in the database.
+#'
+#' @slot e_ numeric. The entity number (e_) as in the EPD.
+#' @slot restriction data.frame. Restriction of use information for that particular entity
+#' in the database. It is important to know if we can freely use the data or should ask
+#' for authorization
+#' @slot entity data.frame. Details of the entity.
+#' @slot site data.frame. Details of the site to which the entity belong to. Note that 
+#' several entities can belong to the same site.
+#' @slot number_of_chronologies numeric. The number of chronologies that are stored in
+#' the database for this particular entity.
+#' @slot default_chronology numeric. Which of the available chronologies is tagged as 
+#' the default in the database.
+#' @slot chron data.frame. Details about the chronologies stored in the database, like 
+#' the author, full name, etc.
+#' @slot agebasis data.frame. Agebasis used in the chronologies to calibrate radiocarbon 
+#' dates.
+#'
 #' @export
 #' @import methods
 #' 
-#' @examples
-#' # TBW
 chronology <- setClass("chronology",
                                 slots=c(
                                     e_="numeric",
@@ -104,25 +113,36 @@ chronology <- setClass("chronology",
 )
 
 
-#' TitleTBW
-#'
-#' @slot e_ numeric. TBW
-#' @slot restriction data.frame. TBW
-#' @slot entity TBW
-#' @slot site data.frame. TBW
-#' @slot postbomb_zone factor. TBW
-#' @slot chronology chronology. TBW
-#' @slot c14 data.frame. TBW
-#' @slot events data.frame. TBW
-#' @slot depths data.frame. TBW
-#'
-#' @return TBW
+#' Class for Datation of an entity
 #' 
+#' Class "datation" store all information about datation of an specified entity in the 
+#' European Pollen Database (EPD). These objects are created by \code{\link[EPDr:getDatation]{getDatation}}.
+#' 
+#' Now, it include only C14 data and events, it should include in the future other
+#' sort of data that are included in the EPD.
+#'
+#' It has different elements all of which correspond to a unique entity in the database.
+#'
+#' @slot e_ numeric. The entity number (e_) as in the EPD.
+#' @slot restriction data.frame. Restriction of use information for that particular entity
+#' in the database. It is important to know if we can freely use the data or should ask
+#' for authorization
+#' @slot entity data.frame. Details of the entity.
+#' @slot site data.frame. Details of the site to which the entity belong to. Note that 
+#' several entities can belong to the same site.
+#' @slot postbomb_zone factor. Indicate the postbomb zone in which the entity (site)
+#' was sampled. This information is useful when calibrating radiocarbon dates with
+#' \code{clam} or \code{bacon}.
+#' @slot chronology chronology. Object of class \code{\link{chronology}} for the entity.
+#' @slot c14 data.frame. Details on radiocarbon (C14) data and analysis.
+#' @slot events data.frame. Details about events (e.g. tephra) that could appear in
+#' the entity.
+#' @slot depths data.frame. Details about the samples (including depths) at which samples
+#' were taken in the entity for biological (pollen, spores, etc) analysis.
+#'
 #' @export
 #' @import methods
 #'
-#' @examples
-#' # TBW
 datation <- setClass("datation",
                               slots=c(
                                   e_="numeric",
@@ -229,34 +249,76 @@ datation <- setClass("datation",
                               )
 )
 
-#' Title TBW
-#'
-#' @slot e_ numeric. TBW
-#' @slot restriction data.frame. TBW
-#' @slot counts_type factor. TBW
-#' @slot counts_processing factor. TBW
-#' @slot taxa_type factor. TBW
-#' @slot taxa_processing factor. TBW
-#' @slot entity TBW
-#' @slot site data.frame. TBW
-#' @slot taxa_names character. TBW
-#' @slot taxa_ numeric. TBW
-#' @slot taxa_accepted numeric. TBW
-#' @slot taxa_mhvar numeric. TBW
-#' @slot taxa_groupid character. TBW 
-#' @slot sample_ numeric. TBW
-#' @slot sample_label character. TBW
-#' @slot default_ages numeric. TBW
-#' @slot depthcm numeric. TBW
-#' @slot counts data.frame. TBW
-#'
-#' @return TBW
+#' Class for Counts of an entity
 #' 
+#' Class "counts" store in an organized and systematic way information about 
+#' the particles counts in an specified entity in the European Pollen Database (EPD). This
+#' object is created by \code{\link[EPDr:getCounts]{getCounts}}.
+#'
+#' It has different elements all of which correspond to a unique entity 
+#'
+#' @slot e_ numeric. The entity number (e_) as in the EPD.
+#' @slot restriction data.frame. Restriction of use information for that particular entity
+#' in the database. It is important to know if we can freely use the data or should ask
+#' for authorization
+#' @slot counts_type factor. Indicating the type of counts stored in slot \code{@counts}.
+#' They can be one of two values "Counts" or "Percentages". "Counts" indicates that values
+#' in \code{@counts} are raw counts as in the EPD. "Percentages" indicates that values in 
+#' \code{@counts} are percentages calculated, for instance, with \code{\link[EPDr:trans2Percentages]{trans2Percentages}}. 
+#' @slot counts_processing factor. Indicating whether the data in slot \code{@counts} has
+#' been processed. It can be one of three values: "Samples", "Interpolated" or "Ranged 
+#' means". "Samples" indicate that values in \code{@counts} correspond with the counts
+#' for the biological samples. "Interpolated" indicates that values in \code{@counts}
+#' correspond to interpolated data at specific depth/ages among the biological samples, 
+#' using \code{\link[EPDr:interpolateCounts]{interpolateCounts}}. "Ranged means"
+#' indicates that values in \code{@counts} represent mean values among all biological samples for specified age/depth ranges calculated using \code{\link[EPDr:intervalsCounts]{intervalsCounts}}
+#' @slot taxa_type factor. Indicating the taxa used to calculate values in slot
+#' \code{@counts}. The EPD allow establish three levels of taxonomy: the taxonomic level
+#' determined by analyst when processing the entity, "accepted" name to resolve
+#' synonymies, and "higher" to collapse taxa into higher taxonomical levels (i.e.,
+#' species in the same genus, genus in the same family, etc). \code{taxa_type} can take 
+#' any of three values: "Samples", "Accepted" or "Higher". "Samples" indicates that 
+#' taxonomy in \code{@coutns} is the same the analyst submitted to the EPD. "Accepted"
+#' indicates that taxonomy in \code{@counts} is modified using the accepted taxa according
+#' to last review of the EPD. "Higher" indicates that taxonomy was modified to group
+#' taxa into higher taxonomical levels. "Samples" is always found when data comes
+#' directly from the EPD with \code{\link[EPDr:getCounts]{getCounts}}, whereas "Accepted" and "Higher" are specified when data are transformed using \code{\link[EPDr:taxa2AcceptedTaxa]{taxa2AcceptedTaxa}} and \code{\link[EPDr:taxa2HigherTaxa]{taxa2HigherTaxa}}
+#' respectively.
+#' @slot taxa_processing factor. Indicating if taxonomy in \code{@counts} has been
+#' processed. It can take any of three values: "Original", "Expanded", or "Taxized". 
+#' "Original" indicates that taxonomy has not been modified. "Expanded" indicates that
+#' taxonomy has been expanded beyond the taxa specified by the data provider, using
+#' \code{\link[EPDr:expandTaxonomy]{expandTaxonomy}} or
+#' \code{\link[EPDr:unifyTaxonomy]{unifyTaxonomy}}. "Taxized" indicates that taxonomy in
+#' \code{@counts} has been resolved using the package \code{link[taxize]{taxize}}.
+#' Function for this are on schedule but not implemented yet.
+#' @slot entity data.frame. Details of the entity.
+#' @slot site data.frame. Details of the site to which the entity belong to. Note that 
+#' several entities can belong to the same site.
+#' @slot taxa_names character. Character vector with all taxa used in \code{@counts}.
+#' @slot taxa_ numeric. Numeric vector indicating the taxa number for each of the taxa 
+#' used in \code{@counts}.
+#' @slot taxa_accepted numeric. Numeric vector indicating the taxa number of 
+#' corresponding accepted taxa for each taxa used in \code{@counts}.
+#' @slot taxa_mhvar numeric. Numeric vector indicating the taxa number of 
+#' corresponding higher taxa for each taxa used in \code{@counts}.
+#' @slot taxa_groupid character. Character vector indicating the corresponding groupid
+#' to which belong each taxa used in \code{@counts}. 
+#' @slot sample_ numeric. Numeric vector indicating the sample number of each sample used
+#' in \code{@counts}. Sample here is each of the biological samples in the entity.
+#' @slot sample_label character. Character vector indicating the sample name (or code)
+#' of each sample used in \code{@counts}. Sample here is each of the biological samples in the entity.
+#' @slot default_ages numeric. Numeric vector indicating the ages estimated for each
+#' biological sample according to the default chronology in the EPD for that entity.
+#' @slot depthcm numeric. Numeric vector indicating the depth (in cm) in which each
+#' biological sample was collected.
+#' @slot counts data.frame. Data frame with counts (raw counts or percentages) for each
+#' taxon at each sample (original samples, interpolated or ranged). This takes the form
+#' of a age/depth (rows) by taxon (columns).
+#'
 #' @export 
 #' @import methods
 #'
-#' @examples
-#' # TBW
 counts <- setClass("counts",
                             slots=c(
                                 e_="numeric",
@@ -346,28 +408,58 @@ counts <- setClass("counts",
                             )
 )
 
-#' Title TBW
+
+#' Class for Ages of an entity
+#' 
+#' Class "ages" store in an organized and systematic way information about 
+#' estimated ages for biological samples in an specified entity in the European
+#' Pollen Database (EPD). This object is created by \code{\link[EPDr:getAges]{getAges}}.
 #'
-#' @slot e_ numeric. TBW
-#' @slot restriction data.frame. TBW
-#' @slot entity TBW
-#' @slot site data.frame. TBW
-#' @slot default_chronology numeric. TBW
-#' @slot giesecke logical. TBW
-#' @slot sample_ numeric. TBW
-#' @slot sample_label character. TBW
-#' @slot depthcm numeric. TBW
-#' @slot depths data.frame. TBW
-#' @slot depth_ages data.frame. TBW
-#' @slot data_quality data.frame. TBW
+#' It has different elements all of which correspond to a unique entity 
+#' 
+#' @slot e_ numeric. The entity number (e_) as in the EPD.
+#' @slot restriction data.frame. Restriction of use information for that particular entity
+#' in the database. It is important to know if we can freely use the data or should ask
+#' for authorization
+#' @slot entity data.frame. Details of the entity.
+#' @slot site data.frame. Details of the site to which the entity belong to. Note that 
+#' several entities can belong to the same site.
+#' @slot default_chronology numeric. Which of the available chronologies is tagged as 
+#' the default in the database.
+#' @slot giesecke logical. Indicating \code{TRUE} if there are ages revised by Giesecke
+#' et al. (2013) for this entity or \code{FALSE} on the contrary.
+#' @slot sample_ numeric. Numeric vector indicating the sample number of each sample used
+#' in \code{@counts}. Sample here is each of the biological samples in the entity.
+#' @slot sample_label character. Character vector indicating the sample name (or code)
+#' of each sample used in \code{@counts}. Sample here is each of the biological samples
+#' in the entity.
+#' @slot depthcm numeric. Numeric vector indicating the depth (in cm) in which each
+#' biological sample was collected.
+#' @slot depths data.frame. Details about the samples (including depths) at which samples
+#' were taken in the entity for biological (pollen, spores, etc) analysis.
+#' @slot depth_ages data.frame. Data frame with ages for each biological sample
+#' according to the different chronologies and giesecke, if available.
+#' @slot data_quality data.frame. Data frame with data quality index for counts on
+#' each sample (original, interpolated, or ranged) according to metrics in Blois
+#' et al. (2013).
 #'
-#' @return TBW
+#' @references Giesecke, Thomas; Davis, Basil A S; Brewer, Simon; Finsinger, Walter;
+#' Wolters, Steffen; Blaauw, Maarten; de Beaulieu, Jacques-Louis; Binney, Heather;
+#' Fyfe, Ralph M; Gaillard, Marie-Jose; Gil-Romera, Graciela; van der Knaap, Pim Willem O;
+#' Kunes, Petr; Kuhl, Norbert; van Leeuwen, Jaqueline F N; Leydet, Michelle;
+#' Lotter, Andre F; Ortu, Elena; Semmler, Malte Sebastian Swen;
+#' Bradshaw, Richard H W (2013). Towards mapping the late Quaternary vegetation change
+#' of Europe. Vegetation History and Archaeobotany, 23(1): 75-86.
+#' doi:10.1007/s00334-012-0390-y
+#' @references \url{https://doi.pangaea.de/10.1594/PANGAEA.804597}
+#' @references Blois, Jessica L; Williams, John W; Fitzpatrick, Matthew C; Ferrier, Simon;
+#' Veloz, Samuel D; He, Feng; Liu, Zhengyu; Manion, Glenn; Otto-Bliesner, Bette (2013).
+#' Modeling the Climatic Drivers of Spatial Patterns in Vegetation Composition since the
+#' Last Glacial Maximum. Ecography, 36(4): 460-473. doi:10.1111/j.1600-0587.2012.07852.x.
 #' 
 #' @export 
 #' @import methods
 #'
-#' @examples
-#' # TBW
 ages <- setClass("ages",
                           slots=c(
                               e_="numeric",
@@ -453,22 +545,29 @@ ages <- setClass("ages",
                           )
 )
 
-#' Title TBW
-#'
-#' @slot e_ numeric. TBW
-#' @slot restriction data.frame. TBW
-#' @slot entity TBW
-#' @slot site data.frame. TBW
-#' @slot ages ages. TBW
-#' @slot counts counts. TBW
-#'
-#' @return TBW
+
+#' Class for Aged-Counts of an entity
 #' 
+#' Class "agedcounts" store in an organized and systematic way information about 
+#' counts and ages for biological samples in an specified entity in the European
+#' Pollen Database (EPD). This object is created by
+#' \code{\link[EPDr:getAgedCounts]{getAgedCounts}}.
+#' 
+#' It has different elements all of which correspond to a unique entity 
+#'
+#' @slot e_ numeric. The entity number (e_) as in the EPD.
+#' @slot restriction data.frame. Restriction of use information for that particular entity
+#' in the database. It is important to know if we can freely use the data or should ask
+#' for authorization
+#' @slot entity data.frame. Details of the entity.
+#' @slot site data.frame. Details of the site to which the entity belong to. Note that 
+#' several entities can belong to the same site.
+#' @slot ages ages. Object of class \code{\link{ages}} for the entity.
+#' @slot counts counts. Object of class \code{\link{counts}} for the entity.
+#'
 #' @export 
 #' @import methods
 #'
-#' @examples
-#' # TBW
 agedcounts <- setClass("agedcounts",
                                 slots=c(
                                     e_="numeric",

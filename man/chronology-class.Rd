@@ -4,33 +4,39 @@
 \name{chronology-class}
 \alias{chronology}
 \alias{chronology-class}
-\title{Title TBW}
-\value{
-TBW
-}
+\title{Class for Chronologies of an entity}
 \description{
-Title TBW
+Class "chronology" store in an organized and systematic way information about 
+the chronologies for an specified entity in the European Pollen Database (EPD). This
+object is created by \code{\link[EPDr:getChronology]{getChronology}}.
+}
+\details{
+It has different elements all of which correspond to a unique entity in the database.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{e_}}{numeric. TBW}
+\item{\code{e_}}{numeric. The entity number (e_) as in the EPD.}
 
-\item{\code{restriction}}{data.frame. TBW}
+\item{\code{restriction}}{data.frame. Restriction of use information for that particular entity
+in the database. It is important to know if we can freely use the data or should ask
+for authorization}
 
-\item{\code{entity}}{TBW}
+\item{\code{entity}}{data.frame. Details of the entity.}
 
-\item{\code{site}}{data.frame. TBW}
+\item{\code{site}}{data.frame. Details of the site to which the entity belong to. Note that 
+several entities can belong to the same site.}
 
-\item{\code{number_of_chronologies}}{numeric. TBW}
+\item{\code{number_of_chronologies}}{numeric. The number of chronologies that are stored in
+the database for this particular entity.}
 
-\item{\code{default_chronology}}{numeric. TBW}
+\item{\code{default_chronology}}{numeric. Which of the available chronologies is tagged as 
+the default in the database.}
 
-\item{\code{chron}}{data.frame. TBW}
+\item{\code{chron}}{data.frame. Details about the chronologies stored in the database, like 
+the author, full name, etc.}
 
-\item{\code{agebasis}}{data.frame. TBW}
+\item{\code{agebasis}}{data.frame. Agebasis used in the chronologies to calibrate radiocarbon 
+dates.}
 }}
-\examples{
-# TBW
-}
 

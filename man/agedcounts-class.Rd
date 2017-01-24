@@ -4,29 +4,32 @@
 \name{agedcounts-class}
 \alias{agedcounts}
 \alias{agedcounts-class}
-\title{Title TBW}
-\value{
-TBW
-}
+\title{Class for Aged-Counts of an entity}
 \description{
-Title TBW
+Class "agedcounts" store in an organized and systematic way information about 
+counts and ages for biological samples in an specified entity in the European
+Pollen Database (EPD). This object is created by
+\code{\link[EPDr:getAgedCounts]{getAgedCounts}}.
+}
+\details{
+It has different elements all of which correspond to a unique entity
 }
 \section{Slots}{
 
 \describe{
-\item{\code{e_}}{numeric. TBW}
+\item{\code{e_}}{numeric. The entity number (e_) as in the EPD.}
 
-\item{\code{restriction}}{data.frame. TBW}
+\item{\code{restriction}}{data.frame. Restriction of use information for that particular entity
+in the database. It is important to know if we can freely use the data or should ask
+for authorization}
 
-\item{\code{entity}}{TBW}
+\item{\code{entity}}{data.frame. Details of the entity.}
 
-\item{\code{site}}{data.frame. TBW}
+\item{\code{site}}{data.frame. Details of the site to which the entity belong to. Note that 
+several entities can belong to the same site.}
 
-\item{\code{ages}}{ages. TBW}
+\item{\code{ages}}{ages. Object of class \code{\link{ages}} for the entity.}
 
-\item{\code{counts}}{counts. TBW}
+\item{\code{counts}}{counts. Object of class \code{\link{counts}} for the entity.}
 }}
-\examples{
-# TBW
-}
 

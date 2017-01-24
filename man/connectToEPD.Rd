@@ -22,10 +22,10 @@ on the DDBB server used to host the EPD database. For alternatives look at the \
 \item{host}{Character string with the IP address of the DDBB server (default: "localhost").}
 }
 \value{
-This function return a RPostgreSQL connection object.
+This function returns a RPostgreSQL connection object.
 }
 \description{
-\code{connectToEPD} establish a connection to a EPD data base that is stored in a DDBB server. By default it assume a local
+\code{\link[EPDr:connectToEPD]{connectToEPD}} establish a connection to a EPD data base that is stored in a DDBB server. By default it assume a local
 PostgreSQL server. The function can connect with remote servers in different formats (MySQL, etc; see RPostgreSQL documentation
 for supported formats). To connect to the DDBB the function need the DDBB name, the user name, and the user password. If any of
 the data are not passed as arguments the function will ask for them interactively.

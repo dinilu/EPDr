@@ -11,7 +11,7 @@ disconnectFromEPD(connection = NULL)
 \item{connection}{The connection object created with \code{\link[EPDr:connectToEPD]{connectToEPD}} to stablish the connection}
 }
 \value{
-NULL It just disconnect from the EPD DDBB server and modify the connection object to reflect the new status.
+NULL It just disconnects from the EPD DDBB server and modifies the connection object to reflect the new status.
 }
 \description{
 Disconnect a connection to a EPD database

@@ -4,41 +4,70 @@
 \name{ages-class}
 \alias{ages}
 \alias{ages-class}
-\title{Title TBW}
-\value{
-TBW
-}
+\title{Class for Ages of an entity}
 \description{
-Title TBW
+Class "ages" store in an organized and systematic way information about 
+estimated ages for biological samples in an specified entity in the European
+Pollen Database (EPD). This object is created by \code{\link[EPDr:getAges]{getAges}}.
+}
+\details{
+It has different elements all of which correspond to a unique entity
 }
 \section{Slots}{
 
 \describe{
-\item{\code{e_}}{numeric. TBW}
+\item{\code{e_}}{numeric. The entity number (e_) as in the EPD.}
 
-\item{\code{restriction}}{data.frame. TBW}
+\item{\code{restriction}}{data.frame. Restriction of use information for that particular entity
+in the database. It is important to know if we can freely use the data or should ask
+for authorization}
 
-\item{\code{entity}}{TBW}
+\item{\code{entity}}{data.frame. Details of the entity.}
 
-\item{\code{site}}{data.frame. TBW}
+\item{\code{site}}{data.frame. Details of the site to which the entity belong to. Note that 
+several entities can belong to the same site.}
 
-\item{\code{default_chronology}}{numeric. TBW}
+\item{\code{default_chronology}}{numeric. Which of the available chronologies is tagged as 
+the default in the database.}
 
-\item{\code{giesecke}}{logical. TBW}
+\item{\code{giesecke}}{logical. Indicating \code{TRUE} if there are ages revised by Giesecke
+et al. (2013) for this entity or \code{FALSE} on the contrary.}
 
-\item{\code{sample_}}{numeric. TBW}
+\item{\code{sample_}}{numeric. Numeric vector indicating the sample number of each sample used
+in \code{@counts}. Sample here is each of the biological samples in the entity.}
 
-\item{\code{sample_label}}{character. TBW}
+\item{\code{sample_label}}{character. Character vector indicating the sample name (or code)
+of each sample used in \code{@counts}. Sample here is each of the biological samples
+in the entity.}
 
-\item{\code{depthcm}}{numeric. TBW}
+\item{\code{depthcm}}{numeric. Numeric vector indicating the depth (in cm) in which each
+biological sample was collected.}
 
-\item{\code{depths}}{data.frame. TBW}
+\item{\code{depths}}{data.frame. Details about the samples (including depths) at which samples
+were taken in the entity for biological (pollen, spores, etc) analysis.}
 
-\item{\code{depth_ages}}{data.frame. TBW}
+\item{\code{depth_ages}}{data.frame. Data frame with ages for each biological sample
+according to the different chronologies and giesecke, if available.}
 
-\item{\code{data_quality}}{data.frame. TBW}
+\item{\code{data_quality}}{data.frame. Data frame with data quality index for counts on
+each sample (original, interpolated, or ranged) according to metrics in Blois
+et al. (2013).}
 }}
-\examples{
-# TBW
+\references{
+Giesecke, Thomas; Davis, Basil A S; Brewer, Simon; Finsinger, Walter;
+Wolters, Steffen; Blaauw, Maarten; de Beaulieu, Jacques-Louis; Binney, Heather;
+Fyfe, Ralph M; Gaillard, Marie-Jose; Gil-Romera, Graciela; van der Knaap, Pim Willem O;
+Kunes, Petr; Kuhl, Norbert; van Leeuwen, Jaqueline F N; Leydet, Michelle;
+Lotter, Andre F; Ortu, Elena; Semmler, Malte Sebastian Swen;
+Bradshaw, Richard H W (2013). Towards mapping the late Quaternary vegetation change
+of Europe. Vegetation History and Archaeobotany, 23(1): 75-86.
+doi:10.1007/s00334-012-0390-y
+
+\url{https://doi.pangaea.de/10.1594/PANGAEA.804597}
+
+Blois, Jessica L; Williams, John W; Fitzpatrick, Matthew C; Ferrier, Simon;
+Veloz, Samuel D; He, Feng; Liu, Zhengyu; Manion, Glenn; Otto-Bliesner, Bette (2013).
+Modeling the Climatic Drivers of Spatial Patterns in Vegetation Composition since the
+Last Glacial Maximum. Ecography, 36(4): 460-473. doi:10.1111/j.1600-0587.2012.07852.x.
 }
 

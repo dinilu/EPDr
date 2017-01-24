@@ -1,6 +1,6 @@
 #' Conect to a EPD database
 #'
-#' \code{connectToEPD} establish a connection to a EPD data base that is stored in a DDBB server. By default it assume a local
+#' \code{\link[EPDr:connectToEPD]{connectToEPD}} establish a connection to a EPD data base that is stored in a DDBB server. By default it assume a local
 #' PostgreSQL server. The function can connect with remote servers in different formats (MySQL, etc; see RPostgreSQL documentation
 #' for supported formats). To connect to the DDBB the function need the DDBB name, the user name, and the user password. If any of
 #' the data are not passed as arguments the function will ask for them interactively.
@@ -14,7 +14,8 @@
 #' on the DDBB server used to host the EPD database. For alternatives look at the \code{\link[DBI:dbConnect]{dbConnect}} function.
 #' @param host Character string with the IP address of the DDBB server (default: "localhost").
 #'
-#' @return This function return a RPostgreSQL connection object.
+#' @return This function returns a RPostgreSQL connection object.
+#' 
 #' @export
 #'
 #' @examples
@@ -47,7 +48,7 @@ connectToEPD <- function(database=NULL, user=NULL, password=NULL, driver="Postgr
 #'
 #' @param connection The connection object created with \code{\link[EPDr:connectToEPD]{connectToEPD}} to stablish the connection
 #'
-#' @return NULL It just disconnect from the EPD DDBB server and modify the connection object to reflect the new status.
+#' @return NULL It just disconnects from the EPD DDBB server and modifies the connection object to reflect the new status.
 #' 
 #' @export
 #' 
