@@ -7,9 +7,10 @@
 getDepths(e_, connection)
 }
 \arguments{
-\item{e_}{Integer with the core (entity) number for which C14 data want to be extracted.}
+\item{e_}{numeric. Value indicating the entity number (e_) of the database that want to 
+be queried.}
 
-\item{connection}{Connection object to a EPD DDBB where the query is made.}
+\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 }
 \value{
 Data frame with all the information for pollen samples as in the p_sample table of the EPD DDBB.
@@ -18,7 +19,7 @@ Data frame with all the information for pollen samples as in the p_sample table 
 Given a specific core (entity) this function return the information at which depths samples were taken for pollen data.
 }
 \examples{
-#epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#epd.connection <- connectToEPD(database="epd", user="epdr",
 #                                 password="epdrpw", host="localhost")
 #getDepths(1, epd.connection)
 #getDepths(51, epd.connection)

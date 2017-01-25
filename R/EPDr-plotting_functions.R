@@ -33,20 +33,20 @@ map_by_TaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, poll
                            napoints_fill=NA, countries_bg_colour="grey80", countries_border_colour="grey90"){
     if(class(agedcounts) == "list"){
         if(!class(agedcounts[[1]]) %in% c("agedcounts", "data.frame")){
-            stop("agedcounts of the wrong class. It has to be a list of agedcount objects (see ?getAgedCount) or data.frames (see ?table_by_taxaAge)")
+            stop("agedcounts of the wrong class. It has to be a list of agedcount objects (see ?getAgedCount) or data.frames (see ?tableByTaxaAge)")
         }else{
             if(class(agedcounts[[1]]) == "agedcounts"){
-                dataList <- lapply(agedcounts, table_by_taxaAge, sample_label, taxa)    
+                dataList <- lapply(agedcounts, tableByTaxaAge, sample_label, taxa)    
             }else{
                 if(setequal(colnames(agedcounts[[1]]), c("e_", "londd", "latdd", "count", "sample_label", "taxa"))){
                     dataList <- agedcounts
                 }else{
-                    stop("data.frames in agedcounts of the wrong type. See ?table_by_taxaAge.")
+                    stop("data.frames in agedcounts of the wrong type. See ?tableByTaxaAge.")
                 }
             }
         }
     }else{
-        stop("agedcounts of the wrong class. It has to be a list of agedcount objects (see ?getAgedCount) or data.frames (see ?table_by_taxaAge)")
+        stop("agedcounts of the wrong class. It has to be a list of agedcount objects (see ?getAgedCount) or data.frames (see ?tableByTaxaAge)")
     }
     
     dataList <- do.call(rbind, dataList)

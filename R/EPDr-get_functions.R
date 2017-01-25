@@ -1,16 +1,27 @@
-#' Title TBW
+#' Query Site information of EPD entities
 #'
-#' TBW
+#' This function allows to query the database to request all information about the site in
+#' which an entity was sampled. To perform the query the function requires the number
+#' of the entity that want to be queried and a valid connection to the database. Hence,
+#' the following parameters are mandatory:
 #'
-#' @param e_ TBW
-#' @param connection TBW
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
+#' be queried.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#' @return TBW
+#' @return data.frame The function return a data.frame with all the information on the SITELOC table of the database (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #' 
 #' @export
 #'
 #' @examples
-#' #TBW
+#' # Not run
+#' # library(EPDr)
+#' # epd.connection <- connectToEPD(host="localhost", database="epd",
+#' #                               user="epdr", password="epdrpw")
+#' # site.400 <- getSite(400, epd.connection)
+#' # site.400
+#' # disconnectFromEPD(epd.connection)
+#' 
 getSite <- function(e_, connection){
     sqlQuery <- paste("SELECT site_ FROM entity WHERE e_=", e_, ";", sep="")
     site_num <- as.character(RPostgreSQL::dbGetQuery(connection, sqlQuery))
@@ -23,17 +34,30 @@ getSite <- function(e_, connection){
 
 
 
-#' Title TBW
+#' Query details of EPD Entities
 #'
-#' @param e_ TBW
-#' @param connection TBW
+#' This function query the database to return details of the specified entity. It requires 
+#' the number of the entity that want to be queried and a valid connection to the database 
+#' server, as returned by \code{\link[EPDr:connectToEPD]{connectToEPD}}. Hence, the 
+#' following parameters are mandatory. 
 #'
-#' @return TBW
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
+#' be queried.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#'
+#' @return data.frame The function return a data.frame with all the information on the ENTITY table of the database (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #' 
 #' @export
 #'
 #' @examples
-#' # TBW
+#' # Not run
+#' # library(EPDr)
+#' # epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
+#' #                               user="epdr", password="epdrpw")
+#' # e.400 <- getEntity(400, epd.connection)
+#' # e.400
+#' # disconnectFromEPD(epd.connection)
+#' 
 getEntity <- function(e_, connection){
     sqlQuery <- paste("SELECT * FROM entity WHERE e_=", e_, ";", sep="")
     results <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -43,16 +67,30 @@ getEntity <- function(e_, connection){
 
 
 
-#' Title TBW
+#' Query the taxonomy table of the EPD
+#' 
+#' The function query the whole taxonomy of the database by combining 
+#' information from the P_VARS and P_GROUP tables. Because it queries all 
+#' the records in the database it only requires a valid connection to the 
+#' database server as parameter.
+#' 
+#' Some users may find this function useful but it has been mainly 
+#' implemented to be used by other functions in the \code{EPDr} package.
 #'
-#' @param connection  TBW
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#' @return TBW
+#' @return data.frame The function return a data.frame with the combined information from P_VARS and P_GROUP tables of the database (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #' 
 #' @export
 #'
 #' @examples
-#' # TBW
+#' # Not run
+#' # library(EPDr)
+#' # epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
+#' #                               user="epdr", password="epdrpw")
+#' # getTaxonomy(epd.connection)
+#' # disconnectFromEPD(epd.connection)
+#' 
 getTaxonomyEPD <- function(connection){
     sqlQuery <- paste("SELECT * FROM p_vars NATURAL JOIN p_group")
     results <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -66,34 +104,17 @@ getTaxonomyEPD <- function(connection){
 #' Given a core number (as in the EPD DDBB: e_) the function returns a matrix with the C14 data associated to this core. This values
 #' come from two different tables of the EPD: c14 and geochron.
 #'
-#' @param e_ Integer with the core (entity) number for which C14 data want to be extracted.
-#' @param connection Connection object to a EPD DDBB where the query is made.
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
+#' be queried.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#' @return Data frame with combined information from c14 and geochron tables in the EPD. Columns in the data frame follows terminology
-#' in the original database and are as follows:
-#' \itemize{
-#'  \item \code{e_}: Core (entity) identifier.
-#'  \item \code{sample_}: C14 sample identifier.
-#'  \item \code{agebp}: Uncalibrated C14 age.
-#'  \item \code{agesdup}:
-#'  \item \code{agesdlo}:
-#'  \item \code{grthanage}:
-#'  \item \code{basis}:
-#'  \item \code{enriched}:
-#'  \item \code{labnumber}:
-#'  \item \code{deltac13}:
-#'  \item \code{notes}:
-#'  \item \code{method}:
-#'  \item \code{depthcm}:
-#'  \item \code{thickness}:
-#'  \item \code{materialdated}:
-#'  \item \code{publ_}: Publication identifier.
-#' } 
+#'
+#' @return Data frame with combined information from c14 and geochron tables in the EPD.
 #' 
 #' @export
 #'
 #' @examples
-#' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#' #epd.connection <- connectToEPD(database="epd", user="epdr",
 #' #                                 password="epdrpw", host="localhost")
 #' #getC14(1, epd.connection)
 #' #getC14(400, epd.connection)
@@ -126,8 +147,10 @@ getC14 <- function(e_, connection) {
 #' Given a core (entity) number, \code{\link[EPDr:getChronology]{getChronology}} extract all the information about chronologies associated with this core
 #' in the EPD DDBB. This information comes from two different tables in the DDBB: chron and agebasis.
 #'
-#' @param e_ Integer with the core (entity) number for which C14 data want to be extracted.
-#' @param connection Connection object to a EPD DDBB where the query is made.
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
+#' be queried.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#'
 #'
 #' @return List with 5 elements:
 #' \itemize{
@@ -141,7 +164,7 @@ getC14 <- function(e_, connection) {
 #' @export
 #'
 #' @examples
-#' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#' #epd.connection <- connectToEPD(database="epd", user="epdr",
 #' #                                 password="epdrpw", host="localhost")
 #' #getChronology(1, epd.connection)
 #' #getChronology(400, epd.connection)
@@ -181,8 +204,10 @@ getChronology <- function(e_, connection) {
 #'
 #' Given a specific core number and connection to the EPD, this function return the information of events associated with the core.
 #'
-#' @param e_ Integer with the core (entity) number for which C14 data want to be extracted.
-#' @param connection Connection object to a EPD DDBB where the query is made.
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
+#' be queried.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#'
 #'
 #' @return NA or data frame, depending on whether there are events associated with the requested core. If there are events the
 #' function return a data frame with combined information from synevent and event tables in the EPD. Columns in the data
@@ -203,7 +228,7 @@ getChronology <- function(e_, connection) {
 #' @export
 #'
 #' @examples
-#' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#' #epd.connection <- connectToEPD(database="epd", user="epdr",
 #' #                                password="epdrpw", host="localhost")
 #' #getEvents(1, epd.connection)
 #' #getEvents(51, epd.connection)
@@ -234,15 +259,17 @@ getEvents <- function(e_, connection){
 #'
 #' Given a specific core (entity) this function return the information at which depths samples were taken for pollen data.
 #'
-#' @param e_ Integer with the core (entity) number for which C14 data want to be extracted.
-#' @param connection Connection object to a EPD DDBB where the query is made.
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
+#' be queried.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#'
 #'
 #' @return Data frame with all the information for pollen samples as in the p_sample table of the EPD DDBB.
 #' 
 #' @export
 #'
 #' @examples
-#' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#' #epd.connection <- connectToEPD(database="epd", user="epdr",
 #' #                                 password="epdrpw", host="localhost")
 #' #getDepths(1, epd.connection)
 #' #getDepths(51, epd.connection)
@@ -261,8 +288,10 @@ getDepths <- function(e_, connection){
 #'
 #' TBW
 #' 
-#' @param e_ TBW
-#' @param connection TBW
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
+#' be queried.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#'
 #'
 #' @return TBW
 #' 
@@ -284,8 +313,10 @@ getRestriction <- function(e_, connection){
 #'
 #' TBW
 #'
-#' @param e_ TBW
-#' @param connection TBW
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
+#' be queried.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#'
 #'
 #' @return TBW
 #' 
@@ -311,8 +342,10 @@ getDatation <- function(e_, connection){
 
 #' Title TBW
 #'
-#' @param e_ TBW
-#' @param connection TBW
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
+#' be queried.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#'
 #'
 #' @return TBW
 #' 
@@ -385,8 +418,10 @@ getCounts <- function(e_, connection){
 
 #' Title TBW
 #'
-#' @param e_  TBW
-#' @param connection  TBW
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
+#' be queried.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#'
 #'
 #' @return TBW
 #' 
@@ -454,8 +489,10 @@ getAges <- function(e_, connection){
 
 #' Title TBW
 #'
-#' @param e_ TBW
-#' @param connection TBW 
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
+#' be queried.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#'
 #'
 #' @return TBW
 #' 

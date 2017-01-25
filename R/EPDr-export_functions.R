@@ -13,12 +13,13 @@
 #' @export
 #'
 #' @examples
-#' #library(EPDr)
-#' #epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
+#' # Not run
+#' # library(EPDr)
+#' # epd.connection <- connectToEPD(host="localhost", database="epd",
 #' #                               user="epdr", password="epdrpw")
-#' #c14 <- getC14(400, epd.connection)
-#' #c14.clam <- exportC14(c14, "clam")
-#' #c14.bacon <- exportC14(c14, "bacon")
+#' # c14 <- getC14(400, epd.connection)
+#' # c14.clam <- exportC14(c14, "clam")
+#' # c14.bacon <- exportC14(c14, "bacon")
 #' 
 exportC14 <- function(C14, format=c("clam","bacon")) {
     if(nrow(C14) == 0){
@@ -61,7 +62,7 @@ exportC14 <- function(C14, format=c("clam","bacon")) {
 #'
 #' @examples
 #' #library(EPDr)
-#' #epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
+#' #epd.connection <- connectToEPD(host="localhost", database="epd",
 #' #                               user="epdr", password="epdrpw")
 #' #c14 <- getC14(400, epd.connection)
 #' #c14.clam <- exportC14(c14, "clam")
@@ -109,7 +110,7 @@ exportAgebasis <- function(agebasis, format=c("clam", "bacon")){
 #' @export
 #'
 #' @examples
-#' #epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
+#' #epd.connection <- connectToEPD(host="localhost", database="epd",
 #' #                               user="epdr", password="epdrpw")
 #' #event <- getEvents(51, epd.connection)
 #' #event.clam <- exportEvents(event, format="clam")
@@ -151,7 +152,7 @@ exportEvents <- function(event, format=c("clam", "bacon")){
 #' @export
 #'
 #' @examples
-#' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#' #epd.connection <- connectToEPD(database="epd", user="epdr",
 #' #                                 password="epdrpw", host="localhost")
 #' #depths.1 <- getDepths(1, epd.connection)
 #' #exportDepths(depths.1)

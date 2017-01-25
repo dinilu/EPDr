@@ -16,7 +16,7 @@ Vector with depths in ascending order.
 This function takes depths data, as returned by \code{\link[EPDr:getDepths]{getDepths}}, to comply with CLAM or BACON format.
 }
 \examples{
-#epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#epd.connection <- connectToEPD(database="epd", user="epdr",
 #                                 password="epdrpw", host="localhost")
 #depths.1 <- getDepths(1, epd.connection)
 #exportDepths(depths.1)

@@ -22,7 +22,7 @@ comply with CLAM or BACON format.
 }
 \examples{
 #library(EPDr)
-#epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
+#epd.connection <- connectToEPD(host="localhost", database="epd",
 #                               user="epdr", password="epdrpw")
 #c14 <- getC14(400, epd.connection)
 #c14.clam <- exportC14(c14, "clam")

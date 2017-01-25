@@ -7,38 +7,20 @@
 getC14(e_, connection)
 }
 \arguments{
-\item{e_}{Integer with the core (entity) number for which C14 data want to be extracted.}
+\item{e_}{numeric. Value indicating the entity number (e_) of the database that want to 
+be queried.}
 
-\item{connection}{Connection object to a EPD DDBB where the query is made.}
+\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 }
 \value{
-Data frame with combined information from c14 and geochron tables in the EPD. Columns in the data frame follows terminology
-in the original database and are as follows:
-\itemize{
- \item \code{e_}: Core (entity) identifier.
- \item \code{sample_}: C14 sample identifier.
- \item \code{agebp}: Uncalibrated C14 age.
- \item \code{agesdup}:
- \item \code{agesdlo}:
- \item \code{grthanage}:
- \item \code{basis}:
- \item \code{enriched}:
- \item \code{labnumber}:
- \item \code{deltac13}:
- \item \code{notes}:
- \item \code{method}:
- \item \code{depthcm}:
- \item \code{thickness}:
- \item \code{materialdated}:
- \item \code{publ_}: Publication identifier.
-}
+Data frame with combined information from c14 and geochron tables in the EPD.
 }
 \description{
 Given a core number (as in the EPD DDBB: e_) the function returns a matrix with the C14 data associated to this core. This values
 come from two different tables of the EPD: c14 and geochron.
 }
 \examples{
-#epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#epd.connection <- connectToEPD(database="epd", user="epdr",
 #                                 password="epdrpw", host="localhost")
 #getC14(1, epd.connection)
 #getC14(400, epd.connection)

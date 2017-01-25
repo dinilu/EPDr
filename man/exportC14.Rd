@@ -18,12 +18,13 @@ Data frame with C14 data in CLAM or BACON format.
 This function takes C14 data, as those extracted from \code{\link[EPDr:getC14]{getC14}}, to fit into a new table that comply with CLAM or BACON format.
 }
 \examples{
-#library(EPDr)
-#epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
+# Not run
+# library(EPDr)
+# epd.connection <- connectToEPD(host="localhost", database="epd",
 #                               user="epdr", password="epdrpw")
-#c14 <- getC14(400, epd.connection)
-#c14.clam <- exportC14(c14, "clam")
-#c14.bacon <- exportC14(c14, "bacon")
+# c14 <- getC14(400, epd.connection)
+# c14.clam <- exportC14(c14, "clam")
+# c14.bacon <- exportC14(c14, "bacon")
 
 }
 \references{

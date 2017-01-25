@@ -2,22 +2,33 @@
 % Please edit documentation in R/EPDr-get_functions.R
 \name{getSite}
 \alias{getSite}
-\title{Title TBW}
+\title{Query Site information of EPD entities}
 \usage{
 getSite(e_, connection)
 }
 \arguments{
-\item{e_}{TBW}
+\item{e_}{numeric. Value indicating the entity number (e_) of the database that want to 
+be queried.}
 
-\item{connection}{TBW}
+\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 }
 \value{
-TBW
+data.frame The function return a data.frame with all the information on the SITELOC table of the database (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 }
 \description{
-TBW
+This function allows to query the database to request all information about the site in
+which an entity was sampled. To perform the query the function requires the number
+of the entity that want to be queried and a valid connection to the database. Hence,
+the following parameters are mandatory:
 }
 \examples{
-#TBW
+# Not run
+# library(EPDr)
+# epd.connection <- connectToEPD(host="localhost", database="epd",
+#                               user="epdr", password="epdrpw")
+# site.400 <- getSite(400, epd.connection)
+# site.400
+# disconnectFromEPD(epd.connection)
+
 }
 

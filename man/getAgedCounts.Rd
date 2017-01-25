@@ -7,9 +7,10 @@
 getAgedCounts(e_, connection)
 }
 \arguments{
-\item{e_}{TBW}
+\item{e_}{numeric. Value indicating the entity number (e_) of the database that want to 
+be queried.}
 
-\item{connection}{TBW}
+\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 }
 \value{
 TBW

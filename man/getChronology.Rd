@@ -7,9 +7,10 @@
 getChronology(e_, connection)
 }
 \arguments{
-\item{e_}{Integer with the core (entity) number for which C14 data want to be extracted.}
+\item{e_}{numeric. Value indicating the entity number (e_) of the database that want to 
+be queried.}
 
-\item{connection}{Connection object to a EPD DDBB where the query is made.}
+\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 }
 \value{
 List with 5 elements:
@@ -26,7 +27,7 @@ Given a core (entity) number, \code{\link[EPDr:getChronology]{getChronology}} ex
 in the EPD DDBB. This information comes from two different tables in the DDBB: chron and agebasis.
 }
 \examples{
-#epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#epd.connection <- connectToEPD(database="epd", user="epdr",
 #                                 password="epdrpw", host="localhost")
 #getChronology(1, epd.connection)
 #getChronology(400, epd.connection)

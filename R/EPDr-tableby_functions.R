@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' # TBW
-table_by_taxaAge <- function(agedcount, sample_label, taxa){
+tableByTaxaAge <- function(agedcount, sample_label, taxa){
     e_ <- agedcount@e_
     londd <- agedcount@site$londd
     latdd <- agedcount@site$latdd

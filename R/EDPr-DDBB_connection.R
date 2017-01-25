@@ -21,7 +21,7 @@
 #' @examples
 #' # Not run
 #' # epd.connection <- connectToEPD()
-#' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#' #epd.connection <- connectToEPD(database="epd", user="epdr",
 #' #                                 password="epdrpw", host="localhost")
 #' #epd.connection
 #' # To list all the tables in the database we have connected with
@@ -53,7 +53,7 @@ connectToEPD <- function(database=NULL, user=NULL, password=NULL, driver="Postgr
 #' @export
 #' 
 #' @examples
-#' #epd.connection <- connectToEPD(database="epd_ddbb", user="epdr",
+#' #epd.connection <- connectToEPD(database="epd", user="epdr",
 #' #                                 password="epdrpw", host="localhost")
 #' #disconnectFromEPD(connection=epd.connection)
 #' #epd.connection

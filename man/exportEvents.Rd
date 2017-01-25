@@ -18,7 +18,7 @@ Data frame with event data in CLAM or BACON format.
 This function takes event data to fit into a new table that comply with CLAM or BACON format.
 }
 \examples{
-#epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
+#epd.connection <- connectToEPD(host="localhost", database="epd",
 #                               user="epdr", password="epdrpw")
 #event <- getEvents(51, epd.connection)
 #event.clam <- exportEvents(event, format="clam")
