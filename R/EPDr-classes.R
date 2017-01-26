@@ -138,7 +138,7 @@ chronology <- setClass("chronology",
 #' @slot events data.frame. Details about events (e.g. tephra) that could appear in
 #' the entity.
 #' @slot depths data.frame. Details about the samples (including depths) at which samples
-#' were taken in the entity for biological (pollen, spores, etc) analysis.
+#' were taken in the entity for palynological (pollen, spores, etc) analysis.
 #'
 #' @export
 #' @import methods
@@ -268,10 +268,10 @@ datation <- setClass("datation",
 #' @slot counts_processing factor. Indicating whether the data in slot \code{@counts} has
 #' been processed. It can be one of three values: "Samples", "Interpolated" or "Ranged 
 #' means". "Samples" indicate that values in \code{@counts} correspond with the counts
-#' for the biological samples. "Interpolated" indicates that values in \code{@counts}
-#' correspond to interpolated data at specific depth/ages among the biological samples, 
+#' for the palynological samples. "Interpolated" indicates that values in \code{@counts}
+#' correspond to interpolated data at specific depth/ages among the palynological samples, 
 #' using \code{\link[EPDr:interpolateCounts]{interpolateCounts}}. "Ranged means"
-#' indicates that values in \code{@counts} represent mean values among all biological samples for specified age/depth ranges calculated using \code{\link[EPDr:intervalsCounts]{intervalsCounts}}
+#' indicates that values in \code{@counts} represent mean values among all palynological samples for specified age/depth ranges calculated using \code{\link[EPDr:intervalsCounts]{intervalsCounts}}
 #' @slot taxa_type factor. Indicating the taxa used to calculate values in slot
 #' \code{@counts}. The EPD allow establish three levels of taxonomy: the taxonomic level
 #' determined by analyst when processing the entity, "accepted" name to resolve
@@ -305,13 +305,13 @@ datation <- setClass("datation",
 #' @slot taxa_groupid character. Character vector indicating the corresponding groupid
 #' to which belong each taxa used in \code{@counts}. 
 #' @slot sample_ numeric. Numeric vector indicating the sample number of each sample used
-#' in \code{@counts}. Sample here is each of the biological samples in the entity.
+#' in \code{@counts}. Sample here is each of the palynological samples in the entity.
 #' @slot sample_label character. Character vector indicating the sample name (or code)
-#' of each sample used in \code{@counts}. Sample here is each of the biological samples in the entity.
+#' of each sample used in \code{@counts}. Sample here is each of the palynological samples in the entity.
 #' @slot default_ages numeric. Numeric vector indicating the ages estimated for each
-#' biological sample according to the default chronology in the EPD for that entity.
+#' palynological sample according to the default chronology in the EPD for that entity.
 #' @slot depthcm numeric. Numeric vector indicating the depth (in cm) in which each
-#' biological sample was collected.
+#' palynological sample was collected.
 #' @slot counts data.frame. Data frame with counts (raw counts or percentages) for each
 #' taxon at each sample (original samples, interpolated or ranged). This takes the form
 #' of a age/depth (rows) by taxon (columns).
@@ -412,7 +412,7 @@ counts <- setClass("counts",
 #' Class for Ages of an entity
 #' 
 #' Class "ages" store in an organized and systematic way information about 
-#' estimated ages for biological samples in an specified entity in the European
+#' estimated ages for palynological samples in an specified entity in the European
 #' Pollen Database (EPD). This object is created by \code{\link[EPDr:getAges]{getAges}}.
 #'
 #' It has different elements all of which correspond to a unique entity 
@@ -429,15 +429,15 @@ counts <- setClass("counts",
 #' @slot giesecke logical. Indicating \code{TRUE} if there are ages revised by Giesecke
 #' et al. (2013) for this entity or \code{FALSE} on the contrary.
 #' @slot sample_ numeric. Numeric vector indicating the sample number of each sample used
-#' in \code{@counts}. Sample here is each of the biological samples in the entity.
+#' in \code{@counts}. Sample here is each of the palynological samples in the entity.
 #' @slot sample_label character. Character vector indicating the sample name (or code)
-#' of each sample used in \code{@counts}. Sample here is each of the biological samples
+#' of each sample used in \code{@counts}. Sample here is each of the palynological samples
 #' in the entity.
 #' @slot depthcm numeric. Numeric vector indicating the depth (in cm) in which each
-#' biological sample was collected.
+#' palynological sample was collected.
 #' @slot depths data.frame. Details about the samples (including depths) at which samples
-#' were taken in the entity for biological (pollen, spores, etc) analysis.
-#' @slot depth_ages data.frame. Data frame with ages for each biological sample
+#' were taken in the entity for palynological (pollen, spores, etc) analysis.
+#' @slot depth_ages data.frame. Data frame with ages for each palynological sample
 #' according to the different chronologies and giesecke, if available.
 #' @slot data_quality data.frame. Data frame with data quality index for counts on
 #' each sample (original, interpolated, or ranged) according to metrics in Blois
@@ -549,7 +549,7 @@ ages <- setClass("ages",
 #' Class for Aged-Counts of an entity
 #' 
 #' Class "agedcounts" store in an organized and systematic way information about 
-#' counts and ages for biological samples in an specified entity in the European
+#' counts and ages for palynological samples in an specified entity in the European
 #' Pollen Database (EPD). This object is created by
 #' \code{\link[EPDr:getAgedCounts]{getAgedCounts}}.
 #' 

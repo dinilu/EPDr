@@ -2,7 +2,7 @@
 % Please edit documentation in R/EPDr-get_functions.R
 \name{getEvents}
 \alias{getEvents}
-\title{Extract events associated with a specific core (entity) in the EPD DDBB}
+\title{Query events of EPD entities}
 \usage{
 getEvents(e_, connection)
 }
@@ -13,30 +13,21 @@ be queried.}
 \item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 }
 \value{
-NA or data frame, depending on whether there are events associated with the requested core. If there are events the
-function return a data frame with combined information from synevent and event tables in the EPD. Columns in the data
-frame follows terminology in the original database and are as follows:
-\itemize{
- \item \code{event_}: Event identifier.
- \item \code{e_}: Core (entity) identifier.
- \item \code{depthcm}: Depth of the event in cm.
- \item \code{thickness}: Thickness of the event in cm.
- \item \code{event}: Code for the type of event. See EPD documentation for details.
- \item \code{name}: Name of the event.
- \item \code{agebp}: Known age of the event in BP.
- \item \code{ageuncertup}:
- \item \code{ageuncertlo}:
- \item \code{publ_}: Publication identifier.
-}
+data.frame. Data frame with all combined information from the EVENT and SYNEVENT tables in the database for that particular entity (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}). If the entity has no events the dataframe is empty.
 }
 \description{
-Given a specific core number and connection to the EPD, this function return the information of events associated with the core.
+This function queries the database to request all information about the stratigraphic events 
+of an specified entity. To perform the query the function requires the number
+of the entity that want to be queried and a valid connection to the database. Hence,
+the following parameters are mandatory:
 }
 \examples{
-#epd.connection <- connectToEPD(database="epd", user="epdr",
+# Not run
+# epd.connection <- connectToEPD(database="epd", user="epdr",
 #                                password="epdrpw", host="localhost")
-#getEvents(1, epd.connection)
-#getEvents(51, epd.connection)
-#disconnectFromEPD(connection=epd.connection)
+# getEvents(1, epd.connection)
+# getEvents(51, epd.connection)
+# disconnectFromEPD(connection=epd.connection)
+
 }
 

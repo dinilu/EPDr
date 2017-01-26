@@ -13,7 +13,7 @@ getTaxonomyEPD(connection)
 data.frame The function return a data.frame with the combined information from P_VARS and P_GROUP tables of the database (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 }
 \description{
-The function query the whole taxonomy of the database by combining 
+The function queries the whole taxonomy of the database by combining 
 information from the P_VARS and P_GROUP tables. Because it queries all 
 the records in the database it only requires a valid connection to the 
 database server as parameter.
@@ -27,7 +27,8 @@ implemented to be used by other functions in the \code{EPDr} package.
 # library(EPDr)
 # epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
 #                               user="epdr", password="epdrpw")
-# getTaxonomy(epd.connection)
+# epd.taxonomy <- getTaxonomy(epd.connection)
+# epd.taxonomy
 # disconnectFromEPD(epd.connection)
 
 }

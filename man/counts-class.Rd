@@ -30,10 +30,10 @@ in \code{@counts} are raw counts as in the EPD. "Percentages" indicates that val
 \item{\code{counts_processing}}{factor. Indicating whether the data in slot \code{@counts} has
 been processed. It can be one of three values: "Samples", "Interpolated" or "Ranged 
 means". "Samples" indicate that values in \code{@counts} correspond with the counts
-for the biological samples. "Interpolated" indicates that values in \code{@counts}
-correspond to interpolated data at specific depth/ages among the biological samples, 
+for the palynological samples. "Interpolated" indicates that values in \code{@counts}
+correspond to interpolated data at specific depth/ages among the palynological samples, 
 using \code{\link[EPDr:interpolateCounts]{interpolateCounts}}. "Ranged means"
-indicates that values in \code{@counts} represent mean values among all biological samples for specified age/depth ranges calculated using \code{\link[EPDr:intervalsCounts]{intervalsCounts}}}
+indicates that values in \code{@counts} represent mean values among all palynological samples for specified age/depth ranges calculated using \code{\link[EPDr:intervalsCounts]{intervalsCounts}}}
 
 \item{\code{taxa_type}}{factor. Indicating the taxa used to calculate values in slot
 \code{@counts}. The EPD allow establish three levels of taxonomy: the taxonomic level
@@ -77,16 +77,16 @@ corresponding higher taxa for each taxa used in \code{@counts}.}
 to which belong each taxa used in \code{@counts}.}
 
 \item{\code{sample_}}{numeric. Numeric vector indicating the sample number of each sample used
-in \code{@counts}. Sample here is each of the biological samples in the entity.}
+in \code{@counts}. Sample here is each of the palynological samples in the entity.}
 
 \item{\code{sample_label}}{character. Character vector indicating the sample name (or code)
-of each sample used in \code{@counts}. Sample here is each of the biological samples in the entity.}
+of each sample used in \code{@counts}. Sample here is each of the palynological samples in the entity.}
 
 \item{\code{default_ages}}{numeric. Numeric vector indicating the ages estimated for each
-biological sample according to the default chronology in the EPD for that entity.}
+palynological sample according to the default chronology in the EPD for that entity.}
 
 \item{\code{depthcm}}{numeric. Numeric vector indicating the depth (in cm) in which each
-biological sample was collected.}
+palynological sample was collected.}
 
 \item{\code{counts}}{data.frame. Data frame with counts (raw counts or percentages) for each
 taxon at each sample (original samples, interpolated or ranged). This takes the form

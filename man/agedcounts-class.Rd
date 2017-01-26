@@ -7,7 +7,7 @@
 \title{Class for Aged-Counts of an entity}
 \description{
 Class "agedcounts" store in an organized and systematic way information about 
-counts and ages for biological samples in an specified entity in the European
+counts and ages for palynological samples in an specified entity in the European
 Pollen Database (EPD). This object is created by
 \code{\link[EPDr:getAgedCounts]{getAgedCounts}}.
 }

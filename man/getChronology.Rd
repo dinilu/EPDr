@@ -2,7 +2,7 @@
 % Please edit documentation in R/EPDr-get_functions.R
 \name{getChronology}
 \alias{getChronology}
-\title{Extract chronologies associated with a core (entity) in the pollen database}
+\title{Query chronologies of EPD entities}
 \usage{
 getChronology(e_, connection)
 }
@@ -13,24 +13,22 @@ be queried.}
 \item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 }
 \value{
-List with 5 elements:
-\itemize{
-  \item \code{number_of_chronologies}: Integer indicating the number of chronologies associated with the core (entity).
-  \item \code{default_chronology}: Integer indicating which is the default chronology according to the EPD DDBB.
-  \item \code{chron}: Data frame with the meta information on how each calibration was built.
-  \item \code{agebasis}: Data frame with all the information (depth and age for C14 and no-C14 data) used to build the chronologies.
-  \item \code{no_C14}: Data frame with no-C14 data used to build the chronologies.
-}
+chronology. Object of class \code{\link[EPDr:chronology]{chronology}}. This object store in an organized and systematic way all combined information from CHRON and AGEBASIS tables in the EPD  (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 }
 \description{
-Given a core (entity) number, \code{\link[EPDr:getChronology]{getChronology}} extract all the information about chronologies associated with this core
-in the EPD DDBB. This information comes from two different tables in the DDBB: chron and agebasis.
+This function queries the database to request all information about the chronologies  
+of an specified entity. A particular entity might have several chronologies developed in different
+projects by differen researchers. To perform the query the function requires the number
+of the entity that want to be queried and a valid connection to the database. Hence,
+the following parameters are mandatory:
 }
 \examples{
-#epd.connection <- connectToEPD(database="epd", user="epdr",
+# Not run
+# epd.connection <- connectToEPD(database="epd", user="epdr",
 #                                 password="epdrpw", host="localhost")
-#getChronology(1, epd.connection)
-#getChronology(400, epd.connection)
-#disconnectFromEPD(connection=epd.connection)
+# getChronology(1, epd.connection)
+# getChronology(400, epd.connection)
+# disconnectFromEPD(connection=epd.connection)
+
 }
 

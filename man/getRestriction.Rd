@@ -2,7 +2,7 @@
 % Please edit documentation in R/EPDr-get_functions.R
 \name{getRestriction}
 \alias{getRestriction}
-\title{Title TBW}
+\title{Query restriction of use for EPD entities}
 \usage{
 getRestriction(e_, connection)
 }
@@ -13,12 +13,21 @@ be queried.}
 \item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 }
 \value{
-TBW
+data.frame. Data frame with all information from the P_ENTITY table in the database for that particular entity (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}). If the entity is restricted the function release a warning with the data provider name to be contacted.
 }
 \description{
-TBW
+This function queries the database to request information about use restrictions 
+of an specified entity. To perform the query the function requires the number
+of the entity that want to be queried and a valid connection to the database. Hence,
+the following parameters are mandatory:
 }
 \examples{
-# TBW
+# Not run
+# epd.connection <- connectToEPD(database="epd", user="epdr",
+#                                 password="epdrpw", host="localhost")
+# getRestriction(1, epd.connection)
+# getRestriction(51, epd.connection)
+# disconnectFromEPD(connection=epd.connection)
+
 }
 

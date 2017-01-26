@@ -140,7 +140,7 @@ exportEvents <- function(event, format=c("clam", "bacon")){
 
 #' Reshape depths data to CLAM or BACON format
 #'
-#' This function takes depths data, as returned by \code{\link[EPDr:getDepths]{getDepths}}, to comply with CLAM or BACON format.
+#' This function takes depths data, as returned by \code{\link[EPDr:getPSamples]{getPSamples}}, to comply with CLAM or BACON format.
 #'
 #' @param depths Data frame with at least a column called depthcm.
 #'
@@ -154,7 +154,7 @@ exportEvents <- function(event, format=c("clam", "bacon")){
 #' @examples
 #' #epd.connection <- connectToEPD(database="epd", user="epdr",
 #' #                                 password="epdrpw", host="localhost")
-#' #depths.1 <- getDepths(1, epd.connection)
+#' #depths.1 <- getPSamples(1, epd.connection)
 #' #exportDepths(depths.1)
 #' #disconnectFromEPD(connection=epd.connection)
 exportDepths <- function(depths){
@@ -177,7 +177,7 @@ exportDepths <- function(depths){
 #' @param include_c14_not_in_chron Logical value indicating whether the function should include in the result agebasis present in the C14 data but not present in the specified (or default) chronology (TRUE), or should not include them (FALSE).
 #' @param use_c14_conf_age Logical value indicating whether the function should use data from C14 table when there are conflicting ages between the C14 table or the chronology (TRUE), or it should take data from the chronology instead (FALSE).
 #' @param use_c14_conf_depth Logical value indicating whether the function should use data from C14 table when there are conflicting depths between the C14 table or the chronology (TRUE), or it should take data from the chronology instead (FALSE).
-#' @param include_depths Logical value indicating whether depths of biological samples should be exported too. The default value is TRUE. This is helpful because running CLAM or BACON with depths calculate the calibrated ages for those sample in the same step.
+#' @param include_depths Logical value indicating whether depths of pollen samples should be exported too. The default value is TRUE. This is helpful because running CLAM or BACON with depths calculate the calibrated ages for those sample in the same step.
 #' @param include_events Logical value indicating whether events information should be included (TRUE), or not (FALSE).
 #'
 #' @return Data frame with specific format for "CLAM" or "BACON" age-depth modelling softwares.

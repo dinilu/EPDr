@@ -24,7 +24,7 @@ exportDatation(datation, format = "clam", chronology_number = NA,
 
 \item{use_c14_conf_depth}{Logical value indicating whether the function should use data from C14 table when there are conflicting depths between the C14 table or the chronology (TRUE), or it should take data from the chronology instead (FALSE).}
 
-\item{include_depths}{Logical value indicating whether depths of biological samples should be exported too. The default value is TRUE. This is helpful because running CLAM or BACON with depths calculate the calibrated ages for those sample in the same step.}
+\item{include_depths}{Logical value indicating whether depths of pollen samples should be exported too. The default value is TRUE. This is helpful because running CLAM or BACON with depths calculate the calibrated ages for those sample in the same step.}
 
 \item{include_events}{Logical value indicating whether events information should be included (TRUE), or not (FALSE).}
 }

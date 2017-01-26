@@ -2,7 +2,7 @@
 % Please edit documentation in R/EPDr-get_functions.R
 \name{getAgedCounts}
 \alias{getAgedCounts}
-\title{Title TBW}
+\title{Query counts and ages of palynological-samples of EPD entities}
 \usage{
 getAgedCounts(e_, connection)
 }
@@ -13,12 +13,21 @@ be queried.}
 \item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 }
 \value{
-TBW
+agedcounts Object of class \code{\link[EPDr:agedcounts]{agedcounts}}.
 }
 \description{
-Title TBW
+This function queries the database to request information about counts and estimated ages
+of palynological samples of an specified entity. To perform the query the function requires
+the number of the entity that want to be queried and a valid connection to the database. Hence,
+the following parameters are mandatory:
 }
 \examples{
-# TBW
+# Not run
+# epd.connection <- connectToEPD(database="epd", user="epdr",
+#                                 password="epdrpw", host="localhost")
+# getAgedCounts(1, epd.connection)
+# getAgedCounts(51, epd.connection)
+# disconnectFromEPD(connection=epd.connection)
+
 }
 

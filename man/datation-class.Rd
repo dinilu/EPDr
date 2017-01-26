@@ -41,6 +41,6 @@ was sampled. This information is useful when calibrating radiocarbon dates with
 the entity.}
 
 \item{\code{depths}}{data.frame. Details about the samples (including depths) at which samples
-were taken in the entity for biological (pollen, spores, etc) analysis.}
+were taken in the entity for palynological (pollen, spores, etc) analysis.}
 }}
 

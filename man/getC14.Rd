@@ -2,7 +2,7 @@
 % Please edit documentation in R/EPDr-get_functions.R
 \name{getC14}
 \alias{getC14}
-\title{Extract C14 data for a particular core (entity in the EPD DDBB)}
+\title{Query C14 data of EPD Entities}
 \usage{
 getC14(e_, connection)
 }
@@ -13,17 +13,21 @@ be queried.}
 \item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 }
 \value{
-Data frame with combined information from c14 and geochron tables in the EPD.
+Data frame with all combined information from C14 and GEOCHRON tables in the EPD  (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 }
 \description{
-Given a core number (as in the EPD DDBB: e_) the function returns a matrix with the C14 data associated to this core. This values
-come from two different tables of the EPD: c14 and geochron.
+This function queries the database to request all information about the C14 data 
+of an specified entity. To perform the query the function requires the number
+of the entity that want to be queried and a valid connection to the database. Hence,
+the following parameters are mandatory:
 }
 \examples{
-#epd.connection <- connectToEPD(database="epd", user="epdr",
+# Not run
+# epd.connection <- connectToEPD(database="epd", user="epdr",
 #                                 password="epdrpw", host="localhost")
-#getC14(1, epd.connection)
-#getC14(400, epd.connection)
-#disconnectFromEPD(connection=epd.connection)
+# getC14(1, epd.connection)
+# getC14(400, epd.connection)
+# disconnectFromEPD(connection=epd.connection)
+
 }
 

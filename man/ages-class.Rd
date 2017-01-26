@@ -7,7 +7,7 @@
 \title{Class for Ages of an entity}
 \description{
 Class "ages" store in an organized and systematic way information about 
-estimated ages for biological samples in an specified entity in the European
+estimated ages for palynological samples in an specified entity in the European
 Pollen Database (EPD). This object is created by \code{\link[EPDr:getAges]{getAges}}.
 }
 \details{
@@ -34,19 +34,19 @@ the default in the database.}
 et al. (2013) for this entity or \code{FALSE} on the contrary.}
 
 \item{\code{sample_}}{numeric. Numeric vector indicating the sample number of each sample used
-in \code{@counts}. Sample here is each of the biological samples in the entity.}
+in \code{@counts}. Sample here is each of the palynological samples in the entity.}
 
 \item{\code{sample_label}}{character. Character vector indicating the sample name (or code)
-of each sample used in \code{@counts}. Sample here is each of the biological samples
+of each sample used in \code{@counts}. Sample here is each of the palynological samples
 in the entity.}
 
 \item{\code{depthcm}}{numeric. Numeric vector indicating the depth (in cm) in which each
-biological sample was collected.}
+palynological sample was collected.}
 
 \item{\code{depths}}{data.frame. Details about the samples (including depths) at which samples
-were taken in the entity for biological (pollen, spores, etc) analysis.}
+were taken in the entity for palynological (pollen, spores, etc) analysis.}
 
-\item{\code{depth_ages}}{data.frame. Data frame with ages for each biological sample
+\item{\code{depth_ages}}{data.frame. Data frame with ages for each palynological sample
 according to the different chronologies and giesecke, if available.}
 
 \item{\code{data_quality}}{data.frame. Data frame with data quality index for counts on

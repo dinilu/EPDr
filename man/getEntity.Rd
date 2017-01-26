@@ -2,7 +2,7 @@
 % Please edit documentation in R/EPDr-get_functions.R
 \name{getEntity}
 \alias{getEntity}
-\title{Query details of EPD Entities}
+\title{Query details of EPD entities}
 \usage{
 getEntity(e_, connection)
 }
@@ -16,7 +16,7 @@ be queried.}
 data.frame The function return a data.frame with all the information on the ENTITY table of the database (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 }
 \description{
-This function query the database to return details of the specified entity. It requires 
+This function queries the database to return details of the specified entity. It requires 
 the number of the entity that want to be queried and a valid connection to the database 
 server, as returned by \code{\link[EPDr:connectToEPD]{connectToEPD}}. Hence, the 
 following parameters are mandatory.

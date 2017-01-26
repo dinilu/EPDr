@@ -2,7 +2,7 @@
 % Please edit documentation in R/EPDr-get_functions.R
 \name{getCounts}
 \alias{getCounts}
-\title{Title TBW}
+\title{Query palynological counts of EPD entities}
 \usage{
 getCounts(e_, connection)
 }
@@ -13,12 +13,21 @@ be queried.}
 \item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 }
 \value{
-TBW
+counts. Object of class \code{\link[EPDr:counts]{counts}}.
 }
 \description{
-Title TBW
+This function queries the database to request information about palynological counts 
+of an specified entity. To perform the query the function requires the number
+of the entity that want to be queried and a valid connection to the database. Hence,
+the following parameters are mandatory:
 }
 \examples{
-# TBW
+# Not run
+# epd.connection <- connectToEPD(database="epd", user="epdr",
+#                                 password="epdrpw", host="localhost")
+# getCounts(1, epd.connection)
+# getCounts(51, epd.connection)
+# disconnectFromEPD(connection=epd.connection)
+
 }
 

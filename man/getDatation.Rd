@@ -2,7 +2,7 @@
 % Please edit documentation in R/EPDr-get_functions.R
 \name{getDatation}
 \alias{getDatation}
-\title{Title TBW}
+\title{Query datation of EPD entities}
 \usage{
 getDatation(e_, connection)
 }
@@ -13,12 +13,21 @@ be queried.}
 \item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 }
 \value{
-TBW
+datation. Object of class \code{\link[EPDr:datation]{datation}} with all the information about datation of that entity.
 }
 \description{
-TBW
+This function queries the database to request information about datation 
+of an specified entity. To perform the query the function requires the number
+of the entity that want to be queried and a valid connection to the database. Hence,
+the following parameters are mandatory:
 }
 \examples{
-# TBW
+# Not run
+# epd.connection <- connectToEPD(database="epd", user="epdr",
+#                                 password="epdrpw", host="localhost")
+# getDatation(1, epd.connection)
+# getDatation(51, epd.connection)
+# disconnectFromEPD(connection=epd.connection)
+
 }
 

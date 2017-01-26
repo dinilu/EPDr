@@ -34,9 +34,9 @@ getSite <- function(e_, connection){
 
 
 
-#' Query details of EPD Entities
+#' Query details of EPD entities
 #'
-#' This function query the database to return details of the specified entity. It requires 
+#' This function queries the database to return details of the specified entity. It requires 
 #' the number of the entity that want to be queried and a valid connection to the database 
 #' server, as returned by \code{\link[EPDr:connectToEPD]{connectToEPD}}. Hence, the 
 #' following parameters are mandatory. 
@@ -69,7 +69,7 @@ getEntity <- function(e_, connection){
 
 #' Query the taxonomy table of the EPD
 #' 
-#' The function query the whole taxonomy of the database by combining 
+#' The function queries the whole taxonomy of the database by combining 
 #' information from the P_VARS and P_GROUP tables. Because it queries all 
 #' the records in the database it only requires a valid connection to the 
 #' database server as parameter.
@@ -88,7 +88,8 @@ getEntity <- function(e_, connection){
 #' # library(EPDr)
 #' # epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
 #' #                               user="epdr", password="epdrpw")
-#' # getTaxonomy(epd.connection)
+#' # epd.taxonomy <- getTaxonomy(epd.connection)
+#' # epd.taxonomy
 #' # disconnectFromEPD(epd.connection)
 #' 
 getTaxonomyEPD <- function(connection){
@@ -99,26 +100,30 @@ getTaxonomyEPD <- function(connection){
 
 
 
-#' Extract C14 data for a particular core (entity in the EPD DDBB)
+#' Query C14 data of EPD Entities
 #' 
-#' Given a core number (as in the EPD DDBB: e_) the function returns a matrix with the C14 data associated to this core. This values
-#' come from two different tables of the EPD: c14 and geochron.
-#'
+#' This function queries the database to request all information about the C14 data 
+#' of an specified entity. To perform the query the function requires the number
+#' of the entity that want to be queried and a valid connection to the database. Hence,
+#' the following parameters are mandatory:
+#' 
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
 #'
-#' @return Data frame with combined information from c14 and geochron tables in the EPD.
+#' @return Data frame with all combined information from C14 and GEOCHRON tables in the EPD  (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #' 
 #' @export
 #'
 #' @examples
-#' #epd.connection <- connectToEPD(database="epd", user="epdr",
+#' # Not run
+#' # epd.connection <- connectToEPD(database="epd", user="epdr",
 #' #                                 password="epdrpw", host="localhost")
-#' #getC14(1, epd.connection)
-#' #getC14(400, epd.connection)
-#' #disconnectFromEPD(connection=epd.connection)
+#' # getC14(1, epd.connection)
+#' # getC14(400, epd.connection)
+#' # disconnectFromEPD(connection=epd.connection)
+#' 
 getC14 <- function(e_, connection) {
     rest <- getRestriction(e_, connection)
     
@@ -142,33 +147,31 @@ getC14 <- function(e_, connection) {
 
 
 
-#' Extract chronologies associated with a core (entity) in the pollen database
+#' Query chronologies of EPD entities
 #' 
-#' Given a core (entity) number, \code{\link[EPDr:getChronology]{getChronology}} extract all the information about chronologies associated with this core
-#' in the EPD DDBB. This information comes from two different tables in the DDBB: chron and agebasis.
+#' This function queries the database to request all information about the chronologies  
+#' of an specified entity. A particular entity might have several chronologies developed in different
+#' projects by differen researchers. To perform the query the function requires the number
+#' of the entity that want to be queried and a valid connection to the database. Hence,
+#' the following parameters are mandatory:
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
 #'
-#' @return List with 5 elements:
-#' \itemize{
-#'   \item \code{number_of_chronologies}: Integer indicating the number of chronologies associated with the core (entity).
-#'   \item \code{default_chronology}: Integer indicating which is the default chronology according to the EPD DDBB.
-#'   \item \code{chron}: Data frame with the meta information on how each calibration was built.
-#'   \item \code{agebasis}: Data frame with all the information (depth and age for C14 and no-C14 data) used to build the chronologies.
-#'   \item \code{no_C14}: Data frame with no-C14 data used to build the chronologies.
-#' }
+#' @return chronology. Object of class \code{\link[EPDr:chronology]{chronology}}. This object store in an organized and systematic way all combined information from CHRON and AGEBASIS tables in the EPD  (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #' 
 #' @export
 #'
 #' @examples
-#' #epd.connection <- connectToEPD(database="epd", user="epdr",
+#' # Not run
+#' # epd.connection <- connectToEPD(database="epd", user="epdr",
 #' #                                 password="epdrpw", host="localhost")
-#' #getChronology(1, epd.connection)
-#' #getChronology(400, epd.connection)
-#' #disconnectFromEPD(connection=epd.connection)
+#' # getChronology(1, epd.connection)
+#' # getChronology(400, epd.connection)
+#' # disconnectFromEPD(connection=epd.connection)
+#' 
 getChronology <- function(e_, connection) {
     rest <- getRestriction(e_, connection)
     
@@ -200,39 +203,29 @@ getChronology <- function(e_, connection) {
 
 
 
-#' Extract events associated with a specific core (entity) in the EPD DDBB
-#'
-#' Given a specific core number and connection to the EPD, this function return the information of events associated with the core.
+#' Query events of EPD entities
+#' 
+#' This function queries the database to request all information about the stratigraphic events 
+#' of an specified entity. To perform the query the function requires the number
+#' of the entity that want to be queried and a valid connection to the database. Hence,
+#' the following parameters are mandatory:
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#'
-#' @return NA or data frame, depending on whether there are events associated with the requested core. If there are events the
-#' function return a data frame with combined information from synevent and event tables in the EPD. Columns in the data
-#' frame follows terminology in the original database and are as follows:
-#' \itemize{
-#'  \item \code{event_}: Event identifier.
-#'  \item \code{e_}: Core (entity) identifier.
-#'  \item \code{depthcm}: Depth of the event in cm.
-#'  \item \code{thickness}: Thickness of the event in cm.
-#'  \item \code{event}: Code for the type of event. See EPD documentation for details.
-#'  \item \code{name}: Name of the event.
-#'  \item \code{agebp}: Known age of the event in BP.
-#'  \item \code{ageuncertup}:
-#'  \item \code{ageuncertlo}:
-#'  \item \code{publ_}: Publication identifier.
-#' } 
+#' @return data.frame. Data frame with all combined information from the EVENT and SYNEVENT tables in the database for that particular entity (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}). If the entity has no events the dataframe is empty.
 #' 
 #' @export
 #'
 #' @examples
-#' #epd.connection <- connectToEPD(database="epd", user="epdr",
+#' # Not run
+#' # epd.connection <- connectToEPD(database="epd", user="epdr",
 #' #                                password="epdrpw", host="localhost")
-#' #getEvents(1, epd.connection)
-#' #getEvents(51, epd.connection)
-#' #disconnectFromEPD(connection=epd.connection)
+#' # getEvents(1, epd.connection)
+#' # getEvents(51, epd.connection)
+#' # disconnectFromEPD(connection=epd.connection)
+#' 
 getEvents <- function(e_, connection){
     rest <- getRestriction(e_, connection)
     
@@ -254,27 +247,30 @@ getEvents <- function(e_, connection){
 }
 
 
-
-#' Depths of pollen samples
+#' Query palynological samples of EPD entities
 #'
-#' Given a specific core (entity) this function return the information at which depths samples were taken for pollen data.
+#' This function queries the database to request all information about palynological samples 
+#' of an specified entity. To perform the query the function requires the number
+#' of the entity that want to be queried and a valid connection to the database. Hence,
+#' the following parameters are mandatory:
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#'
-#' @return Data frame with all the information for pollen samples as in the p_sample table of the EPD DDBB.
+#' @return data.frame. Data frame with all information from the P_SAMPLE table in the database for that particular entity (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #' 
 #' @export
 #'
 #' @examples
-#' #epd.connection <- connectToEPD(database="epd", user="epdr",
+#' # Not run
+#' # epd.connection <- connectToEPD(database="epd", user="epdr",
 #' #                                 password="epdrpw", host="localhost")
-#' #getDepths(1, epd.connection)
-#' #getDepths(51, epd.connection)
-#' #disconnectFromEPD(connection=epd.connection)
-getDepths <- function(e_, connection){
+#' # getPSamples(1, epd.connection)
+#' # getPSamples(51, epd.connection)
+#' # disconnectFromEPD(connection=epd.connection)
+#' 
+getPSamples <- function(e_, connection){
     rest <- getRestriction(e_, connection)
     
     sqlQuery <- paste("select * from p_sample where e_=", e_, ";", sep="")
@@ -284,21 +280,30 @@ getDepths <- function(e_, connection){
     return(output)    
 }
 
-#' Title TBW
+
+#' Query restriction of use for EPD entities
 #'
-#' TBW
-#' 
+#' This function queries the database to request information about use restrictions 
+#' of an specified entity. To perform the query the function requires the number
+#' of the entity that want to be queried and a valid connection to the database. Hence,
+#' the following parameters are mandatory:
+#'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#'
-#' @return TBW
+#' @return data.frame. Data frame with all information from the P_ENTITY table in the database for that particular entity (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}). If the entity is restricted the function release a warning with the data provider name to be contacted.
 #' 
 #' @export
 #'
 #' @examples
-#' # TBW
+#' # Not run
+#' # epd.connection <- connectToEPD(database="epd", user="epdr",
+#' #                                 password="epdrpw", host="localhost")
+#' # getRestriction(1, epd.connection)
+#' # getRestriction(51, epd.connection)
+#' # disconnectFromEPD(connection=epd.connection)
+#' 
 getRestriction <- function(e_, connection){
     sqlQuery <- paste("SELECT * FROM p_entity WHERE e_=", e_, ";", sep="")
     output <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -309,21 +314,30 @@ getRestriction <- function(e_, connection){
     return(output)
 }
 
-#' Title TBW
+
+#' Query datation of EPD entities
 #'
-#' TBW
+#' This function queries the database to request information about datation 
+#' of an specified entity. To perform the query the function requires the number
+#' of the entity that want to be queried and a valid connection to the database. Hence,
+#' the following parameters are mandatory:
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#'
-#' @return TBW
+#' @return datation. Object of class \code{\link[EPDr:datation]{datation}} with all the information about datation of that entity.
 #' 
 #' @export
 #'
 #' @examples
-#' # TBW
+#' # Not run
+#' # epd.connection <- connectToEPD(database="epd", user="epdr",
+#' #                                 password="epdrpw", host="localhost")
+#' # getDatation(1, epd.connection)
+#' # getDatation(51, epd.connection)
+#' # disconnectFromEPD(connection=epd.connection)
+#' 
 getDatation <- function(e_, connection){
     rest <- getRestriction(e_, connection)
     entity <- getEntity(e_, connection)
@@ -333,26 +347,36 @@ getDatation <- function(e_, connection){
     chronology <- getChronology(e_, connection)
     c14 <- getC14(e_, connection)
     events <- getEvents(e_, connection)
-    depths <- getDepths(e_, connection)
+    depths <- getPSamples(e_, connection)
     output <- datation(e_=e_, restriction=rest, entity=entity, site=site, postbomb_zone=pb_zone, chronology=chronology, c14=c14, events=events, depths=depths)
     return(output)
 }
 
 
 
-#' Title TBW
+#' Query palynological counts of EPD entities
+#'
+#' This function queries the database to request information about palynological counts 
+#' of an specified entity. To perform the query the function requires the number
+#' of the entity that want to be queried and a valid connection to the database. Hence,
+#' the following parameters are mandatory:
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#'
-#' @return TBW
+#' @return counts. Object of class \code{\link[EPDr:counts]{counts}}.
 #' 
 #' @export
 #'
 #' @examples
-#' # TBW
+#' # Not run
+#' # epd.connection <- connectToEPD(database="epd", user="epdr",
+#' #                                 password="epdrpw", host="localhost")
+#' # getCounts(1, epd.connection)
+#' # getCounts(51, epd.connection)
+#' # disconnectFromEPD(connection=epd.connection)
+#' 
 getCounts <- function(e_, connection){
     rest <- getRestriction(e_, connection)
     
@@ -362,7 +386,7 @@ getCounts <- function(e_, connection){
     sqlQuery <- paste("SELECT sample_, count, varname FROM p_counts NATURAL JOIN p_vars WHERE e_ =", e_, ";", sep="")
     counts.raw <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
     
-    depth <- getDepths(e_, connection)
+    depth <- getPSamples(e_, connection)
     depthcm <- depth$depthcm
     
     if(is.data.frame(counts.raw) && nrow(counts.raw) == 0){
@@ -416,19 +440,30 @@ getCounts <- function(e_, connection){
     return(counts)
 }
 
-#' Title TBW
+
+#' Query palynological-samples ages of EPD entities
+#'
+#' This function queries the database to request information about estimated ages of palynological
+#' samples of an specified entity. To perform the query the function requires the number
+#' of the entity that want to be queried and a valid connection to the database. Hence,
+#' the following parameters are mandatory:
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#'
-#' @return TBW
+#' @return ages Object of class \code{\link[EPDr:ages]{ages}}.
 #' 
 #' @export
 #'
 #' @examples
-#' # TBW
+#' # Not run
+#' # epd.connection <- connectToEPD(database="epd", user="epdr",
+#' #                                 password="epdrpw", host="localhost")
+#' # getAges(1, epd.connection)
+#' # getAges(51, epd.connection)
+#' # disconnectFromEPD(connection=epd.connection)
+#' 
 getAges <- function(e_, connection){
     rest <- getRestriction(e_, connection)
     
@@ -441,7 +476,7 @@ getAges <- function(e_, connection){
     sqlQuery <-paste("SELECT * FROM chron WHERE e_=", e_, ";", sep="")
     chron <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
     
-    depths <- getDepths(e_, connection)
+    depths <- getPSamples(e_, connection)
     
     default_chronology <- chron$chron_[which(chron$defaultchron == "Y")]
     if(is.null(default_chronology) | length(default_chronology) == 0){default_chronology <- 0}
@@ -487,19 +522,29 @@ getAges <- function(e_, connection){
 }
 
 
-#' Title TBW
+#' Query counts and ages of palynological-samples of EPD entities
+#'
+#' This function queries the database to request information about counts and estimated ages
+#' of palynological samples of an specified entity. To perform the query the function requires
+#' the number of the entity that want to be queried and a valid connection to the database. Hence,
+#' the following parameters are mandatory:
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#'
-#' @return TBW
+#' @return agedcounts Object of class \code{\link[EPDr:agedcounts]{agedcounts}}.
 #' 
 #' @export
 #'
 #' @examples
-#' # TBW
+#' # Not run
+#' # epd.connection <- connectToEPD(database="epd", user="epdr",
+#' #                                 password="epdrpw", host="localhost")
+#' # getAgedCounts(1, epd.connection)
+#' # getAgedCounts(51, epd.connection)
+#' # disconnectFromEPD(connection=epd.connection)
+#' 
 getAgedCounts <- function(e_, connection){
     rest <- getRestriction(e_, connection)
     entity <- getEntity(e_, connection)
@@ -511,8 +556,4 @@ getAgedCounts <- function(e_, connection){
     agedcounts <- agedcounts(e_=e_, restriction=rest, entity=entity, site=site, ages=ages, counts=counts)  
     return(agedcounts)
 }
-
-
-
-
 
