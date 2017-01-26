@@ -10,7 +10,8 @@ getAges(e_, connection)
 \item{e_}{numeric. Value indicating the entity number (e_) of the database that want to 
 be queried.}
 
-\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
+\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
+returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 }
 \value{
 ages Object of class \code{\link[EPDr:ages]{ages}}.

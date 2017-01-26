@@ -7,10 +7,13 @@
 getTaxonomyEPD(connection)
 }
 \arguments{
-\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
+\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
+returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 }
 \value{
-data.frame The function return a data.frame with the combined information from P_VARS and P_GROUP tables of the database (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+data.frame The function return a data.frame with the combined information from P_VARS
+and P_GROUP tables of the database (see documentation of the EPD:
+\url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 }
 \description{
 The function queries the whole taxonomy of the database by combining 

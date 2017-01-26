@@ -10,10 +10,13 @@ getPSamples(e_, connection)
 \item{e_}{numeric. Value indicating the entity number (e_) of the database that want to 
 be queried.}
 
-\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
+\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
+returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 }
 \value{
-data.frame. Data frame with all information from the P_SAMPLE table in the database for that particular entity (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+data.frame. Data frame with all information from the P_SAMPLE table in the database
+for that particular entity (see documentation of the EPD:
+\url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 }
 \description{
 This function queries the database to request all information about palynological samples 

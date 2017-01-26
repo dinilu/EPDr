@@ -7,9 +7,12 @@
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned
+#' by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#' @return data.frame The function return a data.frame with all the information on the SITELOC table of the database (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+#' @return data.frame The function return a data.frame with all the information on the SITELOC
+#' table of the database (see documentation of the EPD:
+#' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #' 
 #' @export
 #'
@@ -43,9 +46,12 @@ getSite <- function(e_, connection){
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
+#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#' @return data.frame The function return a data.frame with all the information on the ENTITY table of the database (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+#' @return data.frame The function return a data.frame with all the information on the ENTITY
+#' table of the database (see documentation of the EPD:
+#' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #' 
 #' @export
 #'
@@ -77,9 +83,12 @@ getEntity <- function(e_, connection){
 #' Some users may find this function useful but it has been mainly 
 #' implemented to be used by other functions in the \code{EPDr} package.
 #'
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
+#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#' @return data.frame The function return a data.frame with the combined information from P_VARS and P_GROUP tables of the database (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+#' @return data.frame The function return a data.frame with the combined information from P_VARS
+#' and P_GROUP tables of the database (see documentation of the EPD:
+#' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #' 
 #' @export
 #'
@@ -109,10 +118,12 @@ getTaxonomyEPD <- function(connection){
 #' 
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
+#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#'
-#' @return Data frame with all combined information from C14 and GEOCHRON tables in the EPD  (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+#' @return Data frame with all combined information from C14 and GEOCHRON tables in the
+#' EPD (see documentation of the EPD:
+#' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #' 
 #' @export
 #'
@@ -157,10 +168,14 @@ getC14 <- function(e_, connection) {
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
+#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
 #'
-#' @return chronology. Object of class \code{\link[EPDr:chronology]{chronology}}. This object store in an organized and systematic way all combined information from CHRON and AGEBASIS tables in the EPD  (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+#' @return chronology. Object of class \code{\link[EPDr:chronology]{chronology}}. This object
+#' store in an organized and systematic way all combined information from CHRON and AGEBASIS tables
+#' in the EPD  (see documentation of the EPD:
+#' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #' 
 #' @export
 #'
@@ -212,9 +227,13 @@ getChronology <- function(e_, connection) {
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
+#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#' @return data.frame. Data frame with all combined information from the EVENT and SYNEVENT tables in the database for that particular entity (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}). If the entity has no events the dataframe is empty.
+#' @return data.frame. Data frame with all combined information from the EVENT and SYNEVENT
+#' tables in the database for that particular entity (see documentation of the EPD:
+#' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+#' If the entity has no events the dataframe is empty.
 #' 
 #' @export
 #'
@@ -256,9 +275,12 @@ getEvents <- function(e_, connection){
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
+#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#' @return data.frame. Data frame with all information from the P_SAMPLE table in the database for that particular entity (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+#' @return data.frame. Data frame with all information from the P_SAMPLE table in the database
+#' for that particular entity (see documentation of the EPD:
+#' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #' 
 #' @export
 #'
@@ -290,9 +312,14 @@ getPSamples <- function(e_, connection){
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection}
+#' as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#' @return data.frame. Data frame with all information from the P_ENTITY table in the database for that particular entity (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}). If the entity is restricted the function release a warning with the data provider name to be contacted.
+#' @return data.frame. Data frame with all information from the P_ENTITY table in the
+#' database for that particular entity (see documentation of the EPD:
+#' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+#' If the entity is restricted the function release a warning with the data provider name
+#' to be contacted.
 #' 
 #' @export
 #'
@@ -324,9 +351,11 @@ getRestriction <- function(e_, connection){
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
+#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#' @return datation. Object of class \code{\link[EPDr:datation]{datation}} with all the information about datation of that entity.
+#' @return datation. Object of class \code{\link[EPDr:datation]{datation}} with all the
+#' information about datation of that entity.
 #' 
 #' @export
 #'
@@ -353,7 +382,6 @@ getDatation <- function(e_, connection){
 }
 
 
-
 #' Query palynological counts of EPD entities
 #'
 #' This function queries the database to request information about palynological counts 
@@ -363,7 +391,8 @@ getDatation <- function(e_, connection){
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection}
+#' as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
 #' @return counts. Object of class \code{\link[EPDr:counts]{counts}}.
 #' 
@@ -450,7 +479,8 @@ getCounts <- function(e_, connection){
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
+#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
 #' @return ages Object of class \code{\link[EPDr:ages]{ages}}.
 #' 
@@ -531,7 +561,8 @@ getAges <- function(e_, connection){
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
 #' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
+#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
 #' @return agedcounts Object of class \code{\link[EPDr:agedcounts]{agedcounts}}.
 #' 

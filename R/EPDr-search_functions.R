@@ -122,13 +122,13 @@ e_by_countries <- function(countries, connection, regions=NULL){
     }    
     if(length(countries) > 1 & !is.null(regions)){warning("Multiple countries specified with regions: Providing regions for multiple countries might result in undesired results. Provide regions only for queries with single countries.")}
     
-    tmp <- list_countries(connection)
+    tmp <- listCountries(connection)
     countries <- tmp[tmp$poldiv1 %in% countries | tmp$name %in% countries, "poldiv1"]
 
     if(is.null(regions)){
-        regions <- list_regions(connection, countries)$poldiv2
+        regions <- listRegions(connection, countries)$poldiv2
     }else{
-        tmp <- list_regions(connection, countries)
+        tmp <- listRegions(connection, countries)
         regions <- tmp[tmp$regionname %in% regions | tmp$poldiv2 %in% regions, "poldiv2"]
     }
     
