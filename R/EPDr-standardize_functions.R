@@ -329,13 +329,13 @@ interpolateCounts <- function(agedcount, time, chronology=NULL){
 #' @examples
 #' # TBW
 intervalsCounts <- function(agedcount, tmin, tmax, labels=NULL, chronology=NULL){
-#     agedcount <- ac.1
-#     tmin <- seq(0, 21000, by=1000)
-#     tmax <- seq(1000, 22000, by=1000)
-#     tmin <- c(0, 1000)
-#     tmax <- c(1000, 2000)
-#     labels <- NULL
-#     chronology <- NULL
+    # agedcount <- percent.wa[[14]]
+    # tmin <- seq(0, 21000, by=1000)
+    # tmax <- seq(1000, 22000, by=1000)
+    # tmin <- c(0, 1000)
+    # tmax <- c(1000, 2000)
+    # labels <- NULL
+    # chronology <- NULL
 
     if(!class(agedcount) == "agedcounts"){
         stop("Agedcount has to be an 'agedcounts' object. See ?getAgedCounts")
@@ -395,14 +395,14 @@ intervalsCounts <- function(agedcount, tmin, tmax, labels=NULL, chronology=NULL)
         range.depthcm <- sample.depthcm[index]
         range.ages <- sample.ages[index]
 
-        range.means <- apply(range.counts, MARGIN=2, FUN=function(x, y, z){stats::aggregate(x~y, FUN=z)}, intervalid, mean)
+        range.means <- apply(range.counts, MARGIN=2, FUN=function(x, y, z){stats::aggregate(x, by=list(y=y), FUN=z)}, intervalid, mean)
         range.means <- reshape2::dcast(reshape2::melt(range.means, id.vars="y"), y ~ L1)
         range.means <- range.means[,-which(colnames(range.means) == "y")]
         
-        range.depth.means <- stats::aggregate(range.depthcm ~ intervalid, FUN=mean)
+        range.depth.means <- stats::aggregate(range.depthcm, by=list(y=intervalid), FUN=mean)
         range.depth.means <- range.depth.means$range.depthcm
         
-        range.ages.means <- stats::aggregate(range.ages ~ intervalid, FUN=mean)
+        range.ages.means <- stats::aggregate(range.ages, by=list(y=intervalid), FUN=mean)
         range.ages.means <- range.ages.means$range.ages
     
         output.counts[unique(intervalid),] <- range.means
