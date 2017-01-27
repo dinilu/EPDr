@@ -329,7 +329,7 @@ interpolateCounts <- function(agedcount, time, chronology=NULL){
 #' @examples
 #' # TBW
 intervalsCounts <- function(agedcount, tmin, tmax, labels=NULL, chronology=NULL){
-    # agedcount <- percent.wa[[14]]
+    # agedcount <- counts[[1]]
     # tmin <- seq(0, 21000, by=1000)
     # tmax <- seq(1000, 22000, by=1000)
     # tmin <- c(0, 1000)
@@ -400,10 +400,10 @@ intervalsCounts <- function(agedcount, tmin, tmax, labels=NULL, chronology=NULL)
         range.means <- range.means[,-which(colnames(range.means) == "y")]
         
         range.depth.means <- stats::aggregate(range.depthcm, by=list(y=intervalid), FUN=mean)
-        range.depth.means <- range.depth.means$range.depthcm
+        range.depth.means <- range.depth.means$x
         
         range.ages.means <- stats::aggregate(range.ages, by=list(y=intervalid), FUN=mean)
-        range.ages.means <- range.ages.means$range.ages
+        range.ages.means <- range.ages.means$x
     
         output.counts[unique(intervalid),] <- range.means
         output.depthcm[unique(intervalid)] <- range.depth.means
