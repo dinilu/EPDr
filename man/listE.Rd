@@ -4,75 +4,73 @@
 \alias{listE}
 \title{List entities in the EPD}
 \usage{
-listE(connection, country = NULL, region = NULL, site = NULL,
-  coords = NULL)
+listE(connection, site = NULL, coords = NULL, lastname = NULL,
+  firstname = NULL, initials = NULL, publ = NULL, country = NULL,
+  region = NULL, restrictions = NULL, logical_operator = "AND")
 }
 \arguments{
-\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.}
+\item{connection}{A valid connection to the database see
+\code{\link[EPDr:connectToEPD]{connectToEPD}}.}
 
-\item{country}{Character vector indicating the three letters code or the full name of the
-desired countries.}
+\item{site}{Numeric or character vector indicating the site identification number or
+the site name to which entities will be retrieved.}
 
-\item{region}{Character vector indicating two digit integer code or the full name of the
-desired regions.}
+\item{coords}{Numeric vector with four elements indicating the geographical coordinates
+to which the search is limited.}
 
-\item{site}{Vector indicating the desired sites. Sites can be defined by the site identification
-number, the site code, or the site name.}
+\item{lastname}{Character vector indicating the last name of data contributor for which
+entities will be retrieved.}
 
-\item{coords}{Vector of four numeric values, indicating the spatial extent in decimal degrees.
-The extent should be specified using the following format \code{c(xmin, xmax, ymin, ymax)}.
-Where \code{x} represents longitude and \code{y} represents latitude.}
+\item{firstname}{Character vector indicating the first name of data contributor
+for which entities will be retrieved.}
+
+\item{initials}{Character vector indicating the initials of data contributor for which
+entities will be retrieved.}
+
+\item{publ}{Numeric vector indicating the publication identification number
+to which search is constrained.}
+
+\item{country}{Character vector indicating the three letters code or the full
+english name for the countries to which entities are desired.}
+
+\item{region}{Character vector indicating the two letters code or the full
+name for the regions to which entities are desired. To specify a region you have to
+specify one, and only one, country. You can specify multiple countries but the results 
+can be funky.}
+
+\item{restrictions}{Character letter ("U" or "R") specifying the usestatus of the data 
+for the entities that are searched. U is for unrestricted and R is for restricted.}
+
+\item{logical_operator}{Character string indicating whether the effects of 
+search criteria are additive ("OR") or substracting ("AND"). If "OR" is specified,
+entities complying with any of the search criteria will be returned. If "AND" is
+specified, only entities that comply with all search criteria will be returned.}
 }
 \value{
-Data frame with 17 columns:
-\itemize{
-  \item{"e_"}{Entity identification number.}
-  \item{"site_"}{Site identification number.}
-  \item{"sigle"}{Unique code name (unique combination of uppercase letters, numbers, and 
-  special characters) for the entity.}
-  \item{"name"}{Entity name that modify the site name in the original publication when
-  multiple entities are sampled in the same site.}
-  \item{"iscore"}{"Y" or "N" indicating whether the entity is a core.}
-  \item{"issect"}{"Y" or "N" indicating whether the entity is a section.}
-  \item{"isssamp"}{"Y" or "N" indicating whether the entity is a modern surface sample.}
-  \item{"descriptor"}{Unique four character identifier for the entity site-descriptions.}
-  \item{"higherdescr"}{Identifier of the next higher descriptor in the hierarchy.}
-  \item{"description"}{Identifier for the description of modern entity site.}
-  \item{"entloc"}{Location where the sample or core was taken (e.g. "north side of lake").}
-  \item{"localveg"}{Local vegetation at the collection site.}
-  \item{"sampdate"}{Date that the sample or core was collected. Enter date as yyyy-mm-dd.}
-  \item{"sampdevice"}{Name of the sampling or coring device.}
-  \item{"corediamcm"}{Diameter of the core (cm). Applies to cores only.}
-  \item{"c14depthadj"}{Adjustment for 14C depths needed to relate the depth of the dated
-  samples to the pollen or other samples. This is necessary since depths cited for samples
-  taken for radiocarbon and other geochronological dates may have been measured from a
-  different datum than those for pollen and other samples (cm).}
-  \item{"notes"}{Additional information on the description of the entity.}
-}
+This function return a data.frame with columns as in the \code{entity} table 
+of the EPD database (see documentation of the EPD:
+\url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}). If search criteria are all empty, the function returns the whole
+table. If criteria are specified the table is complemented with columns from diferent
+tables in the database that store the required information to filter entities
+accordingly.
 }
 \description{
-This function looks into the database and returns all combined information in the SITELOC, DESCR,
-and ENTITY tables (see documentation of the EPD:
-\url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
-This information refers to the entities (or cores) sampled.
-Because the function returns a whole table, only a valid connection to the database is mandatory.
-However, the list of entities can be further restricted to specific countries, administrative
-regions, sites, or a geographical region defined by geographical coordinates
-(longitude and latitude) of its corners.
+This function allows to search entities records by different search criteria that can be
+combined as desired.
 }
 \examples{
 # Not run
-# library(EPDr)
 # epd.connection <- connectToEPD(host="localhost", database="epd",
 #                               user="epdr", password="epdrpw")
 # listE(epd.connection)
+# listE(epd.connection, site=1)
+# listE(epd.connection, site="Adange")
+# listE(epd.connection, site=c(1:10))
 # listE(epd.connection, country="ESP")
-# listE(epd.connection, country="Spain", region="01")
-# summary(listE(epd.connection))
-# listE(epd.connection, coords=c(2.5, 22, 45.5, 53.5))
-# summary(listE(epd.connection, coords=c(2.5, 22, 45.5, 53.5)))
-# disconnectFromEPD(epd.connection)
+# listE(epd.connection, country="Spain")
+# listE(epd.connection, country="Spain", region="Andalucia")
+# listE(epd.connection, lastname="Tzedakis")
+# listE(epd.connection, restrictions="R")
 
 }
 
