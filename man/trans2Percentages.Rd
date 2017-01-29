@@ -2,20 +2,32 @@
 % Please edit documentation in R/EPDr-standardize_functions.R
 \name{trans2Percentages}
 \alias{trans2Percentages}
-\title{Title TBW}
+\title{Calculate counts percentages}
 \usage{
 trans2Percentages(counts)
 }
 \arguments{
-\item{counts}{TBW}
+\item{counts}{\code{\link[EPDr:counts]{counts}} or
+\code{\link[EPDr:agedcounts]{agedcounts}} objects.}
 }
 \value{
-TBW
+The function returns a modified version of the \code{counts} object, in which
+values in slot @counts represent percentages instead of raw counts.
 }
 \description{
-Title TBW
+This function transforms counts in the slot @counts in \code{\link[EPDr:counts]{counts}}
+or \code{\link[EPDr:agedcounts]{agedcounts}} objects to percentages relative to 
+the total amount of particles in each sample (row).
 }
 \examples{
-# TBW
+# epd.connection <- connectToEPD(host="localhost", database="epd",
+# user="epdr", password="epdrpw")
+# agedcount <- getAgedCounts(1, epd.connection)
+# agedcount.pollen <- filterTaxaGroups(agedcount, c("DWAR", "HERB", "LIAN",
+# "TRSH", "UPHE", "INUN")) ## All pollen taxa groups
+# agedcount.percent <- trans2Percentages(agedcount.pollen)
+# head(agedcount.pollen@counts@counts)
+# head(agedcount.percent@counts@counts)
+
 }
 

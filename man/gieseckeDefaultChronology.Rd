@@ -2,20 +2,32 @@
 % Please edit documentation in R/EPDr-standardize_functions.R
 \name{gieseckeDefaultChronology}
 \alias{gieseckeDefaultChronology}
-\title{Title TBW}
+\title{Make Giesecke the default chronology}
 \usage{
 gieseckeDefaultChronology(ages)
 }
 \arguments{
-\item{ages}{TBW}
+\item{ages}{\code{\link[EPDr:ages]{ages}} and \code{\link[EPDr:agedcounts]{agedcounts}} 
+object.}
 }
 \value{
-TBW
+The function returns a modified version of the \code{ages} in which the
+slot @default_chronology is changed to \code{-9999} if they recalculated ages for this
+entity. A numeric code is used (\code{-9999}) because of the object definition is
+numeric. This values is used in other functions to grab the right ages from Giesecke.
 }
 \description{
-Title TBW
+This function makes chronologies from Giesecke the default to be used in
+\code{\link[EPDr:ages]{ages}} and \code{\link[EPDr:agedcounts]{agedcounts}} 
+objects if they are available for that particular entity.
 }
 \examples{
-# TBW
+# epd.connection <- connectToEPD(host="localhost", database="epd",
+# user="epdr", password="epdrpw")
+# agedcount <- getAgedCounts(1, epd.connection)
+# agedcount@ages@default_chronology
+# agedcount <- gieseckeDefaultChronology(agedcount)
+# agedcount@ages@default_chronology
+
 }
 

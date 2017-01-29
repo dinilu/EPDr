@@ -4,40 +4,49 @@
 \alias{interpolateCounts}
 \title{Interpolate counts to specific time periods}
 \usage{
-interpolateCounts(agedcount, time, chronology = NULL)
+interpolateCounts(agedcounts, time, chronology = NULL)
 }
 \arguments{
-\item{agedcount}{An /code{agedcount} object as returned by the /link[EPDr:getAgedCounts]{/code{getAgedCounts}} function.}
+\item{agedcounts}{An \code{\link[EPDr:agedcounts]{agedcounts}} object as returned by
+the \code{\link[EPDr:getAgedCounts]{getAgedCounts}} function.}
 
-\item{time}{Vector with time periods, in the same system (i.e., cal BP) than "ages" in agedcount, in which counts have to be 
-estimated.}
+\item{time}{Vector with time periods, in the same system (i.e., cal BP) than
+"ages" in agedcounts, in which counts have to be estimated.}
 
-\item{chronology}{Number specifying the chronology from which ages should be used to calculate the interpolations. If none is
-provide the function uses the default chronology from the EPD database.}
+\item{chronology}{Number specifying the chronology from which ages should be
+used to calculate the interpolations. If none is
+provided the function uses the default chronology from the object (see
+\code{\link[EPDr:gieseckeDefaultChronology]{gieseckeDefaultChronology}}).}
 }
 \value{
-The function return a /code{agedcount} object, similar to agedcount in which ages and counts has been modified to the
-time periods specified in time and the counts estimated for these periods. Accordingly, /code{default_chronology} is also modified
-to 1, so subsequent analysis will automatically pick up the first (and only) column with the new time periods.
+The function returns an \code{\link[EPDr:agedcounts]{agedcounts}} object, similar
+to \code{agedcounts} in which ages and counts has been modified to the
+time periods specified in time and the counts estimated for these periods.
+Accordingly, \code{default_chronology} is also modified to 1, so subsequent analysis
+will automatically pick up the first (and only) column with the new time periods.
 }
 \description{
-It use data (sample ages and sample counts) from a /code{agedcount} object to estimate by linear interpolation the counts at
-specific time periods defined by the user. This can be used to estimate counts for the same time periods for multiple entities 
+This function uses data (sample ages and sample counts) from an
+\code{\link[EPDr:agedcounts]{agedcounts}} object to estimate by linear interpolation
+the counts at specific time periods defined by the user. This can be used to
+estimate counts for the same time periods for multiple entities 
 or cores in the database, standardizing them for integrative analysis.
 }
+\details{
+Data for time periods in \code{time} but not recorded in the entity are fill with 
+\code{NA}. This is convenient if analysis are carried out with multiple entities.
+}
 \examples{
-#connEPD <- connectToEPD(host="localhost", database="epd_ddbb", user="epdr",
-# password="epdrpw")
-#t <- c(seq(0, 21000, by=500))
-#ac.1 <- getAgedCounts(1, connEPD)
-#interpolateCounts(ac.1, t)
+# epd.connection <- connectToEPD(host="localhost", database="epd",
+# user="epdr", password="epdrpw")
+# t <- c(seq(0, 21000, by=500))
+# agedcounts.1 <- getAgedCounts(1, epd.connection)
+# agedcounts.1.int <- interpolateCounts(agedcounts.1, t)
+#
+# agedcounts.3 <- getAgedCounts(3, connEPD)
+# agedcounts.3.int <- interpolateCounts(agedcounts.3, t)
+# agedcounts.3.int <- interpolateCounts(agedcounts.3, t, 1)
+# agedcounts.3.int <- interpolateCounts(agedcounts.3, t, 2)
 
-#ac.2 <- getAgedCounts(2, connEPD)
-#interpolateCounts(ac.2, t)
-
-#ac.3 <- getAgedCounts(3, connEPD)
-#interpolateCounts(ac.3, t)
-#interpolateCounts(ac.3, t, 1)
-#interpolateCounts(ac.3, t, 2)
 }
 

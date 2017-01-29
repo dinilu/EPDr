@@ -2,22 +2,37 @@
 % Please edit documentation in R/EPDr-standardize_functions.R
 \name{unifyTaxonomy}
 \alias{unifyTaxonomy}
-\title{Title TBW}
+\title{Unify taxonomy of counts in multiple objects}
 \usage{
 unifyTaxonomy(counts, epd_taxonomy)
 }
 \arguments{
-\item{counts}{TBW}
+\item{counts}{\code{\link[EPDr:agedcounts]{agedcounts}} or
+\code{\link[EPDr:counts]{counts}} objects to be modified.}
 
-\item{epd_taxonomy}{TBW}
+\item{epd_taxonomy}{Data frame with the taxonomy from the EPD as from the
+\code{\link[EPDr:getTaxonomyEPD]{getTaxonomyEPD}} function.}
 }
 \value{
-TBW
+\code{\link[EPDr:agedcounts]{agedcounts}} or
+\code{\link[EPDr:counts]{counts}} objects with the modified \code{@counts} slot.
 }
 \description{
-Title TBW
+This function compares the taxa list registered in multiple EPDr objects with
+a \code{@counts} slot (\code{\link[EPDr:agedcounts]{agedcounts}} or
+\code{\link[EPDr:counts]{counts}}) and expand their taxonomy (using
+\code{\link[EPDr:filterTaxa]{filterTaxa}}) to make them match. When neccesary the
+function add empty columns (with \code{NA} values).
 }
 \examples{
-# TBW
+# epd.connection <- connectToEPD(host="localhost", database="epd",
+#                                user="epdr", password="epdrpw")
+# e.list <- listE(epd.connection, country=c("Spain"))
+# e.list <- e.list$e_
+# spain.agedcounts <- lapply(e.list, getAgedCounts, epd.connection)
+# spain.agedcounts.ut <- unifyTaxonomy(spain.agedcounts, getTaxonomyEPD(epd.connection))
+# colnames(spain.agedcounts[[1]]@counts@counts)
+# colnames(spain.agedcounts.ut[[1]]@counts@counts)
+
 }
 

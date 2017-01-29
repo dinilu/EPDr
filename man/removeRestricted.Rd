@@ -2,20 +2,34 @@
 % Please edit documentation in R/EPDr-standardize_functions.R
 \name{removeRestricted}
 \alias{removeRestricted}
-\title{Title TBW}
+\title{Remove restricted data from a list of objects}
 \usage{
-removeRestricted(agedcounts)
+removeRestricted(objects)
 }
 \arguments{
-\item{agedcounts}{TBW}
+\item{objects}{List of EPDr objects (\code{\link[EPDr:ages]{ages}},
+\code{\link[EPDr:counts]{counts}}, \code{\link[EPDr:agedcounts]{agedcounts}}, 
+\code{\link[EPDr:chronology]{chronology}}, and \code{\link[EPDr:datation]{datation}})}
 }
 \value{
-TBW
+List of EPDr objects.
 }
 \description{
-Title TBW
+This function is designed to work with list of EPDr objects
+(\code{\link[EPDr:ages]{ages}}, \code{\link[EPDr:counts]{counts}},
+\code{\link[EPDr:agedcounts]{agedcounts}}, \code{\link[EPDr:chronology]{chronology}},
+and \code{\link[EPDr:datation]{datation}}). The function parses all the elements 
+on the list and remove those with restriction on their use.
 }
 \examples{
-# TBW
+# epd.connection <- connectToEPD(host="localhost", database="epd",
+# user="epdr", password="epdrpw")
+# e.list <- listE(epd.connection, country=c("Spain"))
+# e.list <- e.list$e_
+# spain.agedcounts <- lapply(e.list, getAgedCounts, epd.connection)
+# spain.agedcounts.un <- removeRestricted(spain.agedcounts)
+# length(spain.agedcounts)
+# length(spain.agedcounts.un)
+
 }
 

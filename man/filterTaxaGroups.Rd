@@ -2,22 +2,35 @@
 % Please edit documentation in R/EPDr-standardize_functions.R
 \name{filterTaxaGroups}
 \alias{filterTaxaGroups}
-\title{Title TBW}
+\title{Filter counts by taxa groups}
 \usage{
 filterTaxaGroups(counts, taxa_groups)
 }
 \arguments{
-\item{counts}{TBW}
+\item{counts}{\code{\link[EPDr:counts]{counts}} or
+\code{\link[EPDr:agedcounts]{agedcounts}} objects.}
 
-\item{taxa_groups}{TBW}
+\item{taxa_groups}{Character vector indicating taxa groups to be selected}
 }
 \value{
-TBW
+The function returns a modified version of the \code{counts} object with
+information on @counts only for taxa belonging to the specified taxa groups.
 }
 \description{
-Title TBW
+This function removes taxa from the slot @counts in \code{\link[EPDr:counts]{counts}} or
+\code{\link[EPDr:agedcounts]{agedcounts}} objects based on specified groups of taxa.
+For example, the user can select to work only with pollen from trees and shrubs (TRSH)
+or algae (ALGA). The function automatically remove counts from any particle added by 
+the entity analyst to calculate particle concentrations in the samples 
+(e.g., Lycopodium (added)).
 }
 \examples{
-# TBW
+# epd.connection <- connectToEPD(host="localhost", database="epd",
+# user="epdr", password="epdrpw")
+# agedcount <- getAgedCounts(1, epd.connection)
+# agedcount.pollen <- filterTaxaGroups(agedcount, "TRSH")
+# str(agedcount@counts@counts)
+# str(agedcount.pollen@counts@counts)
+
 }
 

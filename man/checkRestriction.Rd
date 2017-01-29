@@ -2,20 +2,33 @@
 % Please edit documentation in R/EPDr-standardize_functions.R
 \name{checkRestriction}
 \alias{checkRestriction}
-\title{Title TBW}
+\title{Check restrictions on EPDr objects}
 \usage{
-checkRestriction(agedcount)
+checkRestriction(object)
 }
 \arguments{
-\item{agedcount}{TBW}
+\item{object}{Any EPDr object (\code{\link[EPDr:ages]{ages}},
+\code{\link[EPDr:counts]{counts}}, \code{\link[EPDr:agedcounts]{agedcounts}}, 
+\code{\link[EPDr:chronology]{chronology}}, and \code{\link[EPDr:datation]{datation}}).}
 }
 \value{
-TBW
+logical value indicating whether the data are restricted (TRUE) or
+unrestricted (FALSE).
 }
 \description{
-Title TBW
+This function check EPDr objects (\code{\link[EPDr:ages]{ages}},
+\code{\link[EPDr:counts]{counts}}, \code{\link[EPDr:agedcounts]{agedcounts}}, 
+\code{\link[EPDr:chronology]{chronology}}, and \code{\link[EPDr:datation]{datation}}), 
+and return a logical value indicating whether the data are restricted (TRUE) or
+unrestricted (FALSE).
 }
 \examples{
-#  TBW
+# epd.connection <- connectToEPD(host="localhost", database="epd",
+# user="epdr", password="epdrpw")
+# agedcount <- getAgedCounts(1, epd.connection)
+# checkRestriction(agedcount)
+# agedcount <- getAgedCounts(1046, epd.connection)
+# checkRestriction(agedcount)
+
 }
 

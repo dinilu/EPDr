@@ -2,28 +2,56 @@
 % Please edit documentation in R/EPDr-standardize_functions.R
 \name{intervalsCounts}
 \alias{intervalsCounts}
-\title{Title TBW}
+\title{Mean counts for specific time intervals}
 \usage{
-intervalsCounts(agedcount, tmin, tmax, labels = NULL, chronology = NULL)
+intervalsCounts(agedcounts, tmin, tmax, labels = NULL, chronology = NULL)
 }
 \arguments{
-\item{agedcount}{TBW}
+\item{agedcounts}{An \code{\link[EPDr:agedcounts]{agedcounts}} object as returned by
+the \code{\link[EPDr:getAgedCounts]{getAgedCounts}} function.}
 
-\item{tmin}{TBW}
+\item{tmin}{Numeric vector indicating the lower limits (in years cal. BP) for the 
+time intervals.}
 
-\item{tmax}{TBW}
+\item{tmax}{Numeric vector indicating the upper limits (in years cal. BP) for the
+time intervals}
 
-\item{labels}{TBW}
+\item{labels}{Character vector with labels for each time intervals, if none are 
+provided the functions generate them with the following format \code{tmin}-\code{tmax}.}
 
-\item{chronology}{TBW}
+\item{chronology}{Number specifying the chronology from which ages should be
+used to calculate the interpolations. If none is provided the function uses
+the default chronology from the object (see
+\code{\link[EPDr:gieseckeDefaultChronology]{gieseckeDefaultChronology}}).}
 }
 \value{
-TBW
+The function returns a \code{\link[EPDr:agedcounts]{agedcounts}} object, similar
+to \code{agedcounts} in which ages and counts has been modified to the
+time intervarls specified and the counts estimated for these periods.
 }
 \description{
-Title TBW
+This function uses data (sample ages and sample counts) from an
+\code{\link[EPDr:agedcounts]{agedcounts}} object to calculate mean counts
+for samples within specific time intervals defined by the user. This can be
+used to estimate mean counts for the same time intervals for multiple entities 
+or cores in the database, standardizing them for integrative analysis.
+}
+\details{
+Time intervals without sample (data) in the entity are fill with 
+\code{NA}. This is convenient if analysis are carried out with multiple entities.
 }
 \examples{
-# TBW
+# epd.connection <- connectToEPD(host="localhost", database="epd",
+# user="epdr", password="epdrpw")
+# agedcounts.1 <- getAgedCounts(1, epd.connection)
+# agedcounts.1.int <- intervalsCounts(agedcounts.1, tmin=seq(0, 21000, by=1000),
+# tmax=seq(999, 21999, by=1000))
+#
+# agedcounts.3 <- getAgedCounts(3, connEPD)
+# agedcounts.3.int <- intervalsCounts(agedcounts.3, tmin=seq(0, 21000, by=1000),
+# tmax=seq(999, 21999, by=1000))
+# agedcounts.3.int <- intervalsCounts(agedcounts.3, tmin=seq(0, 21000, by=1000),
+# tmax=seq(999, 21999, by=1000), 2)
+
 }
 

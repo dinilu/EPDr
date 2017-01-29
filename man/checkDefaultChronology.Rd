@@ -2,20 +2,33 @@
 % Please edit documentation in R/EPDr-standardize_functions.R
 \name{checkDefaultChronology}
 \alias{checkDefaultChronology}
-\title{Title TBW}
+\title{Check default chronology on EPDr objects}
 \usage{
-checkDefaultChronology(agedcount)
+checkDefaultChronology(object)
 }
 \arguments{
-\item{agedcount}{TBW}
+\item{object}{Any EPDr object but \code{\link[EPDr:counts]{counts}}.}
 }
 \value{
-TBW
+Logical value indicating whether the object has a default chronology (TRUE)
+or not (FALSE).
 }
 \description{
-Title TBW
+The function check EPDr objects with slot @default_chronology 
+(\code{\link[EPDr:ages]{ages}}, \code{\link[EPDr:agedcounts]{agedcounts}},
+\code{\link[EPDr:chronology]{chronology}}, and \code{\link[EPDr:datation]{datation}})
+to see if there are a default chronology specified.
 }
 \examples{
-# TBW
+# epd.connection <- connectToEPD(host="localhost", database="epd",
+#                                user="epdr", password="epdrpw")
+# e.list <- listE(epd.connection, country=c("Spain"))
+# e.list <- e.list$e_
+# spain.agedcounts <- lapply(e.list, getAgedCounts, epd.connection)
+# spain.agedcounts.wo <- sapply(spain.agedcounts, checkDefaultChronology)
+# spain.agedcounts.wo
+# spain.agedcounts[[1]]@ages@default_chronology
+# spain.agedcounts[[16]]@ages@default_chronology
+
 }
 

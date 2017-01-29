@@ -2,22 +2,37 @@
 % Please edit documentation in R/EPDr-standardize_functions.R
 \name{taxa2HigherTaxa}
 \alias{taxa2HigherTaxa}
-\title{Title TBW}
+\title{Change taxa to higher taxa level}
 \usage{
-taxa2HigherTaxa(count, epd_taxonomy)
+taxa2HigherTaxa(counts, epd_taxonomy)
 }
 \arguments{
-\item{count}{TBW}
+\item{counts}{\code{\link[EPDr:agedcounts]{agedcounts}} or
+\code{\link[EPDr:counts]{counts}} objects with a \code{@counts} slot.}
 
-\item{epd_taxonomy}{TBW}
+\item{epd_taxonomy}{Data frame with the taxonomy from the EPD as from the
+\code{\link[EPDr:getTaxonomyEPD]{getTaxonomyEPD}} function.}
 }
 \value{
-TBW
+\code{\link[EPDr:agedcounts]{agedcounts}} or \code{\link[EPDr:counts]{counts}}
+object with new taxa names.
 }
 \description{
-Title TBW
+This function modifies the taxa names in the \code{@counts} slot of EPDr objects
+(\code{\link[EPDr:agedcounts]{agedcounts}} and \code{\link[EPDr:counts]{counts}}).
+More specifically this function compares the taxa name with the taxonomy of the EPD
+to use the higher taxa names. If these changes result in duplicated columns of the same
+taxa their values are unified by summing them.
 }
 \examples{
-# TBW
+# epd.connection <- connectToEPD(host="localhost", database="epd",
+# user="epdr", password="epdrpw")
+# agedcounts.1 <- getAgedCounts(1, epd.connection)
+# agedcounts.1@counts@taxa_names
+# colnames(agedcounts.1@counts@counts)
+# agedcounts.1.hn <- taxa2HigherTaxa(agedcounts.1, getTaxonomyEPD(epd.connection))
+# agedcounts.1.hn@counts@taxa_names
+# colnames(agedcounts.1.hn@counts@counts)
+
 }
 

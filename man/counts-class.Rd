@@ -52,7 +52,7 @@ respectively.}
 processed. It can take any of three values: "Original", "Expanded", or "Taxized". 
 "Original" indicates that taxonomy has not been modified. "Expanded" indicates that
 taxonomy has been expanded beyond the taxa specified by the data provider, using
-\code{\link[EPDr:expandTaxonomy]{expandTaxonomy}} or
+\code{\link[EPDr:filterTaxa]{filterTaxa}} or
 \code{\link[EPDr:unifyTaxonomy]{unifyTaxonomy}}. "Taxized" indicates that taxonomy in
 \code{@counts} has been resolved using the package \code{link[taxize]{taxize}}.
 Function for this are on schedule but not implemented yet.}
