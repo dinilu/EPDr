@@ -30,7 +30,7 @@
 #' # TBW
 tableByTaxaAge <- function(agedcounts, sample_label, taxa){
   if(!all(taxa %in% agedcounts@counts@taxa_names)){
-    stop("taxa has to be a valid taxon in agedcounts@counts@counts and agedcounts@counts@taxa_label")
+    stop("taxa has to be a valid taxon in agedcounts@counts@counts and agedcounts@counts@taxa_names")
   }
   if(!all(sample_label %in% agedcounts@counts@sample_label)){
     stop("sample_label has to be valid sample labels in agedcounts@counts@counts and agedcounts@counts@sample_label")
