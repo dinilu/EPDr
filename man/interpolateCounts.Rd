@@ -4,7 +4,9 @@
 \alias{interpolateCounts}
 \title{Interpolate counts to specific time periods}
 \usage{
-interpolateCounts(agedcounts, time, chronology = NULL)
+interpolateCounts(agedcounts, time, chronology = NULL, method = c("linear",
+  "loess", "sspline"), rep_negt = TRUE, span = 0.25, df = min(20,
+  nrow(agedcounts@counts@counts) * 0.7), ...)
 }
 \arguments{
 \item{agedcounts}{An \code{\link[EPDr:agedcounts]{agedcounts}} object as returned by
@@ -17,10 +19,22 @@ the \code{\link[EPDr:getAgedCounts]{getAgedCounts}} function.}
 used to calculate the interpolations. If none is
 provided the function uses the default chronology from the object (see
 \code{\link[EPDr:gieseckeDefaultChronology]{gieseckeDefaultChronology}}).}
+
+\item{method}{interpolation method, should be an unambiguous abbreviation of
+either linear, loess, sspline or aspline. See details.}
+
+\item{rep_negt}{logical to indicate whether or not to replace negative values with zero in the interpolated data.}
+
+\item{span}{span for loess, default=0.25.}
+
+\item{df}{degress of freedome for smoothing spline, default is the lower of
+20 or 0.7 * number of samples.}
+
+\item{...}{additional arguments to loess, smooth.spline and aspline.}
 }
 \value{
-The function returns an \code{\link[EPDr:agedcounts]{agedcounts}} object, similar
-to \code{agedcounts} in which ages and counts has been modified to the
+The function returns an \code{\link[EPDr:agedcounts]{agedcounts}} object,
+similar to \code{agedcounts} in which ages and counts has been modified to the
 time periods specified in time and the counts estimated for these periods.
 Accordingly, \code{default_chronology} is also modified to 1, so subsequent analysis
 will automatically pick up the first (and only) column with the new time periods.
@@ -35,6 +49,13 @@ or cores in the database, standardizing them for integrative analysis.
 \details{
 Data for time periods in \code{time} but not recorded in the entity are fill with 
 \code{NA}. This is convenient if analysis are carried out with multiple entities.
+
+ Interpolation can be done using linear interpolation between data points
+in the original series (default) using \code{\link[stats:approx]{approx}}, using
+a fitted \code{\link[stats:loess]{loess}} locally weighted regression, or by 
+\code{\link[stats:smooth.spline]{smooth.spline}}. The latter two methods will
+also smooth the dataand additional arguments may be passed to these functions
+to control the amount of smoothing.
 }
 \examples{
 # epd.connection <- connectToEPD(host="localhost", database="epd",

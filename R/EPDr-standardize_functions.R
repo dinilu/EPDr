@@ -328,9 +328,23 @@ removeWithoutAges <- function(objects){
 #' used to calculate the interpolations. If none is
 #' provided the function uses the default chronology from the object (see
 #' \code{\link[EPDr:gieseckeDefaultChronology]{gieseckeDefaultChronology}}).
+#' @param method interpolation method, should be an unambiguous abbreviation of
+#' either linear, loess, sspline or aspline. See details.
+#' @param rep_negt logical to indicate whether or not to replace negative values with zero in the interpolated data.
+#' @param span span for loess, default=0.25.
+#' @param df degress of freedome for smoothing spline, default is the lower of
+#' 20 or 0.7 * number of samples.
+#' @param ...	additional arguments to loess, smooth.spline and aspline.
+#' 
+#' @details  Interpolation can be done using linear interpolation between data points
+#' in the original series (default) using \code{\link[stats:approx]{approx}}, using
+#' a fitted \code{\link[stats:loess]{loess}} locally weighted regression, or by 
+#' \code{\link[stats:smooth.spline]{smooth.spline}}. The latter two methods will
+#' also smooth the dataand additional arguments may be passed to these functions
+#' to control the amount of smoothing.
 #'
-#' @return The function returns an \code{\link[EPDr:agedcounts]{agedcounts}} object, similar
-#' to \code{agedcounts} in which ages and counts has been modified to the
+#' @return The function returns an \code{\link[EPDr:agedcounts]{agedcounts}} object,
+#' similar to \code{agedcounts} in which ages and counts has been modified to the
 #' time periods specified in time and the counts estimated for these periods.
 #' Accordingly, \code{default_chronology} is also modified to 1, so subsequent analysis
 #' will automatically pick up the first (and only) column with the new time periods.
@@ -349,7 +363,9 @@ removeWithoutAges <- function(objects){
 #' # agedcounts.3.int <- interpolateCounts(agedcounts.3, t, 1)
 #' # agedcounts.3.int <- interpolateCounts(agedcounts.3, t, 2)
 #' 
-interpolateCounts <- function(agedcounts, time, chronology=NULL){
+interpolateCounts <- function(agedcounts, time, chronology=NULL,
+    method=c("linear", "loess", "sspline"), rep_negt=TRUE, span=0.25,
+    df=min(20, nrow(agedcounts@counts@counts) * 0.7), ...){
   #     agedcounts <- getAgedCounts(100, connEPD)
   #     time <- c(seq(0, 21000, by=500))
   #     chronology <- NULL
@@ -389,13 +405,50 @@ interpolateCounts <- function(agedcounts, time, chronology=NULL){
   interp.depthcm <- numeric(0)
   if(length(interp.ages) != 0){
     
-    interp.counts <- apply(sample.counts, MARGIN=2, FUN=function(x, y, z){stats::approx(y, x, xout=z)$y}, sample.ages, interp.ages)
+      method <- match.arg(method)
+      if (is.null(method)) 
+        stop("Interpolation method not recognised")
+      if (method == "linear") {
+        lin.f <- function(y, x, xout) {
+          stats::approx(x, y, xout)$y
+        }
+        interp.counts <- apply(sample.counts, MARGIN=2, lin.f, x=sample.ages, xout=interp.ages, ...)
+        interp.depthcm <- lin.f(sample.depthcm, sample.ages, xout=interp.ages)
+       # res <- apply(y, 2, lin.f, x1 = x, xout = xout, ...)
+       # interp.counts <- apply(sample.counts, MARGIN=2, FUN=function(x, y, z){stats::approx(y, x, xout=z)$y}, sample.ages, interp.ages)
+      }
+      else if (method == "loess") {
+        lo.f <- function(y, x, xout, span, ...) {
+          fit <- stats::loess(y ~ x, span=span, ...)
+          stats::predict(fit, newdata=data.frame(x=xout))
+        }
+        interp.counts <- apply(sample.counts, MARGIN=2, lo.f, x=sample.ages, xout=interp.ages, span=span, ...)
+        interp.depthcm <- lo.f(sample.depthcm, sample.ages, xout=interp.ages, span=span, ...)
+        # res <- apply(y, 2, lo.f, x1 = x, xout = xout, span = span, ...)
+        # interp.counts <- apply(sample.counts, MARGIN=2, FUN=function(x, y, z){stats::approx(y, x, xout=z)$y}, sample.ages, interp.ages)
+      }
+      else if (method == "sspline") {
+        ss.f <- function(y, x, xout, df, ...) {
+          fit <- stats::smooth.spline(y ~ x, df=df, ...)
+          stats::predict(fit, x=data.frame(x=xout))$y[, 1]
+        }
+        interp.counts <- apply(sample.counts, MARGIN=2, ss.f, x=sample.ages, xout=interp.ages)
+        interp.depthcm <- ss.f(sample.depthcm, sample.ages, xout=interp.ages, df=df, ...)
+        # res <- apply(y, 2, ss.f, x1 = x, xout = xout, df = df, ...)
+        # interp.counts <- apply(sample.counts, MARGIN=2, FUN=function(x, y, z){stats::approx(y, x, xout=z)$y}, sample.ages, interp.ages)
+      }
+      if (rep_negt) {
+        interp.counts[interp.counts < 0] <- 0
+      }
+      
+#    interp.counts <- apply(sample.counts, MARGIN=2, FUN=function(x, y, z){stats::approx(y, x, xout=z)$y}, sample.ages, interp.ages)
+    
     if(length(interp.ages) == 1){
       interp.counts <- as.data.frame(t(interp.counts))
     }else{
       interp.counts <- as.data.frame(interp.counts)
     }
-    interp.depthcm <- stats::approx(sample.ages, sample.depthcm, xout=interp.ages)$y
+    # interp.depthcm <- stats::approx(sample.ages, sample.depthcm, xout=interp.ages)$y
   }
   colnames(interp.counts) <- colnames(sample.counts)
   
@@ -909,11 +962,10 @@ taxa2HigherTaxa <- function(counts, epd_taxonomy){
 #' # agedcounts.1.int.qi <- bloisQualityIndex(agedcounts.1.int, datation.1)
 #' # agedcounts.1.int.qi@ages@data_quality
 bloisQualityIndex <- function(agedcounts, datation, max_sample_dist=2000, max_c14_dist=5000){
-  # 
-  #     agedcounts <- counts.wa.uni[[44]]
-  #     datation <- datation.co.wa.uni[[44]]
-  #     max_sample_dist <- 2000
-  #     max_c14_dist <- 5000
+      # agedcounts <- counts.wa.uni[[44]]
+      # datation <- datation.co.wa.uni[[44]]
+      # max_sample_dist <- 2000
+      # max_c14_dist <- 5000
   
   if(!class(agedcounts) %in% c("agedcounts")){
     stop("Agedcounts has to be an 'agedcounts' object. See ?getAgedCounts.")
