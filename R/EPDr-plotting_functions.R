@@ -39,8 +39,6 @@
 #' @param legend_title Character string with a title for the legend.
 #' @param napoints_size Any value accepted for \code{size} by \code{\link[ggplot2:geom_point]{geom_point}}. This
 #' control for the size of points representing \code{NA} values.
-#' @param napoints_pch Any value accepted for \code{pch} by \code{\link[ggplot2:geom_point]{geom_point}}. This
-#' control for the symbol of points representing \code{NA} values.
 #' @param napoints_colour Any value accepted for \code{colour} by \code{\link[ggplot2:geom_point]{geom_point}}. This
 #' control for the border colour of points representing \code{NA} values.
 #' @param napoints_fill  Any value accepted for \code{fill} by \code{\link[ggplot2:geom_point]{geom_point}}. This
@@ -49,6 +47,7 @@
 #' control for the fill colour of polygons representing countries.
 #' @param countries_border_colour Any value accepted for \code{colour} by \code{\link[ggplot2:borders]{borders}}. This
 #' control for the border colour of polygons representing countries. 
+#' @param projection Projection to be used in the map. The default is \code{mercator}. Check \url{http://docs.ggplot2.org/current/coord_map.html} for more details.
 #'
 #' @return The function display a ggplot map with countries in the background and counts for particular taxa and age (or time periods) as points in the foreground.
 #' 
@@ -103,23 +102,22 @@
 #' # 
 mapTaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, pollen_thres=NULL, zoom_coords=NULL,
                        points_pch=21, points_colour=NULL, points_fill=NULL, points_range_size=NULL,
-                       map_title=NULL, legend_range=NULL, legend_title=NULL, napoints_size=0.75, napoints_pch=19,
-                       napoints_colour="grey45", napoints_fill=NA, countries_fill_colour="grey80",
-                       countries_border_colour="grey90"){
-  # rm(agedcounts, taxa, sample_label, pres_abse, points_pch, napoints_size, napoints_pch, napoints_colour, countries_fill_colour, countries_border_colour, pollen_thres, zoom_coords, points_colour, points_fill, points_range_size, map_title, legend_range, napoints_fill)
-  # agedcounts <- percent.int
-  # taxa <- cedrus
-  # sample_label <- "21000"
-  # pres_abse <- F
+                       map_title=NULL, legend_range=NULL, legend_title=NULL, napoints_size=0.75,
+                       napoints_colour="grey45", napoints_fill="grey45", countries_fill_colour="grey80",
+                       countries_border_colour="grey90", projection="mercator"){
+  # rm(agedcounts, taxa, sample_label, pres_abse, points_pch, napoints_size, napoints_colour, countries_fill_colour, countries_border_colour, pollen_thres, zoom_coords, points_colour, points_fill, points_range_size, map_title, legend_range, napoints_fill)
+  # agedcounts <- percent.int.uni
+  # taxa <- "Plantago"
+  # sample_label <- "5000"
+  # pres_abse <- T
   # points_pch <- 21
   # napoints_size <- 0.75
-  # napoints_pch <- 19
   # napoints_colour <- "grey45"
+  # napoints_fill <- "grey45"
   # countries_fill_colour <- "grey80"
   # countries_border_colour <- "grey90"
   # pollen_thres <- zoom_coords <- points_colour <- points_fill <- points_range_size <- map_title <- legend_range <-
   #   legend_title <- NULL
-  # napoints_fill <- NA
   if(class(agedcounts) == "list"){
     if(!class(agedcounts[[1]]) %in% c("agedcounts", "data.frame")){
       stop("agedcounts of the wrong class. It has to be a list of agedcount objects (see ?getAgedCount) or data.frames (see ?tableByTaxaAge)")
@@ -160,9 +158,8 @@ mapTaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, pollen_t
       pollen_thres <- 0
     }
     
-    dataList$count <- dataList$count > pollen_thres
-    dataList_woNA <- dataList[!is.na(dataList$count),]
-    
+    dataList$count <- as.factor(dataList$count > pollen_thres)
+
     if(is.null(map_title)){
       map_title <- paste(taxa, " (>", pollen_thres, "): ", sample_label, " cal BP", sep="")    
     }
@@ -170,7 +167,7 @@ mapTaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, pollen_t
       legend_title <- paste("Presence (>", pollen_thres, ")", sep="")
     }
     if(is.null(points_colour)){
-      points_colour <- c("Red 2", "Dodger Blue 1")
+      points_colour <- c("Red 4", "Dodger Blue 3")
     }
     if(is.null(points_fill)){
       points_fill <- c("Red 2", "Dodger Blue 1")
@@ -179,16 +176,15 @@ mapTaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, pollen_t
       points_range_size <- c(2, 3.5)
     }
     
-    ggplot2::ggplot(dataList_woNA, ggplot2::aes(x=dataList_woNA$londd, y=dataList_woNA$latdd, fill=dataList_woNA$count, colour=dataList_woNA$count, size=dataList_woNA$count)) +
+    ggplot2::ggplot(dataList, ggplot2::aes(x=dataList$londd, y=dataList$latdd, fill=dataList$count, colour=dataList$count, size=dataList$count)) +
       ggplot2::borders("world", fill=countries_fill_colour, colour=countries_border_colour) +
-      ggplot2::geom_point(data=dataList, ggplot2::aes(x=dataList$londd, y=dataList$latdd, fill=dataList$count, colour=dataList$count, size=dataList$count), pch=napoints_pch, colour=napoints_colour, fill=napoints_fill, size=napoints_size, show.legend=FALSE) +
       ggplot2::geom_point(pch=points_pch) +
-      ggplot2::coord_fixed(xlim=c(xmin, xmax), ylim = c(ymin, ymax), ratio=1) +
+      ggplot2::coord_map(projection=projection, xlim=c(xmin, xmax), ylim = c(ymin, ymax)) +
       ggplot2::ggtitle(map_title) +
       ggplot2::guides(size=ggplot2::guide_legend(title=legend_title), fill=ggplot2::guide_legend(title=legend_title), colour=ggplot2::guide_legend(title=legend_title)) +
-      ggplot2::scale_fill_manual(values=points_fill) +
-      ggplot2::scale_colour_manual(values=points_colour) +
-      ggplot2::scale_size_discrete(range=points_range_size) +
+      ggplot2::scale_fill_manual(values=points_fill, na.value=napoints_fill) +
+      ggplot2::scale_colour_manual(values=points_colour, na.value=napoints_colour) +
+      ggplot2::scale_size_discrete(range=points_range_size, na.value=napoints_size) +
       ggplot2::scale_x_continuous(name="Longitude") +
       ggplot2::scale_y_continuous(name="Latitude") +
       ggplot2::theme_bw() 
@@ -206,28 +202,26 @@ mapTaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, pollen_t
     }
     if(is.null(legend_range)){
       if(counts_type == "Percentages"){
-        legend_range <- c(0, 100)
+        legend_range <- c(0, max(dataList$count))
       }else{
         legend_range <- c(0, max(dataList$count))
       }
     }
     if(is.null(points_colour)){
-      points_colour <- c("Light Blue 1", "Blue 3")
+      points_colour <- c("Blue 1", "Blue 3")
     }
     if(is.null(points_fill)){
-      points_fill <- c("white", "Blue 3")
+      points_fill <- c("Light Blue 1", "Blue 3")
     }
     if(is.null(points_range_size)){
       points_range_size <- c(2, 7)
     }
     
-    # dataList_zero <- subset(dataList, dataList$count == 0)
-    
     ggplot2::ggplot(dataList, ggplot2::aes(x=dataList$londd, y=dataList$latdd, fill=dataList$count, colour=dataList$count, size=dataList$count)) +
       ggplot2::borders("world", fill=countries_fill_colour, colour=countries_border_colour) +
-      ggplot2::geom_point(pch=napoints_pch, colour=napoints_colour, fill=napoints_fill, size=napoints_size, show.legend=FALSE) +
+      ggplot2::geom_point(colour=napoints_colour, fill=napoints_fill, size=napoints_size, show.legend=TRUE) +
       ggplot2::geom_point(pch=points_pch) +
-      ggplot2::coord_fixed(xlim=c(xmin, xmax), ylim = c(ymin, ymax), ratio=1) +
+      ggplot2::coord_map(projection=projection, xlim=c(xmin, xmax), ylim = c(ymin, ymax)) +
       ggplot2::ggtitle(map_title) +
       ggplot2::guides(size=ggplot2::guide_legend(title=legend_title), fill=ggplot2::guide_legend(title=legend_title), colour=ggplot2::guide_legend(title=legend_title)) +
       ggplot2::scale_fill_gradient(low=points_fill[1], high=points_fill[2], limits=legend_range) +

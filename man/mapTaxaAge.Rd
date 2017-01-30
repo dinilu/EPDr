@@ -8,9 +8,9 @@ mapTaxaAge(agedcounts, taxa, sample_label, pres_abse = FALSE,
   pollen_thres = NULL, zoom_coords = NULL, points_pch = 21,
   points_colour = NULL, points_fill = NULL, points_range_size = NULL,
   map_title = NULL, legend_range = NULL, legend_title = NULL,
-  napoints_size = 0.75, napoints_pch = 19, napoints_colour = "grey45",
-  napoints_fill = NA, countries_fill_colour = "grey80",
-  countries_border_colour = "grey90")
+  napoints_size = 0.75, napoints_colour = "grey45",
+  napoints_fill = "grey45", countries_fill_colour = "grey80",
+  countries_border_colour = "grey90", projection = "mercator")
 }
 \arguments{
 \item{agedcounts}{List of \code{\link[EPDr:agedcounts]{agedcounts}} objects that are going to be included 
@@ -59,9 +59,6 @@ set \code{legend_range=c(0,100)}. By default the function uses the min and max v
 \item{napoints_size}{Any value accepted for \code{size} by \code{\link[ggplot2:geom_point]{geom_point}}. This
 control for the size of points representing \code{NA} values.}
 
-\item{napoints_pch}{Any value accepted for \code{pch} by \code{\link[ggplot2:geom_point]{geom_point}}. This
-control for the symbol of points representing \code{NA} values.}
-
 \item{napoints_colour}{Any value accepted for \code{colour} by \code{\link[ggplot2:geom_point]{geom_point}}. This
 control for the border colour of points representing \code{NA} values.}
 
@@ -73,6 +70,8 @@ control for the fill colour of polygons representing countries.}
 
 \item{countries_border_colour}{Any value accepted for \code{colour} by \code{\link[ggplot2:borders]{borders}}. This
 control for the border colour of polygons representing countries.}
+
+\item{projection}{Projection to be used in the map. The default is \code{mercator}. Check \url{http://docs.ggplot2.org/current/coord_map.html} for more details.}
 }
 \value{
 The function display a ggplot map with countries in the background and counts for particular taxa and age (or time periods) as points in the foreground.
