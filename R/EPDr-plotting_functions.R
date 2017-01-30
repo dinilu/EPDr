@@ -177,7 +177,7 @@ mapTaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, pollen_t
     }
     
     ggplot2::ggplot(dataList, ggplot2::aes(x=dataList$londd, y=dataList$latdd, fill=dataList$count, colour=dataList$count, size=dataList$count)) +
-      ggplot2::borders("world", fill=countries_fill_colour, colour=countries_border_colour) +
+      ggplot2::borders("world", fill=countries_fill_colour, colour=countries_border_colour, xlim=c(xmin, xmax), ylim=c(ymin, ymax)) +
       ggplot2::geom_point(pch=points_pch) +
       ggplot2::coord_map(projection=projection, xlim=c(xmin, xmax), ylim = c(ymin, ymax)) +
       ggplot2::ggtitle(map_title) +
@@ -218,7 +218,7 @@ mapTaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, pollen_t
     }
     
     ggplot2::ggplot(dataList, ggplot2::aes(x=dataList$londd, y=dataList$latdd, fill=dataList$count, colour=dataList$count, size=dataList$count)) +
-      ggplot2::borders("world", fill=countries_fill_colour, colour=countries_border_colour) +
+      ggplot2::borders("world", fill=countries_fill_colour, colour=countries_border_colour, xlim=c(xmin, xmax), ylim=c(ymin, ymax)) +
       ggplot2::geom_point(colour=napoints_colour, fill=napoints_fill, size=napoints_size, show.legend=TRUE) +
       ggplot2::geom_point(pch=points_pch) +
       ggplot2::coord_map(projection=projection, xlim=c(xmin, xmax), ylim = c(ymin, ymax)) +
