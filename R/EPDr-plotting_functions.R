@@ -162,7 +162,6 @@ mapTaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, pollen_t
     
     dataList$count <- dataList$count > pollen_thres
     dataList_woNA <- dataList[!is.na(dataList$count),]
-    dataList_zero <- dataList[!dataList$count == 0,]
     
     if(is.null(map_title)){
       map_title <- paste(taxa, " (>", pollen_thres, "): ", sample_label, " cal BP", sep="")    
@@ -182,9 +181,7 @@ mapTaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, pollen_t
     
     ggplot2::ggplot(dataList_woNA, ggplot2::aes(x=dataList_woNA$londd, y=dataList_woNA$latdd, fill=dataList_woNA$count, colour=dataList_woNA$count, size=dataList_woNA$count)) +
       ggplot2::borders("world", fill=countries_fill_colour, colour=countries_border_colour) +
-      # ggplot2::geom_point(data=dataList, ggplot2::aes(x=dataList$londd, y=dataList$latdd, fill=dataList$count, colour=dataList$count, size=dataList$count), pch=napoints_pch, colour=napoints_colour, fill=napoints_fill, size=napoints_size, show.legend=FALSE) +
-      ggplot2::geom_point(data=dataList, ggplot2::aes(x=dataList$londd, y=dataList$latdd), pch=napoints_pch, colour=napoints_colour, fill=napoints_fill, size=napoints_size, show.legend=TRUE) +
-      ggplot2::geom_point(data=dataList_zero, ggplot2::aes(x=dataList$londd, y=dataList$latdd), pch=zero_pch, colour=zero_colour, fill=zero_fill, size=zero_size, show.legend=TRUE) +
+      ggplot2::geom_point(data=dataList, ggplot2::aes(x=dataList$londd, y=dataList$latdd, fill=dataList$count, colour=dataList$count, size=dataList$count), pch=napoints_pch, colour=napoints_colour, fill=napoints_fill, size=napoints_size, show.legend=FALSE) +
       ggplot2::geom_point(pch=points_pch) +
       ggplot2::coord_fixed(xlim=c(xmin, xmax), ylim = c(ymin, ymax), ratio=1) +
       ggplot2::ggtitle(map_title) +
@@ -224,12 +221,11 @@ mapTaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, pollen_t
       points_range_size <- c(2, 7)
     }
     
-    dataList_zero <- dataList[!dataList$count == 0,]
+    # dataList_zero <- subset(dataList, dataList$count == 0)
     
     ggplot2::ggplot(dataList, ggplot2::aes(x=dataList$londd, y=dataList$latdd, fill=dataList$count, colour=dataList$count, size=dataList$count)) +
       ggplot2::borders("world", fill=countries_fill_colour, colour=countries_border_colour) +
-      ggplot2::geom_point(pch=napoints_pch, colour=napoints_colour, fill=napoints_fill, size=napoints_size, show.legend=T) +
-      ggplot2::geom_point(data=dataList_zero, ggplot2::aes(x=dataList$londd, y=dataList$latdd), pch=zero_pch, colour=zero_colour, fill=zero_fill, size=zero_size, show.legend=T) +
+      ggplot2::geom_point(pch=napoints_pch, colour=napoints_colour, fill=napoints_fill, size=napoints_size, show.legend=FALSE) +
       ggplot2::geom_point(pch=points_pch) +
       ggplot2::coord_fixed(xlim=c(xmin, xmax), ylim = c(ymin, ymax), ratio=1) +
       ggplot2::ggtitle(map_title) +
