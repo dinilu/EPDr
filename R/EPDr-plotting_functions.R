@@ -189,8 +189,8 @@ mapTaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, pollen_t
       ggplot2::scale_fill_manual(values=points_fill) +
       ggplot2::scale_colour_manual(values=points_colour) +
       ggplot2::scale_size_discrete(range=points_range_size) +
-      ggplot2::sscale_x_continuous(name="Longitude") +
-      ggplot2::sscale_y_continuous(name="Latitude") +
+      ggplot2::scale_x_continuous(name="Longitude") +
+      ggplot2::scale_y_continuous(name="Latitude") +
       ggplot2::theme_bw() 
     
   }else{
@@ -233,8 +233,8 @@ mapTaxaAge <- function(agedcounts, taxa, sample_label, pres_abse=FALSE, pollen_t
       ggplot2::scale_fill_gradient(low=points_fill[1], high=points_fill[2], limits=legend_range) +
       ggplot2::scale_colour_gradient(low=points_colour[1], high=points_colour[2], limits=legend_range) +
       ggplot2::scale_size(range=points_range_size, limits=legend_range) +
-      ggplot2::sscale_x_continuous(name="Longitude") +
-      ggplot2::sscale_y_continuous(name="Latitude") +
+      ggplot2::scale_x_continuous(name="Longitude") +
+      ggplot2::scale_y_continuous(name="Latitude") +
       ggplot2::theme_bw() 
   }
 }
