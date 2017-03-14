@@ -2,7 +2,7 @@
 % Please edit documentation in R/EPDr-export_functions.R
 \name{exportC14}
 \alias{exportC14}
-\title{Reshape C14 data to CLAM format}
+\title{Reshape C14 data to CLAM or BACON format}
 \usage{
 exportC14(C14, format = c("clam", "bacon"))
 }
