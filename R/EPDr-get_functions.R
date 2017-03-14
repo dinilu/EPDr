@@ -26,6 +26,12 @@
 #' # disconnectFromEPD(epd.connection)
 #' 
 getSite <- function(e_, connection){
+    
+    if(length(e_) > 1){
+      e_ <- e_[[1]]
+      warning("'getSite' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+    }
+    
     sqlQuery <- paste("SELECT site_ FROM entity WHERE e_=", e_, ";", sep="")
     site_num <- as.character(RPostgreSQL::dbGetQuery(connection, sqlQuery))
     
@@ -65,7 +71,12 @@ getSite <- function(e_, connection){
 #' # disconnectFromEPD(epd.connection)
 #' 
 getEntity <- function(e_, connection){
-    sqlQuery <- paste("SELECT * FROM entity WHERE e_=", e_, ";", sep="")
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning("'getEntity' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+  }
+  
+  sqlQuery <- paste("SELECT * FROM entity WHERE e_=", e_, ";", sep="")
     results <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
     return(results)
 }
@@ -136,7 +147,12 @@ getTaxonomyEPD <- function(connection){
 #' # disconnectFromEPD(connection=epd.connection)
 #' 
 getC14 <- function(e_, connection) {
-    rest <- getRestriction(e_, connection)
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning("'getC14' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+  }
+  
+  rest <- getRestriction(e_, connection)
     
     sqlQuery <- paste("SELECT * FROM c14 WHERE e_=", e_, ";", sep="")
     c14 <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -188,7 +204,12 @@ getC14 <- function(e_, connection) {
 #' # disconnectFromEPD(connection=epd.connection)
 #' 
 getChronology <- function(e_, connection) {
-    rest <- getRestriction(e_, connection)
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning("'getChronology' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+  }
+  
+  rest <- getRestriction(e_, connection)
     
     site <- getSite(e_, connection)
     entity <- getEntity(e_, connection)
@@ -246,6 +267,11 @@ getChronology <- function(e_, connection) {
 #' # disconnectFromEPD(connection=epd.connection)
 #' 
 getEvents <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning("'getEvents' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+  }
+  
     rest <- getRestriction(e_, connection)
     
     sqlQuery <-paste("SELECT * FROM synevent WHERE e_ =", e_, ";", sep="")
@@ -293,6 +319,12 @@ getEvents <- function(e_, connection){
 #' # disconnectFromEPD(connection=epd.connection)
 #' 
 getPSamples <- function(e_, connection){
+
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning("'getPSamples' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+  }
+  
     rest <- getRestriction(e_, connection)
     
     sqlQuery <- paste("select * from p_sample where e_=", e_, ";", sep="")
@@ -332,7 +364,12 @@ getPSamples <- function(e_, connection){
 #' # disconnectFromEPD(connection=epd.connection)
 #' 
 getRestriction <- function(e_, connection){
-    sqlQuery <- paste("SELECT * FROM p_entity WHERE e_=", e_, ";", sep="")
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning("'getRestriction' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+  }
+  
+  sqlQuery <- paste("SELECT * FROM p_entity WHERE e_=", e_, ";", sep="")
     output <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
     if(output$usestatus == "R"){
         warning(paste("Data for this core has restriction in their use. Please contact the data owner (", output$datasource,
@@ -368,7 +405,12 @@ getRestriction <- function(e_, connection){
 #' # disconnectFromEPD(connection=epd.connection)
 #' 
 getDatation <- function(e_, connection){
-    rest <- getRestriction(e_, connection)
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning("'getDatation' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+  }
+  
+  rest <- getRestriction(e_, connection)
     entity <- getEntity(e_, connection)
     site <- getSite(e_, connection)
     coord <- site[, c("londd", "latdd")]     
@@ -407,7 +449,13 @@ getDatation <- function(e_, connection){
 #' # disconnectFromEPD(connection=epd.connection)
 #' 
 getCounts <- function(e_, connection){
-    rest <- getRestriction(e_, connection)
+
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning("'getCounts' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+  }
+  
+  rest <- getRestriction(e_, connection)
     
     entity <- getEntity(e_, connection)
     site <- getSite(e_, connection)
@@ -495,7 +543,12 @@ getCounts <- function(e_, connection){
 #' # disconnectFromEPD(connection=epd.connection)
 #' 
 getAges <- function(e_, connection){
-    rest <- getRestriction(e_, connection)
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning("'getAges' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+  }
+  
+  rest <- getRestriction(e_, connection)
     
     entity <- getEntity(e_, connection)
     site <- getSite(e_, connection)
@@ -577,7 +630,12 @@ getAges <- function(e_, connection){
 #' # disconnectFromEPD(connection=epd.connection)
 #' 
 getAgedCounts <- function(e_, connection){
-    rest <- getRestriction(e_, connection)
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning("'getAgedCounts' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+  }
+  
+  rest <- getRestriction(e_, connection)
     entity <- getEntity(e_, connection)
     site <- getSite(e_, connection)
     
