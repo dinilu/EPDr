@@ -65,8 +65,8 @@ listTaxagroups <- function(connection){
 #' # disconnectFromEPD(epd.connection)
 #' 
 listTaxa <- function(connection, group_id=NULL){
-    if(is.null(groups)){
-        groups <- listTaxagroups(connection)$groupid
+    if(is.null(group_id)){
+        group_id <- listTaxagroups(connection)$groupid
     }
     groups.c <- paste(group_id, collapse="','")
     sqlQuery <- paste("SELECT var_, varname, varcode, mhvar_, groupid FROM p_vars NATURAL JOIN p_group WHERE groupid IN ('", groups.c, "') ORDER BY varname;", sep="")
@@ -150,7 +150,7 @@ listCountries <- function(connection){
 #' 
 listRegions <- function(connection, country=NULL){
     if(is.null(country)){
-        countries <- listCountries(connection)$poldiv1
+        country <- listCountries(connection)$poldiv1
     }
     countries <- paste(country, collapse="','")
     sqlQuery <- paste("SELECT a.poldiv2, a.poldiv1, a.name AS regionname, b.name AS countryname FROM poldiv2 a JOIN poldiv1 b ON a.poldiv1 = b.poldiv1 WHERE b.poldiv1 IN ('", countries, "') OR b.name IN ('", countries, "');", sep="")
