@@ -1,4 +1,4 @@
-#' Reshape C14 data to CLAM format
+#' Reshape C14 data to CLAM or BACON format
 #' 
 #' This function takes C14 data, as those extracted from \code{\link[EPDr:getC14]{getC14}}, to fit into a new table that comply with CLAM or BACON format.
 #'
