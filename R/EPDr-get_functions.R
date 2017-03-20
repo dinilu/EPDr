@@ -958,7 +958,7 @@ getSite <- function(e_, connection){
     e_ <- e_[[1]]
     warning("'getSite' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
   }
-  sqlQuery <- paste("SELECT site_ FROM entity WHERE e_=", e_, ";", sep="")
+  sqlQuery <- paste("SELECT site_ FROM entity WHERE e_ =", e_, ";", sep="")
   site_ <- as.character(RPostgreSQL::dbGetQuery(connection, sqlQuery))
   
   siteloc <- .getSiteloc(site_, connection)
@@ -987,7 +987,7 @@ getSite <- function(e_, connection){
     site_ <- site_[[1]]
     warning("'.getSiteloc' function is designed to retrieve information for single sites. You have provided several site ID values (e_) but only the first one is going to be used.")
   }
-  sqlQuery <-paste("SELECT * FROM siteloc WHERE site_=", site_, ";", sep="")
+  sqlQuery <-paste("SELECT * FROM siteloc WHERE site_ =", site_, ";", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery) 
   if(nrow(sqlOut) == 0){
     sqlOut <- data.frame(site_=NA, sitename=NA, sitecode=NA, siteexist=NA, poldiv1=NA, poldiv2=NA, poldiv3=NA, latdeg=NA, latmin=NA, latseg=NA, latns=NA, latdd=NA, latdms=NA, londeg=NA, lonmin=NA, lonseg=NA, lonns=NA, londd=NA, londms=NA, elevation=NA, areaofsite=NA)[-1,]
@@ -1113,5 +1113,208 @@ getSite <- function(e_, connection){
     sqlOut <- data.frame(icode=NA, infotype=NA)[-1,]
   }
   return(sqlOut)
+}
+
+
+
+
+# getChron functions ------------------------------------------------------
+
+getChron <- function(){
+  
+}
+
+.getChron <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
+  }
+  table <- "chron"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+.getAgebasis <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
+  }
+  table <- "agebasis"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+.getAgebound <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
+  }
+  table <- "agebound"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+.getDescr <- function(descriptor, connection){
+  descriptor <- paste(descriptor, collapse="','")
+  table <- "descr"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE descriptor IN ('", descriptor, "');", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+.getEntity <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
+  }
+  table <- "entity"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+.getEvent <- function(event_, connection){
+  event_ <- paste(event_, collapse="','")
+  table <- "event"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE event_ IN ('", event_, "');", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+.getLithology <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
+  }
+  table <- "litholgy"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+.getGroups <- function(groupid, connection){
+  groupid <- paste(groupid, collapse="','")
+  table <- "groups"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE groupid IN ('", groupid, "');", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+.getLOI <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
+  }
+  table <- "loi"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+.getRational <- function(rcode, connection){
+  rcode <- paste(rcode, collapse="','")
+  table <- "rational"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE rcode IN ('", rcode, "');", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+.getSection <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
+  }
+  table <- "section"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+.getSynevent <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
+  }
+  table <- "synevent"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+.getSyntype <- function(syntype, connection){
+  syntype <- paste(syntype, collapse="','")
+  table <- "syntype"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE syntype IN ('", syntype, "');", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+  
 }
 
