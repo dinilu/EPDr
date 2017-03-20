@@ -759,3 +759,91 @@ geochron <- setClass("geochron",
                            citation=NA)[-1,]
                          )
 )
+
+
+
+#' Class for Site of an entity
+#' 
+#' Class "site" store all information relative to site where samples were taken and to which a specified entity of the European Pollen Database (EPD) belong to. This object is created by \code{\link[EPDr:getSite]{getSite}}.
+#'
+#' @slot siteloc data.frame. Information on the location (e.g. geographical coordinates) for the site.
+#' @slot sitedescr data.frame. Description of the site in terms of vegetation and orography.
+#' @slot siteinfo data.frame. This table summarize the information available for that site (e.g. C14, pollen, insects, etc.)
+#' @slot country data.frame. Country to which the site belong to.
+#' @slot region data.frame. Regions to which the site belong to.
+#' @slot region3rd data.frame. 3rd level regions to which the site belong to.
+#' @slot igcptype data.frame. IGCP regions to which the site belong to.
+#' @slot infotype data.frame. This table provide a longer description of the information summarized in \code{@siteinfo}
+#' @slot publ data.frame PUBL data where the data were published
+#'
+#' @export
+#' @import methods
+site <- setClass("site",
+                     slots=c(
+                       siteloc="data.frame",
+                       sitedescr="data.frame",
+                       siteinfo="data.frame",
+                       country="data.frame",
+                       region="data.frame",
+                       region3rd="data.frame",
+                       igcptype="data.frame",
+                       infotype="data.frame",
+                       publ="data.frame"
+                     ),
+                     prototype=list(
+                       siteloc=data.frame(
+                         site_=NA,
+                         sitename=NA,
+                         sitecode=NA,
+                         siteexists=NA,
+                         poldiv1=NA,
+                         poldiv2=NA,
+                         poldiv3=NA,
+                         latdeg=NA,
+                         latmin=NA,
+                         latsec=NA,
+                         latns=NA,
+                         latdd=NA,
+                         latdms=NA,
+                         londeg=NA,
+                         lonmin=NA,
+                         lonsec=NA,
+                         lonew=NA,
+                         londd=NA,
+                         londms=NA,
+                         elevation=NA,
+                         areaofsite=NA)[-1,],
+                       sitedesc=data.frame(
+                         site_=NA,
+                         sitedescript=NA,
+                         physiography=NA,
+                         surroundveg=NA,
+                         vegformation=NA,
+                         igcptype=NA)[-1,],
+                       siteinfo=data.frame(
+                         site_=NA,
+                         icode=NA,
+                         publ_=NA)[-1,],
+                       country=data.frame(
+                         poldiv1=NA,
+                         name=NA)[-1,],
+                       region=data.frame(
+                         poldiv1=NA,
+                         poldiv2=NA,
+                         postcode=NA,
+                         name=NA)[-1,],
+                       region3rd=data.frame(
+                         poldiv1=NA,
+                         poldiv2=NA,
+                         poldiv3=NA,
+                         name=NA)[-1,],
+                       igcptype=data.frame(
+                         igcptype=NA,
+                         regionname=NA)[-1,],
+                       publ=data.frame(
+                         publ_=NA,
+                         acc_=NA,
+                         yearofpubl=NA,
+                         citation=NA)[-1,]
+                     )
+)

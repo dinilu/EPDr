@@ -154,7 +154,7 @@ All these `get` functions have been designed to query data for a particular enti
 
 Some of the `get` functions retrieve metadata for the entity, the site, or the use restriction for data in that particular entity. The result from these functions are regular data frames.
 
-```{r getEntity getSite and getRestriction}
+```{r getEntity getSite and getRestriction, eval=F}
 getEntity(1, epdConnection)
 getSite(1, epdConnection)
 getRestriction(1, epdConnection)

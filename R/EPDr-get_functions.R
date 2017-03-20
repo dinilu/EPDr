@@ -25,7 +25,7 @@
 #' # site.400
 #' # disconnectFromEPD(epd.connection)
 #' 
-getSite <- function(e_, connection){
+getSite_old <- function(e_, connection){
   
   if(length(e_) > 1){
     e_ <- e_[[1]]
@@ -660,9 +660,9 @@ getAgedCounts <- function(e_, connection){
 #' # Not run
 #' # epd.connection <- connectToEPD(database="epd", user="epdr",
 #' #                                 password="epdrpw", host="localhost")
-#' # .getPubl(1, epd.connection)
+#' # getPubl(1, epd.connection)
 #' # disconnectFromEPD(connection=epd.connection)
-.getPubl <- function(publ_, connection){
+getPubl <- function(publ_, connection){
   if(is.numeric(publ_)){
     publ_ <- paste(publ_, collapse="','")
     sqlQuery <-paste("SELECT * FROM publ WHERE publ_ IN ('", publ_, "');", sep="")
@@ -671,7 +671,7 @@ getAgedCounts <- function(e_, connection){
       sqlOut <- data.frame(publ_=NA, acc_=NA, yearofpubl=NA, citation=NA)[-1,]
     }
   }else{
-    sqlOut <- data.frame(publ_=NA, acc_=NA, yearofpubl=NA, citation=NA)[-1,]
+    stop("publ_ should be numeric.")
   }
   return(sqlOut)
 }
@@ -689,6 +689,7 @@ getAgedCounts <- function(e_, connection){
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that is queried.
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' 
 #' @return Data frame with all information from specific tables in the EPD (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}) for the requested entity. Columns names in the resulting data frames will vary among functions.
 #' 
 #' @examples
@@ -703,7 +704,7 @@ getAgedCounts <- function(e_, connection){
 #' 
 #' 
 #' @section getGeochron:
-#' This function returns information in the GEOCHRON table for the specified entity. This corresponds with the common geochronological data for the entity that have been analysed for that particular entity.
+#' This function returns a \code{\link[EPDr:geochron]{geochron}} object, that store information from different tables for a particular entity.
 #' @rdname getGeochron
 #' 
 #' @export
@@ -719,7 +720,7 @@ getGeochron <- function(e_, connection) {
   si32 <- .getSI32(e_, connection)
   tl <- .getTL(e_, connection)
   useries <- .getUSERIES(e_, connection)
-  publ <- .getPubl(geochron$publ_, connection)
+  publ <- getPubl(geochron$publ_, connection)
   output <- geochron(geochron=geochron, aar=aar, c14=c14, esr=esr, ft=ft, kar=kar, pb210=pb210, si32=si32, tl=tl, useries=useries, publ=publ)
   return(output)
   }
@@ -921,18 +922,22 @@ getGeochron <- function(e_, connection) {
 # getSite functions -------------------------------------------------------
 
 
-#' Title
+#' Retrieve site information for EPD entities
 #'
-#' Description
+#' Functions in this family retrieves information relative to the site where the entities have been sampled. The main function (\code{\link[EPDr:getSite]{getSite}}) requires a valid connection to the database and the entity ID for the entity of interest. All other functions (starting with a dot [.]) use different arguments depending on the piece of information they retrieve.
 #' 
 #' Details
 #'
 #' @param e_ numeric. Value indicating the entity number (e_) of the database that want to be queried.
+#' @param site_ numeric. Value indicating the site number (site_) of interest in the database.
+#' @param poldiv1_ Three character string. The three character string are the international country code.
+#' @param poldiv2_ Two number string (character). This string with length equal two and with numbers represent the regions code for administrative regions in each country. The code is not unique so to capture an specific region in a country you need to provide always country code (poldiv1_) and region code (poldiv2_).
+#' @param poldiv3_ Three number string (character). This string with length equal three and with numbers represent the 3rd level administrative regions in each country.  The code is not unique so to capture an specific 3rd level region in a country you need to provide always country code (poldiv1_), region code (poldiv2_), and 3rd level region code (poldiv3_).
+#' @param igcptype Character. Representing the IGCP type code.
+#' @param icode Character. Three letter string representing the information code.
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
 #' @return data.frame The function return a data.frame with all the information on the SITELOC table of the database (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
-#' 
-#' @export
 #'
 #' @examples
 #' # Not run
@@ -942,19 +947,171 @@ getGeochron <- function(e_, connection) {
 #' # site.400 <- getSite(400, epd.connection)
 #' # site.400
 #' # disconnectFromEPD(epd.connection)
-#' 
-.getSiteloc <- function(e_, connection){
+
+
+#' @section getSite:
+#' This function returns a \code{\link[EPDr:site]{site}} object with several information from the rest of the functions for a particular entity.
+#' @rdname getSite
+#' @export
+getSite <- function(e_, connection){
   if(length(e_) > 1){
     e_ <- e_[[1]]
-    warning("'.getSiteloc' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+    warning("'getSite' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
   }
   sqlQuery <- paste("SELECT site_ FROM entity WHERE e_=", e_, ";", sep="")
   site_ <- as.character(RPostgreSQL::dbGetQuery(connection, sqlQuery))
   
-  sqlQuery <-paste("SELECT * FROM siteloc sl LEFT JOIN poldiv1 p1 ON sl.poldiv1 = p1.poldiv1 LEFT JOIN poldiv2 p2 ON sl.poldiv1 = p2.poldiv1 AND sl.poldiv2 = p2.poldiv2 LEFT JOIN poldiv3 p3 ON sl.poldiv1 = p3.poldiv1 AND sl.poldiv2 = p3.poldiv2 AND sl.poldiv3 = p3.poldiv3 WHERE site_=", site_, ";", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)   
+  siteloc <- .getSiteloc(site_, connection)
+  sitedesc <- .getSitedesc(site_, connection)
+  siteinfo <- .getSiteinfo(site_, connection)
+  
+  country <- .getPoldiv1(siteloc$poldiv1, connection)
+  region <- .getPoldiv2(siteloc$poldiv2, siteloc$poldiv1, connection)
+  region3rd <- .getPoldiv3(siteloc$poldiv3, siteloc$poldiv2, siteloc$poldiv1, connection)
+  
+  igcptype <- .getIGCPtype(sitedesc$igcptype, connection)
+  infotype <- .getInfotype(siteinfo$icode, connection)
+  
+  publ <- getPubl(siteinfo$publ_, connection)
+  
+  site <- site(siteloc=siteloc, sitedesc=sitedesc, siteinfo=siteinfo, country=country, region=region, region3rd=region3rd, igcptype=igcptype, infotype=infotype, publ=publ)
+  return(site)
+}
+
+#' @section .getSiteloc:
+#' This function returns information in the SITELOC table for the specified entity. This corresponds with location data for the site wheres samples were taken.
+#' @rdname getSite
+#' @export
+.getSiteloc <- function(site_, connection){
+  if(length(site_) > 1){
+    site_ <- site_[[1]]
+    warning("'.getSiteloc' function is designed to retrieve information for single sites. You have provided several site ID values (e_) but only the first one is going to be used.")
+  }
+  sqlQuery <-paste("SELECT * FROM siteloc WHERE site_=", site_, ";", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery) 
+  if(nrow(sqlOut) == 0){
+    sqlOut <- data.frame(site_=NA, sitename=NA, sitecode=NA, siteexist=NA, poldiv1=NA, poldiv2=NA, poldiv3=NA, latdeg=NA, latmin=NA, latseg=NA, latns=NA, latdd=NA, latdms=NA, londeg=NA, lonmin=NA, lonseg=NA, lonns=NA, londd=NA, londms=NA, elevation=NA, areaofsite=NA)[-1,]
+  }
   
   return(sqlOut)
 }
 
+#' @section .getSitedesc:
+#' This function returns information in the SITEDESC table for the specified entity. This corresponds with a description of the site wheres samples were taken.
+#' @rdname getSite
+#' @export
+.getSitedesc <- function(site_, connection){
+  if(length(site_) > 1){
+    site_ <- site_[[1]]
+    warning("'.getSitedesc' function is designed to retrieve information for single sites. You have provided several site ID values (e_) but only the first one is going to be used.")
+  }
+  sqlQuery <-paste("SELECT * FROM sitedesc WHERE site_=", site_, ";", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)   
+  if(nrow(sqlOut) == 0){
+    sqlOut <- data.frame(site_=NA, sitedescript=NA, physiography=NA, surroundveg=NA, vegformation=NA, igcptype=NA)[-1,]
+  }
+  return(sqlOut)
+}
+
+#' @section .getSiteinfo:
+#' This function returns information in the SITEINFO table for the specified entity. This corresponds with a summary data of all type of information in the database for that particular entity (chronological, palynological, etc).
+#' @rdname getSite
+#' @export
+.getSiteinfo <- function(site_, connection){
+  if(length(site_) > 1){
+    site_ <- site_[[1]]
+    warning("'.getSiteinfo' function is designed to retrieve information for single sites. You have provided several site ID values (e_) but only the first one is going to be used.")
+  }
+  sqlQuery <-paste("SELECT * FROM siteinfo WHERE site_=", site_, ";", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)  
+  if(nrow(sqlOut) == 0){
+    sqlOut <- data.frame(site_=NA, icode=NA, publ_=NA)[-1,]
+  }
+  return(sqlOut)
+}
+
+#' @section .getPoldiv1:
+#' This function returns information in the POLDIV1 table for the specified country (poldiv1_ is the country code). This corresponds with data of the country in which a site belong to.
+#' @rdname getSite
+#' @export
+.getPoldiv1 <- function(poldiv1_, connection){
+  if(length(poldiv1_) > 1){
+    poldiv1_ <- poldiv1_[[1]]
+    warning("'.getPoldiv1' function is designed to retrieve information for single countries. You have provided several countries ID values (e_) but only the first one is going to be used.")
+  }
+  sqlQuery <-paste("SELECT * FROM poldiv1 WHERE poldiv1 = '", poldiv1_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    sqlOut <- data.frame(poldiv1_=NA, name=NA)[-1,]
+  }
+  return(sqlOut)
+}
+
+#' @section .getPoldiv2:
+#' This function returns information in the POLDIV2 table for the specified region (poldiv2_ is the region code). This corresponds with data of the region in which a site belong to.
+#' @rdname getSite
+#' @export
+.getPoldiv2 <- function(poldiv2_, poldiv1_, connection){
+  if(length(poldiv1_) > 1 | length(poldiv2_) > 1){
+    poldiv1_ <- poldiv1_[[1]]
+    poldiv2_ <- poldiv2_[[1]]
+    warning("'.getPoldiv2' function is designed to retrieve information for single countries and regions. You have provided several countries and/or regions ID values (poldiv1_ or poldiv2_) but only the first one of each is going to be used.")
+  }
+  sqlQuery <-paste("SELECT * FROM poldiv2 WHERE poldiv1 = '", poldiv1_, "' AND poldiv2 = '", poldiv2_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    sqlOut <- data.frame(poldiv1=NA, poldiv2=NA, postcode=NA, name=NA)[-1,]
+  }
+  return(sqlOut)
+}
+
+#' @section .getPoldiv3:
+#' This function returns information in the POLDIV3 table for the specified 3rd level region (poldiv3_ is the 3rd level region code). This corresponds with data of the 3rd level region in which a site belong to.
+#' @rdname getSite
+#' @export
+.getPoldiv3 <- function(poldiv3_, poldiv2_, poldiv1_, connection){
+  if(length(poldiv1_) > 1 | length(poldiv2_) > 1 | length(poldiv3_) > 1){
+    poldiv1_ <- poldiv1_[[1]]
+    poldiv2_ <- poldiv2_[[1]]
+    poldiv3_ <- poldiv3_[[1]]
+    warning("'.getPoldiv3' function is designed to retrieve information for single third level regions. You have provided several countries, regions and/or third level regions ID values (poldiv1_, poldiv2_ and/or poldiv3_) but only the first one of each is going to be used.")
+  }
+  sqlQuery <- paste("SELECT * FROM poldiv3 WHERE poldiv1 = '", poldiv1_, "' AND poldiv2 = '", poldiv2_, "' AND poldiv3 = '", poldiv3_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    sqlOut <- data.frame(poldiv1=NA, poldiv2=NA, poldiv3=NA, name=NA)[-1,]
+  }
+  return(sqlOut)
+}
+
+#' @section .getIGCPtype:
+#' This function returns information in the IGCPTYPE table for the specified IGCP region. This corresponds with data of the IGCP region in which a site belong to.
+#' @rdname getSite
+#' @export
+.getIGCPtype <- function(igcptype, connection){
+  if(length(igcptype) > 1){
+    igcptype <- igcptype[[1]]
+    warning("'.getIGCPType' function is designed to retrieve information for single IGCPTypes. You have provided several IGCPType values (igcptype) but only the first one is going to be used.")
+  }
+  sqlQuery <- paste("SELECT * FROM igcptype WHERE igcptype = '", igcptype, "';")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    sqlOut <- data.frame(igcptype=NA, regionname=NA)[-1,]
+  }
+  return(sqlOut)
+}
+
+#' @section .getInfotype:
+#' This function returns information in the INFOTYPE table for the specified info code (icode). This corresponds with a longer description of the info type codes returned by \code{.getSiteinfo}.
+#' @rdname getSite
+#' @export
+.getInfotype <- function(icode, connection){
+  icode <- paste(icode, collapse="','")
+  sqlQuery <- paste("SELECT * FROM infotype WHERE icode IN ('", icode, "');", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    sqlOut <- data.frame(icode=NA, infotype=NA)[-1,]
+  }
+  return(sqlOut)
+}
 
