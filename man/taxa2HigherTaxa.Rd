@@ -35,4 +35,3 @@ taxa their values are unified by summing them.
 # colnames(agedcounts.1.hn@counts@counts)
 
 }
-

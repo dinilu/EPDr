@@ -40,4 +40,3 @@ entity but it is useful when standardizing data from multiple entities.
 # head(agedcounts.1.ft@counts@counts)
 
 }
-

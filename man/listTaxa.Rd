@@ -42,4 +42,3 @@ The function allows to restrict the list to taxa in an specific group, using par
 # disconnectFromEPD(epd.connection)
 
 }
-

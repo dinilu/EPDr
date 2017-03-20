@@ -2,8 +2,8 @@
 % Please edit documentation in R/EPDr-classes.R
 \docType{class}
 \name{ages-class}
-\alias{ages}
 \alias{ages-class}
+\alias{ages}
 \title{Class for Ages of an entity}
 \description{
 Class "ages" store in an organized and systematic way information about 
@@ -53,6 +53,7 @@ according to the different chronologies and giesecke, if available.}
 each sample (original, interpolated, or ranged) according to metrics in Blois
 et al. (2013).}
 }}
+
 \references{
 Giesecke, Thomas; Davis, Basil A S; Brewer, Simon; Finsinger, Walter;
 Wolters, Steffen; Blaauw, Maarten; de Beaulieu, Jacques-Louis; Binney, Heather;
@@ -70,4 +71,3 @@ Veloz, Samuel D; He, Feng; Liu, Zhengyu; Manion, Glenn; Otto-Bliesner, Bette (20
 Modeling the Climatic Drivers of Spatial Patterns in Vegetation Composition since the
 Last Glacial Maximum. Ecography, 36(4): 460-473. doi:10.1111/j.1600-0587.2012.07852.x.
 }
-

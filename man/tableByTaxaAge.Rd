@@ -38,4 +38,3 @@ This function is useful to reshape the data to be plotted and mapped by \code{li
 \examples{
 # TBW
 }
-

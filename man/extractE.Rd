@@ -37,4 +37,3 @@ and \code{\link[EPDr:chronology]{chronology}}), returning the entity number of t
 # disconnectFromEPD(connection=epd.connection)
 
 }
-

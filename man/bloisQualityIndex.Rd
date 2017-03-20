@@ -68,4 +68,3 @@ distances as parameters of the function.
 \references{
 Blois, J.L, J.W. Williams, M.C. Fitzpatrick, S. Ferrier, S.D. Veloz, F. He, Z. Liu, G. Manion, and Bette Otto-Bliesner (2013). Modeling the Climatic Drivers of Spatial Patterns in Vegetation Composition since the Last Glacial Maximum. Ecography 36(4): 460-473. doi:10.1111/j.1600-0587.2012.07852.x.
 }
-

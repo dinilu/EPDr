@@ -32,4 +32,3 @@ all the elements on the list and remove those without a default chronology.
 # length(spain.agedcounts.wo)
 
 }
-

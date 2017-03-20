@@ -42,4 +42,3 @@ the data are not passed as arguments the function will ask for them interactivel
 #dbGetQuery(epd.connection, "SELECT e_ FROM synevent;")
 #disconnectFromEPD(connection=epd.connection)
 }
-

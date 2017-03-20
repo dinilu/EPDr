@@ -30,4 +30,3 @@ the function return the whole table, it only requires a valid connection to the 
 # disconnectFromEPD(epd.connection)
 
 }
-

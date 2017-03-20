@@ -39,4 +39,3 @@ comply with CLAM or BACON format.
 
 \url{http://chrono.qub.ac.uk/blaauw/bacon.html}
 }
-

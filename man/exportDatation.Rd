@@ -50,4 +50,3 @@ The function has an interactive implementation. If some of the parameters \code{
 
 \url{http://chrono.qub.ac.uk/blaauw/bacon.html}
 }
-

@@ -33,4 +33,3 @@ returns a whole table it only need a parameter with a valid connection to the da
 # disconnectFromEPD(epd.connection)
 
 }
-

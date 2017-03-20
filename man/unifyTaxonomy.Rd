@@ -35,4 +35,3 @@ function add empty columns (with \code{NA} values).
 # colnames(spain.agedcounts.ut[[1]]@counts@counts)
 
 }
-

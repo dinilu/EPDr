@@ -31,4 +31,3 @@ to see if there are a default chronology specified.
 # spain.agedcounts[[16]]@ages@default_chronology
 
 }
-

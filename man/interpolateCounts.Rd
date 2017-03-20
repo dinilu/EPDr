@@ -70,4 +70,3 @@ to control the amount of smoothing.
 # agedcounts.3.int <- interpolateCounts(agedcounts.3, t, 2)
 
 }
-

@@ -35,4 +35,3 @@ implemented to be used by other functions in the \code{EPDr} package.
 # disconnectFromEPD(epd.connection)
 
 }
-

@@ -132,4 +132,3 @@ reflect \code{NA}, avoiding confusion with \code{0 (zero)} values.
 # mapTaxaAge(counts.ran, cedrus, "21000-21999", pres_abse=T, pollen_thres=0)
 # 
 }
-

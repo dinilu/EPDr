@@ -2,8 +2,8 @@
 % Please edit documentation in R/EPDr-classes.R
 \docType{class}
 \name{geochron-class}
-\alias{geochron}
 \alias{geochron-class}
+\alias{geochron}
 \title{Class for Geochronologies of an entity}
 \description{
 Class "geochron" store all information relative to datation samples and analysis in a specified entity of the European Pollen Database (EPD). This object is created by

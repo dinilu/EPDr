@@ -2,8 +2,8 @@
 % Please edit documentation in R/EPDr-classes.R
 \docType{class}
 \name{chronology-class}
-\alias{chronology}
 \alias{chronology-class}
+\alias{chronology}
 \title{Class for Chronologies of an entity}
 \description{
 Class "chronology" store in an organized and systematic way information about 

@@ -30,4 +30,3 @@ This function takes event data to fit into a new table that comply with CLAM or 
 
 \url{http://chrono.qub.ac.uk/blaauw/bacon.html}
 }
-

@@ -32,4 +32,3 @@ This function takes C14 data, as those extracted from \code{\link[EPDr:getC14_ol
 
 \url{http://chrono.qub.ac.uk/blaauw/bacon.html}
 }
-

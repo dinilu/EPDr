@@ -2,8 +2,8 @@
 % Please edit documentation in R/EPDr-classes.R
 \docType{class}
 \name{agedcounts-class}
-\alias{agedcounts}
 \alias{agedcounts-class}
+\alias{agedcounts}
 \title{Class for Aged-Counts of an entity}
 \description{
 Class "agedcounts" store in an organized and systematic way information about 

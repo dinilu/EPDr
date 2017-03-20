@@ -27,4 +27,3 @@ This function takes depths data, as returned by \code{\link[EPDr:getPSamples]{ge
 
 \url{http://chrono.qub.ac.uk/blaauw/bacon.html}
 }
-

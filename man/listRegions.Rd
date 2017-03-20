@@ -46,4 +46,3 @@ to the database. The list can be restricted to specific countries using paramete
 # disconnectFromEPD(epd.connection)
 
 }
-

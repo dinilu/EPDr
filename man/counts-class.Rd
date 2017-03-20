@@ -2,8 +2,8 @@
 % Please edit documentation in R/EPDr-classes.R
 \docType{class}
 \name{counts-class}
-\alias{counts}
 \alias{counts-class}
+\alias{counts}
 \title{Class for Counts of an entity}
 \description{
 Class "counts" store in an organized and systematic way information about 

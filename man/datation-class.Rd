@@ -2,8 +2,8 @@
 % Please edit documentation in R/EPDr-classes.R
 \docType{class}
 \name{datation-class}
-\alias{datation}
 \alias{datation-class}
+\alias{datation}
 \title{Class for Datation of an entity}
 \description{
 Class "datation" store all information about datation of an specified entity in the 

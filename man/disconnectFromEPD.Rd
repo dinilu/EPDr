@@ -23,4 +23,3 @@ Disconnect a connection to a EPD database
 #disconnectFromEPD(connection=epd.connection)
 #epd.connection
 }
-
