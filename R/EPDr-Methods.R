@@ -1,0 +1,3 @@
+# setMethod("summary", "chronology", function(
+#   
+# ))
