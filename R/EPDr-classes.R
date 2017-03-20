@@ -635,3 +635,127 @@ agedcounts <- setClass("agedcounts",
                                 )
 )
 
+
+
+#' Class for Geochronologies of an entity
+#' 
+#' Class "geochron" store all information relative to datation samples and analysis in a specified entity of the European Pollen Database (EPD). This object is created by
+#' \code{\link[EPDr:getGeochron]{getGeochron}}.
+#'
+#' @slot geochron data.frame. Common information on geochron samples.
+#' @slot aar data.frame. AAR data for samples in geochron
+#' @slot c14 data.frame. C14 data for samples in geochron
+#' @slot esr data.frame. ESR data for samples in geochron
+#' @slot ft data.frame. FT data for samples in geochron
+#' @slot kar data.frame. KAR data for samples in geochron
+#' @slot pb210 data.frame. PB210 data for samples in geochron
+#' @slot si32 data.frame. SI32 data for samples in geochron
+#' @slot tl data.frame. TL data for samples in geochron
+#' @slot useries data.frame. USERIES data for samples in geochron
+#' @slot publ data.frame PUBL data where the data were published
+#'
+#' @export
+#' @import methods
+#' 
+geochron <- setClass("geochron",
+                       slots=c(
+                         geochron="data.frame",
+                         aar="data.frame",
+                         c14="data.frame",
+                         esr="data.frame",
+                         ft="data.frame",
+                         kar="data.frame",
+                         pb210="data.frame",
+                         si32="data.frame",
+                         tl="data.frame",
+                         useries="data.frame",
+                         publ="data.frame"
+                       ),
+                       prototype=list(
+                         geochron=data.frame(
+                           e_=NA,
+                           sample_=NA,
+                           agebp=NA,
+                           errorlimits=NA,
+                           labnumber=NA,
+                           notes=NA)[-1,],
+                         aar=data.frame(
+                           e_=NA,
+                           sample_=NA,
+                           agebp=NA,
+                           errorlimits=NA,
+                           taxondated=NA,
+                           labnumber=NA,
+                           notes=NA)[-1,],
+                         c14=data.frame(
+                           e_=NA,
+                           sample_=NA,
+                           agebp=NA,
+                           agesdup=NA,
+                           agesdlo=NA,
+                           grthanage=NA,
+                           basis=NA,
+                           enriched=NA,
+                           labnumber=NA,
+                           deltac13=NA,
+                           notes=NA)[-1,],
+                         esr=data.frame(
+                           e_=NA,
+                           sample_=NA,
+                           agebp=NA,
+                           errorlimits=NA,
+                           labnumber=NA,
+                           notes=NA)[-1,],
+                         ft=data.frame(
+                           e_=NA,
+                           sample_=NA,
+                           agebp=NA,
+                           errorlimits=NA,
+                           labnumber=NA,
+                           notes=NA)[-1,],
+                         kar=data.frame(
+                           e_=NA,
+                           sample_=NA,
+                           agebp=NA,
+                           errorlimits=NA,
+                           labnumber=NA,
+                           notes=NA)[-1,],
+                         pb210=data.frame(
+                           e_=NA,
+                           sample_=NA,
+                           agead=NA,
+                           agesdup=NA,
+                           agesdlo=NA,
+                           grthanage=NA,
+                           notes=NA)[-1,],
+                         si32=data.frame(
+                           e_=NA,
+                           sample_=NA,
+                           agebp=NA,
+                           agesdup=NA,
+                           agesdlo=NA,
+                           grthanage=NA,
+                           labnumber=NA,
+                           notes=NA)[-1,],
+                         tl=data.frame(
+                           e_=NA,
+                           sample_=NA,
+                           agebp=NA,
+                           errorlimits=NA,
+                           grainsize=NA,
+                           labnumber=NA,
+                           notes=NA)[-1,],
+                         useries=data.frame(
+                           e_=NA,
+                           sample_=NA,
+                           agebp=NA,
+                           errorlimits=NA,
+                           labnumber=NA,
+                           notes=NA)[-1,],
+                         publ=data.frame(
+                           publ_=NA,
+                           acc_=NA,
+                           yearofpubl=NA,
+                           citation=NA)[-1,]
+                         )
+)

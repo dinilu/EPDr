@@ -1,8 +1,8 @@
 #' Reshape C14 data to CLAM or BACON format
 #' 
-#' This function takes C14 data, as those extracted from \code{\link[EPDr:getC14]{getC14}}, to fit into a new table that comply with CLAM or BACON format.
+#' This function takes C14 data, as those extracted from \code{\link[EPDr:getC14_old]{getC14_old}}, to fit into a new table that comply with CLAM or BACON format.
 #'
-#' @param C14 Data frame with C14 data as those extracted from \code{\link[EPDr:getC14]{getC14}}. 
+#' @param C14 Data frame with C14 data as those extracted from \code{\link[EPDr:getC14_old]{getC14_old}}. 
 #' @param format Character string indicating whether to export to "clam" or to "bacon" format.
 #'
 #' @return Data frame with C14 data in CLAM or BACON format.
@@ -17,7 +17,7 @@
 #' # library(EPDr)
 #' # epd.connection <- connectToEPD(host="localhost", database="epd",
 #' #                               user="epdr", password="epdrpw")
-#' # c14 <- getC14(400, epd.connection)
+#' # c14 <- getC14_old(400, epd.connection)
 #' # c14.clam <- exportC14(c14, "clam")
 #' # c14.bacon <- exportC14(c14, "bacon")
 #' 
@@ -64,7 +64,7 @@ exportC14 <- function(C14, format=c("clam","bacon")) {
 #' #library(EPDr)
 #' #epd.connection <- connectToEPD(host="localhost", database="epd",
 #' #                               user="epdr", password="epdrpw")
-#' #c14 <- getC14(400, epd.connection)
+#' #c14 <- getC14_old(400, epd.connection)
 #' #c14.clam <- exportC14(c14, "clam")
 #' #c14.bacon <- exportC14(c14, "bacon")
 #' #chron <- getChronology(400, epd.connection)

@@ -162,10 +162,9 @@ getRestriction(1, epdConnection)
 
 However, most of the functions recover actual data from the entities. There are two groups of data that can be retrieved: datation information and biological samples/counts.
 
-
 ### Retrieving datation information for particular entities
 
-
+Among the datation data most relevant data are radiocarbon dates from radiocarbon samples, which can be retrieved with `getC14`. 
 
 ```{r, eval=F}
 getC14(1, epdConnection)

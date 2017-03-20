@@ -7,7 +7,7 @@
 exportC14(C14, format = c("clam", "bacon"))
 }
 \arguments{
-\item{C14}{Data frame with C14 data as those extracted from \code{\link[EPDr:getC14]{getC14}}.}
+\item{C14}{Data frame with C14 data as those extracted from \code{\link[EPDr:getC14_old]{getC14_old}}.}
 
 \item{format}{Character string indicating whether to export to "clam" or to "bacon" format.}
 }
@@ -15,14 +15,14 @@ exportC14(C14, format = c("clam", "bacon"))
 Data frame with C14 data in CLAM or BACON format.
 }
 \description{
-This function takes C14 data, as those extracted from \code{\link[EPDr:getC14]{getC14}}, to fit into a new table that comply with CLAM or BACON format.
+This function takes C14 data, as those extracted from \code{\link[EPDr:getC14_old]{getC14_old}}, to fit into a new table that comply with CLAM or BACON format.
 }
 \examples{
 # Not run
 # library(EPDr)
 # epd.connection <- connectToEPD(host="localhost", database="epd",
 #                               user="epdr", password="epdrpw")
-# c14 <- getC14(400, epd.connection)
+# c14 <- getC14_old(400, epd.connection)
 # c14.clam <- exportC14(c14, "clam")
 # c14.bacon <- exportC14(c14, "bacon")
 

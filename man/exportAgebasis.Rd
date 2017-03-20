@@ -24,7 +24,7 @@ comply with CLAM or BACON format.
 #library(EPDr)
 #epd.connection <- connectToEPD(host="localhost", database="epd",
 #                               user="epdr", password="epdrpw")
-#c14 <- getC14(400, epd.connection)
+#c14 <- getC14_old(400, epd.connection)
 #c14.clam <- exportC14(c14, "clam")
 #c14.bacon <- exportC14(c14, "bacon")
 #chron <- getChronology(400, epd.connection)
