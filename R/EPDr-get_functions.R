@@ -663,15 +663,24 @@ getAgedCounts <- function(e_, connection){
 #' # getPubl(1, epd.connection)
 #' # disconnectFromEPD(connection=epd.connection)
 getPubl <- function(publ_, connection){
-  if(is.numeric(publ_)){
-    publ_ <- paste(publ_, collapse="','")
-    sqlQuery <-paste("SELECT * FROM publ WHERE publ_ IN ('", publ_, "');", sep="")
-    sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-    if(nrow(sqlOut) == 0){
-      sqlOut <- data.frame(publ_=NA, acc_=NA, yearofpubl=NA, citation=NA)[-1,]
-    }
+  table <- "publ"
+  if(is.logical(publ_) & length(publ_) == 0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
   }else{
-    stop("publ_ should be numeric.")
+    if(is.numeric(publ_)){
+      publ_ <- paste(publ_, collapse="','")
+      sqlQuery <- paste("SELECT * FROM ", table, " WHERE publ_ IN ('", publ_, "');", sep="")
+      sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+      if(nrow(sqlOut) == 0){
+        names <- RPostgreSQL::dbListFields(connection, table)
+        sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+        colnames(sqlOut) <- names
+      }
+    }else{
+      stop("publ_ should be numeric.")
+    }
   }
   return(sqlOut)
 }
@@ -733,7 +742,7 @@ getGeochron <- function(e_, connection) {
 .getGeochron <- function(e_, connection) {
   if(length(e_) > 1){
     e_ <- e_[[1]]
-    warning("'.getGeochron' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <-paste("SELECT * FROM geochron WHERE e_=", e_, ";", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -751,7 +760,7 @@ getGeochron <- function(e_, connection) {
 .getAAR <- function(e_, connection) {
   if(length(e_) > 1){
     e_ <- e_[[1]]
-    warning("'.getAAR' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <- paste("SELECT * FROM AAR WHERE e_=", e_, ";", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -770,7 +779,7 @@ getGeochron <- function(e_, connection) {
 .getC14 <- function(e_, connection) {
   if(length(e_) > 1){
     e_ <- e_[[1]]
-    warning("'.getC14' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <- paste("SELECT * FROM c14 WHERE e_=", e_, ";", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -789,7 +798,7 @@ getGeochron <- function(e_, connection) {
 .getESR <- function(e_, connection) {
   if(length(e_) > 1){
     e_ <- e_[[1]]
-    warning("'.getESR' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <- paste("SELECT * FROM ESR WHERE e_=", e_, ";", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -808,7 +817,7 @@ getGeochron <- function(e_, connection) {
 .getFT <- function(e_, connection) {
   if(length(e_) > 1){
     e_ <- e_[[1]]
-    warning("'.getFT' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <- paste("SELECT * FROM FT WHERE e_=", e_, ";", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -827,7 +836,7 @@ getGeochron <- function(e_, connection) {
 .getKAR <- function(e_, connection) {
   if(length(e_) > 1){
     e_ <- e_[[1]]
-    warning("'.getKAR' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <- paste("SELECT * FROM KAR WHERE e_=", e_, ";", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -846,7 +855,7 @@ getGeochron <- function(e_, connection) {
 .getPB210 <- function(e_, connection) {
   if(length(e_) > 1){
     e_ <- e_[[1]]
-    warning("'.getPB210' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <- paste("SELECT * FROM PB210 WHERE e_=", e_, ";", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -865,7 +874,7 @@ getGeochron <- function(e_, connection) {
 .getSI32 <- function(e_, connection) {
   if(length(e_) > 1){
     e_ <- e_[[1]]
-    warning("'.getSI32' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <- paste("SELECT * FROM SI32 WHERE e_=", e_, ";", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -884,7 +893,7 @@ getGeochron <- function(e_, connection) {
 .getTL <- function(e_, connection) {
   if(length(e_) > 1){
     e_ <- e_[[1]]
-    warning("'.getTL' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <- paste("SELECT * FROM TL WHERE e_=", e_, ";", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -903,7 +912,7 @@ getGeochron <- function(e_, connection) {
 .getUSERIES <- function(e_, connection) {
   if(length(e_) > 1){
     e_ <- e_[[1]]
-    warning("'.getUSERIES' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <- paste("SELECT * FROM USERIES WHERE e_=", e_, ";", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -937,7 +946,7 @@ getGeochron <- function(e_, connection) {
 #' @param icode Character. Three letter string representing the information code.
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
 #'
-#' @return data.frame The function return a data.frame with all the information on the SITELOC table of the database (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+#' @return \code{\link[EPDr:site]{site}} object. This is an EPDr object with information from different tables. See documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #'
 #' @examples
 #' # Not run
@@ -956,7 +965,7 @@ getGeochron <- function(e_, connection) {
 getSite <- function(e_, connection){
   if(length(e_) > 1){
     e_ <- e_[[1]]
-    warning("'getSite' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <- paste("SELECT site_ FROM entity WHERE e_ =", e_, ";", sep="")
   site_ <- as.character(RPostgreSQL::dbGetQuery(connection, sqlQuery))
@@ -983,9 +992,9 @@ getSite <- function(e_, connection){
 #' @rdname getSite
 #' @export
 .getSiteloc <- function(site_, connection){
-  if(length(site_) > 1){
-    site_ <- site_[[1]]
-    warning("'.getSiteloc' function is designed to retrieve information for single sites. You have provided several site ID values (e_) but only the first one is going to be used.")
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <-paste("SELECT * FROM siteloc WHERE site_ =", site_, ";", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery) 
@@ -1001,9 +1010,9 @@ getSite <- function(e_, connection){
 #' @rdname getSite
 #' @export
 .getSitedesc <- function(site_, connection){
-  if(length(site_) > 1){
-    site_ <- site_[[1]]
-    warning("'.getSitedesc' function is designed to retrieve information for single sites. You have provided several site ID values (e_) but only the first one is going to be used.")
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <-paste("SELECT * FROM sitedesc WHERE site_=", site_, ";", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)   
@@ -1018,9 +1027,9 @@ getSite <- function(e_, connection){
 #' @rdname getSite
 #' @export
 .getSiteinfo <- function(site_, connection){
-  if(length(site_) > 1){
-    site_ <- site_[[1]]
-    warning("'.getSiteinfo' function is designed to retrieve information for single sites. You have provided several site ID values (e_) but only the first one is going to be used.")
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <-paste("SELECT * FROM siteinfo WHERE site_=", site_, ";", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)  
@@ -1035,9 +1044,9 @@ getSite <- function(e_, connection){
 #' @rdname getSite
 #' @export
 .getPoldiv1 <- function(poldiv1_, connection){
-  if(length(poldiv1_) > 1){
-    poldiv1_ <- poldiv1_[[1]]
-    warning("'.getPoldiv1' function is designed to retrieve information for single countries. You have provided several countries ID values (e_) but only the first one is going to be used.")
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <-paste("SELECT * FROM poldiv1 WHERE poldiv1 = '", poldiv1_, "';", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -1055,8 +1064,9 @@ getSite <- function(e_, connection){
   if(length(poldiv1_) > 1 | length(poldiv2_) > 1){
     poldiv1_ <- poldiv1_[[1]]
     poldiv2_ <- poldiv2_[[1]]
-    warning("'.getPoldiv2' function is designed to retrieve information for single countries and regions. You have provided several countries and/or regions ID values (poldiv1_ or poldiv2_) but only the first one of each is going to be used.")
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single countries and regions. You have provided several countries and/or regions ID values (poldiv1_ or poldiv2_) but only the first one of each is going to be used.", sep=""))
   }
+
   sqlQuery <-paste("SELECT * FROM poldiv2 WHERE poldiv1 = '", poldiv1_, "' AND poldiv2 = '", poldiv2_, "';", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
   if(nrow(sqlOut) == 0){
@@ -1074,8 +1084,9 @@ getSite <- function(e_, connection){
     poldiv1_ <- poldiv1_[[1]]
     poldiv2_ <- poldiv2_[[1]]
     poldiv3_ <- poldiv3_[[1]]
-    warning("'.getPoldiv3' function is designed to retrieve information for single third level regions. You have provided several countries, regions and/or third level regions ID values (poldiv1_, poldiv2_ and/or poldiv3_) but only the first one of each is going to be used.")
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single third level regions. You have provided several countries, regions and/or third level regions ID values (poldiv1_, poldiv2_ and/or poldiv3_) but only the first one of each is going to be used.", sep=""))
   }
+ 
   sqlQuery <- paste("SELECT * FROM poldiv3 WHERE poldiv1 = '", poldiv1_, "' AND poldiv2 = '", poldiv2_, "' AND poldiv3 = '", poldiv3_, "';", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
   if(nrow(sqlOut) == 0){
@@ -1089,9 +1100,9 @@ getSite <- function(e_, connection){
 #' @rdname getSite
 #' @export
 .getIGCPtype <- function(igcptype, connection){
-  if(length(igcptype) > 1){
-    igcptype <- igcptype[[1]]
-    warning("'.getIGCPType' function is designed to retrieve information for single IGCPTypes. You have provided several IGCPType values (igcptype) but only the first one is going to be used.")
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
   sqlQuery <- paste("SELECT * FROM igcptype WHERE igcptype = '", igcptype, "';")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
@@ -1120,10 +1131,58 @@ getSite <- function(e_, connection){
 
 # getChron functions ------------------------------------------------------
 
-getChron <- function(){
+
+#' Retrieve chronological information for EPD entities
+#'
+#' Functions in this family retrieves information relative to the chronologies used to calculate samples ages for a particular entity. The main function (\code{\link[EPDr:getChron]{getChron}}) requires a valid connection to the database and the entity ID for the entity of interest. All other functions (starting with a dot [.]) use different arguments depending on the piece of information they retrieve.
+#' 
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to be queried.
+#' @param rcode character. Three letter code for the rational.
+#' @param event_ numeric. Value indicating the event number (event_) of the database of the requested event.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#'
+#' @return \code{\link[EPDr:chron]{chron}} object. This is an EPDr object with information from different tables. See documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+#'
+#' @examples
+#' # Not run
+#' # library(EPDr)
+#' # epd.connection <- connectToEPD(host="localhost", database="epd",
+#' #                               user="epdr", password="epdrpw")
+#' # chron.400 <- getChron(400, epd.connection)
+#' # chron.400
+#' # disconnectFromEPD(epd.connection)
+
+
+#' @section getChron:
+#' This function returns a \code{\link[EPDr:chron]{chron}} object with several information from the rest of the functions for a particular entity.
+#' @rdname getChron
+#' @export
+getChron <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
+  }
+  chron <- .getChron(e_, connection)
+  agebound <- .getAgebound(e_, connection)
+  agebasis <- .getAgebasis(e_, connection)
+  rcode_ <- agebasis$rcode
+  rational <- .getRational(rcode_, connection)
+  alsegs <- .getAlsegs(e_, connection)
+  panldpt <- .getPAnldpt(e_, connection)
+  synevent <- .getSynevent(e_, connection)
+  event_ <- synevent$event_
+  event <- .getEvent(event_, connection)
+  publ <- getPubl(event$publ_, connection)
   
+  chronOutput <- chron(chron=chron, agebound=agebound, agebasis=agebasis, rational=rational, alsegs=alsegs, panldpt=panldpt, synevent=synevent, event=event)
+  
+  return(chronOutput)
 }
 
+#' @section .getChron:
+#' This function returns information in the CHRON table for the specified entity. This corresponds with chronologies for that entity.
+#' @rdname getChron
+#' @export
 .getChron <- function(e_, connection){
   if(length(e_) > 1){
     e_ <- e_[[1]]
@@ -1133,29 +1192,17 @@ getChron <- function(){
   sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
   if(nrow(sqlOut) == 0){
-    names <- dbListFields(connection, table)
+    names <- RPostgreSQL::dbListFields(connection, table)
     sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
     colnames(sqlOut) <- names
   }
   return(sqlOut)
 }
 
-.getAgebasis <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  table <- "agebasis"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
+#' @section .getAgebound:
+#' This function returns information in the AGEBOUND table for the chronologies in that entity. This corresponds with age limits for that entity calculated according to each chronology.
+#' @rdname getChron
+#' @export
 .getAgebound <- function(e_, connection){
   if(length(e_) > 1){
     e_ <- e_[[1]]
@@ -1165,12 +1212,137 @@ getChron <- function(){
   sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
   if(nrow(sqlOut) == 0){
-    names <- dbListFields(connection, table)
+    names <- RPostgreSQL::dbListFields(connection, table)
     sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
     colnames(sqlOut) <- names
   }
   return(sqlOut)
 }
+
+#' @section .getAgebasis:
+#' This function returns information in the AGEBASIS table for the specified entity. This corresponds with the depth and C14 data used to calibrate the age-depth model in each chronology.
+#' @rdname getChron
+#' @export
+.getAgebasis <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
+  }
+  table <- "agebasis"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+#' @section .getRational:
+#' This function returns information in the RATIONAL table for the specified entity. This corresponds with the rational to use each sample in the AGEBASIS table to calibrate the age-depth model.
+#' @rdname getChron
+#' @export
+.getRational <- function(rcode, connection){
+  rcode <- paste(rcode, collapse="','")
+  table <- "rational"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE rcode IN ('", rcode, "');", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+#' @section .getAlsegs:
+#' This function returns information in the ALSEGS table for the specified entity. This corresponds with segments of annual laminations in the entity.
+#' @rdname getChron
+#' @export
+.getAlsegs <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
+  }
+  table <- "alsegs"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+#' @section .getPAnldpt:
+#' This function returns information in the P_ANLDPT table for the specified entity. This corresponds with details on the lamination for each segment on the ALSEGS table for each entity.
+#' @rdname getChron
+#' @export
+.getPAnldpt <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
+  }
+  table <- "p_anldpt"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+#' @section .getSynevent:
+#' This function returns information in the SYNEVENT table for the specified entity. This corresponds with the geological events that affect that entity.
+#' @rdname getChron
+#' @export
+.getSynevent <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
+  }
+  table <- "synevent"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+#' @section .getEvent:
+#' This function returns information in the EVENT table for the specified entity. This corresponds with details on the geological event specified for that entity in the SYNEVENT table.
+#' @rdname getChron
+#' @export
+.getEvent <- function(event_, connection){
+  table <- "event"
+  if(length(event_) != 0){
+    event_ <- paste(event_, collapse="','")
+    sqlQuery <-paste("SELECT * FROM ", table, " WHERE event_ IN ('", event_, "');", sep="")
+    sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  }
+  if(length(event_) == 0 || nrow(sqlOut) == 0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+
+# getPsamples functions ---------------------------------------------------
+
+
+
+# getEntity functions ---------------------------------------------------
+
+
 
 .getDescr <- function(descriptor, connection){
   descriptor <- paste(descriptor, collapse="','")
@@ -1178,7 +1350,7 @@ getChron <- function(){
   sqlQuery <-paste("SELECT * FROM ", table, " WHERE descriptor IN ('", descriptor, "');", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
   if(nrow(sqlOut) == 0){
-    names <- dbListFields(connection, table)
+    names <- RPostgreSQL::dbListFields(connection, table)
     sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
     colnames(sqlOut) <- names
   }
@@ -1194,20 +1366,7 @@ getChron <- function(){
   sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
   if(nrow(sqlOut) == 0){
-    names <- dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-.getEvent <- function(event_, connection){
-  event_ <- paste(event_, collapse="','")
-  table <- "event"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE event_ IN ('", event_, "');", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- dbListFields(connection, table)
+    names <- RPostgreSQL::dbListFields(connection, table)
     sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
     colnames(sqlOut) <- names
   }
@@ -1223,7 +1382,7 @@ getChron <- function(){
   sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
   if(nrow(sqlOut) == 0){
-    names <- dbListFields(connection, table)
+    names <- RPostgreSQL::dbListFields(connection, table)
     sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
     colnames(sqlOut) <- names
   }
@@ -1236,7 +1395,7 @@ getChron <- function(){
   sqlQuery <-paste("SELECT * FROM ", table, " WHERE groupid IN ('", groupid, "');", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
   if(nrow(sqlOut) == 0){
-    names <- dbListFields(connection, table)
+    names <- RPostgreSQL::dbListFields(connection, table)
     sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
     colnames(sqlOut) <- names
   }
@@ -1252,20 +1411,7 @@ getChron <- function(){
   sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
   if(nrow(sqlOut) == 0){
-    names <- dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-.getRational <- function(rcode, connection){
-  rcode <- paste(rcode, collapse="','")
-  table <- "rational"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE rcode IN ('", rcode, "');", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- dbListFields(connection, table)
+    names <- RPostgreSQL::dbListFields(connection, table)
     sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
     colnames(sqlOut) <- names
   }
@@ -1281,23 +1427,7 @@ getChron <- function(){
   sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
   if(nrow(sqlOut) == 0){
-    names <- dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-.getSynevent <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  table <- "synevent"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- dbListFields(connection, table)
+    names <- RPostgreSQL::dbListFields(connection, table)
     sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
     colnames(sqlOut) <- names
   }
@@ -1310,7 +1440,7 @@ getChron <- function(){
   sqlQuery <-paste("SELECT * FROM ", table, " WHERE syntype IN ('", syntype, "');", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
   if(nrow(sqlOut) == 0){
-    names <- dbListFields(connection, table)
+    names <- RPostgreSQL::dbListFields(connection, table)
     sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
     colnames(sqlOut) <- names
   }

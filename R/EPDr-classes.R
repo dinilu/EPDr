@@ -847,3 +847,94 @@ site <- setClass("site",
                          citation=NA)[-1,]
                      )
 )
+
+
+#' Class for chronology information of an entity
+#' 
+#' Class "chron" store all information relative to chronologies for a specified entity of the European Pollen Database (EPD). This object is created by \code{\link[EPDr:getChron]{getChron}}.
+#'
+#' @slot chron data.frame. Information on the different chronologies for the site.
+#' @slot agebound data.frame. Description of the temporal bounds or limits for each chronology in  \code{@chron}.
+#' @slot agebasis data.frame. This table store the information used to fit the age-depth model in each chronology and to calculate ages for the biological samples.
+#' @slot rational data.frame. This table provide a longer explanation for the rational used in each data in \code{@agebasis}.
+#' @slot alsegs data.frame. Information on the annual lamination segments found in the entity.
+#' @slot panldpt data.frame. Detailed information (e.g., depth, thikness, etc) for each annual lamination in \code{@alsegs}.
+#' @slot synevent data.frame. This is a transition table that connect each entity with geological events in \code{@event}.
+#' @slot event data.frame. Details on the events that are present in that particular entity.
+#' @slot publ data.frame PUBL data where the event data were published.
+#'
+#' @export
+#' @import methods
+chron <- setClass("chron",
+                  slots=c(
+                    chron="data.frame",
+                    agebound="data.frame",
+                    agebasis="data.frame",
+                    rational="data.frame",
+                    alsegs="data.frame",
+                    panldpt="data.frame",
+                    synevent="data.frame",
+                    event="data.frame",
+                    publ="data.frame"
+                  ),
+                  prototype=list(
+                    chron=data.frame(
+                      e_=NA,
+                      chron_=NA,
+                      defaultchron=NA,
+                      name=NA,
+                      preparedby=NA,
+                      dateprepared=NA,
+                      model=NA,
+                      notes=NA)[-1,],
+                    agebound=data.frame(
+                      e_=NA,
+                      chron_=NA,
+                      top=NA,
+                      bottom=NA)[-1,],
+                    agebasis=data.frame(
+                      e_=NA,
+                      chron_=NA,
+                      sample_=NA,
+                      depthcm=NA,
+                      thickness=NA,
+                      age=NA,
+                      ageup=NA,
+                      agelo=NA,
+                      rcode=NA)[-1,],
+                    rational=data.frame(
+                      rcode=NA,
+                      rationale=NA)[-1,],
+                    alsegs=data.frame(
+                      e_=NA,
+                      seg_=NA,
+                      depthtopcm=NA,
+                      depthbotcm=NA)[-1,],
+                    panldpt=data.frame(
+                      e_=NA,
+                      seg_=NA,
+                      sample_=NA,
+                      depthcm=NA,
+                      thickness=NA,
+                      counttop=NA,
+                      countbot=NA)[-1,],
+                    synevent=data.frame(
+                      e_=NA,
+                      event_=NA,
+                      depthcm=NA,
+                      thickness=NA)[-1,],
+                    event=data.frame(
+                      event_=NA,
+                      event=NA,
+                      name=NA,
+                      agebp=NA,
+                      ageuncertup=NA,
+                      ageuncertlo=NA,
+                      publ=NA)[-1,], 
+                    publ=data.frame(
+                      publ_=NA,
+                      acc_=NA,
+                      yearofpubl=NA,
+                      citation=NA)[-1,]
+                  )
+)

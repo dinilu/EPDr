@@ -48,7 +48,7 @@ getSite(e_, connection)
 \item{icode}{Character. Three letter string representing the information code.}
 }
 \value{
-data.frame The function return a data.frame with all the information on the SITELOC table of the database (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+\code{\link[EPDr:site]{site}} object. This is an EPDr object with information from different tables. See documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 }
 \description{
 Functions in this family retrieves information relative to the site where the entities have been sampled. The main function (\code{\link[EPDr:getSite]{getSite}}) requires a valid connection to the database and the entity ID for the entity of interest. All other functions (starting with a dot [.]) use different arguments depending on the piece of information they retrieve.
