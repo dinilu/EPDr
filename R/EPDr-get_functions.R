@@ -66,11 +66,11 @@ getSite_old <- function(e_, connection){
 #' # library(EPDr)
 #' # epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
 #' #                               user="epdr", password="epdrpw")
-#' # e.400 <- getEntity(400, epd.connection)
+#' # e.400 <- getEntity_old(400, epd.connection)
 #' # e.400
 #' # disconnectFromEPD(epd.connection)
 #' 
-getEntity <- function(e_, connection){
+getEntity_old <- function(e_, connection){
   if(length(e_) > 1){
     e_ <- e_[[1]]
     warning("'getEntity' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
@@ -367,7 +367,6 @@ getRestriction <- function(e_, connection){
     e_ <- e_[[1]]
     warning("'getRestriction' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
   }
-  
   sqlQuery <- paste("SELECT * FROM p_entity WHERE e_=", e_, ";", sep="")
   output <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
   if(output$usestatus == "R"){
@@ -408,7 +407,6 @@ getDatation <- function(e_, connection){
     e_ <- e_[[1]]
     warning("'getDatation' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
   }
-  
   rest <- getRestriction(e_, connection)
   entity <- getEntity(e_, connection)
   site <- getSite(e_, connection)
@@ -448,7 +446,6 @@ getDatation <- function(e_, connection){
 #' # disconnectFromEPD(connection=epd.connection)
 #' 
 getCounts <- function(e_, connection){
-  
   if(length(e_) > 1){
     e_ <- e_[[1]]
     warning("'getCounts' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
@@ -685,10 +682,31 @@ getPubl <- function(publ_, connection){
   return(sqlOut)
 }
 
+getWorkers <- function(worker_, connection){
+  table <- "workers"
+  if(is.logical(worker_) & length(worker_) == 0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }else{
+    if(is.numeric(worker_)){
+      worker_ <- paste(worker_, collapse="','")
+      sqlQuery <- paste("SELECT * FROM ", table, " WHERE worker_ IN ('", worker_, "');", sep="")
+      sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+      if(nrow(sqlOut) == 0){
+        names <- RPostgreSQL::dbListFields(connection, table)
+        sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+        colnames(sqlOut) <- names
+      }
+    }else{
+      stop("worker_ should be numeric.")
+    }
+  }
+  return(sqlOut)
+}
 
 
 # getGeochron functions ---------------------------------------------------
-
 
 #' Retrieving information for an entity in the EPD
 #' 
@@ -1336,25 +1354,11 @@ getChron <- function(e_, connection){
 }
 
 
-# getPsamples functions ---------------------------------------------------
-
-
 
 # getEntity functions ---------------------------------------------------
 
-
-
-.getDescr <- function(descriptor, connection){
-  descriptor <- paste(descriptor, collapse="','")
-  table <- "descr"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE descriptor IN ('", descriptor, "');", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
+getEntity <- function(e_, connection){
+  
 }
 
 .getEntity <- function(e_, connection){
@@ -1373,12 +1377,12 @@ getChron <- function(e_, connection){
   return(sqlOut)
 }
 
-.getLithology <- function(e_, connection){
+.getPEntity <- function(e_, connection){
   if(length(e_) > 1){
     e_ <- e_[[1]]
     warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
   }
-  table <- "litholgy"
+  table <- "p_entity"
   sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
   if(nrow(sqlOut) == 0){
@@ -1389,10 +1393,43 @@ getChron <- function(e_, connection){
   return(sqlOut)
 }
 
-.getGroups <- function(groupid, connection){
-  groupid <- paste(groupid, collapse="','")
-  table <- "groups"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE groupid IN ('", groupid, "');", sep="")
+.getCoredrive <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
+  }
+  table <- "coredriv"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+.getDescr <- function(descriptor, connection){
+  descriptor <- paste(descriptor, collapse="','")
+  table <- "descr"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE descriptor IN ('", descriptor, "');", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
+
+.getLithology <- function(e_, connection){
+  if(length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
+  }
+  table <- "litholgy"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
   sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
   if(nrow(sqlOut) == 0){
     names <- RPostgreSQL::dbListFields(connection, table)
@@ -1434,6 +1471,26 @@ getChron <- function(e_, connection){
   return(sqlOut)
 }
 
+.getPublent <- function(e_, connection){
+  
+}
+
+
+# getPsamples functions ---------------------------------------------------
+
+.getGroups <- function(groupid, connection){
+  groupid <- paste(groupid, collapse="','")
+  table <- "groups"
+  sqlQuery <-paste("SELECT * FROM ", table, " WHERE groupid IN ('", groupid, "');", sep="")
+  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  if(nrow(sqlOut) == 0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
+    colnames(sqlOut) <- names
+  }
+  return(sqlOut)
+}
+
 .getSyntype <- function(syntype, connection){
   syntype <- paste(syntype, collapse="','")
   table <- "syntype"
@@ -1445,6 +1502,5 @@ getChron <- function(e_, connection){
     colnames(sqlOut) <- names
   }
   return(sqlOut)
-  
 }
 
