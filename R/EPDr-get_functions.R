@@ -1,88 +1,1359 @@
-#' Query Site information of EPD entities
+# get_geochron functions ---------------------------------------------------
+
+#' Retrieving information for an entity in the EPD
+#' 
+#' Functions in this group retrieve different sort of information from an specific entity in the database. 
+#' 
+#' All functions here are designed to retrieve information from a single entity. If multiple entity numbers are requested, the functions return data only for the first one. Each function retrieve data from a specific table or set of tables that are conveniently combined if necessary.
 #'
-#' This function allows to query the database to request all information about the site in
-#' which an entity was sampled. To perform the query the function requires the number
-#' of the entity that want to be queried and a valid connection to the database. Hence,
-#' the following parameters are mandatory:
-#'
-#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
-#' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned
-#' by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
-#'
-#' @return data.frame The function return a data.frame with all the information on the SITELOC
-#' table of the database (see documentation of the EPD:
-#' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that is queried.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.
+#' 
+#' @return Data frame with all information from specific tables in the EPD (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}) for the requested entity. Columns names in the resulting data frames will vary among functions.
+#' 
+#' @examples
+#' # Not run
+#' # epd.connection <- connect_to_epd(database = "epd", user = "epdr",
+#' #                                 password = "epdrpw", host = "localhost")
+#' # .get_c14(1, epd.connection)
+#' # .get_c14(400, epd.connection)
+#' #
+#' # get_geochron(400, epd.connection)
+#' # disconnectFromEPD(connection = epd.connection)
+#' 
+#' 
+#' @section get_geochron:
+#' This function returns a \code{\link[EPDr:geochron]{geochron}} object, that store information from different tables for a particular entity.
+#' @rdname get_geochron
 #' 
 #' @export
+#' 
+get_geochron <- function(e_, connection) {
+  geochron <- .get_geochron(e_, connection)
+  aar <- .get_aar(e_, connection)
+  c14 <- .get_c14(e_, connection)
+  esr <- .get_esr(e_, connection)
+  ft <- .get_ft(e_, connection)
+  kar <- .get_kar(e_, connection)
+  pb210 <- .get_pb210(e_, connection)
+  si32 <- .get_si32(e_, connection)
+  tl <- .get_tl(e_, connection)
+  useries <- .get_useries(e_, connection)
+  publ <- get_publ(geochron$publ_, connection)
+  output <- new("geochron",
+                geochron = geochron,
+                aar = aar,
+                c14 = c14,
+                esr = esr,
+                ft = ft,
+                kar = kar,
+                pb210 = pb210,
+                si32 = si32,
+                tl = tl,
+                useries = useries,
+                publ = publ)
+  return(output)
+  }
+
+
+#' @section .get_geochron:
+#' This function returns information in the GEOCHRON table for the specified entity. This corresponds with the common geochronological data for the entity that have been analysed for that particular entity.
+#' @rdname get_geochron
+#' @export
+.get_geochron <- function(e_, connection) {
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  sql_query <- paste("SELECT * FROM geochron WHERE e_ = ", e_, ";", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    sql_out <- data.frame(e_ = NA, sample_ = NA, method = NA, depthcm = NA,
+                          thickness = NA, materialdated = NA, publ_ = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_aar:
+#' This function returns information in the AAR table for the specified entity. This corresponds with Amino Acid Racemization data for datation samples.
+#' @rdname get_geochron
+#' @export
+.get_aar <- function(e_, connection) {
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  sql_query <- paste("SELECT * FROM AAR WHERE e_ = ", e_, ";", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    warning("This core (entity) does not have AAR data.", call. = FALSE)
+    sql_out <- data.frame(e_ = NA, sample_ = NA, agebp = NA, errorlimits = NA,
+                          taxondated = NA, labnumber = NA, notes = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_c14:
+#' This function returns information in the C14 table for the specified entity. This corresponds with C14 data for all radiocarbon samples that have been analysed for that particular entity.
+#' @rdname get_geochron
+#' @export
+.get_c14 <- function(e_, connection) {
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first ",
+                  "one is going to be used.", sep = ""))
+  }
+  sql_query <- paste("SELECT * FROM c14 WHERE e_ = ", e_, ";", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    warning("This core (entity) does not have C14 data.", call. = FALSE)
+    sql_out <- data.frame(e_ = NA, sample_ = NA, agebp = NA, agesdup = NA,
+                          agesdlo = NA, grthanage = NA, basis = NA,
+                          enriched = NA, labnumber = NA, deltac13 = NA,
+                          notes = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_esr:
+#' This function returns information in the ESR table for the specified entity. This corresponds with Electron Spin Resonance data for datation samples.
+#' @rdname get_geochron
+#' @export
+.get_esr <- function(e_, connection) {
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  sql_query <- paste("SELECT * FROM ESR WHERE e_ = ", e_, ";", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    warning("This core (entity) does not have ESR data.", call. = FALSE)
+    sql_out <- data.frame(e_ = NA, sample_ = NA, agebp = NA, errorlimits = NA,
+                          labnumber = NA, notes = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_ft:
+#' This function returns information in the FT table for the specified entity. This corresponds with Fission Track data for datation samples.
+#' @rdname get_geochron
+#' @export
+.get_ft <- function(e_, connection) {
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  sql_query <- paste("SELECT * FROM FT WHERE e_ = ", e_, ";", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    warning("This core (entity) does not have FT data.", call. = FALSE)
+    sql_out <- data.frame(e_ = NA, sample_ = NA, agebp = NA, errorlimits = NA,
+                          labnumber = NA, notes = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_kar:
+#' This function returns information in the KAR table for the specified entity. This corresponds with Fission Track data for datation samples.
+#' @rdname get_geochron
+#' @export
+.get_kar <- function(e_, connection) {
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  sql_query <- paste("SELECT * FROM KAR WHERE e_ = ", e_, ";", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    warning("This core (entity) does not have KAR data.", call. = FALSE)
+    sql_out <- data.frame(e_ = NA, sample_ = NA, agebp = NA, errorlimits = NA,
+                          labnumber = NA, notes = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_pb210:
+#' This function returns information in the PB210 table for the specified entity. This corresponds with \eqn{210^{Pb}}{[Pb]^210} Isotope data for datation samples.
+#' @rdname get_geochron
+#' @export
+.get_pb210 <- function(e_, connection) {
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  sql_query <- paste("SELECT * FROM PB210 WHERE e_ = ", e_, ";", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    warning("This core (entity) does not have PB210 data.", call. = FALSE)
+    sql_out <- data.frame(e_ = NA, sample_ = NA, agead = NA, agesdup = NA,
+                          agesdlo = NA, grthanage = NA, notes = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_si32:
+#' This function returns information in the SI32 table for the specified entity. This corresponds with Silicon-32 data for datation samples.
+#' @rdname get_geochron
+#' @export
+.get_si32 <- function(e_, connection) {
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  sql_query <- paste("SELECT * FROM SI32 WHERE e_ = ", e_, ";", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    warning("This core (entity) does not have SI32 data.", call. = FALSE)
+    sql_out <- data.frame(e_ = NA, sample_ = NA, agebp = NA, agesdup = NA,
+                          agesdlo = NA, grthanage = NA, labnumber = NA,
+                          notes = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_tl:
+#' This function returns information in the TL table for the specified entity. This corresponds with Thermoluminescence data for datation samples.
+#' @rdname get_geochron
+#' @export
+.get_tl <- function(e_, connection) {
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  sql_query <- paste("SELECT * FROM TL WHERE e_ = ", e_, ";", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    warning("This core (entity) does not have TL data.", call. = FALSE)
+    sql_out <- data.frame(e_ = NA, sample_ = NA, agebp = NA, errorlimits = NA,
+                          grainsize = NA, labnumber = NA, notes = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_useries:
+#' This function returns information in the USERIES table for the specified entity. This corresponds with Uranium-series data for datation samples.
+#' @rdname get_geochron
+#' @export
+.get_useries <- function(e_, connection) {
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided several ",
+                  "entity ID values (e_) but only the first one is going to ",
+                  "be used.", sep = ""))
+  }
+  sql_query <- paste("SELECT * FROM USERIES WHERE e_ = ", e_, ";", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    warning("This core (entity) does not have USERIES data.", call. = FALSE)
+    sql_out <- data.frame(e_ = NA, sample_ = NA, agebp = NA, errorlimits = NA,
+                          labnumber = NA, notes = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+
+
+
+
+
+# get_site functions -------------------------------------------------------
+
+
+#' Retrieve site information for EPD entities
+#'
+#' Functions in this family retrieves information relative to the site where the entities have been sampled. The main function (\code{\link[EPDr:get_site]{get_site}}) requires a valid connection to the database and the entity ID for the entity of interest. All other functions (starting with a dot [.]) use different arguments depending on the piece of information they retrieve.
+#' 
+#' Details
+#'
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to be queried.
+#' @param site_ numeric. Value indicating the site number (site_) of interest in the database.
+#' @param poldiv1_ Three character string. The three character string are the international country code.
+#' @param poldiv2_ Two number string (character). This string with length equal two and with numbers represent the regions code for administrative regions in each country. The code is not unique so to capture an specific region in a country you need to provide always country code (poldiv1_) and region code (poldiv2_).
+#' @param poldiv3_ Three number string (character). This string with length equal three and with numbers represent the 3rd level administrative regions in each country.  The code is not unique so to capture an specific 3rd level region in a country you need to provide always country code (poldiv1_), region code (poldiv2_), and 3rd level region code (poldiv3_).
+#' @param igcptype Character. Representing the IGCP type code.
+#' @param icode Character. Three letter string representing the information code.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.
+#'
+#' @return \code{\link[EPDr:site]{site}} object. This is an EPDr object with information from different tables. See documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #'
 #' @examples
 #' # Not run
 #' # library(EPDr)
-#' # epd.connection <- connectToEPD(host="localhost", database="epd",
-#' #                               user="epdr", password="epdrpw")
-#' # site.400 <- getSite(400, epd.connection)
+#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#' #                               user = "epdr", password = "epdrpw")
+#' # site.400 <- get_site(400, epd.connection)
 #' # site.400
 #' # disconnectFromEPD(epd.connection)
-#' 
-getSite_old <- function(e_, connection){
-  
-  if(length(e_) > 1){
+
+
+#' @section get_site:
+#' This function returns a \code{\link[EPDr:site]{site}} object with several information from the rest of the functions for a particular entity.
+#' @rdname get_site
+#' @export
+get_site <- function(e_, connection){
+  if (length(e_) > 1){
     e_ <- e_[[1]]
-    warning("'getSite' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
   }
-  
-  sqlQuery <- paste("SELECT site_ FROM entity WHERE e_=", e_, ";", sep="")
-  site_num <- as.character(RPostgreSQL::dbGetQuery(connection, sqlQuery))
-  
-  sqlQuery <-paste("SELECT * FROM siteloc WHERE site_=", site_num, ";", sep="")
-  site <- RPostgreSQL::dbGetQuery(connection, sqlQuery)   
-  
+  sql_query <- paste("SELECT site_ FROM entity WHERE e_  = ", e_, ";", sep = "")
+  site_ <- as.character(RPostgreSQL::dbGetQuery(connection, sql_query))
+  siteloc <- .get_siteloc(site_, connection)
+  sitedesc <- .get_sitedesc(site_, connection)
+  siteinfo <- .get_siteinfo(site_, connection)
+  country <- .get_poldiv1(siteloc$poldiv1, connection)
+  region <- .get_poldiv2(siteloc$poldiv2, siteloc$poldiv1, connection)
+  region3rd <- .get_poldiv3(siteloc$poldiv3, siteloc$poldiv2,
+                            siteloc$poldiv1, connection)
+  igcptype <- .get_igcptype(sitedesc$igcptype, connection)
+  infotype <- .get_infotype(siteinfo$icode, connection)
+  publ <- get_publ(siteinfo$publ_, connection)
+  site <- new("site",
+              siteloc = siteloc,
+              sitedesc = sitedesc,
+              siteinfo = siteinfo,
+              country = country,
+              region = region,
+              region3rd = region3rd,
+              igcptype = igcptype,
+              infotype = infotype,
+              publ = publ)
   return(site)
 }
 
-
-
-#' Query details of EPD entities
-#'
-#' This function queries the database to return details of the specified entity. It requires 
-#' the number of the entity that want to be queried and a valid connection to the database 
-#' server, as returned by \code{\link[EPDr:connectToEPD]{connectToEPD}}. Hence, the 
-#' following parameters are mandatory. 
-#'
-#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
-#' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
-#'
-#' @return data.frame The function return a data.frame with all the information on the ENTITY
-#' table of the database (see documentation of the EPD:
-#' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
-#' 
+#' @section .get_siteloc:
+#' This function returns information in the SITELOC table for the specified entity. This corresponds with location data for the site wheres samples were taken.
+#' @rdname get_site
 #' @export
-#'
-#' @examples
-#' # Not run
-#' # library(EPDr)
-#' # epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
-#' #                               user="epdr", password="epdrpw")
-#' # e.400 <- getEntity_old(400, epd.connection)
-#' # e.400
-#' # disconnectFromEPD(epd.connection)
-#' 
-getEntity_old <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning("'getEntity' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+.get_siteloc <- function(site_, connection){
+  if (length(site_) > 1){
+    site_ <- site_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single sites. You have provided several ",
+                  "site ID values (site_) but only the first one is going ",
+                  "to be used.", sep = ""))
   }
-  
-  sqlQuery <- paste("SELECT * FROM entity WHERE e_=", e_, ";", sep="")
-  results <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  return(results)
+  sql_query <- paste("SELECT * FROM siteloc WHERE site_  = ",
+                     site_, ";", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    sql_out <- data.frame(site_ = NA, sitename = NA, sitecode = NA,
+                          siteexist = NA, poldiv1 = NA, poldiv2 = NA,
+                          poldiv3 = NA, latdeg = NA, latmin = NA,
+                          latseg = NA, latns = NA, latdd = NA,
+                          latdms = NA, londeg = NA, lonmin = NA,
+                          lonseg = NA, lonns = NA, londd = NA,
+                          londms = NA, elevation = NA,
+                          areaofsite = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+#' @section .get_sitedesc:
+#' This function returns information in the SITEDESC table for the specified entity. This corresponds with a description of the site wheres samples were taken.
+#' @rdname get_site
+#' @export
+.get_sitedesc <- function(site_, connection){
+  if (length(site_) > 1){
+    site_ <- site_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single site. You have provided several ",
+                  "site ID values (site_) but only the first one is going ",
+                  "to be used.", sep = ""))
+  }
+  sql_query <- paste("SELECT * FROM sitedesc WHERE site_ = ",
+                     site_, ";", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    sql_out <- data.frame(site_ = NA, sitedescript = NA, physiography = NA,
+                          surroundveg = NA, vegformation = NA,
+                          igcptype = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+#' @section .get_siteinfo:
+#' This function returns information in the SITEINFO table for the specified entity. This corresponds with a summary data of all type of information in the database for that particular entity (chronological, palynological, etc).
+#' @rdname get_site
+#' @export
+.get_siteinfo <- function(site_, connection){
+  if (length(site_) > 1){
+    site_ <- site_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single site. You have provided several ",
+                  "site ID values (site_) but only the first one is going ",
+                  "to be used.", sep = ""))
+  }
+  sql_query <- paste("SELECT * FROM siteinfo WHERE site_ = ",
+                     site_, ";", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    sql_out <- data.frame(site_ = NA, icode = NA, publ_ = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+#' @section .get_poldiv1:
+#' This function returns information in the POLDIV1 table for the specified country (poldiv1_ is the country code). This corresponds with data of the country in which a site belong to.
+#' @rdname get_site
+#' @export
+.get_poldiv1 <- function(poldiv1_, connection){
+  if (length(poldiv1_) > 1){
+    poldiv1_ <- poldiv1_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single country. You have provided ",
+                  "several country ID values (poldiv1_) but only the ",
+                  "first one is going to be used.", sep = ""))
+  }
+  sql_query <- paste("SELECT * FROM poldiv1 WHERE poldiv1 = '",
+                     poldiv1_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    sql_out <- data.frame(poldiv1_ = NA, name = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+#' @section .get_poldiv2:
+#' This function returns information in the POLDIV2 table for the specified region (poldiv2_ is the region code). This corresponds with data of the region in which a site belong to.
+#' @rdname get_site
+#' @export
+.get_poldiv2 <- function(poldiv2_, poldiv1_, connection){
+  if (length(poldiv1_) > 1 | length(poldiv2_) > 1){
+    poldiv1_ <- poldiv1_[[1]]
+    poldiv2_ <- poldiv2_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single countries and regions. You have ",
+                  "provided several countries and/or regions ID values ",
+                  "(poldiv1_ or poldiv2_) but only the first one of each is ",
+                  "going to be used.", sep = ""))
+  }
+
+  sql_query <- paste("SELECT * FROM poldiv2 WHERE poldiv1 = '", poldiv1_,
+                     "' AND poldiv2 = '", poldiv2_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    sql_out <- data.frame(poldiv1 = NA, poldiv2 = NA, postcode = NA,
+                          name = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+#' @section .get_poldiv3:
+#' This function returns information in the POLDIV3 table for the specified 3rd level region (poldiv3_ is the 3rd level region code). This corresponds with data of the 3rd level region in which a site belong to.
+#' @rdname get_site
+#' @export
+.get_poldiv3 <- function(poldiv3_, poldiv2_, poldiv1_, connection){
+  if (length(poldiv1_) > 1 | length(poldiv2_) > 1 | length(poldiv3_) > 1){
+    poldiv1_ <- poldiv1_[[1]]
+    poldiv2_ <- poldiv2_[[1]]
+    poldiv3_ <- poldiv3_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single third level regions. You have ",
+                  "provided several countries, regions and/or third level ",
+                  "regions ID values (poldiv1_, poldiv2_ and/or poldiv3_) ",
+                  "but only the first one of each is going to be used.",
+                  sep = ""))
+  }
+  sql_query <- paste("SELECT * FROM poldiv3 WHERE poldiv1 = '", poldiv1_,
+                     "' AND poldiv2 = '", poldiv2_, "' AND poldiv3 = '",
+                     poldiv3_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    sql_out <- data.frame(poldiv1 = NA, poldiv2 = NA, poldiv3 = NA,
+                          name = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+#' @section .get_igcptype:
+#' This function returns information in the IGCPTYPE table for the specified IGCP region. This corresponds with data of the IGCP region in which a site belong to.
+#' @rdname get_site
+#' @export
+.get_igcptype <- function(igcptype, connection){
+  if (length(igcptype) > 1){
+    igcptype <- igcptype[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single IGCP type. You have provided ",
+                  "several IGCP type values (igcptype) but only the ",
+                  "first one is going to be used.", sep = ""))
+  }
+  sql_query <- paste("SELECT * FROM igcptype WHERE igcptype = '",
+                     igcptype, "';")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    sql_out <- data.frame(igcptype = NA, regionname = NA)[-1, ]
+  }
+  return(sql_out)
+}
+
+#' @section .get_infotype:
+#' This function returns information in the INFOTYPE table for the specified info code (icode). This corresponds with a longer description of the info type codes returned by \code{.get_siteinfo}.
+#' @rdname get_site
+#' @export
+.get_infotype <- function(icode, connection){
+  icode <- paste(icode, collapse = "','")
+  sql_query <- paste("SELECT * FROM infotype WHERE icode IN ('",
+                     icode, "');", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    sql_out <- data.frame(icode = NA, infotype = NA)[-1, ]
+  }
+  return(sql_out)
 }
 
 
 
+
+# get_chron functions ------------------------------------------------------
+
+
+#' Retrieve chronological information for EPD entities
+#'
+#' Functions in this family retrieves information relative to the chronologies used to calculate samples ages for a particular entity. The main function (\code{\link[EPDr:get_chron]{get_chron}}) requires a valid connection to the database and the entity ID for the entity of interest. All other functions (starting with a dot [.]) use different arguments depending on the piece of information they retrieve.
+#' 
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to be queried.
+#' @param rcode character. Three letter code for the rational.
+#' @param event_ numeric. Value indicating the event number (event_) of the database of the requested event.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.
+#'
+#' @return \code{\link[EPDr:chron]{chron}} object. This is an EPDr object with information from different tables. See documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+#'
+#' @examples
+#' # Not run
+#' # library(EPDr)
+#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#' #                               user = "epdr", password = "epdrpw")
+#' # chron.400 <- get_chron(400, epd.connection)
+#' # chron.400
+#' # disconnectFromEPD(epd.connection)
+
+
+#' @section get_chron:
+#' This function returns a \code{\link[EPDr:chron]{chron}} object with several information from the rest of the functions for a particular entity.
+#' @rdname get_chron
+#' @export
+get_chron <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  chron <- .get_chron(e_, connection)
+  agebound <- .get_agebound(e_, connection)
+  agebasis <- .get_agebasis(e_, connection)
+  rcode_ <- agebasis$rcode
+  rational <- .get_rational(rcode_, connection)
+  alsegs <- .get_alsegs(e_, connection)
+  panldpt <- .get_panldpt(e_, connection)
+  synevent <- .get_synevent(e_, connection)
+  event_ <- synevent$event_
+  event <- .get_event(event_, connection)
+  publ <- get_publ(event$publ_, connection)
+  chron_output <- new("chron",
+                      chron = chron,
+                      agebound = agebound,
+                      agebasis = agebasis,
+                      rational = rational,
+                      alsegs = alsegs,
+                      panldpt = panldpt,
+                      synevent = synevent,
+                      event = event,
+                      publ = publ)
+  return(chron_output)
+}
+
+#' @section .get_chron:
+#' This function returns information in the CHRON table for the specified entity. This corresponds with chronologies for that entity.
+#' @rdname get_chron
+#' @export
+.get_chron <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  table <- "chron"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '",
+                     e_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+#' @section .get_agebound:
+#' This function returns information in the AGEBOUND table for the chronologies in that entity. This corresponds with age limits for that entity calculated according to each chronology.
+#' @rdname get_chron
+#' @export
+.get_agebound <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  table <- "agebound"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '",
+                     e_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+#' @section .get_agebasis:
+#' This function returns information in the AGEBASIS table for the specified entity. This corresponds with the depth and C14 data used to calibrate the age-depth model in each chronology.
+#' @rdname get_chron
+#' @export
+.get_agebasis <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  table <- "agebasis"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '",
+                     e_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+#' @section .get_rational:
+#' This function returns information in the RATIONAL table for the specified entity. This corresponds with the rational to use each sample in the AGEBASIS table to calibrate the age-depth model.
+#' @rdname get_chron
+#' @export
+.get_rational <- function(rcode, connection){
+  rcode <- paste(rcode, collapse = "','")
+  table <- "rational"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE rcode IN ('",
+                     rcode, "');", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+#' @section .get_alsegs:
+#' This function returns information in the ALSEGS table for the specified entity. This corresponds with segments of annual laminations in the entity.
+#' @rdname get_chron
+#' @export
+.get_alsegs <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  table <- "alsegs"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '",
+                     e_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+#' @section .get_panldpt:
+#' This function returns information in the P_ANLDPT table for the specified entity. This corresponds with details on the lamination for each segment on the ALSEGS table for each entity.
+#' @rdname get_chron
+#' @export
+.get_panldpt <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  table <- "p_anldpt"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '",
+                     e_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+#' @section .get_synevent:
+#' This function returns information in the SYNEVENT table for the specified entity. This corresponds with the geological events that affect that entity.
+#' @rdname get_chron
+#' @export
+.get_synevent <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  table <- "synevent"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '",
+                     e_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+#' @section .get_event:
+#' This function returns information in the EVENT table for the specified entity. This corresponds with details on the geological event specified for that entity in the SYNEVENT table.
+#' @rdname get_chron
+#' @export
+.get_event <- function(event_, connection){
+  table <- "event"
+  if (length(event_) !=  0){
+    event_ <- paste(event_, collapse = "','")
+    sql_query <- paste("SELECT * FROM ", table, " WHERE event_ IN ('",
+                       event_, "');", sep = "")
+    sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  }
+  if (length(event_)  ==  0 || nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+
+
+# get_ent functions ---------------------------------------------------
+
+#' Retrieve description for EPD entities
+#'
+#' Functions in this family retrieves information relative to the description of the entity itself. The main function (\code{\link[EPDr:get_ent]{get_ent}}) requires a valid connection to the database and the entity ID for the entity of interest. All other functions (starting with a dot [.]) use different arguments depending on the piece of information they retrieve.
+#' 
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to be queried.
+#' @param descriptor character. Three/four letter code for the description of the entity.
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.
+#'
+#' @return \code{\link[EPDr:entity]{entity}} object. This is an EPDr object with information from different tables. See documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+#'
+#' @examples
+#' # Not run
+#' # library(EPDr)
+#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#' #                               user = "epdr", password = "epdrpw")
+#' # chron.400 <- get_ent(400, epd.connection)
+#' # chron.400
+#' # disconnectFromEPD(epd.connection)
+#' 
+#' 
+#' @section get_entity:
+#' This function returns an \code{\link[EPDr:entity]{entity}} object with several information from the rest of the functions for a particular entity.
+#' @rdname get_ent
+#' @export
+get_ent <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  ent <- .get_entity(e_, connection)
+  pentity <- .get_pentity(e_, connection)
+  contact <- get_workers(pentity$contact_, connection)
+  coredrive <- .get_coredrive(e_, connection)
+  descr <- .get_descr(ent$descriptor, connection)
+  lithology <- .get_lithology(e_, connection)
+  loi <- .get_loi(e_, connection)
+  section <- .get_section(e_, connection)
+  publent <- .get_publent(e_, connection)
+  publ <- get_publ(publent$publ_, connection)
+  entity <- new("entity",
+                entity = ent,
+                pentity = pentity,
+                contact = contact,
+                coredrive = coredrive,
+                descr = descr,
+                lithology = lithology,
+                loi = loi,
+                section = section,
+                publent = publent,
+                publ = publ)
+  return(entity)
+}
+
+
+#' @section .get_entity:
+#' This function returns information in the ENTITY table for the specified entity. This corresponds with description information for that entity.
+#' @rdname get_ent
+#' @export
+.get_entity <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  table <- "entity"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '", e_,
+                     "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_pentity:
+#' This function returns information in the P_ENTITY table for the specified entity. This corresponds with details on the status of the data, contact person, and restriction of use for the data in that entity.
+#' @rdname get_ent
+#' @export
+.get_pentity <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  table <- "p_entity"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '",
+                     e_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_coredrive:
+#' This function returns information in the COREDRIVE table for the specified entity. This corresponds with details on the drirve used to sample the entity.
+#' @rdname get_ent
+#' @export
+.get_coredrive <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided several ",
+                  "entity ID values (e_) but only the first one is going to ",
+                  "be used.", sep = ""))
+  }
+  table <- "coredriv"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '",
+                     e_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_descr:
+#' This function returns information in the DESCR table for the specified entity. This corresponds with a longer description of the entity.
+#' @rdname get_ent
+#' @export
+.get_descr <- function(descriptor, connection){
+  descriptor <- paste(descriptor, collapse = "','")
+  table <- "descr"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE descriptor IN ('",
+                     descriptor, "');", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_lithology:
+#' This function returns information in the LITHOLOGY table for the specified entity. This corresponds with details on the lithology found when drilling the entity.
+#' @rdname get_ent
+#' @export
+.get_lithology <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  table <- "litholgy"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '",
+                     e_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_loi:
+#' This function returns information in the LOI table for the specified entity. This corresponds with details on the loss-on-ignition for samples in that particular entity the entity.
+#' @rdname get_ent
+#' @export
+.get_loi <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  table <- "loi"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '",
+                     e_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_section:
+#' This function returns information in the SECTION table for the specified entity. This corresponds with details on the sections used to sample the entity.
+#' @rdname get_ent
+#' @export
+.get_section <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  table <- "section"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '",
+                     e_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+
+#' @section .get_publent:
+#' This function returns information in the PUBLENT table for the specified entity. This corresponds with publications in which data for that entity have been published.
+#' @rdname get_ent
+#' @export
+.get_publent <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  table <- "publent"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '",
+                     e_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+
+# getPsamples functions ---------------------------------------------------
+
+#' TBW
+#'
+#' TBW
+#' 
+#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to be queried.
+#' @param var_ TBW
+#' @param syntype TBW
+#' @param groupid TBW
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.
+#'
+#' @return TBW 
+#'
+#' @examples
+#' # Not run
+#' # library(EPDr)
+#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#' #                               user = "epdr", password = "epdrpw")
+#' # chron.400 <- get_samples(400, epd.connection)
+#' # chron.400
+#' # disconnectFromEPD(epd.connection)
+#' 
+#' 
+#' @section get_samples:
+#' TBW
+#' @rdname get_samples
+#' @export
+get_samples <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for a single entity. You have provided ",
+                  "several entity ID values (e_) but only the first one ",
+                  "is going to be used.", sep = ""))
+  }
+  psamples <- .get_psamples(e_, connection)
+  pagedpt <- .get_pagedpt(e_, connection)
+  pcounts <- .get_pcounts(e_, connection)
+  pvars <- .get_pvars(pcounts$var_, connection)
+  syntype <- .get_syntype(pvars$syntype, connection)
+  pvtrans <- .get_pvtrans(pcounts$var_, connection)
+  pgroup <- .get_pgroup(pcounts$var_, connection)
+  groups <- .get_groups(pgroup$groupid, connection)
+  analysts <- get_workers(psamples$analyst_, connection)
+  samples <- new("samples",
+                 psamples = psamples,
+                 analysts = analysts,
+                 pagedpt = pagedpt,
+                 pcounts = pcounts,
+                 pvars = pvars,
+                 syntype = syntype,
+                 pvtrans = pvtrans,
+                 pgroup = pgroup,
+                 groups = groups)
+  return(samples)
+  }
+
+#' @section .get_psamples:
+#' TBW
+#' @rdname get_samples
+#' @export
+.get_psamples <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one is ",
+                  "going to be used.", sep = ""))
+  }
+  table <- "p_sample"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '",
+                     e_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+#' @section .get_pagedpt:
+#' TBW
+#' @rdname get_samples
+#' @export
+.get_pagedpt <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided several ",
+                  "entity ID values (e_) but only the first one is going to ",
+                  "be used.", sep = ""))
+  }
+  table <- "p_agedpt"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '",
+                     e_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+#' @section .get_pcounts:
+#' TBW
+#' @rdname get_samples
+#' @export
+.get_pcounts <- function(e_, connection){
+  if (length(e_) > 1){
+    e_ <- e_[[1]]
+    warning(paste(match.call()[[1]], " function is designed to retrieve ",
+                  "information for single entities. You have provided ",
+                  "several entity ID values (e_) but only the first one is ",
+                  "going to be used.", sep = ""))
+  }
+  table <- "p_counts"
+  sql_query <- paste("SELECT * FROM ", table, " WHERE e_ = '",
+                     e_, "';", sep = "")
+  sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  if (nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+#' @section .get_pvars:
+#' TBW
+#' @rdname get_samples
+#' @export
+.get_pvars <- function(var_, connection){
+  table <- "p_vars"
+  if (length(var_) !=  0){
+    var_ <- paste(var_, collapse = "','")
+    sql_query <- paste("SELECT * FROM ", table, " WHERE var_ IN ('",
+                       var_, "');", sep = "")
+    sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  }
+  if (length(var_)  ==  0 || nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+#' @section .get_pvtrans:
+#' TBW
+#' @rdname get_samples
+#' @export
+.get_pvtrans <- function(var_, connection){
+  table <- "p_vtrans"
+  if (length(var_) !=  0){
+    var_ <- paste(var_, collapse = "','")
+    sql_query <- paste("SELECT * FROM ", table, " WHERE var_ IN ('",
+                       var_, "');", sep = "")
+    sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  }
+  if (length(var_)  ==  0 || nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+#' @section .get_syntype:
+#' TBW
+#' @rdname get_samples
+#' @export
+.get_syntype <- function(syntype, connection){
+  table <- "syntype"
+  syntype <- stats::na.omit(syntype)
+  if (length(syntype) !=  0){
+    syntype <- paste(syntype, collapse = "','")
+    sql_query <- paste("SELECT * FROM ", table, " WHERE syntype IN ('",
+                       syntype, "');", sep = "")
+    sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  }
+  if (length(syntype)  ==  0 || nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+#' @section .get_pgroup:
+#' TBW
+#' @rdname get_samples
+#' @export
+.get_pgroup <- function(var_, connection){
+  table <- "p_group"
+  if (length(var_) !=  0){
+    var_ <- paste(var_, collapse = "','")
+    sql_query <- paste("SELECT * FROM ", table, " WHERE var_ IN ('",
+                       var_, "');", sep = "")
+    sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  }
+  if (length(var_)  ==  0 || nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  sql_out$groupid[which(sql_out$var_  ==  "5148")] <- "AQUA"
+  sql_out$groupid[which(sql_out$var_  ==  "5205")] <- "NOPO"
+  return(sql_out)
+}
+
+#' @section .get_groups:
+#' TBW
+#' @rdname get_samples
+#' @export
+.get_groups <- function(groupid, connection){
+  table <- "groups"
+  if (length(groupid) !=  0){
+    groupid <- paste(groupid, collapse = "','")
+    sql_query <- paste("SELECT * FROM ", table, " WHERE groupid IN ('",
+                       groupid, "');", sep = "")
+    sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+  }
+  if (length(groupid)  ==  0 || nrow(sql_out)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }
+  return(sql_out)
+}
+
+
+
+# General get functions ---------------------------------------------------
+
+#' Retrieve publications from their publ ID number
+#'
+#' This function is mainly intended for internal use. It retrieves information of publications by querying the database by the publication identification number.
+#'
+#' @param publ_ numeric with the publ_ 
+#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.
+#'
+#' @return data frame with information about the publication whole reference
+#' @export
+#'
+#' @examples
+#' # Not run
+#' # epd.connection <- connect_to_epd(database = "epd", user = "epdr",
+#' #                                 password = "epdrpw", host = "localhost")
+#' # get_publ(1, epd.connection)
+#' # disconnectFromEPD(connection = epd.connection)
+get_publ <- function(publ_, connection){
+  publ_ <- stats::na.omit(publ_)
+  table <- "publ"
+  if (is.logical(publ_) | length(publ_)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }else{
+    if (is.numeric(publ_)){
+      publ_ <- paste(publ_, collapse = "','")
+      sql_query <- paste("SELECT * FROM ", table, " WHERE publ_ IN ('",
+                         publ_, "');", sep = "")
+      sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+      if (nrow(sql_out)  ==  0){
+        names <- RPostgreSQL::dbListFields(connection, table)
+        sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+        colnames(sql_out) <- names
+      }
+    }else{
+      stop("publ_ should be numeric.")
+    }
+  }
+  return(sql_out)
+}
+
+
+
+#' Title TBW
+#'
+#' @param worker_  TBW
+#' @param connection  TBW
+#'
+#' @return TBW
+#' @export
+#'
+#' @examples
+#' # TBW
+get_workers <- function(worker_, connection){
+  table <- "workers"
+  worker_ <- stats::na.omit(worker_)
+  if (is.logical(worker_) | length(worker_)  ==  0){
+    names <- RPostgreSQL::dbListFields(connection, table)
+    sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+    colnames(sql_out) <- names
+  }else{
+    if (is.numeric(worker_)){
+      worker_ <- paste(worker_, collapse = "','")
+      sql_query <- paste("SELECT * FROM ", table, " WHERE worker_ IN ('",
+                         worker_, "');", sep = "")
+      sql_out <- RPostgreSQL::dbGetQuery(connection, sql_query)
+      if (nrow(sql_out)  ==  0){
+        names <- RPostgreSQL::dbListFields(connection, table)
+        sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
+        colnames(sql_out) <- names
+      }
+    }else{
+      stop("worker_ should be numeric.")
+    }
+  }
+  return(sql_out)
+}
 
 #' Query the taxonomy table of the EPD
 #' 
@@ -95,7 +1366,7 @@ getEntity_old <- function(e_, connection){
 #' implemented to be used by other functions in the \code{EPDr} package.
 #'
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.
 #'
 #' @return data.frame The function return a data.frame with the combined information from P_VARS
 #' and P_GROUP tables of the database (see documentation of the EPD:
@@ -106,1401 +1377,89 @@ getEntity_old <- function(e_, connection){
 #' @examples
 #' # Not run
 #' # library(EPDr)
-#' # epd.connection <- connectToEPD(host="localhost", database="epd_ddbb",
-#' #                               user="epdr", password="epdrpw")
+#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd_ddbb",
+#' #                               user = "epdr", password = "epdrpw")
 #' # epd.taxonomy <- getTaxonomy(epd.connection)
 #' # epd.taxonomy
 #' # disconnectFromEPD(epd.connection)
 #' 
-getTaxonomyEPD <- function(connection){
-  sqlQuery <- paste("SELECT * FROM p_vars NATURAL JOIN p_group")
-  results <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+get_taxonomy_epd <- function(connection){
+  sql_query <- paste("SELECT * FROM p_vars NATURAL JOIN p_group")
+  results <- RPostgreSQL::dbGetQuery(connection, sql_query)
   return(results)
 }
 
 
 
-#' Query C14 data of EPD Entities
-#' 
-#' This function queries the database to request all information about the C14 data 
-#' of an specified entity. To perform the query the function requires the number
-#' of the entity that want to be queried and a valid connection to the database. Hence,
-#' the following parameters are mandatory:
-#' 
-#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
-#' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' Title TBW
 #'
-#' @return Data frame with all combined information from C14 and GEOCHRON tables in the
-#' EPD (see documentation of the EPD:
-#' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+#' TBW
 #' 
+#' @param e_  TBW
+#' @param connection  TBW
+#'
+#' @return TBW
 #' @export
 #'
 #' @examples
-#' # Not run
-#' # epd.connection <- connectToEPD(database="epd", user="epdr",
-#' #                                 password="epdrpw", host="localhost")
-#' # getC14_old(1, epd.connection)
-#' # getC14_old(400, epd.connection)
-#' # disconnectFromEPD(connection=epd.connection)
-#' 
-getC14_old <- function(e_, connection) {
-  if(length(e_) > 1){
+#' # TBW
+get_entity <- function(e_, connection){
+  if (length(e_) > 1){
     e_ <- e_[[1]]
-    warning("'getC14_old' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
+    warning(paste(match.call()[[1]], " function is designed to retrieve
+                  information for single entities. You have provided several
+                  entity ID values (e_) but only the first one is going to
+                  be used.", sep = ""))
   }
-  
-  rest <- getRestriction(e_, connection)
-  
-  sqlQuery <- paste("SELECT * FROM c14 WHERE e_=", e_, ";", sep="")
-  c14 <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  
-  sqlQuery <-paste("SELECT * FROM geochron WHERE e_=", e_, ";", sep="")
-  geochron <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  
-  if(nrow(c14) == 0){
-    warning("This core (entity) does not have C14 data.", call.=FALSE)
-    c14 <- data.frame(e_=NA,sample_=NA,agebp=NA,agesdup=NA,agesdlo=NA,grthanage=NA,basis=NA,enriched=NA,labnumber=NA,
-                      deltac13=NA,notes=NA)[-1,] 
-    geochron <- data.frame(e_=NA,sample_=NA,method=NA,depthcm=NA,thickness=NA,materialdated=NA,publ_=NA)[-1,]
-  }
-  
-  c14geochron <- merge(c14, geochron, by=c("e_","sample_"))
-  
-  return(c14geochron)
-}
+  entity <- get_ent(e_, connection)
+  site <- get_site(e_, connection)
+  geochron <- get_geochron(e_, connection)
+  chron <- get_chron(e_, connection)
+  samples <- get_samples(e_, connection)
 
-
-
-#' Query chronologies of EPD entities
-#' 
-#' This function queries the database to request all information about the chronologies  
-#' of an specified entity. A particular entity might have several chronologies developed in different
-#' projects by differen researchers. To perform the query the function requires the number
-#' of the entity that want to be queried and a valid connection to the database. Hence,
-#' the following parameters are mandatory:
-#'
-#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
-#' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
-#'
-#'
-#' @return chronology. Object of class \code{\link[EPDr:chronology]{chronology}}. This object
-#' store in an organized and systematic way all combined information from CHRON and AGEBASIS tables
-#' in the EPD  (see documentation of the EPD:
-#' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
-#' 
-#' @export
-#'
-#' @examples
-#' # Not run
-#' # epd.connection <- connectToEPD(database="epd", user="epdr",
-#' #                                 password="epdrpw", host="localhost")
-#' # getChronology(1, epd.connection)
-#' # getChronology(400, epd.connection)
-#' # disconnectFromEPD(connection=epd.connection)
-#' 
-getChronology <- function(e_, connection) {
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning("'getChronology' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
-  }
-  
-  rest <- getRestriction(e_, connection)
-  
-  site <- getSite(e_, connection)
-  entity <- getEntity(e_, connection)
-  
-  sqlQuery <-paste("SELECT * FROM chron WHERE e_=", e_, ";", sep="")
-  chron <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  
-  sqlQuery <- paste("SELECT * FROM agebasis WHERE e_=", e_, ";", sep="")
-  agebasis <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  
-  number_of_chronologies <- nrow(chron)
-  
-  default_chronology <- chron$chron_[which(chron$defaultchron == "Y")]
-  if(is.null(default_chronology)){default_chronology <- 0}
-  if(length(default_chronology) == 0){default_chronology <- 0}
-  
-  if(number_of_chronologies == 0){
-    warning("This core (entity) does not have chronologies.", call.=F)
-    output <- chronology()
+  if (e_ %in% giesecke.EpdAgeCut$ID){
+    isingiesecke <- TRUE
+    g.ages <- giesecke.EpdAgeCut[which(giesecke.EpdAgeCut$ID  ==  e_), ]
+    g.ages$depthcm <- round(g.ages$Depth..m. * 100, 1)
+    g.ages <- g.ages[match(round(samples@psamples$depthcm, 1),
+                           g.ages$depthcm), ]
+    g.ages <- merge(g.ages, samples@psamples, by = "depthcm")
+    g.pagedpt <- subset(g.ages, select = c("e_", "sample_", "Age.dated..ka.",
+                                           "Age.min..ka.", "Age.max..ka."))
+    g.pagedpt$agebp <- g.ages$Age.dated..ka. * 1000
+    g.pagedpt$agelo <- g.ages$Age.min..ka. * 1000
+    g.pagedpt$ageup <- g.ages$Age.max..ka. * 1000
+    g.pagedpt$chron_ <- 9999
+    g.pagedpt$deptime <- NA
+    g.pagedpt <- subset(g.pagedpt, select = c("e_", "chron_", "sample_",
+                                              "agebp", "ageup", "agelo",
+                                              "deptime"))
+    samples@pagedpt <- rbind(samples@pagedpt, g.pagedpt)
   }else{
-    output <- chronology(e_=e_, restriction=rest, entity=entity, site=site, number_of_chronologies=number_of_chronologies, default_chronology=default_chronology, chron=chron, agebasis=agebasis)
+    isingiesecke <- FALSE
   }
-  
-  return(output)
+
+  coords <- subset(site@siteloc, select = c("londd", "latdd"))
+  postbombzone <- sp::over(sp::SpatialPoints(coords), postbomb.map)$Zone
+  numberofchron <- nrow(chron@chron)
+  defaultchron <- chron@chron$chron_[which(chron@chron$defaultchron  ==  "Y")]
+  if (is.null(defaultchron)){
+    defaultchron <- 0
+  }
+  if (length(defaultchron)  ==  0){
+    defaultchron <- 0
+  }
+
+  epd.entity <- new("epd.entity",
+                    e_ = e_,
+                    postbombzone = postbombzone,
+                    numberofchron = numberofchron,
+                    isingiesecke = isingiesecke,
+                    defaultchron = defaultchron,
+                    entity = entity,
+                    site = site,
+                    geochron = geochron,
+                    chron = chron,
+                    samples = samples)
+  return(epd.entity)
 }
-
-
-
-#' Query events of EPD entities
-#' 
-#' This function queries the database to request all information about the stratigraphic events 
-#' of an specified entity. To perform the query the function requires the number
-#' of the entity that want to be queried and a valid connection to the database. Hence,
-#' the following parameters are mandatory:
-#'
-#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
-#' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
-#'
-#' @return data.frame. Data frame with all combined information from the EVENT and SYNEVENT
-#' tables in the database for that particular entity (see documentation of the EPD:
-#' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
-#' If the entity has no events the dataframe is empty.
-#' 
-#' @export
-#'
-#' @examples
-#' # Not run
-#' # epd.connection <- connectToEPD(database="epd", user="epdr",
-#' #                                password="epdrpw", host="localhost")
-#' # getEvents(1, epd.connection)
-#' # getEvents(51, epd.connection)
-#' # disconnectFromEPD(connection=epd.connection)
-#' 
-getEvents <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning("'getEvents' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
-  }
-  
-  rest <- getRestriction(e_, connection)
-  
-  sqlQuery <-paste("SELECT * FROM synevent WHERE e_ =", e_, ";", sep="")
-  synevent <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  
-  # Check for event data and ask interactively for data use
-  if(nrow(synevent) == 0){
-    event <- data.frame(event_=NA, e_=NA, depthcm=NA, thickness=NA, event=NA, name=NA, agebp=NA, ageuncertup=NA, ageuncertlo=NA,
-                        publ_=NA)[-1,]
-    return(event)
-  }else{
-    sqlQuery <- paste("SELECT * FROM event WHERE event_ IN (", paste(synevent$event_, collapse=","), ");", sep="")
-    event <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-    event <- merge(synevent, event, by="event_")
-    event <- event[event$agebp != 0,]
-    return(event)
-  }
-}
-
-
-#' Query palynological samples of EPD entities
-#'
-#' This function queries the database to request all information about palynological samples 
-#' of an specified entity. To perform the query the function requires the number
-#' of the entity that want to be queried and a valid connection to the database. Hence,
-#' the following parameters are mandatory:
-#'
-#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
-#' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
-#'
-#' @return data.frame. Data frame with all information from the P_SAMPLE table in the database
-#' for that particular entity (see documentation of the EPD:
-#' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
-#' 
-#' @export
-#'
-#' @examples
-#' # Not run
-#' # epd.connection <- connectToEPD(database="epd", user="epdr",
-#' #                                 password="epdrpw", host="localhost")
-#' # getPSamples(1, epd.connection)
-#' # getPSamples(51, epd.connection)
-#' # disconnectFromEPD(connection=epd.connection)
-#' 
-getPSamples <- function(e_, connection){
-  
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning("'getPSamples' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
-  }
-  
-  rest <- getRestriction(e_, connection)
-  
-  sqlQuery <- paste("SELECT * FROM p_sample WHERE e_=", e_, ";", sep="")
-  output <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  output$lab_ID <- paste("EPDr", output$e_, "_PO", output$sample_, sep="")
-  
-  return(output)    
-}
-
-
-#' Query restriction of use for EPD entities
-#'
-#' This function queries the database to request information about use restrictions 
-#' of an specified entity. To perform the query the function requires the number
-#' of the entity that want to be queried and a valid connection to the database. Hence,
-#' the following parameters are mandatory:
-#'
-#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
-#' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection}
-#' as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
-#'
-#' @return data.frame. Data frame with all information from the P_ENTITY table in the
-#' database for that particular entity (see documentation of the EPD:
-#' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
-#' If the entity is restricted the function release a warning with the data provider name
-#' to be contacted.
-#' 
-#' @export
-#'
-#' @examples
-#' # Not run
-#' # epd.connection <- connectToEPD(database="epd", user="epdr",
-#' #                                 password="epdrpw", host="localhost")
-#' # getRestriction(1, epd.connection)
-#' # getRestriction(51, epd.connection)
-#' # disconnectFromEPD(connection=epd.connection)
-#' 
-getRestriction <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning("'getRestriction' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
-  }
-  sqlQuery <- paste("SELECT * FROM p_entity WHERE e_=", e_, ";", sep="")
-  output <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(output$usestatus == "R"){
-    warning(paste("Data for this core has restriction in their use. Please contact the data owner (", output$datasource,
-                  ") before publishing this data", sep=""), call.=F)
-  }
-  return(output)
-}
-
-
-#' Query datation of EPD entities
-#'
-#' This function queries the database to request information about datation 
-#' of an specified entity. To perform the query the function requires the number
-#' of the entity that want to be queried and a valid connection to the database. Hence,
-#' the following parameters are mandatory:
-#'
-#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
-#' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
-#'
-#' @return datation. Object of class \code{\link[EPDr:datation]{datation}} with all the
-#' information about datation of that entity.
-#' 
-#' @export
-#'
-#' @examples
-#' # Not run
-#' # epd.connection <- connectToEPD(database="epd", user="epdr",
-#' #                                 password="epdrpw", host="localhost")
-#' # getDatation(1, epd.connection)
-#' # getDatation(51, epd.connection)
-#' # disconnectFromEPD(connection=epd.connection)
-#' 
-getDatation <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning("'getDatation' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
-  }
-  rest <- getRestriction(e_, connection)
-  entity <- getEntity(e_, connection)
-  site <- getSite(e_, connection)
-  coord <- site[, c("londd", "latdd")]     
-  pb_zone <- sp::over(sp::SpatialPoints(coord), postbomb.map)$Zone
-  chronology <- getChronology(e_, connection)
-  c14 <- getC14_old(e_, connection)
-  events <- getEvents(e_, connection)
-  depths <- getPSamples(e_, connection)
-  output <- datation(e_=e_, restriction=rest, entity=entity, site=site, postbomb_zone=pb_zone, chronology=chronology, c14=c14, events=events, depths=depths)
-  return(output)
-}
-
-
-#' Query palynological counts of EPD entities
-#'
-#' This function queries the database to request information about palynological counts 
-#' of an specified entity. To perform the query the function requires the number
-#' of the entity that want to be queried and a valid connection to the database. Hence,
-#' the following parameters are mandatory:
-#'
-#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
-#' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection}
-#' as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
-#'
-#' @return counts. Object of class \code{\link[EPDr:counts]{counts}}.
-#' 
-#' @export
-#'
-#' @examples
-#' # Not run
-#' # epd.connection <- connectToEPD(database="epd", user="epdr",
-#' #                                 password="epdrpw", host="localhost")
-#' # getCounts(1, epd.connection)
-#' # getCounts(51, epd.connection)
-#' # disconnectFromEPD(connection=epd.connection)
-#' 
-getCounts <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning("'getCounts' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
-  }
-  
-  rest <- getRestriction(e_, connection)
-  
-  entity <- getEntity(e_, connection)
-  site <- getSite(e_, connection)
-  
-  sqlQuery <- paste("SELECT sample_, count, varname FROM p_counts NATURAL JOIN p_vars WHERE e_ =", e_, ";", sep="")
-  counts.raw <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  
-  depth <- getPSamples(e_, connection)
-  depthcm <- depth$depthcm
-  
-  if(is.data.frame(counts.raw) && nrow(counts.raw) == 0){
-    warning("This core does not have count data.", call.=FALSE)
-    counts.cast <- data.frame(0)[,-1]
-    taxa.names <- character(0)
-    sample_ <- numeric(0)
-    taxa.groupid <- character(0)
-    taxa.id <- numeric(0)
-    taxa.accepted <- numeric(0)
-    taxa.mhvar <- numeric(0)
-  }else{
-    counts.cast <- reshape2::dcast(counts.raw, sample_ ~ varname, value.var='count')
-    counts.cast[is.na(counts.cast)] <- 0
-    sample_ <- counts.cast[,1]
-    counts.cast <- counts.cast[,-1]
-    
-    taxa.names <- colnames(counts.cast)
-    
-    sqlQuery <- paste("SELECT var_, varname, groupid, accvar_, mhvar_ FROM p_vars NATURAL JOIN p_group WHERE varname IN ('", paste(taxa.names, collapse="','"), "');", sep="")
-    groupid <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-    groupid <- groupid[match(taxa.names, groupid$varname),]
-    
-    taxa.groupid <- groupid$groupid
-    taxa.id <- groupid$var_
-    taxa.accepted <- groupid$accvar_
-    taxa.mhvar <- groupid$mhvar_
-  }
-  
-  counts_type <- factor("Counts", levels=c("Counts", "Percentages"))
-  counts_processing <- factor("Samples", levels=c("Samples", "Interpolated", "Ranged means"))
-  taxa_type <- factor("Samples", levels=c("Samples", "Accepted", "Unified"))
-  taxa_processing <- factor("Original", levels=c("Original", "Expanded", "Taxize"))
-  
-  sample_label <- as.character(sample_)
-  
-  ages <- getAges(e_, connection)
-  
-  default_chronology <- ages@default_chronology
-  if(default_chronology != 0){
-    if(ages@giesecke == T){
-      default_chronology <- "giesecke"
-    }
-    default_ages <- ages@depth_ages[,as.character(default_chronology)]
-  }else{
-    default_ages <- numeric(0)
-  }
-  
-  counts <- counts(e_=e_, restriction=rest, entity=entity, site=site, counts_type=counts_type, counts_processing=counts_processing, taxa_type=taxa_type, taxa_processing=taxa_processing, taxa_names=taxa.names, taxa_=taxa.id, taxa_groupid=taxa.groupid, taxa_accepted=taxa.accepted, taxa_mhvar=taxa.mhvar, sample_=sample_, sample_label=sample_label, default_ages=default_ages, depthcm=depthcm, counts=counts.cast)
-  
-  return(counts)
-}
-
-
-#' Query palynological-samples ages of EPD entities
-#'
-#' This function queries the database to request information about estimated ages of palynological
-#' samples of an specified entity. To perform the query the function requires the number
-#' of the entity that want to be queried and a valid connection to the database. Hence,
-#' the following parameters are mandatory:
-#'
-#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
-#' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
-#'
-#' @return ages Object of class \code{\link[EPDr:ages]{ages}}.
-#' 
-#' @export
-#'
-#' @examples
-#' # Not run
-#' # epd.connection <- connectToEPD(database="epd", user="epdr",
-#' #                                 password="epdrpw", host="localhost")
-#' # getAges(1, epd.connection)
-#' # getAges(51, epd.connection)
-#' # disconnectFromEPD(connection=epd.connection)
-#' 
-getAges <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning("'getAges' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
-  }
-  
-  rest <- getRestriction(e_, connection)
-  
-  entity <- getEntity(e_, connection)
-  site <- getSite(e_, connection)
-  
-  sqlQuery<- paste("SELECT sample_, chron_, agebp FROM p_agedpt WHERE e_=", e_, ";", sep="")
-  ages <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  
-  sqlQuery <-paste("SELECT * FROM chron WHERE e_=", e_, ";", sep="")
-  chron <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  
-  depths <- getPSamples(e_, connection)
-  
-  default_chronology <- chron$chron_[which(chron$defaultchron == "Y")]
-  if(is.null(default_chronology) | length(default_chronology) == 0){default_chronology <- 0}
-  
-  sample_ <- depths$sample_
-  depthcm <- depths$depthcm
-  sample_label <- as.character(sample_)
-  
-  if(is.data.frame(ages) && nrow(ages) == 0){
-    warning("This core does not have age data.", call.=FALSE)
-    ages.cast <- data.frame()
-  }else{
-    ages.cast <- reshape2::dcast(ages, sample_ ~ chron_, value.var='agebp')
-    ages.cast <- ages.cast[match(sample_, ages.cast$sample_),]
-    ages.cast <- ages.cast[,-1]
-  }
-  
-  if(class(ages.cast) == "numeric"){
-    ages.cast <- data.frame(ages.cast)
-    colnames(ages.cast) <- 1
-  }
-  
-  if(e_ %in% giesecke.EpdAgeCut$ID){
-    is.in.giesecke <- TRUE
-    ages.giesecke <- giesecke.EpdAgeCut[which(giesecke.EpdAgeCut$ID == e_), c("ID", "Event", "Depth..m.", "Age.dated..ka.", "Age.min..ka.", "Age.max..ka.")]
-    ages.giesecke$depthcm <- ages.giesecke$Depth..m. * 100
-    ages.giesecke <- ages.giesecke[match(round(depths[,"depthcm"], 1), round(ages.giesecke$depthcm, 1)), ]
-    ages.giesecke$agesbp <- ages.giesecke$Age.dated..ka. * 1000
-    
-    if(nrow(ages.cast) == 0){
-      ages.cast <- data.frame(giesecke=ages.giesecke$agesbp)
-    }else{
-      column.names <- colnames(ages.cast)
-      ages.cast <- cbind(ages.cast, ages.giesecke$agesbp)
-      colnames(ages.cast) <- c(column.names, "giesecke")
-    }
-  }else{
-    is.in.giesecke <- FALSE
-  }
-  
-  ages.final <- ages(e_=e_, restriction=rest, entity=entity, site=site, default_chronology=default_chronology, giesecke=is.in.giesecke, sample_=sample_, sample_label=sample_label, depthcm=depthcm, depths=depths, depth_ages=ages.cast)
-  return(ages.final)
-}
-
-
-#' Query counts and ages of palynological-samples of EPD entities
-#'
-#' This function queries the database to request information about counts and estimated ages
-#' of palynological samples of an specified entity. To perform the query the function requires
-#' the number of the entity that want to be queried and a valid connection to the database. Hence,
-#' the following parameters are mandatory:
-#'
-#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to 
-#' be queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
-#'
-#' @return agedcounts Object of class \code{\link[EPDr:agedcounts]{agedcounts}}.
-#' 
-#' @export
-#'
-#' @examples
-#' # Not run
-#' # epd.connection <- connectToEPD(database="epd", user="epdr",
-#' #                                 password="epdrpw", host="localhost")
-#' # getAgedCounts(1, epd.connection)
-#' # getAgedCounts(51, epd.connection)
-#' # disconnectFromEPD(connection=epd.connection)
-#' 
-getAgedCounts <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning("'getAgedCounts' function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.")
-  }
-  
-  rest <- getRestriction(e_, connection)
-  entity <- getEntity(e_, connection)
-  site <- getSite(e_, connection)
-  
-  ages <- getAges(e_, connection)
-  counts <- getCounts(e_, connection)
-  
-  agedcounts <- agedcounts(e_=e_, restriction=rest, entity=entity, site=site, ages=ages, counts=counts)  
-  return(agedcounts)
-}
-
-
-#' Retrieve publications from their publ ID number
-#'
-#' This function is mainly intended for internal use. It retrieves information of publications by querying the database by the publication identification number.
-#'
-#' @param publ_ numeric with the publ_ 
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
-#'
-#' @return data frame with information about the publication whole reference
-#' @export
-#'
-#' @examples
-#' # Not run
-#' # epd.connection <- connectToEPD(database="epd", user="epdr",
-#' #                                 password="epdrpw", host="localhost")
-#' # getPubl(1, epd.connection)
-#' # disconnectFromEPD(connection=epd.connection)
-getPubl <- function(publ_, connection){
-  table <- "publ"
-  if(is.logical(publ_) & length(publ_) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }else{
-    if(is.numeric(publ_)){
-      publ_ <- paste(publ_, collapse="','")
-      sqlQuery <- paste("SELECT * FROM ", table, " WHERE publ_ IN ('", publ_, "');", sep="")
-      sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-      if(nrow(sqlOut) == 0){
-        names <- RPostgreSQL::dbListFields(connection, table)
-        sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-        colnames(sqlOut) <- names
-      }
-    }else{
-      stop("publ_ should be numeric.")
-    }
-  }
-  return(sqlOut)
-}
-
-getWorkers <- function(worker_, connection){
-  table <- "workers"
-  if(is.logical(worker_) & length(worker_) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }else{
-    if(is.numeric(worker_)){
-      worker_ <- paste(worker_, collapse="','")
-      sqlQuery <- paste("SELECT * FROM ", table, " WHERE worker_ IN ('", worker_, "');", sep="")
-      sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-      if(nrow(sqlOut) == 0){
-        names <- RPostgreSQL::dbListFields(connection, table)
-        sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-        colnames(sqlOut) <- names
-      }
-    }else{
-      stop("worker_ should be numeric.")
-    }
-  }
-  return(sqlOut)
-}
-
-
-# getGeochron functions ---------------------------------------------------
-
-#' Retrieving information for an entity in the EPD
-#' 
-#' Functions in this group retrieve different sort of information from an specific entity in the database. 
-#' 
-#'  All functions here are designed to retrieve information from a single entity. If multiple entity numbers are requested, the functions return data only for the first one. Each function retrieve data from a specific table or set of tables that are conveniently combined if necessary.
-#'
-#' @param e_ numeric. Value indicating the entity number (e_) of the database that is queried.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
-#' 
-#' @return Data frame with all information from specific tables in the EPD (see documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}) for the requested entity. Columns names in the resulting data frames will vary among functions.
-#' 
-#' @examples
-#' # Not run
-#' # epd.connection <- connectToEPD(database="epd", user="epdr",
-#' #                                 password="epdrpw", host="localhost")
-#' # .getC14(1, epd.connection)
-#' # .getC14(400, epd.connection)
-#' #
-#' # getGeochron(400, epd.connection)
-#' # disconnectFromEPD(connection=epd.connection)
-#' 
-#' 
-#' @section getGeochron:
-#' This function returns a \code{\link[EPDr:geochron]{geochron}} object, that store information from different tables for a particular entity.
-#' @rdname getGeochron
-#' 
-#' @export
-#' 
-getGeochron <- function(e_, connection) {
-  geochron <- .getGeochron(e_, connection)
-  aar <- .getAAR(e_, connection)
-  c14 <- .getC14(e_, connection)
-  esr <- .getESR(e_, connection)
-  ft <- .getFT(e_, connection)
-  kar <- .getKAR(e_, connection)
-  pb210 <- .getPB210(e_, connection)
-  si32 <- .getSI32(e_, connection)
-  tl <- .getTL(e_, connection)
-  useries <- .getUSERIES(e_, connection)
-  publ <- getPubl(geochron$publ_, connection)
-  output <- geochron(geochron=geochron, aar=aar, c14=c14, esr=esr, ft=ft, kar=kar, pb210=pb210, si32=si32, tl=tl, useries=useries, publ=publ)
-  return(output)
-  }
-
-
-#' @section .getGeochron:
-#' This function returns information in the GEOCHRON table for the specified entity. This corresponds with the common geochronological data for the entity that have been analysed for that particular entity.
-#' @rdname getGeochron
-#' @export
-.getGeochron <- function(e_, connection) {
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <-paste("SELECT * FROM geochron WHERE e_=", e_, ";", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    sqlOut <- data.frame(e_=NA, sample_=NA, method=NA, depthcm=NA, thickness=NA, materialdated=NA, publ_=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-
-#' @section .getAAR:
-#' This function returns information in the AAR table for the specified entity. This corresponds with Amino Acid Racemization data for datation samples.
-#' @rdname getGeochron
-#' @export
-.getAAR <- function(e_, connection) {
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <- paste("SELECT * FROM AAR WHERE e_=", e_, ";", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    warning("This core (entity) does not have AAR data.", call.=FALSE)
-    sqlOut <- data.frame(e_=NA, sample_=NA, agebp=NA, errorlimits=NA, taxondated=NA, labnumber=NA, notes=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-
-#' @section .getC14:
-#' This function returns information in the C14 table for the specified entity. This corresponds with C14 data for all radiocarbon samples that have been analysed for that particular entity.
-#' @rdname getGeochron
-#' @export
-.getC14 <- function(e_, connection) {
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <- paste("SELECT * FROM c14 WHERE e_=", e_, ";", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    warning("This core (entity) does not have C14 data.", call.=FALSE)
-    sqlOut <- data.frame(e_=NA, sample_=NA, agebp=NA, agesdup=NA, agesdlo=NA, grthanage=NA, basis=NA, enriched=NA, labnumber=NA, deltac13=NA, notes=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-
-#' @section .getESR:
-#' This function returns information in the ESR table for the specified entity. This corresponds with Electron Spin Resonance data for datation samples.
-#' @rdname getGeochron
-#' @export
-.getESR <- function(e_, connection) {
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <- paste("SELECT * FROM ESR WHERE e_=", e_, ";", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    warning("This core (entity) does not have ESR data.", call.=FALSE)
-    sqlOut <- data.frame(e_=NA, sample_=NA, agebp=NA, errorlimits=NA, labnumber=NA, notes=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-
-#' @section .getFT:
-#' This function returns information in the FT table for the specified entity. This corresponds with Fission Track data for datation samples.
-#' @rdname getGeochron
-#' @export
-.getFT <- function(e_, connection) {
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <- paste("SELECT * FROM FT WHERE e_=", e_, ";", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    warning("This core (entity) does not have FT data.", call.=FALSE)
-    sqlOut <- data.frame(e_=NA, sample_=NA, agebp=NA, errorlimits=NA, labnumber=NA, notes=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-
-#' @section .getKAR:
-#' This function returns information in the KAR table for the specified entity. This corresponds with Fission Track data for datation samples.
-#' @rdname getGeochron
-#' @export
-.getKAR <- function(e_, connection) {
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <- paste("SELECT * FROM KAR WHERE e_=", e_, ";", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    warning("This core (entity) does not have KAR data.", call.=FALSE)
-    sqlOut <- data.frame(e_=NA, sample_=NA, agebp=NA, errorlimits=NA, labnumber=NA, notes=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-
-#' @section .getPB210:
-#' This function returns information in the PB210 table for the specified entity. This corresponds with \eqn{210^{Pb}}{[Pb]^210} Isotope data for datation samples.
-#' @rdname getGeochron
-#' @export
-.getPB210 <- function(e_, connection) {
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <- paste("SELECT * FROM PB210 WHERE e_=", e_, ";", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    warning("This core (entity) does not have PB210 data.", call.=FALSE)
-    sqlOut <- data.frame(e_=NA, sample_=NA, agead=NA, agesdup=NA, agesdlo=NA, grthanage=NA, notes=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-
-#' @section .getSI32:
-#' This function returns information in the SI32 table for the specified entity. This corresponds with Silicon-32 data for datation samples.
-#' @rdname getGeochron
-#' @export
-.getSI32 <- function(e_, connection) {
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <- paste("SELECT * FROM SI32 WHERE e_=", e_, ";", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    warning("This core (entity) does not have SI32 data.", call.=FALSE)
-    sqlOut <- data.frame(e_=NA, sample_=NA, agebp=NA, agesdup=NA, agesdlo=NA, grthanage=NA, labnumber=NA, notes=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-
-#' @section .getTL:
-#' This function returns information in the TL table for the specified entity. This corresponds with Thermoluminescence data for datation samples.
-#' @rdname getGeochron
-#' @export
-.getTL <- function(e_, connection) {
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <- paste("SELECT * FROM TL WHERE e_=", e_, ";", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    warning("This core (entity) does not have TL data.", call.=FALSE)
-    sqlOut <- data.frame(e_=NA, sample_=NA, agebp=NA, errorlimits=NA, grainsize=NA, labnumber=NA, notes=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-
-#' @section .getUSERIES:
-#' This function returns information in the USERIES table for the specified entity. This corresponds with Uranium-series data for datation samples.
-#' @rdname getGeochron
-#' @export
-.getUSERIES <- function(e_, connection) {
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <- paste("SELECT * FROM USERIES WHERE e_=", e_, ";", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    warning("This core (entity) does not have USERIES data.", call.=FALSE)
-    sqlOut <- data.frame(e_=NA, sample_=NA, agebp=NA, errorlimits=NA, labnumber=NA, notes=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-
-
-
-
-
-# getSite functions -------------------------------------------------------
-
-
-#' Retrieve site information for EPD entities
-#'
-#' Functions in this family retrieves information relative to the site where the entities have been sampled. The main function (\code{\link[EPDr:getSite]{getSite}}) requires a valid connection to the database and the entity ID for the entity of interest. All other functions (starting with a dot [.]) use different arguments depending on the piece of information they retrieve.
-#' 
-#' Details
-#'
-#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to be queried.
-#' @param site_ numeric. Value indicating the site number (site_) of interest in the database.
-#' @param poldiv1_ Three character string. The three character string are the international country code.
-#' @param poldiv2_ Two number string (character). This string with length equal two and with numbers represent the regions code for administrative regions in each country. The code is not unique so to capture an specific region in a country you need to provide always country code (poldiv1_) and region code (poldiv2_).
-#' @param poldiv3_ Three number string (character). This string with length equal three and with numbers represent the 3rd level administrative regions in each country.  The code is not unique so to capture an specific 3rd level region in a country you need to provide always country code (poldiv1_), region code (poldiv2_), and 3rd level region code (poldiv3_).
-#' @param igcptype Character. Representing the IGCP type code.
-#' @param icode Character. Three letter string representing the information code.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
-#'
-#' @return \code{\link[EPDr:site]{site}} object. This is an EPDr object with information from different tables. See documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
-#'
-#' @examples
-#' # Not run
-#' # library(EPDr)
-#' # epd.connection <- connectToEPD(host="localhost", database="epd",
-#' #                               user="epdr", password="epdrpw")
-#' # site.400 <- getSite(400, epd.connection)
-#' # site.400
-#' # disconnectFromEPD(epd.connection)
-
-
-#' @section getSite:
-#' This function returns a \code{\link[EPDr:site]{site}} object with several information from the rest of the functions for a particular entity.
-#' @rdname getSite
-#' @export
-getSite <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <- paste("SELECT site_ FROM entity WHERE e_ =", e_, ";", sep="")
-  site_ <- as.character(RPostgreSQL::dbGetQuery(connection, sqlQuery))
-  
-  siteloc <- .getSiteloc(site_, connection)
-  sitedesc <- .getSitedesc(site_, connection)
-  siteinfo <- .getSiteinfo(site_, connection)
-  
-  country <- .getPoldiv1(siteloc$poldiv1, connection)
-  region <- .getPoldiv2(siteloc$poldiv2, siteloc$poldiv1, connection)
-  region3rd <- .getPoldiv3(siteloc$poldiv3, siteloc$poldiv2, siteloc$poldiv1, connection)
-  
-  igcptype <- .getIGCPtype(sitedesc$igcptype, connection)
-  infotype <- .getInfotype(siteinfo$icode, connection)
-  
-  publ <- getPubl(siteinfo$publ_, connection)
-  
-  site <- site(siteloc=siteloc, sitedesc=sitedesc, siteinfo=siteinfo, country=country, region=region, region3rd=region3rd, igcptype=igcptype, infotype=infotype, publ=publ)
-  return(site)
-}
-
-#' @section .getSiteloc:
-#' This function returns information in the SITELOC table for the specified entity. This corresponds with location data for the site wheres samples were taken.
-#' @rdname getSite
-#' @export
-.getSiteloc <- function(site_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <-paste("SELECT * FROM siteloc WHERE site_ =", site_, ";", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery) 
-  if(nrow(sqlOut) == 0){
-    sqlOut <- data.frame(site_=NA, sitename=NA, sitecode=NA, siteexist=NA, poldiv1=NA, poldiv2=NA, poldiv3=NA, latdeg=NA, latmin=NA, latseg=NA, latns=NA, latdd=NA, latdms=NA, londeg=NA, lonmin=NA, lonseg=NA, lonns=NA, londd=NA, londms=NA, elevation=NA, areaofsite=NA)[-1,]
-  }
-  
-  return(sqlOut)
-}
-
-#' @section .getSitedesc:
-#' This function returns information in the SITEDESC table for the specified entity. This corresponds with a description of the site wheres samples were taken.
-#' @rdname getSite
-#' @export
-.getSitedesc <- function(site_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <-paste("SELECT * FROM sitedesc WHERE site_=", site_, ";", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)   
-  if(nrow(sqlOut) == 0){
-    sqlOut <- data.frame(site_=NA, sitedescript=NA, physiography=NA, surroundveg=NA, vegformation=NA, igcptype=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-#' @section .getSiteinfo:
-#' This function returns information in the SITEINFO table for the specified entity. This corresponds with a summary data of all type of information in the database for that particular entity (chronological, palynological, etc).
-#' @rdname getSite
-#' @export
-.getSiteinfo <- function(site_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <-paste("SELECT * FROM siteinfo WHERE site_=", site_, ";", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)  
-  if(nrow(sqlOut) == 0){
-    sqlOut <- data.frame(site_=NA, icode=NA, publ_=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-#' @section .getPoldiv1:
-#' This function returns information in the POLDIV1 table for the specified country (poldiv1_ is the country code). This corresponds with data of the country in which a site belong to.
-#' @rdname getSite
-#' @export
-.getPoldiv1 <- function(poldiv1_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <-paste("SELECT * FROM poldiv1 WHERE poldiv1 = '", poldiv1_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    sqlOut <- data.frame(poldiv1_=NA, name=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-#' @section .getPoldiv2:
-#' This function returns information in the POLDIV2 table for the specified region (poldiv2_ is the region code). This corresponds with data of the region in which a site belong to.
-#' @rdname getSite
-#' @export
-.getPoldiv2 <- function(poldiv2_, poldiv1_, connection){
-  if(length(poldiv1_) > 1 | length(poldiv2_) > 1){
-    poldiv1_ <- poldiv1_[[1]]
-    poldiv2_ <- poldiv2_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single countries and regions. You have provided several countries and/or regions ID values (poldiv1_ or poldiv2_) but only the first one of each is going to be used.", sep=""))
-  }
-
-  sqlQuery <-paste("SELECT * FROM poldiv2 WHERE poldiv1 = '", poldiv1_, "' AND poldiv2 = '", poldiv2_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    sqlOut <- data.frame(poldiv1=NA, poldiv2=NA, postcode=NA, name=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-#' @section .getPoldiv3:
-#' This function returns information in the POLDIV3 table for the specified 3rd level region (poldiv3_ is the 3rd level region code). This corresponds with data of the 3rd level region in which a site belong to.
-#' @rdname getSite
-#' @export
-.getPoldiv3 <- function(poldiv3_, poldiv2_, poldiv1_, connection){
-  if(length(poldiv1_) > 1 | length(poldiv2_) > 1 | length(poldiv3_) > 1){
-    poldiv1_ <- poldiv1_[[1]]
-    poldiv2_ <- poldiv2_[[1]]
-    poldiv3_ <- poldiv3_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single third level regions. You have provided several countries, regions and/or third level regions ID values (poldiv1_, poldiv2_ and/or poldiv3_) but only the first one of each is going to be used.", sep=""))
-  }
- 
-  sqlQuery <- paste("SELECT * FROM poldiv3 WHERE poldiv1 = '", poldiv1_, "' AND poldiv2 = '", poldiv2_, "' AND poldiv3 = '", poldiv3_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    sqlOut <- data.frame(poldiv1=NA, poldiv2=NA, poldiv3=NA, name=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-#' @section .getIGCPtype:
-#' This function returns information in the IGCPTYPE table for the specified IGCP region. This corresponds with data of the IGCP region in which a site belong to.
-#' @rdname getSite
-#' @export
-.getIGCPtype <- function(igcptype, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  sqlQuery <- paste("SELECT * FROM igcptype WHERE igcptype = '", igcptype, "';")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    sqlOut <- data.frame(igcptype=NA, regionname=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-#' @section .getInfotype:
-#' This function returns information in the INFOTYPE table for the specified info code (icode). This corresponds with a longer description of the info type codes returned by \code{.getSiteinfo}.
-#' @rdname getSite
-#' @export
-.getInfotype <- function(icode, connection){
-  icode <- paste(icode, collapse="','")
-  sqlQuery <- paste("SELECT * FROM infotype WHERE icode IN ('", icode, "');", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    sqlOut <- data.frame(icode=NA, infotype=NA)[-1,]
-  }
-  return(sqlOut)
-}
-
-
-
-
-# getChron functions ------------------------------------------------------
-
-
-#' Retrieve chronological information for EPD entities
-#'
-#' Functions in this family retrieves information relative to the chronologies used to calculate samples ages for a particular entity. The main function (\code{\link[EPDr:getChron]{getChron}}) requires a valid connection to the database and the entity ID for the entity of interest. All other functions (starting with a dot [.]) use different arguments depending on the piece of information they retrieve.
-#' 
-#' @param e_ numeric. Value indicating the entity number (e_) of the database that want to be queried.
-#' @param rcode character. Three letter code for the rational.
-#' @param event_ numeric. Value indicating the event number (event_) of the database of the requested event.
-#' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
-#'
-#' @return \code{\link[EPDr:chron]{chron}} object. This is an EPDr object with information from different tables. See documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
-#'
-#' @examples
-#' # Not run
-#' # library(EPDr)
-#' # epd.connection <- connectToEPD(host="localhost", database="epd",
-#' #                               user="epdr", password="epdrpw")
-#' # chron.400 <- getChron(400, epd.connection)
-#' # chron.400
-#' # disconnectFromEPD(epd.connection)
-
-
-#' @section getChron:
-#' This function returns a \code{\link[EPDr:chron]{chron}} object with several information from the rest of the functions for a particular entity.
-#' @rdname getChron
-#' @export
-getChron <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  chron <- .getChron(e_, connection)
-  agebound <- .getAgebound(e_, connection)
-  agebasis <- .getAgebasis(e_, connection)
-  rcode_ <- agebasis$rcode
-  rational <- .getRational(rcode_, connection)
-  alsegs <- .getAlsegs(e_, connection)
-  panldpt <- .getPAnldpt(e_, connection)
-  synevent <- .getSynevent(e_, connection)
-  event_ <- synevent$event_
-  event <- .getEvent(event_, connection)
-  publ <- getPubl(event$publ_, connection)
-  
-  chronOutput <- chron(chron=chron, agebound=agebound, agebasis=agebasis, rational=rational, alsegs=alsegs, panldpt=panldpt, synevent=synevent, event=event)
-  
-  return(chronOutput)
-}
-
-#' @section .getChron:
-#' This function returns information in the CHRON table for the specified entity. This corresponds with chronologies for that entity.
-#' @rdname getChron
-#' @export
-.getChron <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  table <- "chron"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-#' @section .getAgebound:
-#' This function returns information in the AGEBOUND table for the chronologies in that entity. This corresponds with age limits for that entity calculated according to each chronology.
-#' @rdname getChron
-#' @export
-.getAgebound <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  table <- "agebound"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-#' @section .getAgebasis:
-#' This function returns information in the AGEBASIS table for the specified entity. This corresponds with the depth and C14 data used to calibrate the age-depth model in each chronology.
-#' @rdname getChron
-#' @export
-.getAgebasis <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  table <- "agebasis"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-#' @section .getRational:
-#' This function returns information in the RATIONAL table for the specified entity. This corresponds with the rational to use each sample in the AGEBASIS table to calibrate the age-depth model.
-#' @rdname getChron
-#' @export
-.getRational <- function(rcode, connection){
-  rcode <- paste(rcode, collapse="','")
-  table <- "rational"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE rcode IN ('", rcode, "');", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-#' @section .getAlsegs:
-#' This function returns information in the ALSEGS table for the specified entity. This corresponds with segments of annual laminations in the entity.
-#' @rdname getChron
-#' @export
-.getAlsegs <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  table <- "alsegs"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-#' @section .getPAnldpt:
-#' This function returns information in the P_ANLDPT table for the specified entity. This corresponds with details on the lamination for each segment on the ALSEGS table for each entity.
-#' @rdname getChron
-#' @export
-.getPAnldpt <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  table <- "p_anldpt"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-#' @section .getSynevent:
-#' This function returns information in the SYNEVENT table for the specified entity. This corresponds with the geological events that affect that entity.
-#' @rdname getChron
-#' @export
-.getSynevent <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  table <- "synevent"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-#' @section .getEvent:
-#' This function returns information in the EVENT table for the specified entity. This corresponds with details on the geological event specified for that entity in the SYNEVENT table.
-#' @rdname getChron
-#' @export
-.getEvent <- function(event_, connection){
-  table <- "event"
-  if(length(event_) != 0){
-    event_ <- paste(event_, collapse="','")
-    sqlQuery <-paste("SELECT * FROM ", table, " WHERE event_ IN ('", event_, "');", sep="")
-    sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  }
-  if(length(event_) == 0 || nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-
-
-# getEntity functions ---------------------------------------------------
-
-getEntity <- function(e_, connection){
-  
-}
-
-.getEntity <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  table <- "entity"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-.getPEntity <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  table <- "p_entity"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-.getCoredrive <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  table <- "coredriv"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-.getDescr <- function(descriptor, connection){
-  descriptor <- paste(descriptor, collapse="','")
-  table <- "descr"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE descriptor IN ('", descriptor, "');", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-
-.getLithology <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  table <- "litholgy"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-.getLOI <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  table <- "loi"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-.getSection <- function(e_, connection){
-  if(length(e_) > 1){
-    e_ <- e_[[1]]
-    warning(paste(match.call()[[1]], " function is designed to retrieve information for single entities. You have provided several entity ID values (e_) but only the first one is going to be used.", sep=""))
-  }
-  table <- "section"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE e_ = '", e_, "';", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-.getPublent <- function(e_, connection){
-  
-}
-
-
-# getPsamples functions ---------------------------------------------------
-
-.getGroups <- function(groupid, connection){
-  groupid <- paste(groupid, collapse="','")
-  table <- "groups"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE groupid IN ('", groupid, "');", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-
-.getSyntype <- function(syntype, connection){
-  syntype <- paste(syntype, collapse="','")
-  table <- "syntype"
-  sqlQuery <-paste("SELECT * FROM ", table, " WHERE syntype IN ('", syntype, "');", sep="")
-  sqlOut <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
-  if(nrow(sqlOut) == 0){
-    names <- RPostgreSQL::dbListFields(connection, table)
-    sqlOut <- data.frame(t(rep(NA, length(names))))[-1,]
-    colnames(sqlOut) <- names
-  }
-  return(sqlOut)
-}
-

@@ -1,6 +1,6 @@
 #' Conect to a EPD database
 #'
-#' \code{\link[EPDr:connectToEPD]{connectToEPD}} establish a connection to a EPD data base that is stored in a DDBB server. By default it assume a local
+#' \code{\link[EPDr:connect_to_epd]{connect_to_epd}} establish a connection to a EPD data base that is stored in a DDBB server. By default it assume a local
 #' PostgreSQL server. The function can connect with remote servers in different formats (MySQL, etc; see RPostgreSQL documentation
 #' for supported formats). To connect to the DDBB the function need the DDBB name, the user name, and the user password. If any of
 #' the data are not passed as arguments the function will ask for them interactively.
@@ -20,46 +20,44 @@
 #'
 #' @examples
 #' # Not run
-#' # epd.connection <- connectToEPD()
-#' #epd.connection <- connectToEPD(database="epd", user="epdr",
+#' # epd.connection <- connect_to_epd()
+#' # epd.connection <- connect_to_epd(database="epd", user="epdr",
 #' #                                 password="epdrpw", host="localhost")
-#' #epd.connection
+#' # epd.connection
 #' # To list all the tables in the database we have connected with
-#' #dbListTables(epd.connection)
+#' # dbListTables(epd.connection)
 #' # Query data from the connection with a SQL statement
-#' #dbGetQuery(epd.connection, "SELECT e_ FROM synevent;")
-#' #disconnectFromEPD(connection=epd.connection)
-connectToEPD <- function(database=NULL, user=NULL, password=NULL, driver="PostgreSQL", host="localhost"){
-    # Ask interactively for parameters if they are not specified
-    if(is.null(driver))driver <- readline("EPD DB driver:")
-    if(is.null(database))database <- readline("EPD DB name:")
-    if(is.null(user))user <- readline("EPD DB user:")
-    if(is.null(password))password <- readline("EPD DB password:")
-    
-    # Establish connection to PoststgreSQL
-    con <- RPostgreSQL::dbConnect(driver, dbname=database, host=host, user=user, password=password)
+#' # dbGetQuery(epd.connection, "SELECT e_ FROM synevent;")
+#' # disconnect_from_epd(connection=epd.connection)
+connect_to_epd <- function(database=NULL, user=NULL, password=NULL,
+                         driver="PostgreSQL", host="localhost"){
+    if (is.null(driver)) driver <- readline("EPD DB driver:")
+    if (is.null(database)) database <- readline("EPD DB name:")
+    if (is.null(user)) user <- readline("EPD DB user:")
+    if (is.null(password)) password <- readline("EPD DB password:")
+    con <- RPostgreSQL::dbConnect(driver, dbname = database, host = host,
+                                  user = user, password = password)
     return(con)
 }
 
 
 
 #' Disconnect a connection to a EPD database
-#' \code{disconnectFromEPD} turns down a connection to a EPD DDBB server.
+#' \code{disconnect_from_epd} turns down a connection to a EPD DDBB server.
 #'
-#' @param connection The connection object created with \code{\link[EPDr:connectToEPD]{connectToEPD}} to stablish the connection
+#' @param connection The connection object created with \code{\link[EPDr:connect_to_epd]{connect_to_epd}} to stablish the connection
 #'
 #' @return NULL It just disconnects from the EPD DDBB server and modifies the connection object to reflect the new status.
 #' 
 #' @export
 #' 
 #' @examples
-#' #epd.connection <- connectToEPD(database="epd", user="epdr",
+#' # epd.connection <- connect_to_epd(database="epd", user="epdr",
 #' #                                 password="epdrpw", host="localhost")
-#' #disconnectFromEPD(connection=epd.connection)
-#' #epd.connection
-disconnectFromEPD <- function(connection=NULL){
-    # Close PostgreSQL connection
-    if(is.null(connection))stop("You have to define a working connection to the EPD to be stoped")
+#' # disconnect_from_epd(connection=epd.connection)
+#' # epd.connection
+disconnect_from_epd <- function(connection=NULL){
+    if (is.null(connection)) stop("You have to define a working connection to
+                                   the EPD to be stoped")
     RPostgreSQL::dbDisconnect(connection)
 }
-

@@ -8,7 +8,7 @@
 #' the function return the whole table, it only requires a valid connection to the database server.
 #' 
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.
 #'
 #' @return data.frame The function returns a data frame with three columns: \code{groupid}, \code{groupcode}, and \code{groupname}.
 #' 
@@ -17,14 +17,14 @@
 #' @examples
 #' # Not run
 #' # library(EPDr)
-#' # epd.connection <- connectToEPD(host="localhost", database="epd",
-#' #                               user="epdr", password="epdrpw")
-#' # listTaxagroups(epd.connection)
+#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#' #                               user = "epdr", password = "epdrpw")
+#' # list_taxagroups(epd.connection)
 #' # disconnectFromEPD(epd.connection)
 #' 
-listTaxagroups <- function(connection){
-    sqlQuery <- paste("SELECT * FROM groups;")
-    result <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+list_taxagroups <- function(connection){
+    sql_query <- paste("SELECT * FROM groups;")
+    result <- RPostgreSQL::dbGetQuery(connection, sql_query)
     return(result)
 }
 
@@ -38,9 +38,9 @@ listTaxagroups <- function(connection){
 #' \code{group_id} along with a valid connection to the database.
 #' 
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.
 #' @param group_id character. Character vector with group ids (four character strings; see
-#' \code{\link[EPDr:listTaxagroups]{listTaxagroups}} to check correspondece between groups and
+#' \code{\link[EPDr:list_taxagroups]{list_taxagroups}} to check correspondece between groups and
 #' group ids). The user can specify as many groups as desired in a single call of the function.
 #'
 #' @return data.frame The function returns a data frame with five columns: \code{var_},
@@ -58,19 +58,21 @@ listTaxagroups <- function(connection){
 #' @examples
 #' # Not run
 #' # library(EPDr)
-#' # epd.connection <- connectToEPD(host="localhost", database="epd",
-#' #                               user="epdr", password="epdrpw")
-#' # listTaxa(epd.connection, "HERB")
-#' # listTaxa(epd.connection, c("HERB","TRSH"))
+#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#' #                               user = "epdr", password = "epdrpw")
+#' # list_taxa(epd.connection, "HERB")
+#' # list_taxa(epd.connection, c("HERB","TRSH"))
 #' # disconnectFromEPD(epd.connection)
 #' 
-listTaxa <- function(connection, group_id=NULL){
-    if(is.null(group_id)){
-        group_id <- listTaxagroups(connection)$groupid
+list_taxa <- function(connection, group_id = NULL){
+    if (is.null(group_id)){
+        group_id <- list_taxagroups(connection)$groupid
     }
-    groups.c <- paste(group_id, collapse="','")
-    sqlQuery <- paste("SELECT var_, varname, varcode, mhvar_, groupid FROM p_vars NATURAL JOIN p_group WHERE groupid IN ('", groups.c, "') ORDER BY varname;", sep="")
-    result <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+    groups.c <- paste(group_id, collapse = "','")
+    sql_query <- paste("SELECT var_, varname, varcode, mhvar_, groupid ",
+                       "FROM p_vars NATURAL JOIN p_group WHERE groupid ",
+                       "IN ('", groups.c, "') ORDER BY varname;", sep = "")
+    result <- RPostgreSQL::dbGetQuery(connection, sql_query)
     return(result)
 }
 
@@ -84,7 +86,7 @@ listTaxa <- function(connection, group_id=NULL){
 #' returns a whole table it only need a parameter with a valid connection to the database.
 #' 
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.
 #'
 #' @return data.frame The function returns a data frame with two columns: \code{poldiv1} and \code{name}.
 #' \itemize{
@@ -97,14 +99,14 @@ listTaxa <- function(connection, group_id=NULL){
 #' @examples
 #' # Not run
 #' # library(EPDr)
-#' # epd.connection <- connectToEPD(host="localhost", database="epd",
-#' #                               user="epdr", password="epdrpw")
-#' # listCountries(epd.connection)
+#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#' #                               user = "epdr", password = "epdrpw")
+#' # list_countries(epd.connection)
 #' # disconnectFromEPD(epd.connection)
 #' 
-listCountries <- function(connection){
-    sqlQuery <- paste("SELECT * FROM poldiv1;")
-    result <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+list_countries <- function(connection){
+    sql_query <- paste("SELECT * FROM poldiv1;")
+    result <- RPostgreSQL::dbGetQuery(connection, sql_query)
     return(result)
 }
 
@@ -120,7 +122,7 @@ listCountries <- function(connection){
 #' to the database. The list can be restricted to specific countries using parameter \code{country}.
 #' 
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.
 #' @param country Character vector indicating the three letters code or the full name of the desired
 #' countries.
 #'
@@ -140,21 +142,25 @@ listCountries <- function(connection){
 #' @examples
 #' # Not run
 #' # library(EPDr)
-#' # epd.connection <- connectToEPD(host="localhost", database="epd",
-#' #                               user="epdr", password="epdrpw")
-#' # listRegions(epd.connection)
-#' # listRegions(epd.connection, "ESP")
-#' # listRegions(epd.connection, "Spain")
-#' # listRegions(epd.connection, c("Spain", "France", "Germany"))
+#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#' #                               user = "epdr", password = "epdrpw")
+#' # list_regions(epd.connection)
+#' # list_regions(epd.connection, "ESP")
+#' # list_regions(epd.connection, "Spain")
+#' # list_regions(epd.connection, c("Spain", "France", "Germany"))
 #' # disconnectFromEPD(epd.connection)
 #' 
-listRegions <- function(connection, country=NULL){
-    if(is.null(country)){
-        country <- listCountries(connection)$poldiv1
+list_regions <- function(connection, country = NULL){
+    if (is.null(country)){
+        country <- list_countries(connection)$poldiv1
     }
-    countries <- paste(country, collapse="','")
-    sqlQuery <- paste("SELECT a.poldiv2, a.poldiv1, a.name AS regionname, b.name AS countryname FROM poldiv2 a JOIN poldiv1 b ON a.poldiv1 = b.poldiv1 WHERE b.poldiv1 IN ('", countries, "') OR b.name IN ('", countries, "');", sep="")
-    RPostgreSQL::dbGetQuery(connection, sqlQuery)
+    countries <- paste(country, collapse = "','")
+    sql_query <- paste("SELECT a.poldiv2, a.poldiv1, a.name AS regionname, ",
+                       "b.name AS countryname FROM poldiv2 a JOIN poldiv1 ",
+                       "b ON a.poldiv1 = b.poldiv1 WHERE b.poldiv1 IN ('",
+                       countries, "') OR b.name IN ('", countries, "');",
+                       sep = "")
+    RPostgreSQL::dbGetQuery(connection, sql_query)
 }
 
 
@@ -169,7 +175,7 @@ listRegions <- function(connection, country=NULL){
 #' of its corners.
 #'
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.
 #' @param country Character vector indicating the three letters code or the full name of the
 #' desired countries.
 #' @param region Character vector indicating two digit integer code or the full name of the
@@ -198,50 +204,67 @@ listRegions <- function(connection, country=NULL){
 #' @examples
 #' # Not run
 #' # library(EPDr)
-#' # epd.connection <- connectToEPD(host="localhost", database="epd",
-#' #                               user="epdr", password="epdrpw")
-#' # listSites(epd.connection)
-#' # listSites(epd.connection, "ESP")
-#' # listSites(epd.connection, "Spain", "01")
-#' # summary(listSites(epd.connection))
-#' # listSites(epd.connection, coords=c(2.5, 22, 45.5, 53.5))
-#' # summary(listSites(epd.connection, coords=c(2.5, 22, 45.5, 53.5)))
+#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#' #                               user = "epdr", password = "epdrpw")
+#' # list_sites(epd.connection)
+#' # list_sites(epd.connection, "ESP")
+#' # list_sites(epd.connection, "Spain", "01")
+#' # summary(list_sites(epd.connection))
+#' # list_sites(epd.connection, coords = c(2.5, 22, 45.5, 53.5))
+#' # summary(list_sites(epd.connection, coords = c(2.5, 22, 45.5, 53.5)))
 #' # disconnectFromEPD(epd.connection)
 #' 
-listSites <- function(connection, country=NULL, region=NULL, coords=NULL){
-    if(length(country) == 0 & !is.null(region)){
-        stop("No country specified: If you want to specify a region you have to provide also the country.")
+list_sites <- function(connection,
+                       country = NULL,
+                       region = NULL,
+                       coords = NULL){
+    if (length(country)  ==  0 & !is.null(region)){
+        stop("No country specified: If you want to specify a region you have
+             to provide also the country.")
     }
-    if(length(country) > 1 & !is.null(region)){
-        warning("Multiple countries specified with region: Providing region for multiple countries might result in undesired results. Provide region only for queries with single countries.")
+    if (length(country) > 1 & !is.null(region)){
+        warning("Multiple countries specified with region: Providing region
+                for multiple countries might result in undesired results.
+                Provide region only for queries with single countries.")
     }
-    
-    if(is.null(country)){
-      country <- listCountries(connection)$poldiv1
+    if (is.null(country)){
+      country <- list_countries(connection)$poldiv1
     }else{
-        tmp <- listCountries(connection)
-        country <- tmp[tmp$poldiv1 %in% country | tmp$name %in% country, "poldiv1"]
+        tmp <- list_countries(connection)
+        country <- tmp[tmp$poldiv1 %in% country | tmp$name %in% country,
+                       "poldiv1"]
     }
-    countries <- paste(country, collapse="','")
-    
-    if(is.null(region)){
-        region <- listRegions(connection, country)$poldiv2
+    countries <- paste(country, collapse = "','")
+    if (is.null(region)){
+        region <- list_regions(connection, country)$poldiv2
     }else{
-        tmp <- listRegions(connection, country)
-        region <- tmp[tmp$regionname %in% region | tmp$poldiv2 %in% region, "poldiv2"]
+        tmp <- list_regions(connection, country)
+        region <- tmp[tmp$regionname %in% region | tmp$poldiv2 %in% region,
+                      "poldiv2"]
     }
-    regions <- paste(region, collapse="','")
-    
-    if(is.null(coords)){
-        sqlQuery <- paste("SELECT site_, sitename, sitecode, latdd, londd, elevation, areaofsite, sitedescript, physiography, surroundveg, vegformation FROM siteloc NATURAL LEFT JOIN sitedesc WHERE poldiv1 IN ('", countries, "') AND poldiv2 IN ('", regions, "');", sep = "")
+    regions <- paste(region, collapse = "','")
+    if (is.null(coords)){
+        sql_query <- paste("SELECT site_, sitename, sitecode, latdd, londd, ",
+                           "elevation, areaofsite, sitedescript, ",
+                           "physiography, surroundveg, vegformation FROM ",
+                           "siteloc NATURAL LEFT JOIN sitedesc WHERE ",
+                           "poldiv1 IN ('", countries, "') AND poldiv2 IN ('",
+                           regions, "');", sep = "")
     }else{
         xmin <- coords[1]
         xmax <- coords[2]
         ymin <- coords[3]
         ymax <- coords[4]
-        sqlQuery <- paste("SELECT site_, sitename, sitecode, latdd, londd, elevation, areaofsite, sitedescript, physiography, surroundveg, vegformation FROM siteloc NATURAL LEFT JOIN sitedesc WHERE poldiv1 IN ('", countries, "') AND poldiv2 IN ('", regions, "') AND (londd BETWEEN ",  xmin, " AND ", xmax, ") AND (latdd BETWEEN ", ymin, " AND ", ymax, ");", sep = "")
+        sql_query <- paste("SELECT site_, sitename, sitecode, latdd, londd, ",
+                           "elevation, areaofsite, sitedescript, ",
+                           "physiography, surroundveg, vegformation FROM ",
+                           "siteloc NATURAL LEFT JOIN sitedesc WHERE poldiv1 ",
+                           "IN ('", countries, "') AND poldiv2 IN ('", regions,
+                           "') AND (londd BETWEEN ", xmin, " AND ", xmax,
+                           ") AND (latdd BETWEEN ", ymin, " AND ", ymax,
+                           ");", sep = "")
     }
-    result <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+    result <- RPostgreSQL::dbGetQuery(connection, sql_query)
     return(result)
 }
 
@@ -258,7 +281,7 @@ listSites <- function(connection, country=NULL, region=NULL, coords=NULL){
 #' coordinates (longitude and latitude) of its corners.
 #'
 #' @param connection PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-#' returned by function \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.
 #' @param e_ Numeric vector indicating the desired entities identification number. 
 #' @param country Character vector indicating the three letters code or the full name of the
 #' desired countries.
@@ -284,25 +307,31 @@ listSites <- function(connection, country=NULL, region=NULL, coords=NULL){
 #' @examples
 #' # Not run
 #' # library(EPDr)
-#' # epd.connection <- connectToEPD(host="localhost", database="epd",
-#' #                               user="epdr", password="epdrpw")
-#' # listPubl(epd.connection)
-#' # listPubl(epd.connection, e_=1)
-#' # listPubl(epd.connection, site="1")
-#' # listPubl(epd.connection, country="ESP", site=1)
-#' # listPubl(epd.connection, country="Spain", region="01")
-#' # str(listPubl(epd.connection))
-#' # listPubl(epd.connection, coords=c(2.5, 22, 45.5, 53.5))
-#' # str(listPubl(epd.connection, coords=c(2.5, 22, 45.5, 53.5)))
+#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#' #                               user = "epdr", password = "epdrpw")
+#' # list_publ(epd.connection)
+#' # list_publ(epd.connection, e_ = 1)
+#' # list_publ(epd.connection, site = "1")
+#' # list_publ(epd.connection, country = "ESP", site = 1)
+#' # list_publ(epd.connection, country = "Spain", region = "01")
+#' # str(list_publ(epd.connection))
+#' # list_publ(epd.connection, coords = c(2.5, 22, 45.5, 53.5))
+#' # str(list_publ(epd.connection, coords = c(2.5, 22, 45.5, 53.5)))
 #' # disconnectFromEPD(epd.connection)
 #' 
-listPubl <- function(connection, e_=NULL, country=NULL, region=NULL, site=NULL, coords=NULL){
-    if(is.null(e_)){
-        e_ <- listE(connection=connection, country=country, region=region, site=site, coords=coords)$e_
+list_publ <- function(connection, e_ = NULL, country = NULL, region = NULL,
+                     site = NULL, coords = NULL){
+    if (is.null(e_)){
+        e_ <- list_e(connection = connection,
+                     country = country,
+                     region = region,
+                     site = site,
+                     coords = coords)$e_
     }
-    e_ <- paste(e_, collapse="','")
-    sqlQuery <- paste("select * FROM publent NATURAL JOIN publ WHERE e_ IN ('", e_, "');", sep = "") 
-    result <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+    e_ <- paste(e_, collapse = "','")
+    sql_query <- paste("select * FROM publent NATURAL JOIN publ WHERE e_ IN ('",
+                       e_, "');", sep = "")
+    result <- RPostgreSQL::dbGetQuery(connection, sql_query)
     return(result)
 }
 
@@ -312,7 +341,7 @@ listPubl <- function(connection, e_=NULL, country=NULL, region=NULL, site=NULL, 
 #' combined as desired.
 #'
 #' @param connection A valid connection to the database see
-#' \code{\link[EPDr:connectToEPD]{connectToEPD}}.
+#' \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.
 #' @param site Numeric or character vector indicating the site identification number or
 #' the site name to which entities will be retrieved.
 #' @param coords Numeric vector with four elements indicating the geographical coordinates
@@ -349,159 +378,165 @@ listPubl <- function(connection, e_=NULL, country=NULL, region=NULL, site=NULL, 
 #'
 #' @examples
 #' # Not run
-#' # epd.connection <- connectToEPD(host="localhost", database="epd",
-#' #                               user="epdr", password="epdrpw")
-#' # listE(epd.connection)
-#' # listE(epd.connection, site=1)
-#' # listE(epd.connection, site="Adange")
-#' # listE(epd.connection, site=c(1:10))
-#' # listE(epd.connection, country="ESP")
-#' # listE(epd.connection, country="Spain")
-#' # listE(epd.connection, country="Spain", region="Andalucia")
-#' # listE(epd.connection, lastname="Tzedakis")
-#' # listE(epd.connection, restrictions="R")
+#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#' #                               user = "epdr", password = "epdrpw")
+#' # list_e(epd.connection)
+#' # list_e(epd.connection, site = 1)
+#' # list_e(epd.connection, site = "Adange")
+#' # list_e(epd.connection, site = c(1:10))
+#' # list_e(epd.connection, country = "ESP")
+#' # list_e(epd.connection, country = "Spain")
+#' # list_e(epd.connection, country = "Spain", region = "Andalucia")
+#' # list_e(epd.connection, lastname = "Tzedakis")
+#' # list_e(epd.connection, restrictions = "R")
 #' 
-listE <- function(connection, site=NULL, coords=NULL, lastname=NULL, firstname=NULL,
-                  initials=NULL, publ=NULL, country=NULL, region=NULL,
-                  restrictions=NULL, logical_operator="AND"){
-  if(all(is.null(country), !is.null(region))){stop("Because regions are not unique
-                                                      in the database you need to specify a country in which to look for specific regions.")}
-  
-  joinQuery <- NULL
-  
-  if(any(!is.null(site), !is.null(coords), !is.null(country))){
-    sitelocJoin <- "JOIN siteloc b ON a.site_ = b.site_"
-    joinQuery <- append(joinQuery, sitelocJoin)
-    if(!is.null(country)){
+list_e <- function(connection, site = NULL, coords = NULL, lastname = NULL,
+                  firstname = NULL, initials = NULL, publ = NULL,
+                  country = NULL, region = NULL, restrictions = NULL,
+                  logical_operator = "AND"){
+  if (all(is.null(country), !is.null(region))){
+    stop(paste0("Because regions are not unique in the database you need to ",
+                "specify a country in which to look for specific regions."))
+    }
+  join_query <- NULL
+  if (any(!is.null(site), !is.null(coords), !is.null(country))){
+    siteloc_join <- "JOIN siteloc b ON a.site_ = b.site_"
+    join_query <- append(join_query, siteloc_join)
+    if (!is.null(country)){
       poldiv1Join <- "JOIN poldiv1 f ON b.poldiv1 = f.poldiv1"
-      joinQuery <- append(joinQuery, poldiv1Join)
-      if(!is.null(region)){
-        poldiv2Join <- "JOIN poldiv2 g ON b.poldiv1 = g.poldiv1 AND b.poldiv2 = g.poldiv2"
-        joinQuery <- append(joinQuery, poldiv2Join)
+      join_query <- append(join_query, poldiv1Join)
+      if (!is.null(region)){
+        poldiv2Join <- paste0("JOIN poldiv2 g ON b.poldiv1 = g.poldiv1 AND ",
+                              "b.poldiv2 = g.poldiv2")
+        join_query <- append(join_query, poldiv2Join)
       }
     }
   }
-  if(any(!is.null(lastname), !is.null(firstname), !is.null(initials))){
-    workersJoin <- "JOIN workers c ON a.coll_ = c.worker_"
-    joinQuery <- append(joinQuery, workersJoin)
+  if (any(!is.null(lastname), !is.null(firstname), !is.null(initials))){
+    workers_join <- "JOIN workers c ON a.coll_ = c.worker_"
+    join_query <- append(join_query, workers_join)
   }
-  if(!is.null(publ)){
-    publentJoin <- "JOIN publent d ON a.e_ = d.e_ JOIN publ e ON d.publ_ = e.publ_"
-    joinQuery <- append(joinQuery, publentJoin)
+  if (!is.null(publ)){
+    publent_join <- paste0("JOIN publent d ON a.e_ = d.e_ JOIN publ e ON",
+                           "d.publ_ = e.publ_")
+    join_query <- append(join_query, publent_join)
   }
-  if(!is.null(restrictions)){
-    restrictionsSelect <- "JOIN p_entity h ON a.e_ = h.e_"
-    joinQuery <- append(joinQuery, restrictionsSelect)
+  if (!is.null(restrictions)){
+    restrictions_select <- "JOIN p_entity h ON a.e_ = h.e_"
+    join_query <- append(join_query, restrictions_select)
   }
-  
-  selectQuery <- NULL
-  
-  if(!is.null(site)){
-    if(all(class(site) != "numeric", class(site) != "character")){
+  select_query <- NULL
+  if (!is.null(site)){
+    if (all(class(site) !=  "numeric", class(site) !=  "character")){
       stop("site has to be a number, a character or a vector of the formers.")
-    }    
-    if(is.character(site)){
-      site <- paste(site, collapse="','")
-      siteSelect <- paste("b.sitename IN ('", site, "')", sep="")
+    }
+    if (is.character(site)){
+      site <- paste(site, collapse = "','")
+      site_select <- paste("b.sitename IN ('", site, "')", sep = "")
     }else{
-      site <- paste(site, collapse="','")
-      siteSelect <- paste("b.site_ IN ('", site, "')", sep="")
+      site <- paste(site, collapse = "','")
+      site_select <- paste("b.site_ IN ('", site, "')", sep = "")
     }
-    selectQuery <- append(selectQuery, siteSelect)
+    select_query <- append(select_query, site_select)
   }
-  
-  if(!is.null(coords)){
-    if(!is.numeric(coords)){
-      stop("Object coord has to be a numeric vector with 4 elements: xmin, xmax, ymin, and ymax")
+  if (!is.null(coords)){
+    if (!is.numeric(coords)){
+      stop("Object coord has to be a numeric vector with 4 elements:
+           xmin, xmax, ymin, and ymax")
     }
-    if(length(coords) != 4){
-      stop("Object coord has to have exactly 4 elements: xmin, xmax, ymin, and ymax")
+    if (length(coords) !=  4){
+      stop("Object coord has to have exactly 4 elements:
+           xmin, xmax, ymin, and ymax")
     }
     xmin <- coords[1]
     xmax <- coords[2]
     ymin <- coords[3]
     ymax <- coords[4]
-    coordsSelect <- paste("b.londd BETWEEN ",  xmin, " AND ", xmax, " AND b.latdd BETWEEN ", ymin, " AND ", ymax, sep="")
-    
-    selectQuery <- append(selectQuery, coordsSelect)
+    coords_select <- paste("b.londd BETWEEN ",  xmin, " AND ", xmax,
+                           " AND b.latdd BETWEEN ", ymin, " AND ",
+                           ymax, sep = "")
+    select_query <- append(select_query, coords_select)
   }
-  
-  if(!is.null(lastname)){
-    if(class(lastname) != "character"){stop("lastname has to be a character string")}
-    lastname <- paste(lastname, collapse="','")
-    lastnameSelect <- paste("c.lastname IN ('", lastname, "')", sep="")
-    selectQuery <- append(selectQuery, lastnameSelect)
+  if (!is.null(lastname)){
+    if (class(lastname) !=  "character"){
+      stop("lastname has to be a character string")
+    }
+    lastname <- paste(lastname, collapse = "','")
+    lastname_select <- paste("c.lastname IN ('", lastname, "')", sep = "")
+    select_query <- append(select_query, lastname_select)
   }
-  if(!is.null(firstname)){
-    if(class(firstname) != "character"){stop("firstname has to be a character string")}
-    firstname <- paste(firstname, collapse="','")
-    firstnameSelect <- paste("c.firstname IN ('", firstname, "')", sep="")
-    selectQuery <- append(selectQuery, firstnameSelect)
+  if (!is.null(firstname)){
+    if (class(firstname) !=  "character"){
+      stop("firstname has to be a character string")
+    }
+    firstname <- paste(firstname, collapse = "','")
+    firstname_select <- paste("c.firstname IN ('", firstname, "')", sep = "")
+    select_query <- append(select_query, firstname_select)
   }
-  if(!is.null(initials)){
-    if(class(initials) != "character"){stop("initials has to be a character string")}
-    initials <- paste(initials, collapse="','")
-    initialsSelect <- paste("c.initials IN ('", initials, "')", sep="")
-    selectQuery <- append(selectQuery, initialsSelect)
+  if (!is.null(initials)){
+    if (class(initials) !=  "character"){
+      stop("initials has to be a character string")
+    }
+    initials <- paste(initials, collapse = "','")
+    initial_select <- paste("c.initials IN ('", initials, "')", sep = "")
+    select_query <- append(select_query, initial_select)
   }
-  
-  if(!is.null(publ)){
-    if(class(publ) != "numeric"){stop("publ has to be a numeric indicating the publication identification number.")}
-    publ <- paste(publ, collapse="','")
-    publSelect <- paste("d.publ_ IN ('", publ, "')", sep = "")
-    selectQuery <- append(selectQuery, publSelect)
+  if (!is.null(publ)){
+    if (class(publ) !=  "numeric"){
+      stop("publ has to be a numeric indicating the publication identification
+           number.")
+    }
+    publ <- paste(publ, collapse = "','")
+    publ_select <- paste("d.publ_ IN ('", publ, "')", sep = "")
+    select_query <- append(select_query, publ_select)
   }
-  
-  if(!is.null(country)){
-    if(class(country) != "character"){
+  if (!is.null(country)){
+    if (class(country) !=  "character"){
       stop("country has to be a character or a vector of character elements.")
-    }    
-    if(length(country) > 1 & !is.null(region)){warning("Multiple countries specified with region: Providing region for multiple countries might result in undesired results. Provide region only for queries with one country.")}
-    
-    country <- paste(country, collapse="','")
-    
-    if(all(sapply(country, nchar) == 3)){
-      countrySelect <- paste("f.poldiv1 IN ('", country, "')", sep="")
+    }
+    if (length(country) > 1 & !is.null(region)){
+      warning("Multiple countries specified with region: Providing region
+              for multiple countries might result in undesired results.
+              Provide region only for queries with one country.")
+    }
+    country <- paste(country, collapse = "','")
+    if (all(vapply(country, nchar, FUN.VALUE = numeric(1))  ==  3)){
+      country_select <- paste("f.poldiv1 IN ('", country, "')", sep = "")
     }else{
-      countrySelect <- paste("f.name IN ('", country, "')", sep="")
+      country_select <- paste("f.name IN ('", country, "')", sep = "")
     }
-    selectQuery <- append(selectQuery, countrySelect)
-    
-    if(!is.null(region)){
-      if(all(class(region) != "character")){
+    select_query <- append(select_query, country_select)
+    if (!is.null(region)){
+      if (all(class(region) !=  "character")){
         stop("region has to be a character or a vector of the characters.")
-      }    
-      if(any(nchar(region) > 2)){
-        regionSelect <- paste("g.name IN ('", region, "')", sep="")
-      }else{
-        regionSelect <- paste("g.poldiv2 IN ('", region, "')", sep="")
       }
-      selectQuery <- append(selectQuery, regionSelect)
+      if (any(nchar(region) > 2)){
+        region_select <- paste("g.name IN ('", region, "')", sep = "")
+      }else{
+        region_select <- paste("g.poldiv2 IN ('", region, "')", sep = "")
+      }
+      select_query <- append(select_query, region_select)
     }
   }
-  
-  if(!is.null(restrictions)){
-    if(class(restrictions) != "character"){stop("restrictions has to be a character 'U' or 'R'.")}
-    
-    restrictions <- paste(restrictions, collapse="','")
-    restrictionsSelect <- paste("usestatus IN ('", restrictions, "')", sep = "")
-    selectQuery <- append(selectQuery, restrictionsSelect)
+  if (!is.null(restrictions)){
+    if (class(restrictions) != "character"){
+      stop("restrictions has to be a character 'U' or 'R'.")
+      }
+    restrictions <- paste(restrictions, collapse = "','")
+    restrictions_select <- paste("usestatus IN ('", restrictions, "')",
+                                 sep = "")
+    select_query <- append(select_query, restrictions_select)
   }
-  
-  basicQuery <- "SELECT * FROM entity a"
-  
-  if(is.null(selectQuery)){
-    sqlQuery <- basicQuery
+  basic_query <- "SELECT * FROM entity a"
+  if (is.null(select_query)){
+    sql_query <- basic_query
   }else{
-    logical_operator <- paste(" ", logical_operator, " ", sep="")
-    joinQuery <- paste(joinQuery, collapse=" ")
-    selectQuery <- paste(selectQuery, collapse=logical_operator)
-    
-    sqlQuery <- paste(basicQuery, joinQuery, "WHERE", selectQuery)
+    logical_operator <- paste(" ", logical_operator, " ", sep = "")
+    join_query <- paste(join_query, collapse = " ")
+    select_query <- paste(select_query, collapse = logical_operator)
+    sql_query <- paste(basic_query, join_query, "WHERE", select_query)
   }
-  sqlQuery <- enc2utf8(sqlQuery)
-  result <- RPostgreSQL::dbGetQuery(connection, sqlQuery)
+  sql_query <- enc2utf8(sql_query)
+  result <- RPostgreSQL::dbGetQuery(connection, sql_query)
   return(result)
   }
-
-

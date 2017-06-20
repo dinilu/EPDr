@@ -60,22 +60,22 @@ library(EPDr)
 
 The `EPDr` package uses the `RPostgreSQL` package to establish a connection between the R session and the EPD database in the PostgreSQL server. Although this can be done to a online server, we assume most users do not have the expertise to setup an online server and most are thus running the server and the R session in the same computer (localhost configuration). 
 
-To establish the connection we use the `connectToEPD` function, which requires the following arguments:
+To establish the connection we use the `connect_to_epd` function, which requires the following arguments:
 *`database`: database name. No default database name is specified in the function.
 *`user`: user name. Name of the user with privileges to access the database. No default user name is specified in the function.
 *`password`: user's password. Password of the user to access the database.
 *`host`: address to the server. "localhost" is the default value indicating that the server is running in the local computer.
 
-If the function is called with no arguments `connectToEPD()`, the function assume the server is running in the local computer ("locahost"), and interactively ask for the necessary arguments to connect with the database: `database`, `user`, and `password`.
+If the function is called with no arguments `connect_to_epd()`, the function assume the server is running in the local computer ("locahost"), and interactively ask for the necessary arguments to connect with the database: `database`, `user`, and `password`.
 
 ```{r Connect to local EPD}
-epdConnection <- connectToEPD(database="epd", user="epdr", password="epdrpw")
+epdConnection <- connect_to_epd(database="epd", user="epdr", password="epdrpw")
 ```
 
 In case you have access to a remote EPD server, you only have to provide the online address to the server using the argument `host`.
 
 ```{r Connect to remote EPD, eval=F}
-epdConnection <- connectToEPD(database="epd", user="epdr", password="epdrpw", host="http://remote.epd.server")
+epdConnection <- connect_to_epd(database="epd", user="epdr", password="epdrpw", host="http://remote.epd.server")
 ```
 
 Now, we are ready to check the connection with some of the functions in the `RPostgreSQL` and/or `DBI` packages. For instance, we can use the `dbListTables` function to get a list of all the tables in the database. The function should return a list of 45 tables.
@@ -97,30 +97,30 @@ For users unfamiliar with the database it might be useful to list elements in th
 Some of these functions (`listCountries` and `listTaxagroups`) only accept one argument (`connection`), which must be a valid connection to the EPD database. 
 
 ```{r listCountries and listTaxagroups, R.options=list(max.print=15)}
-listCountries(epdConnection)
-listTaxagroups(epdConnection)
+list_countries(epdConnection)
+list_taxagroups(epdConnection)
 ```
 
 However, other `list` functions accept several arguments to further filter the result of the query. For instance, `listRegions` accepts an extra argument (`country`) to limit the query to particular countries. 
 
 ```{r listRegions, R.options=list(max.print=40)}
-listRegions(epdConnection)
-listRegions(epdConnection, country="Spain")
+list_regions(epdConnection)
+list_regions(epdConnection, country="Spain")
 ```
 
 Each function has their own relevant parameters. For instance, `listTaxa` accepts the argument `group_id`, which refers to the taxa groups from `listTaxagroups`.
 
 ```{r listTaxa, R.options=list(max.print=20)}
-listTaxa(epdConnection)
-listTaxa(epdConnection, group_id="HERB")
+list_taxa(epdConnection)
+list_taxa(epdConnection, group_id="HERB")
 ```
 
 Other `list` functions accept more arguments. Sample sites, for instance, can be listed specifying the `country` and `region` of interest, but also a set of four geographical coordinates (longitude and latitude) encompasing the area of interest (xmin, xmax, ymin, ymax).
 
 ```{r listSites, R.options=list(max.print=30)}
-listSites(epdConnection)
-listSites(epdConnection, country="Spain", region="Andalucia")
-listSites(epdConnection, coords=c(-4, 10, 36, 40))
+list_sites(epdConnection)
+list_sites(epdConnection, country="Spain", region="Andalucia")
+list_sites(epdConnection, coords=c(-4, 10, 36, 40))
 ```
 
 Biological counts and datation data in the EPD database are refered to entities. This account for the fact that multiple samples can be taken in the same site. For instance, several cores drilled in the the same lake, or a core and a surface sample (moss polster or pollen trap) being collected in a peatbog.
@@ -128,22 +128,22 @@ Biological counts and datation data in the EPD database are refered to entities.
 Entities thus can be listed according to many different criteria: site name or site ID (`site`), geographical coordinates (`coords`), last name of the author (`lastname`), first name of the author (`firstname`), initials of the author (`initials`), publication number (`publ`), country (`country`) and region (`region`), and restriction on the use of data (`restrictions`). If multiple criteria are going to be used, the author can decide to use a logical operator to control for an additive (`AND`) or alternative (`OR`) interaction between criteria.
 
 ```{r listE, R.options=list(max.print=50)}
-listE(epdConnection)
-listE(epdConnection, site="Adange")
-listE(epdConnection, lastname="Tzedakis")
+list_e(epdConnection)
+list_e(epdConnection, site="Adange")
+list_e(epdConnection, lastname="Tzedakis")
 ```
 
 When using any of these `list` functions with arguments to filter the query, we can specify multiple values. That means for instance that we can pass a vector of names as the argument `country` to the `listE` function to get information about all the entities in all those countries.
 
 ```{r listE multiple countries, R.options=list(max.print=60)}
-listE(epdConnection, country=c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
+list_e(epdConnection, country=c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
 ```
 
 Finally, the `listPubl` function allow to search the publications we need to cite if are going to use any of the datasets in the database. This function thus allow to search publications for several criteria, including entity number (`e_`).
 
 ```{r listPubl, R.options=list(max.print=10)}
-listPubl(epdConnection)
-listPubl(epdConnection, e_=1)
+list_publ(epdConnection)
+list_publ(epdConnection, e_=1)
 ```
 
 ## Getting biological counts and datation information (`get` functions)
@@ -155,9 +155,9 @@ All these `get` functions have been designed to query data for a particular enti
 Some of the `get` functions retrieve metadata for the entity, the site, or the use restriction for data in that particular entity. The result from these functions are regular data frames.
 
 ```{r getEntity getSite and getRestriction, eval=F}
-getEntity(1, epdConnection)
-getSite(1, epdConnection)
-getRestriction(1, epdConnection)
+get_entity(1, epdConnection)
+get_site(1, epdConnection)
+get_restriction(1, epdConnection)
 ```
 
 However, most of the functions recover actual data from the entities. There are two groups of data that can be retrieved: datation information and biological samples/counts.
@@ -167,26 +167,23 @@ However, most of the functions recover actual data from the entities. There are 
 Among the datation data most relevant data are radiocarbon dates from radiocarbon samples, which can be retrieved with `getC14`. 
 
 ```{r, eval=F}
-getC14(1, epdConnection)
-getEvents(1, epdConnection)
-getChronology(1, epdConnection)
-getDatation(1, epdConnection)
+get_c14(1, epdConnection)
+get_events(1, epdConnection)
+get_chronology(1, epdConnection)
+get_datation(1, epdConnection)
 
-getAges(1, epdConnection)
+get_ages(1, epdConnection)
 
-getPSamples(1, epdConnection)
-getCounts(1, epdConnection)
+get_psamples(1, epdConnection)
+get_entity(1, epdConnection)
 
-getAgedCounts(1, epdConnection)
-
-getTaxonomyEPD(epdConnection)
+get_taxonomy_epd(epdConnection)
 ```
 
 
 ```{r export functions, eval=F}
 # Export functions ----
-c14.clam <- exportC14(c14)
-noc14.clam <- noC14toCLAM(chron$no_C14)
+c14.clam <- export_c14(c14)
 
 # Extract functions ----
 

@@ -6,26 +6,37 @@
 \alias{chron}
 \title{Class for chronology information of an entity}
 \description{
-Class "chron" store all information relative to chronologies for a specified entity of the European Pollen Database (EPD). This object is created by \code{\link[EPDr:getChron]{getChron}}.
+Class "chron" store all information relative to chronologies for a
+specified entity of the European Pollen Database (EPD). This object is
+created by \code{\link[EPDr]{get_chron}}.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{chron}}{data.frame. Information on the different chronologies for the site.}
+\item{\code{chron}}{data.frame. Information on the different chronologies for
+the site.}
 
-\item{\code{agebound}}{data.frame. Description of the temporal bounds or limits for each chronology in  \code{@chron}.}
+\item{\code{agebound}}{data.frame. Description of the temporal bounds or limits
+for each chronology in  \code{@chron}.}
 
-\item{\code{agebasis}}{data.frame. This table store the information used to fit the age-depth model in each chronology and to calculate ages for the biological samples.}
+\item{\code{agebasis}}{data.frame. This table store the information used to fit
+the age-depth model in each chronology and to calculate ages for the
+biological samples.}
 
-\item{\code{rational}}{data.frame. This table provide a longer explanation for the rational used in each data in \code{@agebasis}.}
+\item{\code{rational}}{data.frame. This table provide a longer explanation for
+the rational used in each data in \code{@agebasis}.}
 
-\item{\code{alsegs}}{data.frame. Information on the annual lamination segments found in the entity.}
+\item{\code{alsegs}}{data.frame. Information on the annual lamination segments
+found in the entity.}
 
-\item{\code{panldpt}}{data.frame. Detailed information (e.g., depth, thikness, etc) for each annual lamination in \code{@alsegs}.}
+\item{\code{panldpt}}{data.frame. Detailed information (e.g., depth, thikness,
+etc) for each annual lamination in \code{@alsegs}.}
 
-\item{\code{synevent}}{data.frame. This is a transition table that connect each entity with geological events in \code{@event}.}
+\item{\code{synevent}}{data.frame. This is a transition table that connect each
+entity with geological events in \code{@event}.}
 
-\item{\code{event}}{data.frame. Details on the events that are present in that particular entity.}
+\item{\code{event}}{data.frame. Details on the events that are present in that
+particular entity.}
 
 \item{\code{publ}}{data.frame PUBL data where the event data were published.}
 }}

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Diego Nieto Lugilde" />
+
+<meta name="date" content="2017-06-19" />
+
+<title>EPDr vignette</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Acounter%2Dreset%3Atable%20figure%3B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0Aborder%3A1px%20solid%20%23021a40%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Acaption%3A%3Abefore%7B%0Acounter%2Dincrement%3A%20table%3B%0Acontent%3A%20%22Table%20%22%20counter%28table%29%20%22%3A%20%22%3B%0A%7D%0A%2Ecaption%3A%3Abefore%7B%0Acounter%2Dincrement%3A%20figure%3B%0Acontent%3A%20%22Figure%20%22%20counter%28figure%29%20%22%3A%20%22%3B%0A%7D%0Ap%2Ecaption%20%7B%0Afont%2Dstyle%3A%20italic%3B%0Afont%2Dsize%3A%2090%25%3B%0Acolor%3A%20grey%3B%0Amargin%2Dbottom%3A%203%2E5em%3B%0A%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">EPDr vignette</h1>
+<h4 class="author"><em>Diego Nieto Lugilde</em></h4>
+<h4 class="date"><em>2017-06-19</em></h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#installing-the-epdr-package"><span class="toc-section-number">1</span> Installing the EPDr package</a></li>
+<li><a href="#setting-up-the-epd-database"><span class="toc-section-number">2</span> Setting up the EPD database</a></li>
+<li><a href="#loading-the-epdr-package"><span class="toc-section-number">3</span> Loading the EPDr package</a></li>
+<li><a href="#connecting-to-the-epd-database"><span class="toc-section-number">4</span> Connecting to the EPD database</a></li>
+<li><a href="#querying-data-from-the-database"><span class="toc-section-number">5</span> Querying data from the database</a><ul>
+<li><a href="#listing-fields-from-the-epd-list-functions"><span class="toc-section-number">5.1</span> Listing fields from the EPD (<code>list</code> functions)</a></li>
+<li><a href="#getting-biological-counts-and-datation-information-get-functions"><span class="toc-section-number">5.2</span> Getting biological counts and datation information (<code>get</code> functions)</a></li>
+</ul></li>
+</ul>
+</div>
+
+<p>In this vignette we will illustrate the use of EPDr package, from installing the package to retrieving data from a local server of the European Pollen Database (EPD) and how to use those data to perform some basic analysis and produce most common plots in paleopalynology, like palynograms or maps.</p>
+<div id="installing-the-epdr-package" class="section level1">
+<h1><span class="header-section-number">1</span> Installing the EPDr package</h1>
+<p>User can choose to install the latest development version from github or the latest released version from CRAN.</p>
+<p>The development version from github can be installed using the <code>install_github</code> function from the <code>devtools</code>package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
+<span class="kw">install_github</span>(<span class="st">&quot;dinilu/EPDr&quot;</span>, <span class="dt">force=</span>T)</code></pre></div>
+<p>Alternatively, the last released version can be installed from CRAN using the usual <code>install.package</code> function</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;EPDr&quot;</span>)</code></pre></div>
+</div>
+<div id="setting-up-the-epd-database" class="section level1">
+<h1><span class="header-section-number">2</span> Setting up the EPD database</h1>
+<p>Before moving on with this vignette, it is important that the user have access to a running PostgreSQL server with the EPD database. This is where the data are going to be pulled out. Detailed, and step by step, instructions to do so in a local-host are in a specific vignette along with the EPDr package. Check the vignette in the following code if you have not yet.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vignette</span>(<span class="st">&quot;EPD-PostgreSQL&quot;</span>, <span class="dt">package=</span><span class="st">&quot;EPDr&quot;</span>)</code></pre></div>
+</div>
+<div id="loading-the-epdr-package" class="section level1">
+<h1><span class="header-section-number">3</span> Loading the EPDr package</h1>
+<p>As any other R-package, <code>ÈPDr</code> is loaded in the working environment with the <code>library</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(EPDr)</code></pre></div>
+</div>
+<div id="connecting-to-the-epd-database" class="section level1">
+<h1><span class="header-section-number">4</span> Connecting to the EPD database</h1>
+<p>The <code>EPDr</code> package uses the <code>RPostgreSQL</code> package to establish a connection between the R session and the EPD database in the PostgreSQL server. Although this can be done to a online server, we assume most users do not have the expertise to setup an online server and most are thus running the server and the R session in the same computer (localhost configuration).</p>
+<p>To establish the connection we use the <code>connect_to_epd</code> function, which requires the following arguments: <em><code>database</code>: database name. No default database name is specified in the function. </em><code>user</code>: user name. Name of the user with privileges to access the database. No default user name is specified in the function. <em><code>password</code>: user’s password. Password of the user to access the database. </em><code>host</code>: address to the server. “localhost” is the default value indicating that the server is running in the local computer.</p>
+<p>If the function is called with no arguments <code>connect_to_epd()</code>, the function assume the server is running in the local computer (“locahost”), and interactively ask for the necessary arguments to connect with the database: <code>database</code>, <code>user</code>, and <code>password</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epdConnection &lt;-<span class="st"> </span><span class="kw">connect_to_epd</span>(<span class="dt">database=</span><span class="st">&quot;epd&quot;</span>, <span class="dt">user=</span><span class="st">&quot;epdr&quot;</span>, <span class="dt">password=</span><span class="st">&quot;epdrpw&quot;</span>)</code></pre></div>
+<p>In case you have access to a remote EPD server, you only have to provide the online address to the server using the argument <code>host</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epdConnection &lt;-<span class="st"> </span><span class="kw">connect_to_epd</span>(<span class="dt">database=</span><span class="st">&quot;epd&quot;</span>, <span class="dt">user=</span><span class="st">&quot;epdr&quot;</span>, <span class="dt">password=</span><span class="st">&quot;epdrpw&quot;</span>, <span class="dt">host=</span><span class="st">&quot;http://remote.epd.server&quot;</span>)</code></pre></div>
+<p>Now, we are ready to check the connection with some of the functions in the <code>RPostgreSQL</code> and/or <code>DBI</code> packages. For instance, we can use the <code>dbListTables</code> function to get a list of all the tables in the database. The function should return a list of 45 tables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DBI)
+<span class="kw">dbListTables</span>(epdConnection)</code></pre></div>
+<pre><code>##  [1] &quot;descr&quot;    &quot;chron&quot;    &quot;entity&quot;   &quot;authors&quot;  &quot;groups&quot;   &quot;coredriv&quot;
+##  [7] &quot;geochron&quot; &quot;esr&quot;      &quot;p_counts&quot; &quot;c14&quot;      &quot;ft&quot;       &quot;p_entity&quot;
+## [13] &quot;kar&quot;      &quot;event&quot;    &quot;p_group&quot;  &quot;infotype&quot; &quot;litholgy&quot; &quot;loi&quot;     
+## [19] &quot;alsegs&quot;   &quot;igcptype&quot; &quot;p_sample&quot; &quot;agebound&quot; &quot;p_anldpt&quot; &quot;p_agedpt&quot;
+## [25] &quot;p_vtrans&quot; &quot;poldiv1&quot;  &quot;siteloc&quot;  &quot;section&quot;  &quot;si32&quot;     &quot;publ&quot;    
+## [31] &quot;p_vars&quot;   &quot;sitedesc&quot; &quot;useries&quot;  &quot;synevent&quot; &quot;siteinfo&quot; &quot;syntype&quot; 
+## [37] &quot;poldiv2&quot;  &quot;aar&quot;      &quot;poldiv3&quot;  &quot;rational&quot; &quot;agebasis&quot; &quot;publent&quot; 
+## [43] &quot;workers&quot;  &quot;tl&quot;       &quot;pb210&quot;</code></pre>
+</div>
+<div id="querying-data-from-the-database" class="section level1">
+<h1><span class="header-section-number">5</span> Querying data from the database</h1>
+<p>The EPDr package provide several ways to retrieve data from the database: Listing information from different fields in the database with <code>list</code> functions, or extracting especific data for a particular entity (pollen core, polster sample, etc.) with <code>get</code> functions.</p>
+<div id="listing-fields-from-the-epd-list-functions" class="section level2">
+<h2><span class="header-section-number">5.1</span> Listing fields from the EPD (<code>list</code> functions)</h2>
+<p>For users unfamiliar with the database it might be useful to list elements in the database, for instance to know which countries are represented or which publications are associated with the entities in the database. To do so, the package provides a series of <code>list</code> functions that return specific tables from the database where important information can be looked at.</p>
+<p>Some of these functions (<code>listCountries</code> and <code>listTaxagroups</code>) only accept one argument (<code>connection</code>), which must be a valid connection to the EPD database.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_countries</span>(epdConnection)</code></pre></div>
+<pre><code>##    poldiv1                                   name
+## 1      ADS                           Adriatic Sea
+## 2      AFG                            Afghanistan
+## 3      ALA                         Ãland Islands
+## 4      ALB                                Albania
+## 5      AND                                Andorra
+## 6      ARE                   United Arab Emirates
+## 7      ARM                                Armenia
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 83 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_taxagroups</span>(epdConnection)</code></pre></div>
+<pre><code>##    groupid groupcode                             groupname
+## 1     ACRI         ?                            Acritarchs
+## 2     ALGA         L                                 Algae
+## 3     AQPT         K                  Aquatic Pteridophyta
+## 4     AQUA         Q                              Aquatics
+## 5     BRYO         M                            Bryophytes
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 24 rows ]</code></pre>
+<p>However, other <code>list</code> functions accept several arguments to further filter the result of the query. For instance, <code>listRegions</code> accepts an extra argument (<code>country</code>) to limit the query to particular countries.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_regions</span>(epdConnection)</code></pre></div>
+<pre><code>##      poldiv2 poldiv1                             regionname
+## 1         00     ADS                                   &lt;NA&gt;
+## 2         00     AFG                                   &lt;NA&gt;
+## 3         00     ALA                                   &lt;NA&gt;
+## 4         00     ALB                                   &lt;NA&gt;
+## 5         01     ALB                        Qarku i Beratit
+## 6         02     ALB                         Qarku i Dibres
+## 7         03     ALB                       Qarku i Durresit
+## 8         04     ALB                      Qarku i Elbasanit
+## 9         05     ALB                         Qarku i Fierit
+## 10        06     ALB                   Qarku i Gjirokastres
+##                                 countryname
+## 1                              Adriatic Sea
+## 2                               Afghanistan
+## 3                            Ãland Islands
+## 4                                   Albania
+## 5                                   Albania
+## 6                                   Albania
+## 7                                   Albania
+## 8                                   Albania
+## 9                                   Albania
+## 10                                  Albania
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 2039 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_regions</span>(epdConnection, <span class="dt">country=</span><span class="st">&quot;Spain&quot;</span>)</code></pre></div>
+<pre><code>##    poldiv2 poldiv1            regionname countryname
+## 1       00     ESP                  &lt;NA&gt;       Spain
+## 2       01     ESP             Andalucia       Spain
+## 3       02     ESP                Aragon       Spain
+## 4       03     ESP              Asturias       Spain
+## 5       04     ESP              Baleares       Spain
+## 6       05     ESP              Canarias       Spain
+## 7       06     ESP             Cantabria       Spain
+## 8       07     ESP    Castilla-La Mancha       Spain
+## 9       08     ESP       Castilla y Leon       Spain
+## 10      09     ESP              Cataluna       Spain
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 10 rows ]</code></pre>
+<p>Each function has their own relevant parameters. For instance, <code>listTaxa</code> accepts the argument <code>group_id</code>, which refers to the taxa groups from <code>listTaxagroups</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_taxa</span>(epdConnection)</code></pre></div>
+<pre><code>##      var_                                            varname   varcode
+## 1       1                                              Abies       Abi
+## 2    1987                                         Abies alba     Abi.a
+## 3    2644                                     Abies marocana     Abi.m
+## 4    2493                                 Abies nordmanniana     Abi.n
+##      mhvar_ groupid
+## 1         1    TRSH
+## 2         1    TRSH
+## 3         1    TRSH
+## 4         1    TRSH
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 5474 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_taxa</span>(epdConnection, <span class="dt">group_id=</span><span class="st">&quot;HERB&quot;</span>)</code></pre></div>
+<pre><code>##      var_                                            varname   varcode
+## 1    1869                                           Abutilon       Abu
+## 2    2721                                        Acanthaceae  Acanteae
+## 3    1852                                       Acantholimon       Alm
+## 4    1763                                           Acanthus       Atu
+##      mhvar_ groupid
+## 1       472    HERB
+## 2      1763    HERB
+## 3       595    HERB
+## 4      1763    HERB
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 2796 rows ]</code></pre>
+<p>Other <code>list</code> functions accept more arguments. Sample sites, for instance, can be listed specifying the <code>country</code> and <code>region</code> of interest, but also a set of four geographical coordinates (longitude and latitude) encompasing the area of interest (xmin, xmax, ymin, ymax).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_sites</span>(epdConnection)</code></pre></div>
+<pre><code>##      site_                               sitename        sitecode    latdd
+## 1        1                                 Adange  GEO-01000-ADAN 43.30556
+## 2        2                         AgerÃ¶ds Mosse  SWE-13000-AGER 55.83333
+##            londd elevation areaofsite
+## 1      41.333333      1750 2.5000e-01
+## 2      13.416667        58 1.5000e+02
+##                                                          sitedescript
+## 1                                             Meander of Adange river
+## 2                                               Forested Sphagnum bog
+##                                      physiography
+## 1               Fluvial terrace above flood-plain
+## 2                                            till
+##                                                                       surroundveg
+## 1                                            Subalpine tall herbaceous vegetation
+## 2                                                         pasture and arable land
+##                                   vegformation
+## 1                                         &lt;NA&gt;
+## 2                                         &lt;NA&gt;
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 1874 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_sites</span>(epdConnection, <span class="dt">country=</span><span class="st">&quot;Spain&quot;</span>, <span class="dt">region=</span><span class="st">&quot;Andalucia&quot;</span>)</code></pre></div>
+<pre><code>##   site_        sitename       sitecode    latdd     londd elevation
+## 1    65           Antas ESP-01000-ANTA 37.20833 -1.823611         0
+## 2   306   Laguna Grande ESP-01000-LAGU 37.10833 -4.316667       800
+##   areaofsite                sitedescript
+## 1         NA                   Sea shore
+## 2          4             Spring-fed lake
+##                                 physiography
+## 1                                       flat
+## 2                         in limestone hills
+##                               surroundveg vegformation
+## 1                                    &lt;NA&gt;         &lt;NA&gt;
+## 2                                    &lt;NA&gt;         &lt;NA&gt;
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 7 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_sites</span>(epdConnection, <span class="dt">coords=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span>, <span class="dv">10</span>, <span class="dv">36</span>, <span class="dv">40</span>))</code></pre></div>
+<pre><code>##    site_           sitename       sitecode    latdd     londd elevation
+## 1     55           Algendar ESP-04000-ALGE 39.94056  3.958611        21
+## 2     65              Antas ESP-01000-ANTA 37.20833 -1.823611         0
+##    areaofsite                  sitedescript
+## 1          NA South coast of Minorca Island
+## 2          NA                     Sea shore
+##                                physiography
+## 1                             littoral core
+## 2                                      flat
+##                                 surroundveg                 vegformation
+## 1                              Quercus ilex                         &lt;NA&gt;
+## 2                                      &lt;NA&gt;                         &lt;NA&gt;
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 23 rows ]</code></pre>
+<p>Biological counts and datation data in the EPD database are refered to entities. This account for the fact that multiple samples can be taken in the same site. For instance, several cores drilled in the the same lake, or a core and a surface sample (moss polster or pollen trap) being collected in a peatbog.</p>
+<p>Entities thus can be listed according to many different criteria: site name or site ID (<code>site</code>), geographical coordinates (<code>coords</code>), last name of the author (<code>lastname</code>), first name of the author (<code>firstname</code>), initials of the author (<code>initials</code>), publication number (<code>publ</code>), country (<code>country</code>) and region (<code>region</code>), and restriction on the use of data (<code>restrictions</code>). If multiple criteria are going to be used, the author can decide to use a logical operator to control for an additive (<code>AND</code>) or alternative (<code>OR</code>) interaction between criteria.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_e</span>(epdConnection)</code></pre></div>
+<pre><code>##        e_ site_    sigle                            name iscore issect
+## 1       1     1   ADANGE                            &lt;NA&gt;      Y      N
+## 2       2     2      AGE                            &lt;NA&gt;      Y      N
+##      isssamp descriptor hasanlam
+## 1          Y       RFLU        N
+## 2          Y       PBRA        N
+##                                                          entloc
+## 1                                           left coast of river
+## 2                                             Center of the bog
+##                                                                                                                                                                                          localveg
+## 1                                                                                                                                                                                  Cyperaceae fen
+## 2                                                                                                                                                                                            &lt;NA&gt;
+##      coll_   sampdate depthatloc icethickcm
+## 1       65 1984-08-00      210.0         NA
+## 2       70 1960-00-00         NA         NA
+##                                  sampdevice corediamcm c14depthadj
+## 1                                     spade      10.00          NA
+## 2                              piston corer       6.00          NA
+##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        notes
+## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       &lt;NA&gt;
+## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       &lt;NA&gt;
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 2407 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_e</span>(epdConnection, <span class="dt">site=</span><span class="st">&quot;Adange&quot;</span>)</code></pre></div>
+<pre><code>##   e_ site_  sigle name iscore issect isssamp descriptor hasanlam
+## 1  1     1 ADANGE &lt;NA&gt;      Y      N       Y       RFLU        N
+##                entloc       localveg coll_   sampdate depthatloc
+## 1 left coast of river Cyperaceae fen    65 1984-08-00        210
+##   icethickcm sampdevice corediamcm c14depthadj notes site_ sitename
+## 1         NA      spade         10          NA  &lt;NA&gt;     1   Adange
+##         sitecode siteexists poldiv1 poldiv2 poldiv3 latdeg latmin latsec
+## 1 GEO-01000-ADAN       &lt;NA&gt;     GEO      01     000     43     18     20
+##   latns    latdd    latdms londeg lonmin lonsec lonew    londd     londms
+## 1     N 43.30556 43.18.20N     41     20      0     E 41.33333  41.20.00E
+##   elevation areaofsite
+## 1      1750       0.25</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_e</span>(epdConnection, <span class="dt">lastname=</span><span class="st">&quot;Tzedakis&quot;</span>)</code></pre></div>
+<pre><code>##    e_ site_   sigle     name iscore issect isssamp descriptor hasanlam
+## 1 294   249 IOAN249 core 249      Y      N       Y       UNKN        N
+##                                     entloc localveg coll_   sampdate
+## 1 Southeast of Lake Pamvotis near Kastrits     &lt;NA&gt;   415 0000-00-00
+##   depthatloc icethickcm         sampdevice corediamcm c14depthadj notes
+## 1         NA         NA Unspecified device         NA          NA  &lt;NA&gt;
+##   worker_ workeris_ status lastname initials  firstname suffix title
+## 1     415       415      A Tzedakis     P.C. P. Chronis   &lt;NA&gt;   Dr.
+##   country phone  fax                emailaddr
+## 1     GBR  &lt;NA&gt; &lt;NA&gt; p.c.tzedakis@leeds.ac.uk
+##                                                                                                                                               address
+## 1 Subdepartment of Quaternary Research\\nDepartment of Plant sciences\\nUniversity of Cambridge\\nDowning Street\\nCambridge CB2 3EA\\nUNITED KINGDOM</code></pre>
+<p>When using any of these <code>list</code> functions with arguments to filter the query, we can specify multiple values. That means for instance that we can pass a vector of names as the argument <code>country</code> to the <code>listE</code> function to get information about all the entities in all those countries.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_e</span>(epdConnection, <span class="dt">country=</span><span class="kw">c</span>(<span class="st">&quot;Spain&quot;</span>, <span class="st">&quot;Portugal&quot;</span>, <span class="st">&quot;France&quot;</span>, <span class="st">&quot;Switzerland&quot;</span>, <span class="st">&quot;Austria&quot;</span>, <span class="st">&quot;Italy&quot;</span>, <span class="st">&quot;Malta&quot;</span>, <span class="st">&quot;Algeria&quot;</span>, <span class="st">&quot;Tunisia&quot;</span>, <span class="st">&quot;Morocco&quot;</span>, <span class="st">&quot;Atlantic ocean&quot;</span>, <span class="st">&quot;Mediterranean Sea&quot;</span>))</code></pre></div>
+<pre><code>##        e_ site_    sigle                            name iscore issect
+## 1      10    10  CARNINO                          core I      Y      N
+##      isssamp descriptor hasanlam
+## 1          Y       PMIR        N
+##                                                          entloc
+## 1                                                          &lt;NA&gt;
+##                                                                                                                                                                                          localveg
+## 1                                                                                                                                                                                            &lt;NA&gt;
+##      coll_   sampdate depthatloc icethickcm                     sampdevice
+## 1       88 0000-00-00         NA         NA             Unspecified device
+##      corediamcm c14depthadj
+## 1            NA          NA
+##                                                                                                                                                                                                                                                             notes
+## 1                                                                                                                                                                                                                                                            &lt;NA&gt;
+##      site_                               sitename        sitecode
+## 1       10                       Selle di Carnino  ITA-08000-SELL
+##      siteexists poldiv1 poldiv2 poldiv3 latdeg latmin latsec latns
+## 1          &lt;NA&gt;     ITA      08     000     44      9      0     N
+##         latdd    latdms londeg lonmin lonsec lonew      londd     londms
+## 1    44.15000 44.09.00N      7     41     40     E   7.694444   7.41.40E
+##      elevation areaofsite poldiv1              name
+## 1         1905       5.00     ITA             Italy
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 1000 rows ]</code></pre>
+<p>Finally, the <code>listPubl</code> function allow to search the publications we need to cite if are going to use any of the datasets in the database. This function thus allow to search publications for several criteria, including entity number (<code>e_</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_publ</span>(epdConnection)</code></pre></div>
+<pre><code>##      publ_   e_ acc_ yearofpubl
+## 1        1   40   NA       1994
+## 2        1   41   NA       1994
+##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         citation
+## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Kremenetski, C.V., P.E. Tarasov, and A.E. Cherkinsky. 1994. Istoriva ostrovnykh borov Kazakhstana v golotsene [Holocene history of the Kazakhstan &quot;island&quot; pine forests]. Botanicheski Zhurial [Botanical Journal], 79(3):13-29.
+## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Kremenetski, C.V., P.E. Tarasov, and A.E. Cherkinsky. 1994. Istoriva ostrovnykh borov Kazakhstana v golotsene [Holocene history of the Kazakhstan &quot;island&quot; pine forests]. Botanicheski Zhurial [Botanical Journal], 79(3):13-29.
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 3166 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_publ</span>(epdConnection, <span class="dt">e_=</span><span class="dv">1</span>)</code></pre></div>
+<pre><code>##   publ_ e_ acc_ yearofpubl
+## 1    16  1   NA       1989
+##                                                                                                                                         citation
+## 1 Kvavadze, E.V., and L.P. Rukhadze. 1989. Vegetation and climate of the Holocene of Abkhazia. Metsniereba, Tbilisi, Georgia, 138p (in Russian).</code></pre>
+</div>
+<div id="getting-biological-counts-and-datation-information-get-functions" class="section level2">
+<h2><span class="header-section-number">5.2</span> Getting biological counts and datation information (<code>get</code> functions)</h2>
+<p>So far, we have been able to look for metadata information (details on country, region, or site) to which entities of the database belong to, but most times we are interested in extracting biological information, along with chronological information that allows us to dating the corresponding biological information, for those particular entities. The <code>EPDr</code> package provide a set of <code>get</code> functions specially designed for this.</p>
+<p>All these <code>get</code> functions have been designed to query data for a particular entity in the database. Hence, all of them (but <code>getTaxonomyEPD</code>) accept two arguments: entity ID (<code>e_</code>) and a valid connection to the EPD database (<code>connection</code>). Note that entities has to be referred by their ID number and not by their sigle name. If you know the sigle of a particular entity, you need to use the <code>listE</code> function and look for the <code>e_</code> number for that particular <code>sigle</code>.</p>
+<p>Some of the <code>get</code> functions retrieve metadata for the entity, the site, or the use restriction for data in that particular entity. The result from these functions are regular data frames.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_entity</span>(<span class="dv">1</span>, epdConnection)
+<span class="kw">get_site</span>(<span class="dv">1</span>, epdConnection)
+<span class="kw">get_restriction</span>(<span class="dv">1</span>, epdConnection)</code></pre></div>
+<p>However, most of the functions recover actual data from the entities. There are two groups of data that can be retrieved: datation information and biological samples/counts.</p>
+<div id="retrieving-datation-information-for-particular-entities" class="section level3">
+<h3><span class="header-section-number">5.2.1</span> Retrieving datation information for particular entities</h3>
+<p>Among the datation data most relevant data are radiocarbon dates from radiocarbon samples, which can be retrieved with <code>getC14</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_c14</span>(<span class="dv">1</span>, epdConnection)
+<span class="kw">get_events</span>(<span class="dv">1</span>, epdConnection)
+<span class="kw">get_chronology</span>(<span class="dv">1</span>, epdConnection)
+<span class="kw">get_datation</span>(<span class="dv">1</span>, epdConnection)
+
+<span class="kw">get_ages</span>(<span class="dv">1</span>, epdConnection)
+
+<span class="kw">get_psamples</span>(<span class="dv">1</span>, epdConnection)
+<span class="kw">get_entity</span>(<span class="dv">1</span>, epdConnection)
+
+<span class="kw">get_taxonomy_epd</span>(epdConnection)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Export functions ----</span>
+c14.clam &lt;-<span class="st"> </span><span class="kw">export_c14</span>(c14)
+
+<span class="co"># Extract functions ----</span>
+
+<span class="co"># Standardize functions ----</span>
+
+<span class="co"># Tabulate functions ----</span>
+
+<span class="co"># Plotting functions ----</span>
+
+
+<span class="co"># Section 1 - Recalibrate chronologies ------------------------------------------</span>
+
+<span class="co"># Site with one chronologies with EXTRA data</span>
+<span class="kw">core4Clam</span>(<span class="dv">1</span>, epdConnection)
+<span class="kw">clam</span>(<span class="st">&quot;1&quot;</span>)
+
+<span class="co"># Site with two chronologies, one with EXTRA data</span>
+<span class="kw">core4Clam</span>(<span class="dv">4</span>, epdConnection)
+<span class="kw">clam</span>(<span class="st">&quot;4&quot;</span>)
+
+entity.list &lt;-<span class="st"> </span><span class="kw">listE</span>(epdConnection, <span class="dt">country=</span><span class="kw">c</span>(<span class="st">&quot;Spain&quot;</span>, <span class="st">&quot;Portugal&quot;</span>, <span class="st">&quot;France&quot;</span>, <span class="st">&quot;Switzerland&quot;</span>, <span class="st">&quot;Austria&quot;</span>, <span class="st">&quot;Italy&quot;</span>, <span class="st">&quot;Malta&quot;</span>, <span class="st">&quot;Algeria&quot;</span>, <span class="st">&quot;Tunisia&quot;</span>, <span class="st">&quot;Morocco&quot;</span>, <span class="st">&quot;Atlantic ocean&quot;</span>, <span class="st">&quot;Mediterranean Sea&quot;</span>))
+entity.list &lt;-<span class="st"> </span><span class="kw">listE</span>(epdConnection)<span class="op">$</span>e_
+counts.all &lt;-<span class="st"> </span><span class="kw">lapply</span>(entity.list, getAgedCounts, epdConnection)
+
+
+counts.po &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.all, filterTaxaGroups, <span class="kw">c</span>(<span class="st">&quot;HERB&quot;</span>, <span class="st">&quot;TRSH&quot;</span>, <span class="st">&quot;DWAR&quot;</span>, <span class="st">&quot;LIAN&quot;</span>, <span class="st">&quot;HEMI&quot;</span>, <span class="st">&quot;UPHE&quot;</span>))
+counts.gi &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.po, gieseckeDefaultChronology)
+counts.un &lt;-<span class="st"> </span><span class="kw">removeRestricted</span>(counts.gi)
+counts.wa &lt;-<span class="st"> </span><span class="kw">removeWithoutAges</span>(counts.un)
+
+percent.wa &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.wa, trans2Percentages)
+percent.int &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.wa, interpolateCounts, <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">22000</span>, <span class="dt">by=</span><span class="dv">1000</span>))
+percent.ran &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.wa, intervalsCounts, <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">21000</span>, <span class="dt">by=</span><span class="dv">1000</span>), <span class="kw">seq</span>(<span class="dv">999</span>, <span class="dv">21999</span>, <span class="dt">by=</span><span class="dv">1000</span>))
+
+epd.taxonomy &lt;-<span class="st"> </span><span class="kw">getTaxonomyEPD</span>(epdConnection)
+
+counts.wa.acc &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.wa, taxa2AcceptedTaxa, epd.taxonomy)
+percent.wa.acc &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.wa, taxa2AcceptedTaxa, epd.taxonomy)
+percent.int.acc &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.int, taxa2AcceptedTaxa, epd.taxonomy)
+
+<span class="co"># counts.wa.hig &lt;- lapply(counts.wa, taxa2HigherTaxa, epd.taxonomy)</span>
+<span class="co"># percent.wa.hig &lt;- lapply(percent.wa, taxa2HigherTaxa, epd.taxonomy)</span>
+<span class="co"># percent.ran.hig &lt;- lapply(percent.ran, taxa2HigherTaxa, epd.taxonomy)</span>
+<span class="co"># percent.int.hig &lt;- lapply(percent.int, taxa2HigherTaxa, epd.taxonomy)</span>
+
+counts.wa.uni &lt;-<span class="st"> </span><span class="kw">unifyTaxonomy</span>(counts.wa.acc, epd.taxonomy)
+percent.wa.uni &lt;-<span class="st"> </span><span class="kw">unifyTaxonomy</span>(percent.wa.acc, epd.taxonomy)
+percent.int.uni &lt;-<span class="st"> </span><span class="kw">unifyTaxonomy</span>(percent.int.acc, epd.taxonomy)
+
+
+<span class="co"># Journals:</span>
+<span class="co">#   Quartenary International</span>
+
+Cedrus &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Cedrus&quot;</span>, <span class="st">&quot;Cedrus atlantica&quot;</span>, <span class="st">&quot;Cedrus cf. C. atlantica&quot;</span>, <span class="st">&quot;Cedrus-type&quot;</span>, <span class="st">&quot;cf. Cedrus&quot;</span>)
+
+
+
+
+
+<span class="kw">mapTaxaAge</span>(percent.unr.ranges,  Cedrus, <span class="st">&quot;20000-22000&quot;</span>, <span class="dt">pres_abse=</span>T, <span class="dt">pollen_thres=</span><span class="dv">0</span>)(percent.unr.ranges,  Cedrus, <span class="st">&quot;20000-22000&quot;</span>, <span class="dt">pres_abse=</span>T, <span class="dt">pollen_thres=</span><span class="dv">0</span>)
+<span class="kw">mapTaxaAge</span>(percent.unr.ranges, Cedrus, <span class="st">&quot;5500-6500&quot;</span>, <span class="dt">pres_abse=</span>F, <span class="dt">legend_range=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">5</span>))
+<span class="kw">mapTaxaAge</span>(percent.unr.ranges,  Cedrus, <span class="st">&quot;20000-22000&quot;</span>, <span class="dt">pres_abse=</span>F, <span class="dt">legend_range=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">5</span>))
+
+Pinus &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Pinus&quot;</span>, <span class="st">&quot;Pinus pinaster&quot;</span>, <span class="st">&quot;Pinus pinea&quot;</span>, <span class="st">&quot;Pinus sylvestris&quot;</span>, <span class="st">&quot;Pinus-type&quot;</span>, <span class="st">&quot;Pinus sp.&quot;</span>)
+<span class="kw">mapTaxaAge</span>(percent.unr.ranges, Pinus, <span class="st">&quot;5500-6500&quot;</span>, <span class="dt">pres_abse=</span>T)
+<span class="kw">mapTaxaAge</span>(percent.unr.ranges, Pinus, <span class="st">&quot;20000-22000&quot;</span>, <span class="dt">pres_abse=</span>T)
+<span class="kw">mapTaxaAge</span>(percent.unr.ranges, Pinus, <span class="st">&quot;5500-6500&quot;</span>, <span class="dt">pres_abse=</span>F)
+<span class="kw">mapTaxaAge</span>(percent.unr.ranges, Pinus, <span class="st">&quot;20000-22000&quot;</span>, <span class="dt">pres_abse=</span>F)
+
+
+
+
+<span class="kw">mapTaxaAge</span>(percent.int.uni, <span class="st">&quot;Cedrus&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="dt">pres_abse=</span>F, <span class="dt">zoom_coords=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">20</span>, <span class="dv">180</span>, <span class="dv">30</span>, <span class="dv">80</span>), <span class="dt">points_pch=</span><span class="dv">21</span>,
+           <span class="dt">points_colour=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="dt">points_fill=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>),
+           <span class="dt">points_range_size=</span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">map_title=</span><span class="st">&quot;EPD sites&quot;</span>,
+           <span class="dt">legend_range=</span><span class="ot">NULL</span>, <span class="dt">legend_title=</span><span class="ot">NULL</span>, <span class="dt">napoints_size=</span><span class="dv">1</span>, <span class="dt">napoints_pch=</span><span class="dv">21</span>, 
+           <span class="dt">napoints_colour=</span><span class="st">&quot;red&quot;</span>, <span class="dt">napoints_fill=</span><span class="st">&quot;red&quot;</span>, <span class="dt">countries_fill_colour=</span><span class="st">&quot;grey80&quot;</span>, <span class="dt">countries_border_colour=</span><span class="st">&quot;grey90&quot;</span>)
+
+
+
+entity.list &lt;-<span class="st"> </span><span class="kw">sapply</span>(counts.wa.uni, extractE)
+datation.co.wa.uni &lt;-<span class="st"> </span><span class="kw">lapply</span>(entity.list, getDatation, epdConnection)
+
+entity.list &lt;-<span class="st"> </span><span class="kw">sapply</span>(percent.wa.uni, extractE)
+datation.pe.wa.uni &lt;-<span class="st"> </span><span class="kw">lapply</span>(entity.list, getDatation, epdConnection)
+
+entity.list &lt;-<span class="st"> </span><span class="kw">sapply</span>(percent.ran.uni, extractE)
+datation.pe.ran.uni &lt;-<span class="st"> </span><span class="kw">lapply</span>(entity.list, getDatation, epdConnection)
+
+entity.list &lt;-<span class="st"> </span><span class="kw">sapply</span>(percent.int.uni, extractE)
+datation.pe.int.uni &lt;-<span class="st"> </span><span class="kw">lapply</span>(entity.list, getDatation, epdConnection)
+
+
+<span class="co"># Aquí me quedo con el problema de que hay algunos e_ que tienen NA en las fechas y casca a la hora de calcular el indice de calidad</span>
+<span class="cf">for</span>(ii <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(entity.list)){
+  <span class="cf">for</span>(ii <span class="cf">in</span> <span class="dv">44</span>){
+    counts.wa.uni.q &lt;-<span class="st"> </span><span class="kw">mapply</span>(qualityIndex, counts.wa.uni[ii], datation.co.wa.uni[ii])
+  }
+  percent.wa.uni.q &lt;-<span class="st"> </span><span class="kw">mapply</span>(qualityIndex, percent.wa.uni, datation.pe.wa.uni)
+  percent.ran.uni.q &lt;-<span class="st"> </span><span class="kw">mapply</span>(qualityIndex, percent.ran.uni, datation.pe.ran.uni)
+  percent.int.uni.q &lt;-<span class="st"> </span><span class="kw">mapply</span>(qualityIndex, percent.int.uni, datation.pe.int.uni)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">disconnectFromEPD</span>(epdConnection)</code></pre></div>
+</div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
