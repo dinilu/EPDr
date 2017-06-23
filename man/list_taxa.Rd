@@ -7,38 +7,44 @@
 list_taxa(connection, group_id = NULL)
 }
 \arguments{
-\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.}
+\item{connection}{PostgreSQLConnection. Object of class 
+\code{PostgreSQLConnection} as returned by function 
+\code{\link[EPDr]{connect_to_epd}}.}
 
-\item{group_id}{character. Character vector with group ids (four character strings; see
-\code{\link[EPDr:list_taxagroups]{list_taxagroups}} to check correspondece between groups and
-group ids). The user can specify as many groups as desired in a single call of the function.}
+\item{group_id}{character. Character vector with group ids (four 
+character strings; see \code{\link[EPDr]{list_taxagroups}} to check 
+correspondence between groups and group ids). The user can specify as 
+many groups as desired in a single call of the function.}
 }
 \value{
-data.frame The function returns a data frame with five columns: \code{var_},
-\code{varname}, \code{varcode}, \code{mhvar}, and \code{groupid}.
+data.frame The function returns a data frame with five 
+columns: \code{var_}, \code{varname}, \code{varcode}, \code{mhvar}, 
+and \code{groupid}.
 \itemize{
  \item{"var_ is"}{ the taxa identification number in the database.}
  \item{"varname"}{ is the taxa name.}
  \item{"varcode"}{ is the short taxa name.}
- \item{"mhvar"}{ is the identification number of the higher taxonomical level.}
- \item{"groupid"}{ is the identification number of the group that the taxa belongs to.}
+ \item{"mhvar"}{ is the identification number of the higher taxonomical 
+ level.}
+ \item{"groupid"}{ is the identification number of the group that the 
+ taxa belongs to.}
 }
 }
 \description{
-This function looks into the database and returns combined information in the P_VARS and
-P_GROUP tables (see documentation of the EPD:
+This function looks into the database and returns combined 
+information in the P_VARS and P_GROUP tables (see documentation 
+of the EPD:
 \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
-The function allows to restrict the list to taxa in an specific group, using parameter
-\code{group_id} along with a valid connection to the database.
+The function allows to restrict the list to taxa in an specific 
+group, using parameter \code{group_id} along with a valid connection 
+to the database.
 }
 \examples{
 # Not run
 # library(EPDr)
 # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                               user = "epdr", password = "epdrpw")
+#                                  user = "epdr", password = "epdrpw")
 # list_taxa(epd.connection, "HERB")
-# list_taxa(epd.connection, c("HERB","TRSH"))
-# disconnectFromEPD(epd.connection)
+# list_taxa(epd.connection, c("HERB", "TRSH"))
 
 }

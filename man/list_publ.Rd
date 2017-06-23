@@ -8,23 +8,26 @@ list_publ(connection, e_ = NULL, country = NULL, region = NULL,
   site = NULL, coords = NULL)
 }
 \arguments{
-\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.}
+\item{connection}{PostgreSQLConnection Object of class 
+\code{PostgreSQLConnection} as returned by function 
+\code{\link[EPDr]{connect_to_epd}}.}
 
-\item{e_}{Numeric vector indicating the desired entities identification number.}
+\item{e_}{numeric Numeric vector indicating the desired entities 
+identification number.}
 
-\item{country}{Character vector indicating the three letters code or the full name of the
-desired countries.}
+\item{country}{character Character vector indicating the three letters 
+code or the full name of the desired countries.}
 
-\item{region}{Character vector indicating two digit integer code or the full name of the
-desired regions.}
+\item{region}{character Character vector indicating two digit integer 
+code or the full name of the desired regions.}
 
-\item{site}{Vector indicating the desired sites. Sites can be defined by the site identification
-number, the site code, or the site name.}
+\item{site}{numeric Vector indicating the desired sites. Sites can be 
+defined by the site identification number, the site code, or the site name.}
 
-\item{coords}{Vector of four numeric values, indicating the spatial extent in decimal degrees.
-The extent should be specified using the following format \code{c(xmin, xmax, ymin, ymax)}.
-Where \code{x} represents longitude and \code{y} represents latitude.}
+\item{coords}{numeric Vector of four numeric values, indicating the 
+spatial extent in decimal degrees. The extent should be specified using 
+the following format \code{c(xmin, xmax, ymin, ymax)}. Where \code{x} 
+represents longitude and \code{y} represents latitude.}
 }
 \value{
 Data frame with 5 columns:
@@ -33,24 +36,25 @@ Data frame with 5 columns:
   \item{"e_"}{Entity identification number.}
   \item{"acc_"}{Short integers for local library accession number}
   \item{"yearofpubl"}{Year of publication.}
-  \item{"citation"}{Complete bibliographic reference in the style of the journal "Ecology".}
+  \item{"citation"}{Complete bibliographic reference in the style of the 
+  journal "Ecology".}
 }
 }
 \description{
-This function looks into the database and returns all combined information in the PUBLENT and
-PUBL tables (see documentation of the EPD:
-\url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
-This information refers to the original publications in which entities were described.
-Because the function returns a whole table, only a valid connection to the database is mandatory.
-However, the list of publications can be further restricted to specific entities, countries,
-administrative regions, sites, or a geographical region defined by geographical
-coordinates (longitude and latitude) of its corners.
+This function looks into the database and returns all combined 
+information in the PUBLENT and PUBL tables (see documentation of the EPD:
+\url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}). This information refers to the original publications 
+in which entities were described. Because the function returns a whole 
+table, only a valid connection to the database is mandatory. However, 
+the list of publications can be further restricted to specific entities, 
+countries, administrative regions, sites, or a geographical region 
+defined by geographical coordinates (longitude and latitude) of its corners.
 }
 \examples{
 # Not run
 # library(EPDr)
 # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                               user = "epdr", password = "epdrpw")
+#                                  user = "epdr", password = "epdrpw")
 # list_publ(epd.connection)
 # list_publ(epd.connection, e_ = 1)
 # list_publ(epd.connection, site = "1")
@@ -59,6 +63,5 @@ coordinates (longitude and latitude) of its corners.
 # str(list_publ(epd.connection))
 # list_publ(epd.connection, coords = c(2.5, 22, 45.5, 53.5))
 # str(list_publ(epd.connection, coords = c(2.5, 22, 45.5, 53.5)))
-# disconnectFromEPD(epd.connection)
 
 }

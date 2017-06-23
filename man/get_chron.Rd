@@ -31,71 +31,98 @@ get_chron(e_, connection)
 .get_event(event_, connection)
 }
 \arguments{
-\item{e_}{numeric. Value indicating the entity number (e_) of the database that want to be queried.}
+\item{e_}{numeric Value indicating the entity number (e_) of the 
+database that want to be queried.}
 
-\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.}
+\item{connection}{PostgreSQLConnection Object of class 
+\code{PostgreSQLConnection} as returned by function 
+\code{\link[EPDr]{connect_to_epd}}.}
 
-\item{rcode}{character. Three letter code for the rational.}
+\item{rcode}{character Three letter code for the rational.}
 
-\item{event_}{numeric. Value indicating the event number (event_) of the database of the requested event.}
+\item{event_}{numeric Value indicating the event number (event_) of 
+the database of the requested event.}
 }
 \value{
-\code{\link[EPDr:chron]{chron}} object. This is an EPDr object with information from different tables. See documentation of the EPD: \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+\code{\link[EPDr]{chron}} object. This is an EPDr object 
+with information from different tables. See documentation of the EPD: 
+\url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 }
 \description{
-Functions in this family retrieves information relative to the chronologies used to calculate samples ages for a particular entity. The main function (\code{\link[EPDr:get_chron]{get_chron}}) requires a valid connection to the database and the entity ID for the entity of interest. All other functions (starting with a dot [.]) use different arguments depending on the piece of information they retrieve.
+Functions in this family retrieves information relative to the 
+chronologies used to calculate samples ages for a particular 
+entity. The main function (\code{\link[EPDr]{get_chron}}) requires 
+a valid connection to the database and the entity ID for the entity 
+of interest. All other functions (starting with a dot [.]) use 
+different arguments depending on the piece of information they retrieve.
 }
 \section{get_chron}{
 
-This function returns a \code{\link[EPDr:chron]{chron}} object with several information from the rest of the functions for a particular entity.
+This function returns a \code{\link[EPDr]{chron}} object with several 
+information from the rest of the functions for a particular entity.
 }
 
 \section{.get_chron}{
 
-This function returns information in the CHRON table for the specified entity. This corresponds with chronologies for that entity.
+This functions returns a data.frame with information in in the CHRON table for the 
+specified entity. This corresponds with chronologies for that entity.
 }
 
 \section{.get_agebound}{
 
-This function returns information in the AGEBOUND table for the chronologies in that entity. This corresponds with age limits for that entity calculated according to each chronology.
+This functions returns a data.frame with information in in the AGEBOUND table for the 
+chronologies in that entity. This corresponds with age limits for 
+that entity calculated according to each chronology.
 }
 
 \section{.get_agebasis}{
 
-This function returns information in the AGEBASIS table for the specified entity. This corresponds with the depth and C14 data used to calibrate the age-depth model in each chronology.
+This functions returns a data.frame with information in in the AGEBASIS table for the 
+specified entity. This corresponds with the depth and C14 data 
+used to calibrate the age-depth model in each chronology.
 }
 
 \section{.get_rational}{
 
-This function returns information in the RATIONAL table for the specified entity. This corresponds with the rational to use each sample in the AGEBASIS table to calibrate the age-depth model.
+This functions returns a data.frame with information in in the RATIONAL table for the 
+specified entity. This corresponds with the rational to use each 
+sample in the AGEBASIS table to calibrate the age-depth model.
 }
 
 \section{.get_alsegs}{
 
-This function returns information in the ALSEGS table for the specified entity. This corresponds with segments of annual laminations in the entity.
+This functions returns a data.frame with information in in the ALSEGS table for the 
+specified entity. This corresponds with segments of annual 
+laminations in the entity.
 }
 
 \section{.get_panldpt}{
 
-This function returns information in the P_ANLDPT table for the specified entity. This corresponds with details on the lamination for each segment on the ALSEGS table for each entity.
+This functions returns a data.frame with information in in the P_ANLDPT table for the 
+specified entity. This corresponds with details on the lamination 
+for each segment on the ALSEGS table for each entity.
 }
 
 \section{.get_synevent}{
 
-This function returns information in the SYNEVENT table for the specified entity. This corresponds with the geological events that affect that entity.
+This functions returns a data.frame with information in in the SYNEVENT table for the 
+specified entity. This corresponds with the geological events that 
+affect that entity.
 }
 
 \section{.get_event}{
 
-This function returns information in the EVENT table for the specified entity. This corresponds with details on the geological event specified for that entity in the SYNEVENT table.
+This functions returns a data.frame with information in in the EVENT table for the 
+specified entity. This corresponds with details on the geological 
+event specified for that entity in the SYNEVENT table.
 }
 
 \examples{
 # Not run
 # library(EPDr)
 # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                               user = "epdr", password = "epdrpw")
+#                                  user = "epdr", password = "epdrpw")
 # chron.400 <- get_chron(400, epd.connection)
 # chron.400
-# disconnectFromEPD(epd.connection)
+
 }

@@ -2,19 +2,19 @@
 % Please edit documentation in R/EDPr-DDBB_connection.R
 \name{disconnect_from_epd}
 \alias{disconnect_from_epd}
-\title{Disconnect a connection to a EPD database
-\code{disconnect_from_epd} turns down a connection to a EPD DDBB server.}
+\title{Disconnect a connection to a EPD database}
 \usage{
 disconnect_from_epd(connection = NULL)
 }
 \arguments{
-\item{connection}{The connection object created with \code{\link[EPDr:connect_to_epd]{connect_to_epd}} to stablish the connection}
+\item{connection}{PostgreSQLConnection The connection object created with 
+\code{\link[EPDr]{connect_to_epd}} to stablish the connection}
 }
 \value{
-NULL It just disconnects from the EPD DDBB server and modifies the connection object to reflect the new status.
+NULL It just disconnects from the EPD DDBB server and modifies 
+the connection object to reflect the new status.
 }
 \description{
-Disconnect a connection to a EPD database
 \code{disconnect_from_epd} turns down a connection to a EPD DDBB server.
 }
 \examples{

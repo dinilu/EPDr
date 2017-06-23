@@ -6,7 +6,7 @@
 \alias{samples}
 \title{Class for biological samples of an entity}
 \description{
-Class "samples" store all information about biological samples relative
+Class \code{samples} stores all information about biological samples relative
 to a specified entity of the European Pollen Database (EPD). This object
 is created by \code{\link[EPDr]{get_samples}}.
 }

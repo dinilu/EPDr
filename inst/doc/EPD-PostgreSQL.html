@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -12,7 +12,7 @@
 
 <meta name="author" content="Diego Nieto Lugilde" />
 
-<meta name="date" content="2016-06-21" />
+<meta name="date" content="2017-06-21" />
 
 <title>Setting up a PostgreSQL server for the European Pollen Database (EPD)</title>
 
@@ -32,7 +32,7 @@
 
 <h1 class="title toc-ignore">Setting up a PostgreSQL server for the European Pollen Database (EPD)</h1>
 <h4 class="author"><em>Diego Nieto Lugilde</em></h4>
-<h4 class="date"><em>2016-06-21</em></h4>
+<h4 class="date"><em>2017-06-21</em></h4>
 
 
 <div id="TOC">
@@ -61,7 +61,7 @@
 </ul></li>
 <li>Dump EPD data into the new database</li>
 </ol>
-<div id="download-and-install-postgresql-server" class="section level1 tabset">
+<div id="download-and-install-postgresql-server" class="section level1">
 <h1><span class="header-section-number">1</span> Download and install PostgreSQL server</h1>
 <p>The first step is to download and install the PostgreSQL server. This step changes depending on your operating system (OS). Select your OS in the tabs below.</p>
 <div id="windows" class="section level2">
@@ -109,7 +109,7 @@
 <p class="caption">Download EPD website.</p>
 </div>
 </div>
-<div id="setup-postgresql-for-epd" class="section level1 tabset">
+<div id="setup-postgresql-for-epd" class="section level1">
 <h1><span class="header-section-number">3</span> Setup PostgreSQL for EPD:</h1>
 <p>Before we can dump the EPD data into the server, you need to perform two basic configuration steps:</p>
 <ol style="list-style-type: decimal">
@@ -163,7 +163,7 @@ CREATE DATABASE</code></pre>
 </div>
 </div>
 </div>
-<div id="dump-epd-data-into-the-new-database" class="section level1 tabset">
+<div id="dump-epd-data-into-the-new-database" class="section level1">
 <h1><span class="header-section-number">4</span> Dump EPD data into the new database</h1>
 <p>Dumping EPD data into the DDBB server requires to use the command line, and cannot be accomplished in pgAdminIII. To do so, once you are in the command line, use the <code>cd</code> command to move into the same folder you downloaded and uncompressed the EPD database for PostgreSQL. Then, you use the <code>psql</code> command to connect to the <code>epd</code> database in the PostgreSQL server as the <code>postgres</code> user. In the same line of code you use the <code>&lt;</code> symbol to parse all the <code>dumpall_epd_db.sql</code> script for PostgreSQL into the database you just created (<code>epd</code>).</p>
 <pre><code>diego@server:~$ cd epd-postgres-distribution
@@ -202,7 +202,7 @@ diego@server:~/epd-postgres-distribution$ </code></pre>
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

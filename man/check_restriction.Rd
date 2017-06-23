@@ -4,7 +4,6 @@
 \name{check_restriction}
 \alias{check_restriction}
 \alias{check_restriction,epd.entity-method}
-\alias{check_restriction-method}
 \title{Check restrictions on EPDr objects}
 \usage{
 check_restriction(x)
@@ -12,27 +11,24 @@ check_restriction(x)
 \S4method{check_restriction}{epd.entity}(x)
 }
 \arguments{
-\item{x}{\code{\link[EPDr:epd.entity]{epd.entity}} or
-\code{\link[EPDr:epd.entity.df]{epd.entity.df}} object.}
+\item{x}{epd.entity \code{\link[EPDr]{epd.entity}} or
+\code{\link[EPDr]{epd.entity.df}} object.}
 }
 \value{
 logical value indicating whether the data are restricted (TRUE) or
 unrestricted (FALSE).
 }
 \description{
-This function check EPDr objects (\code{\link[EPDr:epd.entity]{epd.entity}},
-and \code{\link[EPDr:epd.entity.df]{epd.entity.df}}), 
+This function check EPDr objects (\code{\link[EPDr]{epd.entity}},
+and \code{\link[EPDr]{epd.entity.df}}), 
 and return a logical value indicating whether the data are restricted (TRUE) or
 unrestricted (FALSE).
 }
-\details{
-Details TBW
-}
 \examples{
-# epd.connection <- connectToEPD(host="localhost", database="epd",
+# epd.connection <- connect_to_epd(host="localhost", database="epd",
 # user="epdr", password="epdrpw")
-# agedcount <- getAgedCounts(1, epd.connection)
-# check_restriction(agedcount)
-# agedcount <- getAgedCounts(1046, epd.connection)
-# check_restriction(agedcount)
+# epd.1 <- get_entity(1, epd.connection)
+# check_restriction(epd.1)
+# epd.1046 <- get_entity(1046, epd.connection)
+# check_restriction(epd.1046)
 }

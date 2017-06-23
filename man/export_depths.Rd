@@ -4,9 +4,7 @@
 \name{export_depths}
 \alias{export_depths}
 \alias{export_depths,data.frame-method}
-\alias{export_depths-method}
 \alias{export_depths,epd.entity-method}
-\alias{export_depths-method}
 \title{Reshape depths of biological samples to CLAM or BACON format}
 \usage{
 export_depths(x)
@@ -16,21 +14,25 @@ export_depths(x)
 \S4method{export_depths}{epd.entity}(x)
 }
 \arguments{
-\item{x}{Data frame with at least a column called depthcm or \code{\link[EPDr:epd.entity]{epd.entity}} object to extract this information from.}
+\item{x}{data.frame Data frame with at least a column called \code{depthcm}
+or \code{\link[EPDr]{epd.entity}} object to extract this information from.}
 }
 \value{
 Vector with depths in ascending order.
 }
 \description{
-This function takes depths data, as returned by \code{\link[EPDr:.get_psamples]{.get_psamples}},
+This function takes depths data, as returned by 
+\code{\link[EPDr]{.get_psamples}} or extracted from a 
+\code{\link[EPDr]{epd.entity}} object, and transforms them
 to comply with CLAM or BACON format.
 }
 \examples{
-#epd.connection <- connect_to_epd(database = "epd", user = "epdr",
-#                                 password = "epdrpw", host = "localhost")
-#depths.1 <- getPSamples(1, epd.connection)
-#export_depths(depths.1)
-#disconnectFromEPD(connection = epd.connection)
+# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#                               user = "epdr", password = "epdrpw")
+# depths.1 <- .get_psamples(1, epd.connection)
+# export_depths(depths.1)
+# epd.1 <- get_entity(1, epd.connection)
+# export_depths(epd.1)
 }
 \references{
 \url{http://www.chrono.qub.ac.uk/blaauw/clam.html}

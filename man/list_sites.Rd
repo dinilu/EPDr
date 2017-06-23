@@ -7,18 +7,20 @@
 list_sites(connection, country = NULL, region = NULL, coords = NULL)
 }
 \arguments{
-\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.}
+\item{connection}{PostgreSQLConnection. Object of class 
+\code{PostgreSQLConnection} as returned by function 
+\code{\link[EPDr]{connect_to_epd}}.}
 
-\item{country}{Character vector indicating the three letters code or the full name of the
-desired countries.}
+\item{country}{Character vector indicating the three letters code 
+or the full name of the desired countries.}
 
-\item{region}{Character vector indicating two digit integer code or the full name of the
-desired regions.}
+\item{region}{Character vector indicating two digit integer code or 
+the full name of the desired regions.}
 
-\item{coords}{Vector of four numeric values, indicating the spatial extent in decimal degrees.
-The extent should be specified using the following format \code{c(xmin, xmax, ymin, ymax)}.
-Where \code{x} represents longitude and \code{y} represents latitude.}
+\item{coords}{Vector of four numeric values, indicating the spatial 
+extent in decimal degrees. The extent should be specified using the 
+following format \code{c(xmin, xmax, ymin, ymax)}. Where \code{x} 
+represents longitude and \code{y} represents latitude.}
 }
 \value{
 Data frame (data.frame) with eleven columns:
@@ -32,30 +34,33 @@ Data frame (data.frame) with eleven columns:
   \item{"areaofsite"}{Area of the site in hectares.}
   \item{"sitedescript"}{Description of the nature of the site.}
   \item{"physiography"}{Description of the physiography of the site.}
-  \item{"surroundveg"}{Description of the surrounding vegetation of the site.}
+  \item{"surroundveg"}{Description of the surrounding vegetation of 
+  the site.}
   \item{"vegformation"}{Name of the vegetation formation in the site.}
 }
 }
 \description{
-This function looks into the database and returns all combined information in the SITELOC and
-SITEDESC tables (see documentation of the EPD:
-\url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}). This information refers to the sites where palynological samples were taken.
-Because the function returns a whole table, only a valid connection to the database is mandatory.
-However, the list of sites can be further restricted to specific countries, administrative
-regions, or a geographical region defined by geographical coordinates (longitude and latitude)
-of its corners.
+This function looks into the database and returns all combined 
+information in the SITELOC and SITEDESC tables (see documentation 
+of the EPD:
+\url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
+This information refers to the sites where palynological samples 
+were taken. Because the function returns a whole table, only a valid 
+connection to the database is mandatory. However, the list of sites 
+can be further restricted to specific countries, administrative
+regions, or a geographical region defined by geographical coordinates 
+(longitude and latitude) of its corners.
 }
 \examples{
 # Not run
 # library(EPDr)
 # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                               user = "epdr", password = "epdrpw")
+#                                  user = "epdr", password = "epdrpw")
 # list_sites(epd.connection)
 # list_sites(epd.connection, "ESP")
 # list_sites(epd.connection, "Spain", "01")
 # summary(list_sites(epd.connection))
 # list_sites(epd.connection, coords = c(2.5, 22, 45.5, 53.5))
 # summary(list_sites(epd.connection, coords = c(2.5, 22, 45.5, 53.5)))
-# disconnectFromEPD(epd.connection)
 
 }

@@ -7,32 +7,34 @@
 list_regions(connection, country = NULL)
 }
 \arguments{
-\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.}
+\item{connection}{PostgreSQLConnection. Object of class 
+\code{PostgreSQLConnection} as returned by function 
+\code{\link[EPDr]{connect_to_epd}}.}
 
-\item{country}{Character vector indicating the three letters code or the full name of the desired
-countries.}
+\item{country}{Character vector indicating the three 
+letters code or the full name of the desired countries.}
 }
 \value{
 data.frame with four columns:
 \itemize{
-  \item{"poldiv2"}{Region code consisting of two digit integer. This code is not a key field in 
-  the database and thus can be two regions with the same poldiv2 value. This field allows to
-  differentiate regions within the same country.}
-  \item{"poldiv1"}{Country code consisting of three capital letters. This code is unique for
-  each country.}
+  \item{"poldiv2"}{Region code consisting of two digit integer. 
+  This code is not a key field in the database and thus can be two regions 
+  with the same poldiv2 value. This field allows to differentiate regions 
+  within the same country.}
+  \item{"poldiv1"}{Country code consisting of three capital letters. This 
+  code is unique for each country.}
   \item{"regionname"}{Region full name.}
   \item{"countryname"}{Country full name.}
 }
 }
 \description{
-This function looks into the database and returns all combined information in the POLDIV1 and
-POLDIV2 tables (see documentation of the EPD:
+This function looks into the database and returns all combined 
+information in the POLDIV1 and POLDIV2 tables (see documentation 
+of the EPD:
 \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
-Although we tried to be consistent with names in the database, here we provided both country and 
-region names for each record, which required some name tuning compared to the database.
-Because the function returns a whole table it only need a parameter with a valid connection
-to the database. The list can be restricted to specific countries using parameter \code{country}.
+Because the function returns a whole table, it only needs a parameter 
+with a valid connection to the database. The list can be restricted 
+to specific countries using parameter \code{country}.
 }
 \examples{
 # Not run
@@ -43,6 +45,5 @@ to the database. The list can be restricted to specific countries using paramete
 # list_regions(epd.connection, "ESP")
 # list_regions(epd.connection, "Spain")
 # list_regions(epd.connection, c("Spain", "France", "Germany"))
-# disconnectFromEPD(epd.connection)
 
 }

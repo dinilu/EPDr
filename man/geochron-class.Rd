@@ -6,7 +6,7 @@
 \alias{geochron}
 \title{Class for Geochronologies of an entity}
 \description{
-Class "geochron" store all information relative to datation samples
+Class \code{geochron} stores all information relative to datation samples
 and analysis in a specified entity of the European Pollen Database (EPD).
 This object is created by \code{\link[EPDr]{get_geochron}}.
 }

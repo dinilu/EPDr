@@ -7,29 +7,30 @@
 list_countries(connection)
 }
 \arguments{
-\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.}
+\item{connection}{PostgreSQLConnection Object of class 
+\code{PostgreSQLConnection} as returned by function 
+\code{\link[EPDr]{connect_to_epd}}.}
 }
 \value{
-data.frame The function returns a data frame with two columns: \code{poldiv1} and \code{name}.
+data.frame The function returns a data frame with 
+two columns: \code{poldiv1} and \code{name}.
 \itemize{
   \item{"poldiv1"}{ is a three letter code for each country.}
   \item{"name"}{ is the full country name.}
 }
 }
 \description{
-This function looks into the database and returns all information in the POLDIV1 table (see
-documentation of the EPD:
-\url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
-This belong to the country level in political and administrative level. Because the function
-returns a whole table it only need a parameter with a valid connection to the database.
+This function looks into the database and returns all 
+information in the POLDIV1 table (see documentation of the EPD:
+\url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}). This belong to the country level in political and 
+administrative level. Because the function returns a whole table, 
+it only needs a parameter with a valid connection to the database.
 }
 \examples{
 # Not run
 # library(EPDr)
 # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                               user = "epdr", password = "epdrpw")
+#                                  user = "epdr", password = "epdrpw")
 # list_countries(epd.connection)
-# disconnectFromEPD(epd.connection)
 
 }

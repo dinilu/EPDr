@@ -7,25 +7,26 @@
 remove_restricted(list)
 }
 \arguments{
-\item{list}{List of EPDr objects (\code{\link[EPDr:epd.entity.df]{epd.entity.df}}, or
-\code{\link[EPDr:epd.entity]{epd.entity}}).}
+\item{list}{List of EPDr objects (\code{\link[EPDr]{epd.entity.df}}, or
+\code{\link[EPDr]{epd.entity}}).}
 }
 \value{
 List of EPDr objects.
 }
 \description{
 This function is designed to work with list of EPDr objects
-(\code{\link[EPDr:epd.entity.df]{epd.entity.df}}). The function parses all the elements
-on the list and remove those with restriction on their use.
+(\code{\link[EPDr]{epd.entity.df}}). The function parses all the elements
+on the list and remove those with restriction on their use. See
+\code{\link[EPDr]{check_restriction}}.
 }
 \examples{
 # epd.connection <- connect_to_epd(host="localhost", database="epd",
-# user="epdr", password="epdrpw")
-# e.list <- listE(epd.connection, country=c("Spain"))
+#                                  user="epdr", password="epdrpw")
+# e.list <- list_e(epd.connection, country=c("Spain"))
 # e.list <- e.list$e_
-# spain.agedcounts <- lapply(e.list, getAgedCounts, epd.connection)
-# spain.agedcounts.un <- remove_restricted(spain.agedcounts)
-# length(spain.agedcounts)
-# length(spain.agedcounts.un)
+# epd.spain <- lapply(e.list, get_entity, epd.connection)
+# epd.spain.un <- remove_restricted(epd.spain)
+# length(epd.spain)
+# length(epd.spain.un)
 
 }

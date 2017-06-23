@@ -2,43 +2,48 @@
 
 #' Map pollen counts from a list of epd.entity.df objects
 #' 
-#' This function use information on multiple \code{\link[EPDr:epd.entity.df]{epd.entity.df}}
-#' objects to map counts for a particular taxa in a particular age (or time period).
-#' The function use ggplot function and allow for multiple parameters to further tune the
-#' resulting map. Each entity in the map is represented by a point, which size, border colour,
-#' and fill colour change according to the palynological count. When an entity is
-#' provided but it has no data for that particular age (or time period) the points are
-#' represented diferently to reflect \code{NA}, avoiding confusion with \code{0 (zero)} values.
+#' This function uses information on multiple \code{\link[EPDr]{epd.entity.df}}
+#' objects to map counts for a particular taxa in a particular age (or time 
+#' period). The function use ggplot function and allow for multiple 
+#' parameters to further tune the resulting map. Each entity in the map 
+#' is represented by a point, which size, border colour, and fill colour 
+#' change according to the palynological count. When an entity is provided 
+#' but it has no data for that particular age (or time period) the points 
+#' are represented diferently to reflect \code{NA}, avoiding confusion 
+#' with \code{0} (zero) values.
 #'
-#' @param x List of \code{\link[EPDr:epd.entity.df]{epd.entity.df}} objects that are going to
-#' be included in the map.
-#' @param taxa Character string indicating the taxa that are going to be mapped.
-#' @param sample_label Character string indicating the age (or time period) to be mapped.
-#' @param pres_abse Logical value indicating whether the map will represent presence/absence
-#' or counts (absolute or percentages).
-#' @param pollen_thres Logical value indicating the pollen count threshold to plot an
-#' specific count as presence or absence.
-#' @param zoom_coords Numeric vector with 4 elements defining the bounding box of the map
-#' as geographical coordinates. It should have the following format
-#' \code{c(xmin, xmax, ymin, ymax)}. Where \code{x} represent longitude and \code{y}
-#' represent latitude. If not specified the function looks into the data and automatically
-#' select an extent that encompases all entities.
+#' @param x List of \code{\link[EPDr]{epd.entity.df}} objects that are 
+#' going to be included in the map.
+#' @param taxa Character string indicating the taxa that are going to 
+#' be mapped.
+#' @param sample_label Character string indicating the age (or time period) 
+#' to be mapped.
+#' @param pres_abse Logical value indicating whether the map will represent 
+#' presence/absence or counts (absolute or percentages).
+#' @param pollen_thres Logical value indicating the pollen count threshold 
+#' to plot an specific count as presence or absence.
+#' @param zoom_coords Numeric vector with 4 elements defining the bounding 
+#' box of the map as geographical coordinates. It should have the 
+#' following format \code{c(xmin, xmax, ymin, ymax)}. Where \code{x} 
+#' represents longitude and \code{y} represents latitude. If not specified 
+#' the function looks into the data and automatically selects an extent that 
+#' encompases all entities.
 #' @param points_pch Any value accepted for \code{pch} by
-#' \code{\link[ggplot2:geom_point]{geom_point}}. This controls for the symbol to represent
+#' \code{\link[ggplot2]{geom_point}}. This controls for the symbol to represent
 #' entities in the map.
 #' @param points_colour Two elements vector with any values accepted for \code{colour}
-#' by \code{\link[ggplot2:geom_point]{geom_point}}. You can use this to change border
+#' by \code{\link[ggplot2]{geom_point}}. You can use this to change border
 #' colours for points. The first element is used to select the border colour of the
-#' absence/minimum values, whereas the second value select the border colour for
+#' absence/minimum values, whereas the second value selects the border colour for
 #' presences/maximum values.
 #' @param points_fill Two elements vector with any values accepted for \code{fill}
-#' by \code{\link[ggplot2:geom_point]{geom_point}}. You can use this to change fill colours
+#' by \code{\link[ggplot2]{geom_point}}. You can use this to change fill colours
 #' for points. The first element is used to select the fill colour of the absence/minimum
-#' values, whereas the second value select the fill colour for presences/maximum values.
+#' values, whereas the second value selects the fill colour for presences/maximum values.
 #' @param points_range_size  Two elements vector with any values accepted for \code{size}
-#' by \code{\link[ggplot2:geom_point]{geom_point}}. You can use this to change point sizes.
+#' by \code{\link[ggplot2]{geom_point}}. You can use this to change point sizes.
 #' The first element is used to select the size of the absence/minimum values, whereas the
-#' second value select the size for presences/maximum values.
+#' second value selects the size for presences/maximum values.
 #' @param map_title Character string with a title for the map.
 #' @param legend_range Two elements vector with numeric values to set different min and max
 #' limits of points representation. If you have a dataset where counts goes up to 98 but
@@ -46,75 +51,54 @@
 #' the function uses the min and max values in the dataset.
 #' @param legend_title Character string with a title for the legend.
 #' @param napoints_size Any value accepted for \code{size} by
-#' \code{\link[ggplot2:geom_point]{geom_point}}. This control for the size of points
+#' \code{\link[ggplot2]{geom_point}}. This control for the size of points
 #' representing \code{NA} values.
 #' @param napoints_colour Any value accepted for \code{colour} by
-#' \code{\link[ggplot2:geom_point]{geom_point}}. This control for the border colour of
+#' \code{\link[ggplot2]{geom_point}}. This control for the border colour of
 #' points representing \code{NA} values.
 #' @param napoints_fill  Any value accepted for \code{fill} by
-#' \code{\link[ggplot2:geom_point]{geom_point}}. This control for the fill colour of
+#' \code{\link[ggplot2]{geom_point}}. This control for the fill colour of
 #' points representing \code{NA} values.
 #' @param countries_fill_colour Any value accepted for \code{fill} by
-#' \code{\link[ggplot2:borders]{borders}}. This control for the fill colour of polygons
+#' \code{\link[ggplot2]{borders}}. This control for the fill colour of polygons
 #' representing countries.
 #' @param countries_border_colour Any value accepted for \code{colour} by
-#' \code{\link[ggplot2:borders]{borders}}. This control for the border colour of polygons
+#' \code{\link[ggplot2]{borders}}. This control for the border colour of polygons
 #' representing countries. 
 #'
-#' @return The function display a ggplot map with countries in the background and counts for particular taxa and age (or time periods) as points in the foreground.
+#' @return The function displays a ggplot map with countries in the background and counts for particular taxa and age (or time periods) as points in the foreground.
 #' 
 #' @export
 #'
 #' @examples
 #' # Not run
-#' # epd.connection <- connectToEPD(host = "localhost", database = "epd",
+#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
 #' #                                user = "epdr", password = "epdrpw")
-#' # entity.list <- e_by_countries(c("Spain","Portugal", "France",
-#' #                                 "Switzerland", "Austria", "Italy",
-#' #                                 "Malta", "Algeria", "Tunisia", "Morocco",
-#' #                                "Atlantic ocean", "Mediterranean Sea"), epd.connection)
-#' # counts.all <- lapply(entity.list, getAgedCounts, epd.connection)
+#' # entity.list <- list_e(epd.connection, country = c("Spain","Portugal",
+#' #                                                   "France", "Switzerland",
+#' #                                                   "Austria", "Italy",
+#' #                                                   "Malta", "Algeria",
+#' #                                                   "Tunisia", "Morocco",
+#' #                                                   "Atlantic ocean",
+#' #                                                   "Mediterranean Sea"))
+#' # epd.all <- lapply(entity.list$e_, get_entity, epd.connection)
+#' # epd.all <- lapply(epd.all, filter_taxagroups, c("HERB", "TRSH", "DWAR",
+#' #                                                 "LIAN", "HEMI", "UPHE"))
+#' # epd.all <- lapply(epd.all, giesecke_default_chron)
+#' # epd.all <- remove_restricted(epd.all)
+#' # epd.all <- remove_wo_ages(epd.all)
 #' # 
-#' # counts <- lapply(counts.all, filterTaxaGroups, c("HERB", "TRSH", "DWAR", "LIAN", "HEMI", "UPHE"))
-#' # counts <- lapply(counts, gieseckeDefaultChronology)
-#' # counts <- removeRestricted(counts)
-#' # counts <- removeWithoutAges(counts)
-#' # 
-#' # counts.int <- lapply(counts, interpolateCounts, seq(0, 22000, by = 1000))
-#' # counts.ran <- lapply(counts, intervalsCounts, seq(0, 21000, by = 1000),
-#' #                      seq(999, 21999, by = 1000))
-#' # 
-#' # percent <- lapply(counts, trans2Percentages)
-#' # percent.int <- lapply(counts.int, trans2Percentages)
-#' # percent.ran <- lapply(counts.ran, trans2Percentages)
-#' # 
+#' # epd.int <- lapply(epd.all, interpolate_counts, seq(0, 22000, by = 1000))
 #' # epd.taxonomy <- getTaxonomyEPD(epd.connection)
+#' # epd.int <- lapply(epd.int, taxa_to_acceptedtaxa, epd.taxonomy)
+#' # epd.int <- unify_taxonomy(epd.int, epd.taxonomy)
 #' # 
-#' # counts <- lapply(counts, taxa2AcceptedTaxa, epd.taxonomy)
-#' # counts.int <- lapply(counts.int, taxa2AcceptedTaxa, epd.taxonomy)
-#' # counts.ran <- lapply(counts.ran, taxa2AcceptedTaxa, epd.taxonomy)
-#' # percent <- lapply(percent, taxa2AcceptedTaxa, epd.taxonomy)
-#' # percent.int <- lapply(percent.int, taxa2AcceptedTaxa, epd.taxonomy)
-#' # percent.ran <- lapply(percent.ran, taxa2AcceptedTaxa, epd.taxonomy)
+#' # epd.int.per <- lapply(epd.int, counts_to_percentage)
 #' # 
-#' # counts <- unifyTaxonomy(counts, epd.taxonomy)
-#' # counts.int <- unifyTaxonomy(counts.int, epd.taxonomy)
-#' # counts.ran <- unifyTaxonomy(counts.ran, epd.taxonomy)
-#' # percent <- unifyTaxonomy(percent, epd.taxonomy)
-#' # percent.int <- unifyTaxonomy(percent.int, epd.taxonomy)
-#' # percent.ran <- unifyTaxonomy(percent.ran, epd.taxonomy)
-#' # 
-#' # cedrus <- c("Cedrus", "Cedrus atlantica", "Cedrus cf. C. atlantica", "Cedrus-type", "cf. Cedrus")
-#' # 
-#' # map_taxa_age(percent.int, cedrus, "21000", pres_abse = F)
-#' # map_taxa_age(percent.int, cedrus, "21000", pres_abse = T, pollen_thres = 0)
-#' # map_taxa_age(counts.int, cedrus, "21000", pres_abse = F)
-#' # map_taxa_age(counts.int, cedrus, "21000", pres_abse = T, pollen_thres = 0)
-#' # 
-#' # map_taxa_age(percent.ran, cedrus, "21000-21999", pres_abse = F)
-#' # map_taxa_age(percent.ran, cedrus, "21000-21999", pres_abse = T, pollen_thres = 0)
-#' # map_taxa_age(counts.ran, cedrus, "21000-21999", pres_abse = F)
-#' # map_taxa_age(counts.ran, cedrus, "21000-21999", pres_abse = T, pollen_thres = 0)
+#' # map_taxa_age(epd.int, "Cedrus", "21000", pres_abse = F)
+#' # map_taxa_age(epd.int, "Cedrus", "21000", pres_abse = T)
+#' # map_taxa_age(epd.int.per, "Cedrus", "21000", pres_abse = F)
+#' # map_taxa_age(epd.int.per, "Cedrus", "21000", pres_abse = T)
 #' # 
 map_taxa_age <- function(x, taxa, sample_label, pres_abse = FALSE,
                        pollen_thres = NULL, zoom_coords = NULL,
@@ -184,7 +168,7 @@ map_taxa_age <- function(x, taxa, sample_label, pres_abse = FALSE,
     if (is.null(points_range_size)){
       points_range_size <- c(2, 3.5)
     }
-    ggplot2::ggplot(data_list, ggplot2::aes(x = data_list$londd,
+    nplot <- ggplot2::ggplot(data_list, ggplot2::aes(x = data_list$londd,
                                             y = data_list$latdd,
                                             fill = data_list$count,
                                             colour = data_list$count,
@@ -234,7 +218,7 @@ map_taxa_age <- function(x, taxa, sample_label, pres_abse = FALSE,
     if (is.null(points_range_size)){
       points_range_size <- c(2, 7)
     }
-    ggplot2::ggplot(data_list, ggplot2::aes(x = data_list$londd,
+    nplot <- ggplot2::ggplot(data_list, ggplot2::aes(x = data_list$londd,
                                  y = data_list$latdd,
                                  fill = data_list$count,
                                  colour = data_list$count,
@@ -263,4 +247,132 @@ map_taxa_age <- function(x, taxa, sample_label, pres_abse = FALSE,
       ggplot2::scale_y_continuous(name = "Latitude") +
       ggplot2::theme_bw()
   }
+  nplot
+  return(nplot)
 }
+
+
+
+# plot_diagram -----------------------------------------------
+
+#' Plot pollen diagram of an entity
+#'
+#' Description TBW
+#'
+#' Details TBW
+#'
+#' @param x TBW
+#' @param chronology TBW
+#' @param use_ages TBW
+#' @param low_values_exag TBW
+#' @param color_by_group TBW
+#' @param order_taxa TBW
+#' @param ... TBW
+#'
+#' @return TBW
+#' 
+#' @references \url{http://blarquez.com/684-2/}
+#' 
+#' @examples
+#' # TBW
+#' @rdname plot_diagram
+#' @exportMethod plot_diagram
+setGeneric("plot_diagram", function(x, ...,
+                                    chronology = NULL,
+                                    use_ages = TRUE,
+                                    low_values_exag = TRUE,
+                                    color_by_group = TRUE,
+                                    order_taxa = TRUE){
+  standardGeneric("plot_diagram")
+})
+
+#' @rdname plot_diagram
+setMethod("plot_diagram", signature(x = "epd.entity.df"),
+          function(x, ...){
+  # Plotting pollen diagrams
+  if (is.null(chronology)){
+    chronology <- x@defaultchron
+  }
+  if (chronology == 9999){
+    chronology <- "giesecke"
+  }
+  if (use_ages){
+    if (nrow(x@agesdf@depthages) == 0){
+      warning(paste0("The entity has not ages, and hence depths will be used ",
+                     "for the y axis of the pollen diagram."))
+      ages <- x@agesdf@depthcm
+      xlabel <- "Depth (cm)"
+      x_breaks <- seq(0, 100000, 500)
+    }else{
+      ages <- x@agesdf@depthages[, as.character(chronology)]
+      xlabel <- "Age (cal. BP)"
+    }
+  }else{
+    ages <- x@agesdf@depthcm
+    xlabel <- "Depth (cm)"
+    x_breaks <- seq(0, 10000, 50)
+  }
+  if (is.null(color_by_group) || color_by_group == TRUE){
+    groups <- x@commdf@taxagroupid
+  }else{
+    groups <- x@commdf@taxanames
+  }
+  counts <- x@commdf@counts
+  maxcounts <- apply(counts, MARGIN = 2, FUN = max, na.rm = TRUE)
+  dec_order <- order(maxcounts, decreasing = TRUE)
+  if (x@countstype == "Percentages"){
+    ylabel <- "Percentage (%)"
+    y_breaks <- seq(0, 100, 10)
+  }else{
+    ylabel <- "Counts (n)"
+    y_breaks <- seq(0, max(maxcounts), 10)
+  }
+  if (low_values_exag){
+    maxcounts <- as.data.frame(do.call(rbind,
+                                       replicate(nrow(counts),
+                                                 maxcounts,
+                                                 FALSE)))
+    exag <- counts * 10
+    exag <- pmin(exag, maxcounts)
+  }else{
+    exag <- counts
+  }
+  if (is.logical(order_taxa) && order_taxa == TRUE){
+    counts <- counts[, dec_order]
+    exag <- exag[, dec_order]
+    groups <- groups[dec_order]
+  } else if (is.numeric(order_taxa)){
+    counts <- counts[, order_taxa]
+    exag <- exag[, order_taxa]
+    groups <- groups[order_taxa]
+  }
+  df <- reshape2::melt(counts)
+  exag <- reshape2::melt(exag)
+  df$yr <- rep(ages, ncol(counts))
+  df$group <- rep(groups, each = nrow(counts))
+  df$exag <- exag$value
+  theme_new <- ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+                     panel.grid.minor = ggplot2::element_blank(), # remove grids
+                     panel.background = ggplot2::element_blank(),
+                     axis.line = ggplot2::element_line(colour = "black"),
+                     strip.text.x = ggplot2::element_text(size = 10,
+                                                 angle = 90,
+                                                 vjust = 0),
+                     strip.background = ggplot2::element_blank(),
+                     strip.text.y = ggplot2::element_text(angle = 0),
+                     panel.border = ggplot2::element_blank(),
+                     axis.text.x = ggplot2::element_text(angle = 90,
+                                                hjust = 1))
+nplot <- ggplot2::ggplot(df) +
+    ggplot2::geom_area(ggplot2::aes(df$yr, df$exag, fill = df$group)) +
+    ggplot2::geom_area(ggplot2::aes(df$yr, df$value)) +
+    ggplot2::scale_x_reverse(breaks = x_breaks) +
+    ggplot2::scale_y_continuous(breaks = y_breaks) +
+    ggplot2::xlab(xlabel) + 
+    ggplot2::ylab(ylabel) +
+    ggplot2::coord_flip() +
+    theme_new +
+    ggplot2::facet_grid(~df$variable, scales = "free", space = "free")
+  nplot
+  return(nplot)
+})

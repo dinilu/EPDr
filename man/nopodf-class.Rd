@@ -14,7 +14,7 @@ for not biological particles. This may include total pollen counts,
 added particles to calculate pollen concentrations, sedimentation 
 rates, etc. Check \code{list_taxa(epd.connection, "NOPO")} for the
 whole list. Note, however, that data here comes from the table 
-\code{samples} from the database or an 
+\code{SAMPLES} from the database or an 
 \code{\link[EPDr]{epd.entity}} object. Contrary to data 
 in \code{\link[EPDr]{epd.entity}} objects, this are 
 intended to be manipulated and modified if necessary.
@@ -24,13 +24,13 @@ intended to be manipulated and modified if necessary.
 \describe{
 \item{\code{varnames}}{character. Names of the taxa included in the object.}
 
-\item{\code{var_}}{numeric. Identify numbers of the taxa.}
+\item{\code{var_}}{numeric. Identification numbers of the taxa.}
 
-\item{\code{varaccepted}}{numeric. Identify numbers for the accepted taxa. 
+\item{\code{varaccepted}}{numeric. Identification numbers for the accepted taxa. 
 This is useful to unify taxonomy across entities from different authors,
 that may have used slightly different taxa names.}
 
-\item{\code{varmhvar}}{numeric. Identify numbers for the higher taxa levels
+\item{\code{varmhvar}}{numeric. Identification numbers for the higher taxa levels
 of each taxa. This is the only taxonomical hierarchy that is available
 in the EPD. The approach is useful, but also very limited, since there 
 is no intuitive way to homogenize the data at certain taxonomical level

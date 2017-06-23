@@ -7,18 +7,18 @@
 remove_wo_ages(list)
 }
 \arguments{
-\item{list}{List of EPDr objects (\code{\link[EPDr:epd.entity.df]{epd.entity.df}},
-or \code{\link[EPDr:epd.entity]{epd.entity}})}
+\item{list}{List of EPDr objects (\code{\link[EPDr]{epd.entity.df}},
+or \code{\link[EPDr]{epd.entity}})}
 }
 \value{
 List of EPDr objects.
 }
 \description{
 This function is designed to work with list of EPDr objects
-(\code{\link[EPDr:epd.entity.df]{epd.entity.df}}, or
-\code{\link[EPDr:epd.entity]{epd.entity}}).
+(\code{\link[EPDr]{epd.entity.df}}, or
+\code{\link[EPDr]{epd.entity}}).
 The function parses all the elements on the list and remove those without a default
-chronology.
+chronology (see \code{\link[EPDr]{check_default_chron}}).
 }
 \examples{
 # epd.connection <- connect_to_epd(host="localhost", database="epd",

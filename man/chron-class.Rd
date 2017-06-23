@@ -6,7 +6,7 @@
 \alias{chron}
 \title{Class for chronology information of an entity}
 \description{
-Class "chron" store all information relative to chronologies for a
+Class \code{chron} stores all information relative to chronologies for a
 specified entity of the European Pollen Database (EPD). This object is
 created by \code{\link[EPDr]{get_chron}}.
 }
@@ -19,7 +19,7 @@ the site.}
 \item{\code{agebound}}{data.frame. Description of the temporal bounds or limits
 for each chronology in  \code{@chron}.}
 
-\item{\code{agebasis}}{data.frame. This table store the information used to fit
+\item{\code{agebasis}}{data.frame. This table stores the information used to fit
 the age-depth model in each chronology and to calculate ages for the
 biological samples.}
 

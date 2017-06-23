@@ -8,7 +8,7 @@
 \description{
 This object stores information regarding the ages of biological 
 samples in an entity but in vector or table format rather than 
-the original format in the EPD database. Note, however, that data 
+the original format of the EPD database. Note, however, that data 
 here comes from the tables \code{pagedpt} and \code{psamples} from
 the database or an \code{\link[EPDr]{epd.entity}} object. 
 Contrary to data in \code{\link[EPDr]{epd.entity}} objects, 

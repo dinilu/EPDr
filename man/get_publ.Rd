@@ -7,20 +7,25 @@
 get_publ(publ_, connection)
 }
 \arguments{
-\item{publ_}{numeric with the publ_}
+\item{publ_}{numeric Value indicating the publication identification number (publ_)}
 
-\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.}
+\item{connection}{PostgreSQLConnection Object of class 
+\code{PostgreSQLConnection} as returned by function 
+\code{\link[EPDr]{connect_to_epd}}.}
 }
 \value{
-data frame with information about the publication whole reference
+data.frame Data frame containing information about the whole
+publication reference.
 }
 \description{
-This function is mainly intended for internal use. It retrieves information of publications by querying the database by the publication identification number.
+This function is mainly intended for internal use. It retrieves 
+information of publications by querying the database by the 
+publication identification number.
 }
 \examples{
 # Not run
 # epd.connection <- connect_to_epd(database = "epd", user = "epdr",
 #                                 password = "epdrpw", host = "localhost")
 # get_publ(1, epd.connection)
-# disconnectFromEPD(connection = epd.connection)
+
 }

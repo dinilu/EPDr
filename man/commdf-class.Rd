@@ -10,7 +10,7 @@ This object stores information regarding the particles counts
 in each biological sample of an entity but in vector or table 
 format rather than the original format in the EPD database. 
 Note, however, that data here comes from the table 
-\code{samples} from the database or an 
+\code{SAMPLES} from the database or an 
 \code{\link[EPDr]{epd.entity}} object. Contrary to data 
 in \code{\link[EPDr]{epd.entity}} objects, this are 
 intended to be manipulated and modified if necessary.
@@ -20,13 +20,13 @@ intended to be manipulated and modified if necessary.
 \describe{
 \item{\code{taxanames}}{character. Names of the taxa included in the object.}
 
-\item{\code{taxa_}}{numeric. Identify numbers of the taxa.}
+\item{\code{taxa_}}{numeric. Identification numbers of the taxa.}
 
-\item{\code{taxaaccepted}}{numeric. Identify numbers for the accepted taxa. 
+\item{\code{taxaaccepted}}{numeric. Identification numbers for the accepted taxa. 
 This is useful to unify taxonomy across entities from different authors,
 that may have used slightly different taxa names.}
 
-\item{\code{taxamhvar}}{numeric. Identify numbers for the higher taxa levels
+\item{\code{taxamhvar}}{numeric. Identification numbers for the higher taxa levels
 of each taxa. This is the only taxonomical hierarchy that is available
 in the EPD. The approach is useful, but also very limited, since there 
 is no intuitive way to homogenize the data at certain taxonomical level

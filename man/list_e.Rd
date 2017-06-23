@@ -9,54 +9,57 @@ list_e(connection, site = NULL, coords = NULL, lastname = NULL,
   region = NULL, restrictions = NULL, logical_operator = "AND")
 }
 \arguments{
-\item{connection}{A valid connection to the database see
-\code{\link[EPDr:connect_to_epd]{connect_to_epd}}.}
+\item{connection}{PostgreSQLConnection A valid connection to the 
+database. See \code{\link[EPDr]{connect_to_epd}}.}
 
-\item{site}{Numeric or character vector indicating the site identification number or
-the site name to which entities will be retrieved.}
+\item{site}{numeric Numeric or character vector indicating the site 
+identification number or the site name to which entities will be retrieved.}
 
-\item{coords}{Numeric vector with four elements indicating the geographical coordinates
-to which the search is limited.}
+\item{coords}{numeric Numeric vector with four elements indicating the 
+geographical coordinates to which the search is limited.}
 
-\item{lastname}{Character vector indicating the last name of data contributor for which
-entities will be retrieved.}
+\item{lastname}{character Character vector indicating the last name 
+of data contributor for which entities will be retrieved.}
 
-\item{firstname}{Character vector indicating the first name of data contributor
-for which entities will be retrieved.}
+\item{firstname}{character Character vector indicating the first name 
+of data contributor for which entities will be retrieved.}
 
-\item{initials}{Character vector indicating the initials of data contributor for which
-entities will be retrieved.}
+\item{initials}{character Character vector indicating the initials 
+of data contributor for which entities will be retrieved.}
 
-\item{publ}{Numeric vector indicating the publication identification number
-to which search is constrained.}
+\item{publ}{numeric Numeric vector indicating the publication 
+identification number to which search is constrained.}
 
-\item{country}{Character vector indicating the three letters code or the full
-english name for the countries to which entities are desired.}
+\item{country}{character Character vector indicating the three 
+letters code or the full english name for the countries to which 
+entities are desired.}
 
-\item{region}{Character vector indicating the two letters code or the full
-name for the regions to which entities are desired. To specify a region you have to
-specify one, and only one, country. You can specify multiple countries but the results 
-can be funky.}
+\item{region}{character Character vector indicating the two letters 
+code or the full name for the regions to which entities are desired. 
+To specify a region you have to specify one, and only one, country. 
+You can specify multiple countries but the results  can be funky.}
 
-\item{restrictions}{Character letter ("U" or "R") specifying the usestatus of the data 
-for the entities that are searched. U is for unrestricted and R is for restricted.}
+\item{restrictions}{character Character letter ("U" or "R") specifying 
+the usestatus of the data for the entities that are searched. U is 
+for unrestricted and R is for restricted.}
 
-\item{logical_operator}{Character string indicating whether the effects of 
-search criteria are additive ("OR") or substracting ("AND"). If "OR" is specified,
-entities complying with any of the search criteria will be returned. If "AND" is
-specified, only entities that comply with all search criteria will be returned.}
+\item{logical_operator}{character Character string indicating whether 
+the effects of search criteria are additive ("OR") or substracting 
+("AND"). If "OR" is specified, entities complying with any of the 
+search criteria will be returned. If "AND" is specified, only entities 
+that comply with all search criteria will be returned.}
 }
 \value{
-This function return a data.frame with columns as in the \code{entity} table 
-of the EPD database (see documentation of the EPD:
-\url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}). If search criteria are all empty, the function returns the whole
-table. If criteria are specified the table is complemented with columns from diferent
-tables in the database that store the required information to filter entities
-accordingly.
+This function return a data.frame with columns as in 
+the \code{entity} table of the EPD database (see documentation of the EPD:
+\url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}). If search criteria are all empty, the function returns 
+the whole table. If criteria are specified the table is complemented 
+with columns from diferent tables in the database that store the 
+required information to filter entities accordingly.
 }
 \description{
-This function allows to search entities records by different search criteria that can be
-combined as desired.
+This function allows to search entities records by different search 
+criteria that can be combined as desired.
 }
 \examples{
 # Not run

@@ -12,44 +12,47 @@ map_taxa_age(x, taxa, sample_label, pres_abse = FALSE, pollen_thres = NULL,
   countries_fill_colour = "grey80", countries_border_colour = "grey90")
 }
 \arguments{
-\item{x}{List of \code{\link[EPDr:epd.entity.df]{epd.entity.df}} objects that are going to
-be included in the map.}
+\item{x}{List of \code{\link[EPDr]{epd.entity.df}} objects that are 
+going to be included in the map.}
 
-\item{taxa}{Character string indicating the taxa that are going to be mapped.}
+\item{taxa}{Character string indicating the taxa that are going to 
+be mapped.}
 
-\item{sample_label}{Character string indicating the age (or time period) to be mapped.}
+\item{sample_label}{Character string indicating the age (or time period) 
+to be mapped.}
 
-\item{pres_abse}{Logical value indicating whether the map will represent presence/absence
-or counts (absolute or percentages).}
+\item{pres_abse}{Logical value indicating whether the map will represent 
+presence/absence or counts (absolute or percentages).}
 
-\item{pollen_thres}{Logical value indicating the pollen count threshold to plot an
-specific count as presence or absence.}
+\item{pollen_thres}{Logical value indicating the pollen count threshold 
+to plot an specific count as presence or absence.}
 
-\item{zoom_coords}{Numeric vector with 4 elements defining the bounding box of the map
-as geographical coordinates. It should have the following format
-\code{c(xmin, xmax, ymin, ymax)}. Where \code{x} represent longitude and \code{y}
-represent latitude. If not specified the function looks into the data and automatically
-select an extent that encompases all entities.}
+\item{zoom_coords}{Numeric vector with 4 elements defining the bounding 
+box of the map as geographical coordinates. It should have the 
+following format \code{c(xmin, xmax, ymin, ymax)}. Where \code{x} 
+represents longitude and \code{y} represents latitude. If not specified 
+the function looks into the data and automatically selects an extent that 
+encompases all entities.}
 
 \item{points_pch}{Any value accepted for \code{pch} by
-\code{\link[ggplot2:geom_point]{geom_point}}. This controls for the symbol to represent
+\code{\link[ggplot2]{geom_point}}. This controls for the symbol to represent
 entities in the map.}
 
 \item{points_colour}{Two elements vector with any values accepted for \code{colour}
-by \code{\link[ggplot2:geom_point]{geom_point}}. You can use this to change border
+by \code{\link[ggplot2]{geom_point}}. You can use this to change border
 colours for points. The first element is used to select the border colour of the
-absence/minimum values, whereas the second value select the border colour for
+absence/minimum values, whereas the second value selects the border colour for
 presences/maximum values.}
 
 \item{points_fill}{Two elements vector with any values accepted for \code{fill}
-by \code{\link[ggplot2:geom_point]{geom_point}}. You can use this to change fill colours
+by \code{\link[ggplot2]{geom_point}}. You can use this to change fill colours
 for points. The first element is used to select the fill colour of the absence/minimum
-values, whereas the second value select the fill colour for presences/maximum values.}
+values, whereas the second value selects the fill colour for presences/maximum values.}
 
 \item{points_range_size}{Two elements vector with any values accepted for \code{size}
-by \code{\link[ggplot2:geom_point]{geom_point}}. You can use this to change point sizes.
+by \code{\link[ggplot2]{geom_point}}. You can use this to change point sizes.
 The first element is used to select the size of the absence/minimum values, whereas the
-second value select the size for presences/maximum values.}
+second value selects the size for presences/maximum values.}
 
 \item{map_title}{Character string with a title for the map.}
 
@@ -61,86 +64,67 @@ the function uses the min and max values in the dataset.}
 \item{legend_title}{Character string with a title for the legend.}
 
 \item{napoints_size}{Any value accepted for \code{size} by
-\code{\link[ggplot2:geom_point]{geom_point}}. This control for the size of points
+\code{\link[ggplot2]{geom_point}}. This control for the size of points
 representing \code{NA} values.}
 
 \item{napoints_colour}{Any value accepted for \code{colour} by
-\code{\link[ggplot2:geom_point]{geom_point}}. This control for the border colour of
+\code{\link[ggplot2]{geom_point}}. This control for the border colour of
 points representing \code{NA} values.}
 
 \item{napoints_fill}{Any value accepted for \code{fill} by
-\code{\link[ggplot2:geom_point]{geom_point}}. This control for the fill colour of
+\code{\link[ggplot2]{geom_point}}. This control for the fill colour of
 points representing \code{NA} values.}
 
 \item{countries_fill_colour}{Any value accepted for \code{fill} by
-\code{\link[ggplot2:borders]{borders}}. This control for the fill colour of polygons
+\code{\link[ggplot2]{borders}}. This control for the fill colour of polygons
 representing countries.}
 
 \item{countries_border_colour}{Any value accepted for \code{colour} by
-\code{\link[ggplot2:borders]{borders}}. This control for the border colour of polygons
+\code{\link[ggplot2]{borders}}. This control for the border colour of polygons
 representing countries.}
 }
 \value{
-The function display a ggplot map with countries in the background and counts for particular taxa and age (or time periods) as points in the foreground.
+The function displays a ggplot map with countries in the background and counts for particular taxa and age (or time periods) as points in the foreground.
 }
 \description{
-This function use information on multiple \code{\link[EPDr:epd.entity.df]{epd.entity.df}}
-objects to map counts for a particular taxa in a particular age (or time period).
-The function use ggplot function and allow for multiple parameters to further tune the
-resulting map. Each entity in the map is represented by a point, which size, border colour,
-and fill colour change according to the palynological count. When an entity is
-provided but it has no data for that particular age (or time period) the points are
-represented diferently to reflect \code{NA}, avoiding confusion with \code{0 (zero)} values.
+This function uses information on multiple \code{\link[EPDr]{epd.entity.df}}
+objects to map counts for a particular taxa in a particular age (or time 
+period). The function use ggplot function and allow for multiple 
+parameters to further tune the resulting map. Each entity in the map 
+is represented by a point, which size, border colour, and fill colour 
+change according to the palynological count. When an entity is provided 
+but it has no data for that particular age (or time period) the points 
+are represented diferently to reflect \code{NA}, avoiding confusion 
+with \code{0} (zero) values.
 }
 \examples{
 # Not run
-# epd.connection <- connectToEPD(host = "localhost", database = "epd",
+# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
 #                                user = "epdr", password = "epdrpw")
-# entity.list <- e_by_countries(c("Spain","Portugal", "France",
-#                                 "Switzerland", "Austria", "Italy",
-#                                 "Malta", "Algeria", "Tunisia", "Morocco",
-#                                "Atlantic ocean", "Mediterranean Sea"), epd.connection)
-# counts.all <- lapply(entity.list, getAgedCounts, epd.connection)
+# entity.list <- list_e(epd.connection, country = c("Spain","Portugal",
+#                                                   "France", "Switzerland",
+#                                                   "Austria", "Italy",
+#                                                   "Malta", "Algeria",
+#                                                   "Tunisia", "Morocco",
+#                                                   "Atlantic ocean",
+#                                                   "Mediterranean Sea"))
+# epd.all <- lapply(entity.list$e_, get_entity, epd.connection)
+# epd.all <- lapply(epd.all, filter_taxagroups, c("HERB", "TRSH", "DWAR",
+#                                                 "LIAN", "HEMI", "UPHE"))
+# epd.all <- lapply(epd.all, giesecke_default_chron)
+# epd.all <- remove_restricted(epd.all)
+# epd.all <- remove_wo_ages(epd.all)
 # 
-# counts <- lapply(counts.all, filterTaxaGroups, c("HERB", "TRSH", "DWAR", "LIAN", "HEMI", "UPHE"))
-# counts <- lapply(counts, gieseckeDefaultChronology)
-# counts <- removeRestricted(counts)
-# counts <- removeWithoutAges(counts)
-# 
-# counts.int <- lapply(counts, interpolateCounts, seq(0, 22000, by = 1000))
-# counts.ran <- lapply(counts, intervalsCounts, seq(0, 21000, by = 1000),
-#                      seq(999, 21999, by = 1000))
-# 
-# percent <- lapply(counts, trans2Percentages)
-# percent.int <- lapply(counts.int, trans2Percentages)
-# percent.ran <- lapply(counts.ran, trans2Percentages)
-# 
+# epd.int <- lapply(epd.all, interpolate_counts, seq(0, 22000, by = 1000))
 # epd.taxonomy <- getTaxonomyEPD(epd.connection)
+# epd.int <- lapply(epd.int, taxa_to_acceptedtaxa, epd.taxonomy)
+# epd.int <- unify_taxonomy(epd.int, epd.taxonomy)
 # 
-# counts <- lapply(counts, taxa2AcceptedTaxa, epd.taxonomy)
-# counts.int <- lapply(counts.int, taxa2AcceptedTaxa, epd.taxonomy)
-# counts.ran <- lapply(counts.ran, taxa2AcceptedTaxa, epd.taxonomy)
-# percent <- lapply(percent, taxa2AcceptedTaxa, epd.taxonomy)
-# percent.int <- lapply(percent.int, taxa2AcceptedTaxa, epd.taxonomy)
-# percent.ran <- lapply(percent.ran, taxa2AcceptedTaxa, epd.taxonomy)
+# epd.int.per <- lapply(epd.int, counts_to_percentage)
 # 
-# counts <- unifyTaxonomy(counts, epd.taxonomy)
-# counts.int <- unifyTaxonomy(counts.int, epd.taxonomy)
-# counts.ran <- unifyTaxonomy(counts.ran, epd.taxonomy)
-# percent <- unifyTaxonomy(percent, epd.taxonomy)
-# percent.int <- unifyTaxonomy(percent.int, epd.taxonomy)
-# percent.ran <- unifyTaxonomy(percent.ran, epd.taxonomy)
-# 
-# cedrus <- c("Cedrus", "Cedrus atlantica", "Cedrus cf. C. atlantica", "Cedrus-type", "cf. Cedrus")
-# 
-# map_taxa_age(percent.int, cedrus, "21000", pres_abse = F)
-# map_taxa_age(percent.int, cedrus, "21000", pres_abse = T, pollen_thres = 0)
-# map_taxa_age(counts.int, cedrus, "21000", pres_abse = F)
-# map_taxa_age(counts.int, cedrus, "21000", pres_abse = T, pollen_thres = 0)
-# 
-# map_taxa_age(percent.ran, cedrus, "21000-21999", pres_abse = F)
-# map_taxa_age(percent.ran, cedrus, "21000-21999", pres_abse = T, pollen_thres = 0)
-# map_taxa_age(counts.ran, cedrus, "21000-21999", pres_abse = F)
-# map_taxa_age(counts.ran, cedrus, "21000-21999", pres_abse = T, pollen_thres = 0)
+# map_taxa_age(epd.int, "Cedrus", "21000", pres_abse = F)
+# map_taxa_age(epd.int, "Cedrus", "21000", pres_abse = T)
+# map_taxa_age(epd.int.per, "Cedrus", "21000", pres_abse = F)
+# map_taxa_age(epd.int.per, "Cedrus", "21000", pres_abse = T)
 # 
 }

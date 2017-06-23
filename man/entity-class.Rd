@@ -6,9 +6,9 @@
 \alias{entity}
 \title{Class for descriptions of an entity}
 \description{
-Class "entity" store all summary and description information relative 
-to a specified entity of the European Pollen Database (EPD). This object
-is created by \code{\link[EPDr]{get_ent}}.
+Class \code{entity} stores all summary and description information relative 
+to a specific entity of the European Pollen Database (EPD). This object
+is created by \code{\link[EPDr]{get_ent}} function.
 }
 \section{Slots}{
 
@@ -16,18 +16,18 @@ is created by \code{\link[EPDr]{get_ent}}.
 \item{\code{entity}}{data.frame. Information describing some characteristics of
 the entity.}
 
-\item{\code{pentity}}{data.frame. Description contact person and restriction on
-use of the data from this entity.}
+\item{\code{pentity}}{data.frame. Description of contact person and restriction on
+the use of data from this entity.}
 
 \item{\code{contact}}{data.frame. Details on the contact person.}
 
-\item{\code{coredrive}}{data.frame. Description of the coredrive used to drill
+\item{\code{coredrive}}{data.frame. Description of the coredrive used to sample
 the entity.}
 
 \item{\code{descr}}{data.frame. This table provide a longer explanation for the
-descriptor specified in \code{@entity}.}
+descriptor specified in \code{@entity} slot.}
 
-\item{\code{lithology}}{data.frame. Information on the lithology found in the
+\item{\code{lithology}}{data.frame. Information about the lithology found in the
 entity.}
 
 \item{\code{loi}}{data.frame. Detailed information for loss-on-ignition data for
@@ -37,7 +37,7 @@ that particular entity.}
 entity if is a core.}
 
 \item{\code{publent}}{data.frame. Linking information between entity id and
-publications \code{@publ}.}
+publications (\code{@publ}).}
 
 \item{\code{publ}}{data.frame PUBL data where the event data were published.}
 }}

@@ -8,17 +8,19 @@
 \description{
 This object stores all the information available for a particular 
 entity in the European Pollen Database (EPD). It has some additional 
-information (e.g., in postbombzone or isingiesecke \code{@slots}). 
-Other \code{@slots} are store handy information for simplicity (e.g.,
-defaultchron or numberofchron \code{@slots}). The rest of 
-\code{@slots} are the raw information as extracted from the EPD, and
-stored in the \code{entity, site, geochron, chron, and samples classes}
+information (e.g., in \code{@postbombzone} or \code{@isingiesecke} slots).
+Other slots store handy information for simplicity (e.g.,
+\code{@defaultchron} or \code{@numberofchron} slots). The rest of 
+slots are the raw information as extracted from the EPD, and
+stored in the \code{link[EPDr]{entity}}, \code{link[EPDr]{site}}, 
+\code{link[EPDr]{geochron}}, \code{link[EPDr]{chron}}, and 
+\code{link[EPDr]{samples}} classes.
 }
 \details{
 All data in this object can be changed, but the intention
 of the object is to provide a copy of all the tables in the EPD
 with information regarding a particular entity. When an entity
-has not data in any particular table, the table is created empty.
+has no data in any particular table, the table is created empty.
 }
 \section{Slots}{
 
@@ -26,7 +28,7 @@ has not data in any particular table, the table is created empty.
 \item{\code{e_}}{numeric. Number indicating the entity number (e_) of the
 stored entity.}
 
-\item{\code{postbombzone}}{factor. It indicate the code of the postbombzone of
+\item{\code{postbombzone}}{factor. It indicates the code of the postbomb zone of
 the world where the entity is located. This is not used yet, but
 might be handy for further implementations for datations with CLAM
 or BACON.}

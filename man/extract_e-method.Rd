@@ -12,16 +12,16 @@ extract_e(x)
 \S4method{extract_e}{epd.entity}(x)
 }
 \arguments{
-\item{x}{Any object of classes \code{\link[EPDr:epd.entity]{epd.entity}} or
+\item{x}{epd.entity Any object of classes \code{\link[EPDr:epd.entity]{epd.entity}} or
 \code{\link[EPDr:epd.entity.df]{epd.entity.df}}.}
 }
 \value{
 numeric. Value of the entity number.
 }
 \description{
-This function look into objects from the different EPDr classes (i.e.,
-\code{\link[EPDr:epd.entity]{epd.entity}} or \code{\link[EPDr:epd.entity.df]{epd.entity.df}},
-returning the entity number of the objects
+This function looks into EPDr objects (i.e., \code{\link[EPDr]{epd.entity}}
+or \code{\link[EPDr]{epd.entity.df}} classes), returning the entity 
+number of the objects.
 }
 \examples{
 ##NOT TO RUN

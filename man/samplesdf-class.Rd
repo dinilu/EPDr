@@ -16,11 +16,10 @@ this are intended to be manipulated and modified if necessary.
 \section{Slots}{
 
 \describe{
-\item{\code{sample_}}{numeric. Identify numbers for each sample.}
+\item{\code{sample_}}{numeric. Identification numbers for each sample.}
 
 \item{\code{samplelabel}}{character. Name of each sample. Most time
-they are a character version of the sample_ @slot, but some others
-are composites created by other functions in the 
-\code{EPDr} package.}
+they are a character version of the \code{@sample_} slot, but some others
+are composites created by other functions in the \code{EPDr} package.}
 }}
 

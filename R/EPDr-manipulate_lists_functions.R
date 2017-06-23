@@ -4,11 +4,12 @@
 #' Remove restricted data from a list of objects
 #'
 #' This function is designed to work with list of EPDr objects
-#' (\code{\link[EPDr:epd.entity.df]{epd.entity.df}}). The function parses all the elements
-#' on the list and remove those with restriction on their use.
+#' (\code{\link[EPDr]{epd.entity.df}}). The function parses all the elements
+#' on the list and remove those with restriction on their use. See
+#' \code{\link[EPDr]{check_restriction}}.
 #'
-#' @param list  List of EPDr objects (\code{\link[EPDr:epd.entity.df]{epd.entity.df}}, or
-#' \code{\link[EPDr:epd.entity]{epd.entity}}).
+#' @param list List of EPDr objects (\code{\link[EPDr]{epd.entity.df}}, or
+#' \code{\link[EPDr]{epd.entity}}).
 #'
 #' @return List of EPDr objects.
 #' 
@@ -16,13 +17,13 @@
 #'
 #' @examples
 #' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' # user="epdr", password="epdrpw")
-#' # e.list <- listE(epd.connection, country=c("Spain"))
+#' #                                  user="epdr", password="epdrpw")
+#' # e.list <- list_e(epd.connection, country=c("Spain"))
 #' # e.list <- e.list$e_
-#' # spain.agedcounts <- lapply(e.list, getAgedCounts, epd.connection)
-#' # spain.agedcounts.un <- remove_restricted(spain.agedcounts)
-#' # length(spain.agedcounts)
-#' # length(spain.agedcounts.un)
+#' # epd.spain <- lapply(e.list, get_entity, epd.connection)
+#' # epd.spain.un <- remove_restricted(epd.spain)
+#' # length(epd.spain)
+#' # length(epd.spain.un)
 #' 
 remove_restricted <- function(list){
   index <- which(!vapply(list, check_restriction, FUN.VALUE = logical(1)))
@@ -37,13 +38,13 @@ remove_restricted <- function(list){
 #' Remove data without ages from a list of objects
 #' 
 #' This function is designed to work with list of EPDr objects
-#' (\code{\link[EPDr:epd.entity.df]{epd.entity.df}}, or
-#' \code{\link[EPDr:epd.entity]{epd.entity}}).
+#' (\code{\link[EPDr]{epd.entity.df}}, or
+#' \code{\link[EPDr]{epd.entity}}).
 #' The function parses all the elements on the list and remove those without a default
-#' chronology.
+#' chronology (see \code{\link[EPDr]{check_default_chron}}).
 #'
-#' @param list  List of EPDr objects (\code{\link[EPDr:epd.entity.df]{epd.entity.df}},
-#' or \code{\link[EPDr:epd.entity]{epd.entity}})
+#' @param list List of EPDr objects (\code{\link[EPDr]{epd.entity.df}},
+#' or \code{\link[EPDr]{epd.entity}})
 #'
 #' @return List of EPDr objects.
 #' 
@@ -72,15 +73,15 @@ remove_wo_ages <- function(list){
 #' Unify taxonomy of counts in multiple objects
 #' 
 #' This function compares the taxa registered in a list of
-#' \code{\link[EPDr:epd.entity.df]{epd.entity.df}} objects and expand their taxonomy (using
-#' \code{\link[EPDr:filter_taxa]{filter_taxa}}) to make them match. When neccesary the
+#' \code{\link[EPDr]{epd.entity.df}} objects and expand their taxonomy (using
+#' \code{\link[EPDr]{filter_taxa}}) to make them match. When neccesary the
 #' function add empty columns (with \code{NA} values).
 #'
-#' @param list list of \code{\link[EPDr:epd.entity.df]{epd.entity.df}} objects to be modified.
+#' @param list List of \code{\link[EPDr]{epd.entity.df}} objects to be modified.
 #' @param epd.taxonomy Data frame with the taxonomy from the EPD as from the
-#' \code{\link[EPDr:get_taxonomy_epd]{get_taxonomy_epd}} function.
+#' \code{\link[EPDr]{get_taxonomy_epd}} function.
 #'
-#' @return list of \code{\link[EPDr:epd.entity.df]{epd.entity.df}} objects with taxonomy
+#' @return list of \code{\link[EPDr]{epd.entity.df}} objects with taxonomy
 #' modified.
 #' 
 #' @export

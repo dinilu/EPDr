@@ -7,55 +7,59 @@
 \title{Class for epd.entity.df objects}
 \description{
 This is an expansion of \code{\link[EPDr]{epd.entity}} class,
-in which certain data have been reformated and included in the object. Hence,
-the first @slots are the same as in a
+in which certain data have been reformated and included in the object. 
+Hence, the first slots are the same as in a
 \code{\link[EPDr]{epd.entity}}. Then, additional data
-include four @slots for information on the processing and
-transformation of the data, and for @slots for reformated data.
+include four slots (\code{@countstype}, \code{@countsprocessing},
+\code{@taxatype}, and \code{@taxaprocessing}) for information on
+the processing and transformation of the data, and for slots 
+(\code{@samplesdf}, \code{@agesdf}, \code{@commdf}, and 
+\code{@nopodf}) for reformated data.
 }
 \section{Slots}{
 
 \describe{
 \item{\code{e_}}{numeric. Number indicating the entity number (e_) of the
-stored entity. Same as in a \code{\link[EPDr]{epd.entity}} 
+stored entity. Same as in an \code{\link[EPDr]{epd.entity}} 
 object.}
 
 \item{\code{postbombzone}}{factor. It indicate the code of the postbombzone of
 the world where the entity is located. This is not used yet, but
 might be handy for further implementations for datations with CLAM
-or BACON. Same as in a \code{\link[EPDr]{epd.entity}} 
+or BACON. Same as in an \code{\link[EPDr]{epd.entity}} 
 object.}
 
 \item{\code{numberofchron}}{numeric. The number of chronologies available
-for the data in that entity.Same as in a 
+for the data in that entity. Same as in an
 \code{\link[EPDr]{epd.entity}} object.}
 
 \item{\code{isingiesecke}}{logical. Indicating whether this entity was
 revised in Giesecke et al. (2013) and, hence, additional datations
-are available. Same as in a \code{\link[EPDr]{epd.entity}} 
+are available. Same as in an \code{\link[EPDr]{epd.entity}} 
 object.}
 
 \item{\code{defaultchron}}{numeric. The number of the default chronology
-according to the EPD. Same as in a \code{\link[EPDr]{epd.entity}} 
+according to the EPD. Same as in an \code{\link[EPDr]{epd.entity}} 
 object.}
 
 \item{\code{entity}}{entity. Entity object for the entity. Same as in 
-a \code{\link[EPDr]{epd.entity}} object.}
+an \code{\link[EPDr]{epd.entity}} object.}
 
-\item{\code{site}}{site. Site object for the entity. Same as in a 
+\item{\code{site}}{site. Site object for the entity. Same as in an 
 \code{\link[EPDr]{epd.entity}} object.}
 
 \item{\code{geochron}}{geochron. Geochron object for the entity. Same as in 
-a \code{\link[EPDr]{epd.entity}} object.}
+an \code{\link[EPDr]{epd.entity}} object.}
 
 \item{\code{chron}}{chron. Chron object for the entity. Same as in 
-a \code{\link[EPDr]{epd.entity}} object.}
+an \code{\link[EPDr]{epd.entity}} object.}
 
 \item{\code{samples}}{samples. Samples object for the entity. Same as in 
-a \code{\link[EPDr]{epd.entity}} object.}
+an \code{\link[EPDr]{epd.entity}} object.}
 
-\item{\code{countstype}}{factor. Indicating if the counts in @slot commdf
-are in raw counts or percentages.}
+\item{\code{countstype}}{factor. Indicating if counts in \code{@commdf@counts}
+slot are in raw counts or percentages. See 
+\code{\link[EPDr]{counts_to_percentage}}.}
 
 \item{\code{countsprocessing}}{factor. Indicating whether the 
 counts are those counted (or percentaged) for the samples, or
@@ -65,20 +69,34 @@ have been interpolated or intervaled for particular time periods
 
 \item{\code{taxatype}}{factor. Indicating whether the taxa are the
 same as in the original database, or they have been changed to
-accepted taxa or higher taxonomical level.}
+accepted taxa or higher taxonomical level. See 
+\code{\link[EPDr]{taxa_to_highertaxa}} or 
+\code{\link[EPDr]{taxa_to_acceptedtaxa}}.}
 
-\item{\code{taxaprocessing}}{factor. Indicating whether the taxa in @slot 
-commdf are those originally present in the database, or
-they have been expanded or filtered.}
+\item{\code{taxaprocessing}}{factor. Indicating whether the taxa in 
+\code{commdf} slot are those originally present in the database, or 
+they have been expanded or filtered. See \code{\link[EPDr]{filter_taxa}} 
+or \code{\link[EPDr]{unify_taxonomy}}.}
 
-\item{\code{samplesdf}}{samplesdf. Samples in vector format.}
+\item{\code{samplesdf}}{samplesdf Object of class \code{\link[EPDr]{samplesdf}}. 
+Samples in vector format.}
 
-\item{\code{agesdf}}{agesdf. Ages in vector and table format.}
+\item{\code{agesdf}}{agesdf Object of class \code{\link[EPDr]{agesdf}}. Ages 
+in vector and table format.}
 
-\item{\code{commdf}}{commdf. Counts of biological particles in vector and
-table format.}
+\item{\code{commdf}}{commdf Object of class \code{\link[EPDr]{commdf}}. Counts 
+of biological particles in vector and table format.}
 
-\item{\code{nopodf}}{nopodf. Counts of no-biological particles in vector
-and table format.}
+\item{\code{nopodf}}{nopodf Object of class \code{\link[EPDr]{nopodf}}. Counts 
+of no-biological particles in vector and table format.}
 }}
 
+\references{
+Giesecke, T., Davis, B., Brewer, S., Finsinger, W., 
+Wolters, S., Blaaw, M., de Beaulieu, J.L., Binney, H., Fyfe, R.M.,
+Gaillard, M.J., Gil-Romera, G., van der Knaap, W.O. Kunes, P.,
+Kuhl, N., van Leeuwen, J.F.N, Leydet, M., Lotter, A.F., Ortu, E.,
+Semmler, M., and Bradshaw, R.H.W (2013). Towards mapping the late
+Quaternary vegetation change of Europe. Vegetation History and
+Archaeobotany, 23, 75-86.
+}

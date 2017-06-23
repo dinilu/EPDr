@@ -2,21 +2,48 @@
 % Please edit documentation in R/EPDr-get_functions.R
 \name{get_entity}
 \alias{get_entity}
-\title{Title TBW}
+\title{Retrieve all information for an EPD entity}
 \usage{
 get_entity(e_, connection)
 }
 \arguments{
-\item{e_}{TBW}
+\item{e_}{numeric Number indicating the identification number (e_) of the
+entity that is desired. If multiple numbers are passed the function 
+retrieves data only for the first one.}
 
-\item{connection}{TBW}
+\item{connection}{PostgreSQLConnection A valid PostgreSQL connection to
+the EPD database server.}
 }
 \value{
-TBW
+The function returns an \code{\link[EPDr]{epd.entity}} object, which
+countains several objects with several tables.
 }
 \description{
-TBW
+This function wraps all other \code{get_} and \code{.get_} functions
+to retrieve and store in a single object all the information relative to
+a particular entity in the European Pollen Database (EPD).
+}
+\details{
+The function also import in the objects information from Giesecke et al.
+(2013), if available for that entity. The chronology used by Giesecke are
+numbered as 9999 to distinguish them from those stored in the EPD. It also
+check the geographical location of the entity and import the postbomb
+zone of the world.
 }
 \examples{
-# TBW
+# Not run
+# library(EPDr)
+# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#                               user = "epdr", password = "epdrpw")
+# epd.400 <- get_entity(400, epd.connection)
+
+}
+\references{
+Giesecke, T., Davis, B., Brewer, S., Finsinger, W., 
+Wolters, S., Blaaw, M., de Beaulieu, J.L., Binney, H., Fyfe, R.M.,
+Gaillard, M.J., Gil-Romera, G., van der Knaap, W.O. Kunes, P.,
+Kuhl, N., van Leeuwen, J.F.N, Leydet, M., Lotter, A.F., Ortu, E.,
+Semmler, M., and Bradshaw, R.H.W (2013). Towards mapping the late
+Quaternary vegetation change of Europe. Vegetation History and
+Archaeobotany, 23, 75-86.
 }

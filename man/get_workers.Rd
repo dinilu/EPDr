@@ -2,21 +2,30 @@
 % Please edit documentation in R/EPDr-get_functions.R
 \name{get_workers}
 \alias{get_workers}
-\title{Title TBW}
+\title{Retrieves workers information}
 \usage{
 get_workers(worker_, connection)
 }
 \arguments{
-\item{worker_}{TBW}
+\item{worker_}{numeric Value indicating the worker identification number.}
 
-\item{connection}{TBW}
+\item{connection}{PostgreSQLConnection. Object of class 
+\code{PostgreSQLConnection} as returned by function 
+\code{\link[EPDr]{connect_to_epd}}.}
 }
 \value{
-TBW
+data.frame The function returns a data frame with all information
+in the WORKERS table for that particular worker id.
 }
 \description{
-Title TBW
+This function retrieves details on the workers specified in different 
+tables of the EPD, such as analyst of chronological and/or palynological
+samples, etc. The information comes from the WORKERS table.
 }
 \examples{
-# TBW
+# Not run
+# epd.connection <- connect_to_epd(database = "epd", user = "epdr",
+#                                 password = "epdrpw", host = "localhost")
+# get_workers(1, epd.connection)
+
 }

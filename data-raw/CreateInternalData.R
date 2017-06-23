@@ -42,7 +42,7 @@ postbomb_SH3.14C <- read.table("data-raw/CalibrationCurves/postbomb_SH3.14C")
 
 library(maptools)
 
-postbomb.map <- readShapePoly("data-raw/PostBombMap/PostBombZones")
+postbomb.map <- maptools::readShapePoly("data-raw/PostBombMap/PostBombZones")
 
 
 #' Validated sample ages from 823 EPD sites (Giesecke et al. 2013)
@@ -61,12 +61,16 @@ postbomb.map <- readShapePoly("data-raw/PostBombMap/PostBombZones")
 #' @source \url{https://journals.uair.arizona.edu/index.php/radiocarbon/article/view/16177/pdf}
 #' @source \reference{RADIOCARBON 55(4): 2059–2072. 2013. ATMOSPHERIC RADIOCARBON FOR THE PERIOD 1950–2010. Quan Hua, Mike Barbetti, Andrzej Z Rakowski}
 
-giesecke.chron <- read.table("data-raw/Giesecke/Control_P.tab", header=T, sep="\t", skip=845, quote="")
+giesecke.agebasis <- read.table("data-raw/Giesecke/Control_P.tab", header=T, sep="\t", skip=845, quote="")
+colnames(giesecke.agebasis) <- stringi::stri_trans_general(colnames(giesecke.agebasis), "latin-ascii")
 giesecke.entity <- read.table("data-raw/Giesecke/Entity.tab", header=T, sep="\t", skip=843, quote="")
+colnames(giesecke.entity) <- stringi::stri_trans_general(colnames(giesecke.entity), "latin-ascii")
 giesecke.EpdAgeAll <- read.table("data-raw/Giesecke/EpdAgeAll.tab", header=T, sep="\t", skip=842, quote="")
+colnames(giesecke.EpdAgeAll) <- stringi::stri_trans_general(colnames(giesecke.EpdAgeAll), "latin-ascii")
 giesecke.EpdAgeCut <- read.table("data-raw/Giesecke/EpdAgeCut.tab", header=T, sep="\t", skip=842, quote="")
+colnames(giesecke.EpdAgeCut) <- stringi::stri_trans_general(colnames(giesecke.EpdAgeCut), "latin-ascii")
 
 
 # Saving the data
-devtools::use_data(IntCal13.14C, Marine13.14C, SHCal13.14C, postbomb_NH1.14C, postbomb_NH2.14C, postbomb_NH3.14C, postbomb_SH1_2.14C, postbomb_SH3.14C, postbomb.map, giesecke.chron, giesecke.entity, giesecke.EpdAgeAll, giesecke.EpdAgeCut, internal=TRUE, overwrite=T)
+devtools::use_data(IntCal13.14C, Marine13.14C, SHCal13.14C, postbomb_NH1.14C, postbomb_NH2.14C, postbomb_NH3.14C, postbomb_SH1_2.14C, postbomb_SH3.14C, postbomb.map, giesecke.agebasis, giesecke.entity, giesecke.EpdAgeAll, giesecke.EpdAgeCut, internal=TRUE, overwrite=T)
 

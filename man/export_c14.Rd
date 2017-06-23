@@ -4,9 +4,7 @@
 \name{export_c14}
 \alias{export_c14}
 \alias{export_c14,character,data.frame,data.frame-method}
-\alias{export_c14-method}
 \alias{export_c14,character,epd.entity,missing-method}
-\alias{export_c14-method}
 \title{Reshape C14 table to CLAM or BACON format}
 \usage{
 export_c14(format, x, y)
@@ -16,32 +14,37 @@ export_c14(format, x, y)
 \S4method{export_c14}{character,epd.entity,missing}(format, x)
 }
 \arguments{
-\item{format}{Character string indicating whether to export to "clam" or to "bacon" format.}
+\item{format}{character Character string indicating whether to export to 
+"clam" or to "bacon" format.}
 
-\item{x}{Data frame or \code{\link[EPDr:epd.entity]{epd.entity}} object with C14 data as
-those extracted from \code{\link[EPDr:.get_c14]{.get_c14}} or
-\code{\link[EPDr:get_entity]{get_entity}}.}
+\item{x}{data.frame Data frame or \code{\link[EPDr]{epd.entity}} object 
+with C14 data as those extracted from \code{\link[EPDr]{.get_c14}} or
+\code{\link[EPDr]{get_entity}}.}
 
-\item{y}{Data frame with geochron table, as the one extracted with
-\code{\link[EPDr:.get_geochron]{.get_geochron}}. If x is an
-\code{\link[EPDr:epd.entity]{epd.entity}} object y is not used.}
+\item{y}{data.frame Data frame with geochron table, as the one extracted with
+\code{\link[EPDr]{.get_geochron}}. If x is an
+\code{\link[EPDr]{epd.entity}} object, y is not used.}
 }
 \value{
 Data frame with C14 data in CLAM or BACON format.
 }
 \description{
 This function takes C14 table (data.frame), as those extracted from
-\code{\link[EPDr:.get_c14]{.get_c14}}, to fit into a new table that comply with CLAM
+\code{\link[EPDr]{.get_c14}} or from an \code{\link[EPDr]{epd.entity}} 
+object, and modifies it to fit into a new table that complies with CLAM
 or BACON format.
 }
 \examples{
 # Not run
-# library(EPDr)
 # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
 #                               user = "epdr", password = "epdrpw")
-# c14 <- getC14_old(400, epd.connection)
-# c14.clam <- export_c14(c14, "clam")
-# c14.bacon <- export_c14(c14, "bacon")
+# epd.400 <- get_entity(400, epd.connection)
+# epd.400.c14 <- export_c14("clam", epd.400)
+# epd.400.ageb <- export_agebasis("clam", epd.400)
+# rbind(epd.400.c14, epd.400.ageb)
+# epd.400.c14 <- export_c14("bacon", epd.400)
+# epd.400.ageb <- export_agebasis("bacon", epd.400)
+# rbind(epd.400.c14, epd.400.ageb)
 }
 \references{
 \url{http://www.chrono.qub.ac.uk/blaauw/clam.html}

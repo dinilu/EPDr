@@ -7,12 +7,14 @@
 get_taxonomy_epd(connection)
 }
 \arguments{
-\item{connection}{PostgreSQLConnection. Object of class \code{PostgreSQLConnection} as
-returned by function \code{\link[EPDr:connect_to_epd]{connect_to_epd}}.}
+\item{connection}{PostgreSQLConnection. Object of class 
+\code{PostgreSQLConnection} as returned by function 
+\code{\link[EPDr]{connect_to_epd}}.}
 }
 \value{
-data.frame The function return a data.frame with the combined information from P_VARS
-and P_GROUP tables of the database (see documentation of the EPD:
+data.frame The function return a data.frame with the 
+combined information from P_VARS and P_GROUP tables of the 
+database (see documentation of the EPD:
 \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 }
 \description{
@@ -28,10 +30,9 @@ implemented to be used by other functions in the \code{EPDr} package.
 \examples{
 # Not run
 # library(EPDr)
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd_ddbb",
+# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
 #                               user = "epdr", password = "epdrpw")
-# epd.taxonomy <- getTaxonomy(epd.connection)
+# epd.taxonomy <- get_taxonomy_epd(epd.connection)
 # epd.taxonomy
-# disconnectFromEPD(epd.connection)
 
 }

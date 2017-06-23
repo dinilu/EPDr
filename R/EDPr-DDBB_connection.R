@@ -1,18 +1,30 @@
 #' Conect to a EPD database
 #'
-#' \code{\link[EPDr:connect_to_epd]{connect_to_epd}} establish a connection to a EPD data base that is stored in a DDBB server. By default it assume a local
-#' PostgreSQL server. The function can connect with remote servers in different formats (MySQL, etc; see RPostgreSQL documentation
-#' for supported formats). To connect to the DDBB the function need the DDBB name, the user name, and the user password. If any of
-#' the data are not passed as arguments the function will ask for them interactively.
+#' \code{connect_to_epd} establish a connection to a EPD data base that is 
+#' stored in a DDBB server. By default it assume a local PostgreSQL server.
+#' The function can connect with remote servers in different formats (MySQL, 
+#' etc.; see RPostgreSQL documentation for supported formats). To connect to 
+#' the DDBB the function need the DDBB name, the user name, and the user 
+#' password. If any of the data are not passed as arguments the function 
+#' will ask for them interactively.
+#' 
+#' A companion vignette is provided in the package to explain how to 
+#' \href{../doc/EPD-PostgreSQL.html}{set up the EPD in a PostgreSQL server}.
 #'
-#' @param database Character string with the DDBB name. If not provided the function will ask for it before establishing the connection.
-#' @param user Character string with the user name. A valid user in the DDBB server. If not provided the function will ask for it
-#' before establishing the connection.
-#' @param password Character string with the user password. A valid password for the user in the DDBB server. If not provided the
+#' @param database character Character string with the DDBB name. If not provided the 
 #' function will ask for it before establishing the connection.
-#' @param driver Character string with the driver used to connect with the DDBB server (default: "PostgreSQL"). This value will depend
-#' on the DDBB server used to host the EPD database. For alternatives look at the \code{\link[DBI:dbConnect]{dbConnect}} function.
-#' @param host Character string with the IP address of the DDBB server (default: "localhost").
+#' @param user character Character string with the user name. A valid user in the 
+#' DDBB server. If not provided the function will ask for it before 
+#' establishing the connection.
+#' @param password character Character string with the user password. A valid 
+#' password for the user in the DDBB server. If not provided the
+#' function will ask for it before establishing the connection.
+#' @param driver character Character string with the driver used to connect 
+#' with the DDBB server (default: "PostgreSQL"). This value will depend
+#' on the DDBB server used to host the EPD database. Look at the 
+#' \code{\link[DBI]{dbConnect}} function for alternatives.
+#' @param host character Character string with the IP address of the DDBB 
+#' server (default: "localhost").
 #'
 #' @return This function returns a RPostgreSQL connection object.
 #' 
@@ -43,11 +55,14 @@ connect_to_epd <- function(database=NULL, user=NULL, password=NULL,
 
 
 #' Disconnect a connection to a EPD database
+#' 
 #' \code{disconnect_from_epd} turns down a connection to a EPD DDBB server.
-#'
-#' @param connection The connection object created with \code{\link[EPDr:connect_to_epd]{connect_to_epd}} to stablish the connection
-#'
-#' @return NULL It just disconnects from the EPD DDBB server and modifies the connection object to reflect the new status.
+#' 
+#' @param connection PostgreSQLConnection The connection object created with 
+#' \code{\link[EPDr]{connect_to_epd}} to stablish the connection
+#' 
+#' @return NULL It just disconnects from the EPD DDBB server and modifies 
+#' the connection object to reflect the new status.
 #' 
 #' @export
 #' 
