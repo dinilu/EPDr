@@ -25,10 +25,12 @@ and return a logical value indicating whether the data are restricted (TRUE) or
 unrestricted (FALSE).
 }
 \examples{
-# epd.connection <- connect_to_epd(host="localhost", database="epd",
-# user="epdr", password="epdrpw")
-# epd.1 <- get_entity(1, epd.connection)
-# check_restriction(epd.1)
-# epd.1046 <- get_entity(1046, epd.connection)
-# check_restriction(epd.1046)
+\dontrun{
+epd.connection <- connect_to_epd(host="localhost", database="epd",
+                                 user="epdr", password="epdrpw")
+epd.1 <- get_entity(1, epd.connection)
+check_restriction(epd.1)
+epd.1046 <- get_entity(1046, epd.connection)
+check_restriction(epd.1046)
+}
 }

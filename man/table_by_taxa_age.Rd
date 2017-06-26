@@ -55,19 +55,19 @@ by \code{link[ggplot2]{ggplot}}. It was written to be used by
 \code{\link[EPDr]{map_taxa_age}} function.
 }
 \examples{
-# Not run
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                                user = "epdr", password = "epdrpw")
-# epd.1 <- get_entity(1, epd.connection)
-# epd.1 <- filter_taxagroups(epd.1, c("HERB", "TRSH", "DWAR",
-#                                       "LIAN", "HEMI", "UPHE"))
-# epd.1 <- giesecke_default_chron(epd.1)
-# 
-# epd.1 <- interpolate_counts(epd.1, seq(0, 22000, by = 1000))
-# epd.taxonomy <- getTaxonomyEPD(epd.connection)
-# epd.1 <- taxa_to_acceptedtaxa(epd.1, epd.taxonomy)
-# 
-# table_by_taxa_age(epd.1, "Cedrus", 
-#                   as.character(seq(0, 21000, by=1000)))
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                               user = "epdr", password = "epdrpw")
+epd.1 <- get_entity(1, epd.connection)
+epd.1 <- filter_taxagroups(epd.1, c("HERB", "TRSH", "DWAR",
+                                      "LIAN", "HEMI", "UPHE"))
+epd.1 <- giesecke_default_chron(epd.1)
 
+epd.1 <- interpolate_counts(epd.1, seq(0, 22000, by = 1000))
+epd.taxonomy <- getTaxonomyEPD(epd.connection)
+epd.1 <- taxa_to_acceptedtaxa(epd.1, epd.taxonomy)
+
+table_by_taxa_age(epd.1, "Cedrus", 
+                  as.character(seq(0, 21000, by=1000)))
+}
 }

@@ -7,17 +7,18 @@
 \alias{interpolate_counts,epd.entity,numeric-method}
 \title{Interpolate counts to specific time periods}
 \usage{
-interpolate_counts(x, time, ..., chronology = NULL, method = c("linear",
-  "loess", "sspline"), rep_negt = TRUE, span = 0.25, df = min(20,
-  nrow(x@commdf@counts) * 0.7))
+interpolate_counts(x, time, chronology = NULL, method = c("linear", "loess",
+  "sspline"), rep_negt = TRUE, span = 0.25, df = min(20,
+  nrow(x@commdf@counts) * 0.7), ...)
 
-\S4method{interpolate_counts}{epd.entity.df,numeric}(x, time, ...,
+\S4method{interpolate_counts}{epd.entity.df,numeric}(x, time,
   chronology = NULL, method = c("linear", "loess", "sspline"),
-  rep_negt = TRUE, span = 0.25, df = min(20, nrow(x@commdf@counts) * 0.7))
+  rep_negt = TRUE, span = 0.25, df = min(20, nrow(x@commdf@counts) * 0.7),
+  ...)
 
-\S4method{interpolate_counts}{epd.entity,numeric}(x, time, ...,
-  chronology = NULL, method = c("linear", "loess", "sspline"),
-  rep_negt = TRUE, span = 0.25, df = min(20, nrow(x@commdf@counts) * 0.7))
+\S4method{interpolate_counts}{epd.entity,numeric}(x, time, chronology = NULL,
+  method = c("linear", "loess", "sspline"), rep_negt = TRUE, span = 0.25,
+  df = min(20, nrow(x@commdf@counts) * 0.7), ...)
 }
 \arguments{
 \item{x}{epd.entity.df An \code{\link[EPDr]{epd.entity.df}} or
@@ -28,8 +29,6 @@ interpolate_counts(x, time, ..., chronology = NULL, method = c("linear",
 \item{time}{numeric Vector with time periods, in the same system 
 (i.e., cal BP) than "ages" in epd.entity.df, in which counts have 
 to be estimated.}
-
-\item{...}{additional arguments to loess, smooth.spline and aspline.}
 
 \item{chronology}{numeric Number specifying the chronology from 
 which ages should be used to calculate the interpolations. If none is
@@ -47,6 +46,8 @@ negative values with zero in the interpolated data.}
 
 \item{df}{numeric Degress of freedome for smoothing spline, default is 
 the lower of 20 or 0.7 * number of samples.}
+
+\item{...}{additional arguments to loess, smooth.spline and aspline.}
 }
 \value{
 The function returns an \code{\link[EPDr]{epd.entity.df}} object,
@@ -76,14 +77,16 @@ these functions to control the amount of smoothing, or to force replacing
 negative values with zeros.
 }
 \examples{
-# epd.connection <- connect_to_epd(host="localhost", database="epd",
-#                                  user="epdr", password="epdrpw")
-# t <- c(seq(0, 21000, by = 500))
-# epd.1 <- get_entity(1, epd.connection)
-# epd.1.int <- interpolate_counts(epd.1, t)
-#
-# epd.3 <- get_entity(3, epd.connection)
-# epd.3.int <- interpolate_counts(epd.3, t, method="linear")
-# epd.3.int <- interpolate_counts(epd.3, t, method="loess")
-# epd.3.int <- interpolate_counts(epd.3, t, method="sspline")
+\dontrun{
+epd.connection <- connect_to_epd(host="localhost", database="epd",
+                                 user="epdr", password="epdrpw")
+t <- c(seq(0, 21000, by = 500))
+epd.1 <- get_entity(1, epd.connection)
+epd.1.int <- interpolate_counts(epd.1, t)
+
+epd.3 <- get_entity(3, epd.connection)
+epd.3.int <- interpolate_counts(epd.3, t, method="linear")
+epd.3.int <- interpolate_counts(epd.3, t, method="loess")
+epd.3.int <- interpolate_counts(epd.3, t, method="sspline")
+}
 }

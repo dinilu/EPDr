@@ -33,13 +33,14 @@ default chronology number from the EPD to the one provided by Giesecke
 (i.e., x@defaultchron == 9999)
 }
 \examples{
-# epd.connection <- connect_to_epd(host="localhost", database="epd",
-#                                  user="epdr", password="epdrpw")
-# epd.1 <- get_entity(1, epd.connection)
-# epd.1@defaultchron
-# epd.1 <- giesecke_default_chron(epd.1)
-# epd.1@defaultchron
-
+\dontrun{
+epd.connection <- connect_to_epd(host="localhost", database="epd",
+                                 user="epdr", password="epdrpw")
+epd.1 <- get_entity(1, epd.connection)
+epd.1@defaultchron
+epd.1 <- giesecke_default_chron(epd.1)
+epd.1@defaultchron
+}
 }
 \references{
 Giesecke, T., Davis, B., Brewer, S., Finsinger, W., 

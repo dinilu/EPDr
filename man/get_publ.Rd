@@ -23,9 +23,9 @@ information of publications by querying the database by the
 publication identification number.
 }
 \examples{
-# Not run
-# epd.connection <- connect_to_epd(database = "epd", user = "epdr",
-#                                 password = "epdrpw", host = "localhost")
-# get_publ(1, epd.connection)
-
+\dontrun{
+epd.connection <- connect_to_epd(database = "epd", user = "epdr",
+                                password = "epdrpw", host = "localhost")
+get_publ(1, epd.connection)
+}
 }

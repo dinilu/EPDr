@@ -37,15 +37,16 @@ The function may look useless for a single entity but it is useful when standard
 data across multiple entities.
 }
 \examples{
-# epd.connection <- connect_to_epd(host="localhost", database="epd",
-#                                  user="epdr", password="epdrpw")
-# epd.1 <- get_entity(1, epd.connection)
-# epd.1@commdf@taxanames
-# colnames(epd.1@commdf@counts)
-# epd.1.ft <- filter_taxa(epd.1, c(epd.1@commdf@taxa_names, "prueba"),
-#                         get_taxonomy_epd(epd.connection))
-# colnames(epd.1.ft@commdf@counts)
-# epd.1.ft@commdf@taxanames
-# head(epd.1.ft@commdf@counts)
-
+\dontrun{
+epd.connection <- connect_to_epd(host="localhost", database="epd",
+                                 user="epdr", password="epdrpw")
+epd.1 <- get_entity(1, epd.connection)
+epd.1@commdf@taxanames
+colnames(epd.1@commdf@counts)
+epd.1.ft <- filter_taxa(epd.1, c(epd.1@commdf@taxa_names, "prueba"),
+                        get_taxonomy_epd(epd.connection))
+colnames(epd.1.ft@commdf@counts)
+epd.1.ft@commdf@taxanames
+head(epd.1.ft@commdf@counts)
+}
 }

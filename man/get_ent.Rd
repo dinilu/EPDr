@@ -118,11 +118,10 @@ for that entity have been published.
 }
 
 \examples{
-# Not run
-# library(EPDr)
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                                  user = "epdr", password = "epdrpw")
-# ent.400 <- get_ent(400, epd.connection)
-# ent.400
-
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                                 user = "epdr", password = "epdrpw")
+ent.400 <- get_ent(400, epd.connection)
+ent.400
+}
 }

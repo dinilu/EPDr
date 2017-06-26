@@ -28,11 +28,10 @@ Some users may find this function useful but it has been mainly
 implemented to be used by other functions in the \code{EPDr} package.
 }
 \examples{
-# Not run
-# library(EPDr)
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                               user = "epdr", password = "epdrpw")
-# epd.taxonomy <- get_taxonomy_epd(epd.connection)
-# epd.taxonomy
-
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                              user = "epdr", password = "epdrpw")
+epd.taxonomy <- get_taxonomy_epd(epd.connection)
+epd.taxonomy
+}
 }

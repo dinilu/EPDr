@@ -7,17 +7,15 @@
 \alias{counts_to_percentage,epd.entity-method}
 \title{Calculate counts percentages}
 \usage{
-counts_to_percentage(x, ..., offset = 1e-04)
+counts_to_percentage(x, offset = 1e-04)
 
-\S4method{counts_to_percentage}{epd.entity.df}(x, ..., offset = 1e-04)
+\S4method{counts_to_percentage}{epd.entity.df}(x, offset = 1e-04)
 
-\S4method{counts_to_percentage}{epd.entity}(x, ..., offset = 1e-04)
+\S4method{counts_to_percentage}{epd.entity}(x, offset = 1e-04)
 }
 \arguments{
 \item{x}{epd.entity \code{\link[EPDr]{epd.entity.df}} or 
 \code{\link[EPDr]{epd.entity}} objects.}
-
-\item{...}{Useless with current methods.}
 
 \item{offset}{numeric Numeric value to avoid dividing by zero 
 if the total of particles is zero for a particular sample. This may 
@@ -53,14 +51,15 @@ and algae or fungi spores). Hence, percentages calculated in this base
 may be meaningless and its use is unrecommended.
 }
 \examples{
-# epd.connection <- connect_to_epd(host="localhost", database="epd",
-# user="epdr", password="epdrpw")
-# epd.1 <- get_entity(1, epd.connection)
-# epd.1 <- entity_to_matrices(epd.1)
-# epd.1 <- filter_taxagroups(epd.1, c("DWAR", "HERB", "LIAN",
-# "TRSH", "UPHE", "INUN")) ## All pollen taxa groups
-# epd.1.percent <- counts_to_percentage(epd.1)
-# head(epd.1.percent@commdf@counts)
-# head(epd.1@commdf@counts)
-
+\dontrun{
+epd.connection <- connect_to_epd(host="localhost", database="epd",
+                                 user="epdr", password="epdrpw")
+epd.1 <- get_entity(1, epd.connection)
+epd.1 <- entity_to_matrices(epd.1)
+epd.1 <- filter_taxagroups(epd.1, c("DWAR", "HERB", "LIAN", "TRSH",
+                           "UPHE", "INUN")) ## All pollen taxa groups
+epd.1.percent <- counts_to_percentage(epd.1)
+head(epd.1.percent@commdf@counts)
+head(epd.1@commdf@counts)
+}
 }

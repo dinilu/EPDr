@@ -12,22 +12,16 @@
 #'
 #' @return numeric. Value of the entity number.
 #' @examples
-#' ##NOT TO RUN
-#' # Not run
-#' # epd.connection <- connectToEPD()
-#' # epd.connection <- connectToEPD(database="epd", user="epdr",
-#' #                                 password="epdrpw", host="localhost")
-#' # epd.connection
-#' 
+#' \dontrun{
+#' epd.connection <- connectToEPD()
 #' # To list all the tables in the database we have connected with
-#' # data <- getDatation(1, epd.connection)
-#' # extract_e(data)
-#' # [1] 1
-#' # data <- getDatation(45, epd.connection)
-#' # extract_e(data)
-#' # [1] 45
-#' # disconnectFromEPD(connection=epd.connection)
-#' 
+#' epd.1 <- get_entity(1, epd.connection)
+#' extract_e(epd.1)
+#' [1] 1
+#' epd.45 <- get_entity(45, epd.connection)
+#' extract_e(epd.45)
+#' [1] 45
+#' }
 #' @rdname extract_e-method
 #' @exportMethod extract_e
 setGeneric("extract_e", function(x){

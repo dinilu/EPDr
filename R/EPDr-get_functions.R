@@ -24,13 +24,12 @@
 #' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #'
 #' @examples
-#' # Not run
-#' # library(EPDr)
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                                  user = "epdr", password = "epdrpw")
-#' # chron.400 <- get_chron(400, epd.connection)
-#' # chron.400
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                                  user = "epdr", password = "epdrpw")
+#' chron.400 <- get_chron(400, epd.connection)
+#' chron.400
+#' }
 #' @section get_chron:
 #' This function returns a \code{\link[EPDr]{chron}} object with several 
 #' information from the rest of the functions for a particular entity.
@@ -291,13 +290,12 @@ get_chron <- function(e_, connection){
 #' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #'
 #' @examples
-#' # Not run
-#' # library(EPDr)
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                                  user = "epdr", password = "epdrpw")
-#' # ent.400 <- get_ent(400, epd.connection)
-#' # ent.400
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                                  user = "epdr", password = "epdrpw")
+#' ent.400 <- get_ent(400, epd.connection)
+#' ent.400
+#' }
 #' @section get_entity:
 #' This function returns an \code{\link[EPDr]{entity}} object with several 
 #' information from the rest of the functions for a particular entity.
@@ -571,14 +569,14 @@ get_ent <- function(e_, connection){
 #' data frames will vary among functions.
 #' 
 #' @examples
-#' # Not run
-#' # epd.connection <- connect_to_epd(database = "epd", user = "epdr",
-#' #                                 password = "epdrpw", host = "localhost")
-#' # .get_c14(1, epd.connection)
-#' # .get_c14(400, epd.connection)
+#' \dontrun{
+#' epd.connection <- connect_to_epd(database = "epd", user = "epdr",
+#'                                 password = "epdrpw", host = "localhost")
+#' .get_c14(1, epd.connection)
+#' .get_c14(400, epd.connection)
 #' #
-#' # get_geochron(400, epd.connection)
-#' 
+#' get_geochron(400, epd.connection)
+#' }
 #' @section get_geochron:
 #' This function returns a \code{\link[EPDr]{geochron}} object, that store 
 #' information from different tables for a particular entity.
@@ -902,13 +900,12 @@ get_geochron <- function(e_, connection) {
 #' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #'
 #' @examples
-#' # Not run
-#' # library(EPDr)
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                                  user = "epdr", password = "epdrpw")
-#' # chron.400 <- get_samples(400, epd.connection)
-#' # chron.400
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                                  user = "epdr", password = "epdrpw")
+#' chron.400 <- get_samples(400, epd.connection)
+#' chron.400
+#' }
 #' @section get_samples:
 #' This function returns a \code{\link[EPDr]{samples}} object with several 
 #' information from the rest of the functions in the group for a 
@@ -1183,13 +1180,12 @@ get_samples <- function(e_, connection){
 #' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #'
 #' @examples
-#' # Not run
-#' # library(EPDr)
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                               user = "epdr", password = "epdrpw")
-#' # site.400 <- get_site(400, epd.connection)
-#' # site.400
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                               user = "epdr", password = "epdrpw")
+#' site.400 <- get_site(400, epd.connection)
+#' site.400
+#' }
 #' @section get_site:
 #' This function returns a \code{\link[EPDr]{site}} object with several 
 #' information from the rest of the functions in the group for a 
@@ -1449,11 +1445,11 @@ get_site <- function(e_, connection){
 #' @export
 #'
 #' @examples
-#' # Not run
-#' # epd.connection <- connect_to_epd(database = "epd", user = "epdr",
-#' #                                 password = "epdrpw", host = "localhost")
-#' # get_publ(1, epd.connection)
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(database = "epd", user = "epdr",
+#'                                 password = "epdrpw", host = "localhost")
+#' get_publ(1, epd.connection)
+#' }
 get_publ <- function(publ_, connection){
   publ_ <- stats::na.omit(publ_)
   table <- "publ"
@@ -1497,11 +1493,11 @@ get_publ <- function(publ_, connection){
 #' @export
 #'
 #' @examples
-#' # Not run
-#' # epd.connection <- connect_to_epd(database = "epd", user = "epdr",
-#' #                                 password = "epdrpw", host = "localhost")
-#' # get_workers(1, epd.connection)
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(database = "epd", user = "epdr",
+#'                                 password = "epdrpw", host = "localhost")
+#' get_workers(1, epd.connection)
+#' }
 get_workers <- function(worker_, connection){
   table <- "workers"
   worker_ <- stats::na.omit(worker_)
@@ -1549,13 +1545,12 @@ get_workers <- function(worker_, connection){
 #' @export
 #'
 #' @examples
-#' # Not run
-#' # library(EPDr)
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                               user = "epdr", password = "epdrpw")
-#' # epd.taxonomy <- get_taxonomy_epd(epd.connection)
-#' # epd.taxonomy
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                               user = "epdr", password = "epdrpw")
+#' epd.taxonomy <- get_taxonomy_epd(epd.connection)
+#' epd.taxonomy
+#' }
 get_taxonomy_epd <- function(connection){
   sql_query <- paste("SELECT * FROM p_vars NATURAL JOIN p_group")
   results <- RPostgreSQL::dbGetQuery(connection, sql_query)
@@ -1596,12 +1591,11 @@ get_taxonomy_epd <- function(connection){
 #' @export
 #'
 #' @examples
-#' # Not run
-#' # library(EPDr)
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                               user = "epdr", password = "epdrpw")
-#' # epd.400 <- get_entity(400, epd.connection)
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                               user = "epdr", password = "epdrpw")
+#' epd.400 <- get_entity(400, epd.connection)
+#' }
 get_entity <- function(e_, connection){
   if (length(e_) > 1){
     e_ <- e_[[1]]

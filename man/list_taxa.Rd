@@ -40,11 +40,10 @@ group, using parameter \code{group_id} along with a valid connection
 to the database.
 }
 \examples{
-# Not run
-# library(EPDr)
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                                  user = "epdr", password = "epdrpw")
-# list_taxa(epd.connection, "HERB")
-# list_taxa(epd.connection, c("HERB", "TRSH"))
-
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                                 user = "epdr", password = "epdrpw")
+list_taxa(epd.connection, "HERB")
+list_taxa(epd.connection, c("HERB", "TRSH"))
+}
 }

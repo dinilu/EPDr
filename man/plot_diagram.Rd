@@ -6,39 +6,74 @@
 \alias{plot_diagram,epd.entity.df-method}
 \title{Plot pollen diagram of an entity}
 \usage{
-plot_diagram(x, ..., chronology = NULL, use_ages = TRUE,
-  low_values_exag = TRUE, color_by_group = TRUE, order_taxa = TRUE)
+plot_diagram(x, chronology = NULL, use_ages = TRUE, exag_low_values = 10,
+  color_by_group = TRUE, order_taxa = TRUE, x_breaks = NULL,
+  y_breaks = NULL, legend_position = NULL, legend_title = "Legend")
 
-\S4method{plot_diagram}{epd.entity.df}(x, ..., chronology = NULL,
-  use_ages = TRUE, low_values_exag = TRUE, color_by_group = TRUE,
-  order_taxa = TRUE)
+\S4method{plot_diagram}{epd.entity.df}(x, chronology = NULL,
+  use_ages = TRUE, exag_low_values = 10, color_by_group = TRUE,
+  order_taxa = TRUE, x_breaks = NULL, y_breaks = NULL,
+  legend_position = NULL, legend_title = "Legend")
 }
 \arguments{
-\item{x}{TBW}
+\item{x}{epd.entity.df An object of class \code{\link[EPDr]{epd.entity.df}}.}
 
-\item{...}{TBW}
+\item{chronology}{numeric A number indicating the chronology to be used in 
+the pollen diagram. If not specified the default chronology specified in
+\code{x} is used.}
 
-\item{chronology}{TBW}
+\item{use_ages}{logical Indicating whether to plot the pollen diagram
+with ages or depth of the samples.}
 
-\item{use_ages}{TBW}
+\item{exag_low_values}{numeric A single value indicating an exageration
+factor to improve visibility of low pollen values.}
 
-\item{low_values_exag}{TBW}
+\item{color_by_group}{logical or numeric or character If logical and
+TRUE the function plot all taxa from the same taxa groups with the 
+same color. If FALSE, each taxon will be represented in a different 
+color. If numeric or character \code{color_by_group} should have
+length equal number of taxa in \code{x} indicating the color to be used.}
 
-\item{color_by_group}{TBW}
+\item{order_taxa}{logical or numeric. If logical and TRUE the diagram is
+arranged to show taxa from maximum pollen count (at the left) to
+minimum pollen count (at the right). If numeric \code{order_taxa} should
+be length equal the number of taxa in \code{x} indicating the position in
+which to plot each taxon.}
 
-\item{order_taxa}{TBW}
+\item{x_breaks}{numeric Vector of numbers indicating the break points 
+for the age-depth axis.}
+
+\item{y_breaks}{numeric Vector of numbers indicating the break points
+for the pollen counts axis.}
+
+\item{legend_position}{character One element character indicating the
+desired position of the legend (\code{"bottom"}, \code{"left"}, 
+\code{"right"}, or \code{"upper"}).}
+
+\item{legend_title}{character One element character indicating the 
+title of the legend.}
+
+\item{...}{Not used with current methods.}
 }
 \value{
-TBW
+The function returns a ggplot object with the pollen diagram. It
+can be stored and plotted afterwards.
 }
 \description{
-Description TBW
-}
-\details{
-Details TBW
+The function takes information on an \code{\link[EPDr]{epd.entity.df}} object
+and plot a pollen diagram. The function also return the ggplot object, so the 
+object can be stored and afterward combined with other plots.
 }
 \examples{
-# TBW
+\dontrun{
+epd.connection <- connect_to_epd()
+epd.1 <- get_entity(1, epd.connection)
+epd.1 <- entity_to_matrices(epd.1)
+epd.1 <- filter_taxagroups(epd.1, c("DWAR", "HERB", "TRSH"))
+epd.1.per <- counts_to_percentage(epd.1)
+plot_diagram(epd.1)
+plot_diagram(epd.1.per)
+}
 }
 \references{
 \url{http://blarquez.com/684-2/}

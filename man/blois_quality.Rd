@@ -7,20 +7,18 @@
 \alias{blois_quality,epd.entity-method}
 \title{Blois quality index for palynological samples}
 \usage{
-blois_quality(x, ..., chron = NULL, max_sample_dist = 2000,
+blois_quality(x, chron = NULL, max_sample_dist = 2000,
   max_control_dist = 5000)
 
-\S4method{blois_quality}{epd.entity.df}(x, ..., chron = NULL,
+\S4method{blois_quality}{epd.entity.df}(x, chron = NULL,
   max_sample_dist = 2000, max_control_dist = 5000)
 
-\S4method{blois_quality}{epd.entity}(x, ..., chron = NULL,
+\S4method{blois_quality}{epd.entity}(x, chron = NULL,
   max_sample_dist = 2000, max_control_dist = 5000)
 }
 \arguments{
 \item{x}{epd.entity \code{\link[EPDr]{epd.entity.df}} or a
 \code{\link[EPDr]{epd.entity}} object.}
-
-\item{...}{Not in use with current methods.}
 
 \item{chron}{numeric Chronology number to look for samples and control points ages.
 This value become the default chronology in the new object. If not 
@@ -65,21 +63,23 @@ first transformed into a \code{\link[EPDr]{epd.entity.df}}
 object by \code{\link[EPDr]{entity_to_matrices}} function.
 }
 \examples{
-# epd.connection <- connect_to_epd(host="localhost", database="epd",
-# user="epdr", password="epdrpw")
-# epd.1 <- get_entity(1, epd.connection)
-# epd.1.qi <- blois_quality(epd.1)
-# epd.1.qi@agesdf@dataquality
-# 
-# epd.1.ran <- intervals_counts(epd.1, tmin = seq(0, 21000, by = 1000),
-# tmax = seq(999, 21999, by = 1000))
-# epd.1.ran.qi <- blois_quality(epd.1.ran)
-# epd.1.ran.qi@agesdf@dataquality
-# 
-# t <- c(seq(0, 21000, by = 500))
-# epd.1.int <- interpolate_counts(epd.1, t)
-# epd.1.int.qi <- blois_quality(epd.1.int)
-# epd.1.int.qi@agesdf@dataquality
+\dontrun{
+epd.connection <- connect_to_epd(host="localhost", database="epd",
+                                 user="epdr", password="epdrpw")
+epd.1 <- get_entity(1, epd.connection)
+epd.1.qi <- blois_quality(epd.1)
+epd.1.qi@agesdf@dataquality
+
+epd.1.ran <- intervals_counts(epd.1, tmin = seq(0, 21000, by = 1000),
+                              tmax = seq(999, 21999, by = 1000))
+epd.1.ran.qi <- blois_quality(epd.1.ran)
+epd.1.ran.qi@agesdf@dataquality
+
+t <- c(seq(0, 21000, by = 500))
+epd.1.int <- interpolate_counts(epd.1, t)
+epd.1.int.qi <- blois_quality(epd.1.int)
+epd.1.int.qi@agesdf@dataquality
+}
 }
 \references{
 Blois, J.L., Williams, J.W., Fitzpatrick, M.C., Ferrier, S.,

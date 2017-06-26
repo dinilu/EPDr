@@ -31,16 +31,17 @@
 #' @export
 #'
 #' @examples
-#' # Not run
-#' # epd.connection <- connect_to_epd()
-#' # epd.connection <- connect_to_epd(database="epd", user="epdr",
-#' #                                 password="epdrpw", host="localhost")
-#' # epd.connection
+#' \dontrun{
+#' epd.connection <- connect_to_epd()
+#' epd.connection <- connect_to_epd(database="epd", user="epdr",
+#'                                 password="epdrpw", host="localhost")
+#' epd.connection
 #' # To list all the tables in the database we have connected with
-#' # dbListTables(epd.connection)
-#' # Query data from the connection with a SQL statement
-#' # dbGetQuery(epd.connection, "SELECT e_ FROM synevent;")
-#' # disconnect_from_epd(connection=epd.connection)
+#' dbListTables(epd.connection)
+#' Query data from the connection with a SQL statement
+#' dbGetQuery(epd.connection, "SELECT e_ FROM synevent;")
+#' disconnect_from_epd(connection=epd.connection)
+#' }
 connect_to_epd <- function(database=NULL, user=NULL, password=NULL,
                          driver="PostgreSQL", host="localhost"){
     if (is.null(driver)) driver <- readline("EPD DB driver:")
@@ -67,10 +68,12 @@ connect_to_epd <- function(database=NULL, user=NULL, password=NULL,
 #' @export
 #' 
 #' @examples
-#' # epd.connection <- connect_to_epd(database="epd", user="epdr",
-#' #                                 password="epdrpw", host="localhost")
-#' # disconnect_from_epd(connection=epd.connection)
-#' # epd.connection
+#' \dontrun{
+#' epd.connection <- connect_to_epd(database="epd", user="epdr",
+#'                                 password="epdrpw", host="localhost")
+#' disconnect_from_epd(connection=epd.connection)
+#' epd.connection
+#' }
 disconnect_from_epd <- function(connection=NULL){
     if (is.null(connection)) stop("You have to define a working connection to
                                    the EPD to be stoped")

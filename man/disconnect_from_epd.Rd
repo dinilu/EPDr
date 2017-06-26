@@ -18,8 +18,10 @@ the connection object to reflect the new status.
 \code{disconnect_from_epd} turns down a connection to a EPD DDBB server.
 }
 \examples{
-# epd.connection <- connect_to_epd(database="epd", user="epdr",
-#                                 password="epdrpw", host="localhost")
-# disconnect_from_epd(connection=epd.connection)
-# epd.connection
+\dontrun{
+epd.connection <- connect_to_epd(database="epd", user="epdr",
+                                password="epdrpw", host="localhost")
+disconnect_from_epd(connection=epd.connection)
+epd.connection
+}
 }

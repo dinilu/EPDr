@@ -12,7 +12,7 @@
 
 <meta name="author" content="Diego Nieto Lugilde" />
 
-<meta name="date" content="2017-06-21" />
+<meta name="date" content="2017-06-26" />
 
 <title>EPDr vignette</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">EPDr vignette</h1>
 <h4 class="author"><em>Diego Nieto Lugilde</em></h4>
-<h4 class="date"><em>2017-06-21</em></h4>
+<h4 class="date"><em>2017-06-26</em></h4>
 
 
 <div id="TOC">
@@ -81,7 +81,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#connecting-to-the-epd-database"><span class="toc-section-number">4</span> Connecting to the EPD database</a></li>
 <li><a href="#querying-data-from-the-database"><span class="toc-section-number">5</span> Querying data from the database</a><ul>
 <li><a href="#listing-fields-from-the-epd-list-functions"><span class="toc-section-number">5.1</span> Listing fields from the EPD (<code>list</code> functions)</a></li>
-<li><a href="#getting-biological-counts-and-datation-information-get-functions"><span class="toc-section-number">5.2</span> Getting biological counts and datation information (<code>get</code> functions)</a></li>
+<li><a href="#retrieving-information-for-particular-entities-get-functions"><span class="toc-section-number">5.2</span> Retrieving information for particular entities (<code>get</code> functions)</a></li>
+</ul></li>
+<li><a href="#working-with-data-from-the-epd"><span class="toc-section-number">6</span> Working with data from the EPD</a><ul>
+<li><a href="#exporting-data-for-clam-or-bacon"><span class="toc-section-number">6.1</span> Exporting data for CLAM or BACON</a></li>
+<li><a href="#standardizing-data"><span class="toc-section-number">6.2</span> Standardizing data</a></li>
 </ul></li>
 </ul>
 </div>
@@ -132,7 +136,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="listing-fields-from-the-epd-list-functions" class="section level2">
 <h2><span class="header-section-number">5.1</span> Listing fields from the EPD (<code>list</code> functions)</h2>
 <p>For users unfamiliar with the database it might be useful to list elements in the database, for instance to know which countries are represented or which publications are associated with the entities in the database. To do so, the package provides a series of <code>list</code> functions that return specific tables from the database where important information can be looked at.</p>
-<p>Some of these functions (<code>listCountries</code> and <code>listTaxagroups</code>) only accept one argument (<code>connection</code>), which must be a valid connection to the EPD database.</p>
+<p>Some of these functions (<code>list_countries</code> and <code>list_taxagroups</code>) only accept one argument (<code>connection</code>), which must be a valid connection to the EPD database.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_countries</span>(epdConnection)</code></pre></div>
 <pre><code>##    poldiv1                                   name
 ## 1      ADS                           Adriatic Sea
@@ -151,7 +155,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## 4     AQUA         Q                              Aquatics
 ## 5     BRYO         M                            Bryophytes
 ##  [ reached getOption(&quot;max.print&quot;) -- omitted 24 rows ]</code></pre>
-<p>However, other <code>list</code> functions accept several arguments to further filter the result of the query. For instance, <code>listRegions</code> accepts an extra argument (<code>country</code>) to limit the query to particular countries.</p>
+<p>However, other <code>list</code> functions accept several arguments to further filter the result of the query. For instance, <code>list_regions</code> accepts an extra argument (<code>country</code>) to limit the query to particular countries.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_regions</span>(epdConnection)</code></pre></div>
 <pre><code>##      poldiv2 poldiv1                             regionname
 ## 1         00     ADS                                   &lt;NA&gt;
@@ -189,7 +193,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## 9       08     ESP       Castilla y Leon       Spain
 ## 10      09     ESP              Cataluna       Spain
 ##  [ reached getOption(&quot;max.print&quot;) -- omitted 10 rows ]</code></pre>
-<p>Each function has their own relevant parameters. For instance, <code>listTaxa</code> accepts the argument <code>group_id</code>, which refers to the taxa groups from <code>listTaxagroups</code>.</p>
+<p>Each function has their own relevant parameters. For instance, <code>list_taxa</code> accepts the argument <code>group_id</code>, which refers to the taxa groups from <code>list_taxagroups</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_taxa</span>(epdConnection)</code></pre></div>
 <pre><code>##      var_                                            varname   varcode
 ## 1       1                                              Abies       Abi
@@ -314,7 +318,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## 1     GBR  &lt;NA&gt; &lt;NA&gt; p.c.tzedakis@leeds.ac.uk
 ##                                                                                                                                               address
 ## 1 Subdepartment of Quaternary Research\\nDepartment of Plant sciences\\nUniversity of Cambridge\\nDowning Street\\nCambridge CB2 3EA\\nUNITED KINGDOM</code></pre>
-<p>When using any of these <code>list</code> functions with arguments to filter the query, we can specify multiple values. That means for instance that we can pass a vector of names as the argument <code>country</code> to the <code>listE</code> function to get information about all the entities in all those countries.</p>
+<p>When using any of these <code>list</code> functions with arguments to filter the query, we can specify multiple values. That means for instance that we can pass a vector of names as the argument <code>country</code> to the <code>list_e</code> function to get information about all the entities in all those countries.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_e</span>(epdConnection, <span class="dt">country=</span><span class="kw">c</span>(<span class="st">&quot;Spain&quot;</span>, <span class="st">&quot;Portugal&quot;</span>, <span class="st">&quot;France&quot;</span>, <span class="st">&quot;Switzerland&quot;</span>, <span class="st">&quot;Austria&quot;</span>, <span class="st">&quot;Italy&quot;</span>, <span class="st">&quot;Malta&quot;</span>, <span class="st">&quot;Algeria&quot;</span>, <span class="st">&quot;Tunisia&quot;</span>, <span class="st">&quot;Morocco&quot;</span>, <span class="st">&quot;Atlantic ocean&quot;</span>, <span class="st">&quot;Mediterranean Sea&quot;</span>))</code></pre></div>
 <pre><code>##        e_ site_    sigle                            name iscore issect
 ## 1      10    10  CARNINO                          core I      Y      N
@@ -339,7 +343,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##      elevation areaofsite poldiv1              name
 ## 1         1905       5.00     ITA             Italy
 ##  [ reached getOption(&quot;max.print&quot;) -- omitted 1000 rows ]</code></pre>
-<p>Finally, the <code>listPubl</code> function allow to search the publications we need to cite if are going to use any of the datasets in the database. This function thus allow to search publications for several criteria, including entity number (<code>e_</code>).</p>
+<p>Finally, the <code>list_publ</code> function allow to search the publications we need to cite if are going to use any of the datasets in the database. This function thus allow to search publications for several criteria, including entity number (<code>e_</code>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_publ</span>(epdConnection)</code></pre></div>
 <pre><code>##      publ_   e_ acc_ yearofpubl
 ## 1        1   40   NA       1994
@@ -354,89 +358,489 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##                                                                                                                                         citation
 ## 1 Kvavadze, E.V., and L.P. Rukhadze. 1989. Vegetation and climate of the Holocene of Abkhazia. Metsniereba, Tbilisi, Georgia, 138p (in Russian).</code></pre>
 </div>
-<div id="getting-biological-counts-and-datation-information-get-functions" class="section level2">
-<h2><span class="header-section-number">5.2</span> Getting biological counts and datation information (<code>get</code> functions)</h2>
+<div id="retrieving-information-for-particular-entities-get-functions" class="section level2">
+<h2><span class="header-section-number">5.2</span> Retrieving information for particular entities (<code>get</code> functions)</h2>
 <p>So far, we have been able to look for metadata information (details on country, region, or site) to which entities of the database belong to, but most times we are interested in extracting biological information, along with chronological information that allows us to dating the corresponding biological information, for those particular entities. The <code>EPDr</code> package provide a set of <code>get</code> functions specially designed for this.</p>
-<p>All these <code>get</code> functions have been designed to query data for a particular entity in the database. Hence, all of them (but <code>getTaxonomyEPD</code>) accept two arguments: entity ID (<code>e_</code>) and a valid connection to the EPD database (<code>connection</code>). Note that entities has to be referred by their ID number and not by their sigle name. If you know the sigle of a particular entity, you need to use the <code>listE</code> function and look for the <code>e_</code> number for that particular <code>sigle</code>.</p>
-<p>Some of the <code>get</code> functions retrieve metadata for the entity, the site, or the use restriction for data in that particular entity. The result from these functions are regular data frames.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_entity</span>(<span class="dv">1</span>, epdConnection)
-<span class="kw">get_site</span>(<span class="dv">1</span>, epdConnection)
-<span class="kw">get_restriction</span>(<span class="dv">1</span>, epdConnection)</code></pre></div>
-<p>However, most of the functions recover actual data from the entities. There are two groups of data that can be retrieved: datation information and biological samples/counts.</p>
-<div id="retrieving-datation-information-for-particular-entities" class="section level3">
-<h3><span class="header-section-number">5.2.1</span> Retrieving datation information for particular entities</h3>
-<p>Among the datation data most relevant data are radiocarbon dates from radiocarbon samples, which can be retrieved with <code>getC14</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_c14</span>(<span class="dv">1</span>, epdConnection)
-<span class="kw">get_events</span>(<span class="dv">1</span>, epdConnection)
-<span class="kw">get_chronology</span>(<span class="dv">1</span>, epdConnection)
-<span class="kw">get_datation</span>(<span class="dv">1</span>, epdConnection)
+<p>All these <code>get</code> functions have been designed to query data for a particular entity in the database. Hence, all of them (but <code>get_taxonomy_epd</code>) accept two arguments: entity ID (<code>e_</code>) and a valid connection to the EPD database (<code>connection</code>). Note that entities has to be referred by their ID number and not by their sigle name. If you know the sigle of a particular entity, you need to use the <code>list_e</code> function and look for the <code>e_</code> number for that particular <code>sigle</code>.</p>
+<p>These functions are divided in two groups. The first one is comprised by a set of <code>get</code> functions that returns single data frames that resemble the tables in the EPD in which information is restricted for the queried entity (<code>e_</code>). All these functions are called <code>.get_</code> functions followed by a reference to the table they query. The second group of functions, named as <code>get_</code> functions followed by a small descriptor, retrieve information from different tables (using <code>.get_</code> functions) for related data in an entity. For instance, <code>get_chron</code> retrieves all data relative to the chronologies that are stored in the EPD for a particular entity. Similarly, <code>get_samples</code> retrieves information from all tables about biological samples for the entity. Because this wrapping functions query information from different tables, they return especial S4 class objects that has been designed for the package. Among these wrapping functions, there is a special one (<code>get_entity</code>), which in turns retrieve all possible information from the different tables and get functions from an entity. Most user, will only need <code>get_entity</code> in their working flow. Only most advanced users will look into the rest of the <code>get_</code> functions: <code>get_ent</code>, <code>get_site</code>, <code>get_geochron</code>, <code>get_chron</code>, or <code>get_samples</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ent.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">get_ent</span>(<span class="dv">1</span>, epdConnection)
+<span class="kw">class</span>(ent.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;entity&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;EPDr&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(ent.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##  [1] &quot;entity&quot;    &quot;pentity&quot;   &quot;contact&quot;   &quot;coredrive&quot; &quot;descr&quot;    
+##  [6] &quot;lithology&quot; &quot;loi&quot;       &quot;section&quot;   &quot;publent&quot;   &quot;publ&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">site.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">get_site</span>(<span class="dv">1</span>, epdConnection)
+<span class="kw">slotNames</span>(site.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;siteloc&quot;   &quot;sitedesc&quot;  &quot;siteinfo&quot;  &quot;country&quot;   &quot;region&quot;    &quot;region3rd&quot;
+## [7] &quot;igcptype&quot;  &quot;infotype&quot;  &quot;publ&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chron.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">get_chron</span>(<span class="dv">1</span>, epdConnection)
+<span class="kw">slotNames</span>(chron.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;chron&quot;    &quot;agebound&quot; &quot;agebasis&quot; &quot;rational&quot; &quot;alsegs&quot;   &quot;panldpt&quot; 
+## [7] &quot;synevent&quot; &quot;event&quot;    &quot;publ&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">geochron.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">get_geochron</span>(<span class="dv">1</span>, epdConnection)
+<span class="kw">slotNames</span>(geochron.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##  [1] &quot;geochron&quot; &quot;aar&quot;      &quot;c14&quot;      &quot;esr&quot;      &quot;ft&quot;       &quot;kar&quot;     
+##  [7] &quot;pb210&quot;    &quot;si32&quot;     &quot;tl&quot;       &quot;useries&quot;  &quot;publ&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">samples.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">get_samples</span>(<span class="dv">1</span>, epdConnection)
+<span class="kw">slotNames</span>(samples.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;psamples&quot; &quot;analysts&quot; &quot;pagedpt&quot;  &quot;pcounts&quot;  &quot;pvars&quot;    &quot;syntype&quot; 
+## [7] &quot;pvtrans&quot;  &quot;pgroup&quot;   &quot;groups&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">get_entity</span>(<span class="dv">1</span>, epdConnection)
+<span class="kw">class</span>(epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;epd.entity&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;EPDr&quot;</code></pre>
+<p>As you can see in the previous code, epd.1 is an <code>epd.entity</code> object, with 10 different slots. The first five slots, contain some basic information: the entity number that was retrieved (<code>e_</code>), the postbomb zone in which this entity is (<code>postbombzone</code>), the number of chronologies that are available for that entity in the EPD (<code>numberofchron</code>), whether the entity has datation information in Giesecke et al. (2013) (<code>isingiesecke</code>), and which one is the default chronology (<code>defaultchron</code>) to look for ages in the EPD. Then, the object has five slots (<code>entity</code>, <code>site</code>, <code>geochron</code>, <code>chron</code>, and <code>samples</code>) that store information from the previous <code>get_</code> functions. Hence, <code>epd.entity</code> objects store all available information from a particular entity in the EPD. This is the basic object in the package, and most methods works in the base of this object or the <code>epd.entity.df</code> object that expand it (we will see that later).</p>
+<p>Each one of these slots can be looked using the symbol <code>@</code> or the <code>slot</code> function</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>e_</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slot</span>(epd.<span class="dv">1</span>, <span class="st">&quot;e_&quot;</span>)</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>postbombzone</code></pre></div>
+<pre><code>## [1] NH1
+## Levels: NH1 NH2 NH3 SH12 SH3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>numberofchron</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>isingiesecke</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>defaultchron</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>entity</code></pre></div>
+<pre><code>## An object of class &quot;entity&quot;
+## Slot &quot;entity&quot;:
+##   e_ site_  sigle name iscore issect isssamp descriptor hasanlam
+##                entloc       localveg coll_   sampdate depthatloc
+##   icethickcm sampdevice corediamcm c14depthadj notes
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 1 row ]
+## 
+## Slot &quot;pentity&quot;:
+##   e_ contact_        datasource dataform usestatus datacoop
+## 1  1       65 Kvavadze Eliso V.       RC         U      EPD
+## 
+## Slot &quot;contact&quot;:
+##   worker_ workeris_ status lastname initials firstname suffix title
+##   country phone  fax              emailaddr
+##                                                                                                   address
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 1 row ]
+## 
+## Slot &quot;coredrive&quot;:
+## [1] e_         drive_     drivelabel drivetopcm drivebotcm inftopcm  
+## [7] infbotcm   recoverycm
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;descr&quot;:
+##   descriptor higherdescr description
+## 1       RFLU        RIVR     Fluvial
+## 
+## Slot &quot;lithology&quot;:
+## [1] e_         lith_      descript   depthtopcm depthbotcm loboundary
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;loi&quot;:
+## [1] e_        sample_   depthcm   thickness templo    loilo     temphi   
+## [8] loihi     bulkdens 
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;section&quot;:
+## [1] e_           section_     sectionlabel sectiontopcm sectionbotcm
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;publent&quot;:
+##   publ_ e_
+## 1    16  1
+## 
+## Slot &quot;publ&quot;:
+##   publ_ acc_ yearofpubl
+## 1    16   NA       1989
+##                                                                                                                                         citation
+## 1 Kvavadze, E.V., and L.P. Rukhadze. 1989. Vegetation and climate of the Holocene of Abkhazia. Metsniereba, Tbilisi, Georgia, 138p (in Russian).</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>site</code></pre></div>
+<pre><code>## An object of class &quot;site&quot;
+## Slot &quot;siteloc&quot;:
+##   site_ sitename       sitecode siteexists poldiv1 poldiv2 poldiv3 latdeg
+##   latmin latsec latns    latdd    latdms londeg lonmin lonsec lonew
+##      londd     londms elevation areaofsite
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 1 row ]
+## 
+## Slot &quot;sitedesc&quot;:
+##   site_            sitedescript                      physiography
+## 1     1 Meander of Adange river Fluvial terrace above flood-plain
+##                            surroundveg vegformation igcptype
+## 1 Subalpine tall herbaceous vegetation         &lt;NA&gt;     &lt;NA&gt;
+## 
+## Slot &quot;siteinfo&quot;:
+## [1] site_ icode publ_
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;country&quot;:
+##   poldiv1    name
+## 1     GEO Georgia
+## 
+## Slot &quot;region&quot;:
+##   poldiv1 poldiv2 postcode                            name
+## 1     GEO      01     &lt;NA&gt; Abkhazia Avtonomiuri Respublika
+## 
+## Slot &quot;region3rd&quot;:
+##   poldiv1 poldiv2 poldiv3 name
+## 1     GEO      01     000 &lt;NA&gt;
+## 
+## Slot &quot;igcptype&quot;:
+## [1] igcptype   regionname
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;infotype&quot;:
+## [1] icode    infotype
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;publ&quot;:
+## [1] publ_      acc_       yearofpubl citation  
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>geochron</code></pre></div>
+<pre><code>## An object of class &quot;geochron&quot;
+## Slot &quot;geochron&quot;:
+##   e_ sample_ method depthcm thickness materialdated publ_
+## 1  1       1      C      83         5          &lt;NA&gt;    NA
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 2 rows ]
+## 
+## Slot &quot;aar&quot;:
+## [1] e_          sample_     agebp       errorlimits taxondated  labnumber  
+## [7] notes      
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;c14&quot;:
+##   e_ sample_ agebp agesdup agesdlo grthanage basis enriched labnumber
+##   deltac13 notes
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 3 rows ]
+## 
+## Slot &quot;esr&quot;:
+## [1] e_          sample_     agebp       errorlimits labnumber   notes      
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;ft&quot;:
+## [1] e_          sample_     agebp       errorlimits labnumber   notes      
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;kar&quot;:
+## [1] e_          sample_     agebp       errorlimits labnumber   notes      
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;pb210&quot;:
+## [1] e_        sample_   agead     agesdup   agesdlo   grthanage notes    
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;si32&quot;:
+## [1] e_        sample_   agebp     agesdup   agesdlo   grthanage labnumber
+## [8] notes    
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;tl&quot;:
+## [1] e_          sample_     agebp       errorlimits grainsize   labnumber  
+## [7] notes      
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;useries&quot;:
+## [1] e_          sample_     agebp       errorlimits labnumber   notes      
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;publ&quot;:
+## [1] publ_      acc_       yearofpubl citation  
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>chron</code></pre></div>
+<pre><code>## An object of class &quot;chron&quot;
+## Slot &quot;chron&quot;:
+##   e_ chron_ defaultchron     name     preparedby dateprepared
+## 1  1      1            Y Kvavadze Eliso Kvavadze   1996-08-28
+##                  model
+## 1 Linear interpolation
+##                                                          notes
+## 1 Top is modern and bottom is estimated at 4500 by the author.
+## 
+## Slot &quot;agebound&quot;:
+##   e_ chron_ top bottom
+## 1  1      1   0   4000
+## 
+## Slot &quot;agebasis&quot;:
+##    e_ chron_ sample_ depthcm thickness  age ageup agelo rcode
+## 1   1      1       1       2        NA    0    NA    NA   GUE
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 8 rows ]
+## 
+## Slot &quot;rational&quot;:
+##   rcode   rationale
+## 1   C14 Radiocarbon
+## 2   GUE       Guess
+## 
+## Slot &quot;alsegs&quot;:
+## [1] e_         seg_       depthtopcm depthbotcm
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;panldpt&quot;:
+## [1] e_        seg_      sample_   depthcm   thickness counttop  countbot 
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;synevent&quot;:
+## [1] e_        event_    depthcm   thickness
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;event&quot;:
+## [1] event_      event       name        agebp       ageuncertup ageuncertlo
+## [7] publ_      
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;publ&quot;:
+## [1] publ_      acc_       yearofpubl citation  
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>samples</code></pre></div>
+<pre><code>## An object of class &quot;samples&quot;
+## Slot &quot;psamples&quot;:
+##    e_ sample_ depthcm thickness analyst_  analydate
+## 1   1       1     2.0        NA       65 1985-08-00
+##                          notes
+## 1  Treated by KOH, acetolysis.
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 39 rows ]
+## 
+## Slot &quot;analysts&quot;:
+##   worker_ workeris_ status lastname initials firstname suffix title
+##   country phone  fax              emailaddr
+##                                                                                                   address
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 1 row ]
+## 
+## Slot &quot;pagedpt&quot;:
+##    e_ chron_ sample_   agebp   ageup   agelo deptime
+## 1   1      1       1    0.00      NA      NA      NA
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 79 rows ]
+## 
+## Slot &quot;pcounts&quot;:
+##     e_ sample_ var_ count
+## 1    1       1   32    15
+## 2    1       1   66     1
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 797 rows ]
+## 
+## Slot &quot;pvars&quot;:
+##    var_ accvar_ syntype  varcode                  varname hvar_ mhvar_
+## 1    32      32    &lt;NA&gt;      Aln                    Alnus    NA     32
+##    auth_   notes
+## 1     NA MWC1991
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 46 rows ]
+## 
+## Slot &quot;syntype&quot;:
+##   syntype           description
+## 1       M Morphological synonym
+## 
+## Slot &quot;pvtrans&quot;:
+## [1] var_         translatesto
+## &lt;0 rows&gt; (or 0-length row.names)
+## 
+## Slot &quot;pgroup&quot;:
+##    set_ var_ groupid
+## 1     1   32    TRSH
+## 2     1   66    HERB
+## 3     1   79    HERB
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 44 rows ]
+## 
+## Slot &quot;groups&quot;:
+##   groupid groupcode                           groupname
+## 1    DWAR         E                        Dwarf shrubs
+## 2    HERB         G                               Herbs
+## 3    INUN         X        Indeterminables and unknowns
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 2 rows ]</code></pre>
+<p>Some of the relevant information can be also queried with specific functions from the <code>EPDr</code> package. In general, these functions use the name <code>check_</code> plus a descriptor of the information they check in the <code>epd.entity</code> object. For instance, <code>check_restriction</code> looks into the specific slots and tables that contains information on the use restrictions that apply to the dataset, and returns TRUE or FALSE depending on the case. However, <code>check_default_chron</code> returns also a logical (<code>TRUE</code> or <code>FALSE</code>) indicating whether the entity has a default chronology.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">check_restriction</span>(epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">check_default_chron</span>(epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+</div>
+<div id="working-with-data-from-the-epd" class="section level1">
+<h1><span class="header-section-number">6</span> Working with data from the EPD</h1>
+<p>Once the user have find the dataset he want to work with and have downloaded the data for that particular entity, there are several thinks he can do: Export data for (re-)calibration in CLAM or BACON, apply several transformations and standarization, and, finally, rearrange the data for further analysis or plotting the data.</p>
+<div id="exporting-data-for-clam-or-bacon" class="section level2">
+<h2><span class="header-section-number">6.1</span> Exporting data for CLAM or BACON</h2>
+<p><code>EPDr</code> package provides several functions to reformat and export data to comply with format requirements from CLAM or BACON. These functions are named <code>export_</code> functions. There are five <code>export_</code> functions. One to export data from the C14 and GEOCHRON tables (<code>export_c14</code>), these tables store information for samples and radiocarbon dates. Another function (<code>export_agebasis</code>) export the table AGEBASIS, which stores information on the data used to calibrate the different chronologies. <code>export_events</code> function reformats and exports the data stored in the EVENTS and SYNEVENT tables, which refer to geological events registered in the entity (e.g., tephra, etc.), while <code>export_depths</code> look into biological samples depth and export them. Finally, <code>export_entity</code> function is a wrapping function that sequentially call all other <code>export_</code> functions and combine the information to prepare a set of data ready for CLAM or BACON. Because, some data might be duplicated or may have conflicts between them (especially between AGEBASIS and C14), <code>export_entity</code> have several arguments to control how to resolve these conflicts. If that arguments are not called, the function runs interactively and request input from the user to resolve the conflicts on the way.</p>
+<p><code>export_c14</code> requires a character string indicating the output format (“clam” or “bacon”), the C14 table (<code>x</code>) and the GEOCHRON table (<code>y</code>). Alternatively, it can be passed only a <code>epd.entity</code> object and the function will look for both tables automatically on it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_c14</span>(<span class="st">&quot;clam&quot;</span>, epd.<span class="dv">1</span><span class="op">@</span>geochron<span class="op">@</span>c14, epd.<span class="dv">1</span><span class="op">@</span>geochron<span class="op">@</span>geochron)</code></pre></div>
+<pre><code>##     lab_ID C14_age cal_age error reservoir depth thickness
+## 1 KIGI-350     910      NA    20        NA    83         5
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 2 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_c14</span>(<span class="st">&quot;bacon&quot;</span>, epd.<span class="dv">1</span><span class="op">@</span>geochron<span class="op">@</span>c14, epd.<span class="dv">1</span><span class="op">@</span>geochron<span class="op">@</span>geochron)</code></pre></div>
+<pre><code>##      labID  age error depth
+## 1 KIGI-350  910    20    83
+## 2 KIGI-349 2420   200   118
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 1 row ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_c14</span>(<span class="st">&quot;clam&quot;</span>, epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##     lab_ID C14_age cal_age error reservoir depth thickness
+## 1 KIGI-350     910      NA    20        NA    83         5
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 2 rows ]</code></pre>
+<p><code>export_agebasis</code> takes also as arguments a character vector with output format, and an AGEBASIS table or an <code>epd.entity</code> object to look for it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_agebasis</span>(<span class="st">&quot;clam&quot;</span>, epd.<span class="dv">1</span><span class="op">@</span>chron<span class="op">@</span>agebasis)</code></pre></div>
+<pre><code>##         lab_ID C14_age cal_age error reservoir depth thickness
+## 1    E1_CH1_S1       0      NA     1        NA     2        NA
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 8 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_agebasis</span>(<span class="st">&quot;bacon&quot;</span>, epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##          labID  age error depth
+## 1    E1_CH1_S1    0     1     2
+## 2    E1_CH1_S2  910     1    83
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 7 rows ]</code></pre>
+<p>Similarly, <code>export_events</code> requires two tables (SYNEVENT and EVENT) or the <code>epd.entity</code> objects in which to look for them. Because, depths has the same output format in CLAM and BACON, <code>export_depths</code> do not require to specify the outputformat, and only needs a PSAMPLES or an <code>epd.entity</code> to look for that data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_events</span>(<span class="st">&quot;clam&quot;</span>, epd.<span class="dv">1</span><span class="op">@</span>chron<span class="op">@</span>synevent, epd.<span class="dv">1</span><span class="op">@</span>chron<span class="op">@</span>event)</code></pre></div>
+<pre><code>## [1] lab_ID    C14_age   cal_age   error     reservoir depth     thickness
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_events</span>(<span class="st">&quot;bacon&quot;</span>, epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] labID age   error depth
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_depths</span>(epd.<span class="dv">1</span><span class="op">@</span>samples<span class="op">@</span>psamples)</code></pre></div>
+<pre><code>##  [1]  2  5  6  9 15 20 25 34 38 42
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 30 entries ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_depths</span>(epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##  [1]  2  5  6  9 15 20 25 34 38 42
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 30 entries ]</code></pre>
+<p>Finally, <code>export_entity</code> requires the output format and an <code>epd.entity</code> object to look for all the data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_entity</span>(<span class="st">&quot;clam&quot;</span>, epd.<span class="dv">1</span>)
 
-<span class="kw">get_ages</span>(<span class="dv">1</span>, epdConnection)
+##  Chronology has coincident data with C14 data and, hence, the later will be used
+##  C14 data:
+##  lab_ID  C14_age cal_age error   reserv. depth   thickn.
+##  KIGI-350     910    NA   20 NA   83  5  
+##  KIGI-349    2420    NA  200 NA  118  5  
+##  KIGI-348    2900    NA  190 NA  140 10  
+##  
+##  Chronology data:
+##  lab_ID  C14_age cal_age error   reserv. depth   thickn.
+##  E1_CH1_S2    910    NA  1   NA   83 NA  
+##  E1_CH1_S3   2420    NA  1   NA  118 NA  
+##  E1_CH1_S4   2900    NA  1   NA  140 NA  
+##  
+##  Chronology has additional no-C14 data.
+##  Chronology data:
+##  lab_ID  C14_age cal_age error   reserv. depth   thickn.
+##  E1_CH1_S1      0    NA  1   NA    2 NA  
+##  E1_CH1_S5   4000    NA  1   NA  200 NA
+##  
+##  Incorporate these data to the chronology? (Yes: TRUE then Intro, No: FALSE then Intro)TRUE
+##  
+##        lab_ID C14_age cal_age error reservoir depth thickness
+##  11 E1_CH1_S1       0      NA     1        NA     2        NA
+##  1   KIGI-350     910      NA    20        NA    83         5
+##  2   KIGI-349    2420      NA   200        NA   118         5
+##  3   KIGI-348    2900      NA   190        NA   140        10
+##  5  E1_CH1_S5    4000      NA     1        NA   200        NA</code></pre></div>
+<p>The function, besides returning the data.frame with the right output format, write files in the working directory. It creates a different folder structure for CLAM or BACON files and then stores the files with the entity number (<code>e_</code>) and the appropriate extensions. If you are running the examples, just check your working directory (<code>getwd()</code>)</p>
+</div>
+<div id="standardizing-data" class="section level2">
+<h2><span class="header-section-number">6.2</span> Standardizing data</h2>
+<p>Because the data stored in the EPD are in the original format with minimal standardization, the user will need to run several manipulation and standarization steps depending on the goal of their analysis. <code>EPDr</code> package provides a set of functions to run some of these standardizations on the top of <code>epd.entity</code> objects.</p>
+<div id="reformat-data-into-matrices" class="section level3">
+<h3><span class="header-section-number">6.2.1</span> Reformat data into matrices</h3>
+<p>As explained before, <code>epd.entity</code> objects store a copy of the EPD tables for a specific entity. Hence, the data format are the same than in the PostgreSQL database, which is very convenient for database management but not so much for data visualization and interpretation. The function <code>entity_to_matrices</code> transform several tables in the <code>epd.entity</code> objects and transform then in matrices that are more interpretable for normal use. For instance, ages are returned in the form of <code>samples</code>x<code>chronologies</code> matrix, while biological samples are transformed into <code>samples</code>x<code>taxa</code> matrices. In order to keep a backup copy of the original data and another copy of the data in the matrices formats the functions return an object of the class <code>epd.entity.df</code>. This object inherit all properties of <code>epd.entity</code> objects and expand them with new slots: <code>@countstype</code>, <code>@countsprocessing</code>, <code>@taxatype</code>, <code>@taxaprocessing</code>, <code>@samplesdf</code>, <code>@agesdf</code>, <code>@commdf</code>, and <code>@nopodf</code>.</p>
+<p>The four first slots trace information on data modification and standardizations from other functions (see later). The four last store the data in the matrix (or data.frame) format. <code>@samplesdf</code> has information on the biological samples id and labels, <code>@agesdf</code> stores information on the depth, ages and data quality of the samples, <code>@commdf</code> stores taxa names, taxa ids, accepted taxa ids, higher taxa ids, taxagroups, and counts for each taxa, and finally <code>@nopodf</code> stores the same information than <code>@commdf</code> but for no-biological particles in the samples (e.g., added particles, total sums, etc.)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">entity_to_matrices</span>(epd.<span class="dv">1</span>)
+<span class="kw">slotNames</span>(epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##  [1] &quot;e_&quot;               &quot;postbombzone&quot;     &quot;numberofchron&quot;   
+##  [4] &quot;isingiesecke&quot;     &quot;defaultchron&quot;     &quot;entity&quot;          
+##  [7] &quot;site&quot;             &quot;geochron&quot;         &quot;chron&quot;           
+## [10] &quot;samples&quot;          &quot;countstype&quot;       &quot;countsprocessing&quot;
+## [13] &quot;taxatype&quot;         &quot;taxaprocessing&quot;   &quot;samplesdf&quot;       
+## [16] &quot;agesdf&quot;           &quot;commdf&quot;           &quot;nopodf&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>commdf<span class="op">@</span>counts</code></pre></div>
+<pre><code>##    Alnus Artemisia Aster Betula Carpinus betulus Caryophyllaceae
+##    Castanea sativa Cerealia-type Chenopodiaceae Corylus Cyperaceae
+##    Dipsacaceae Gramineae Labiatae Leguminosae Malvaceae Onagraceae Pinus
+##    Plantaginaceae Plumbaginaceae Polygonaceae Quercus Ranunculaceae
+##    Rhododendron Tilia Ulmus Umbelliferae Vaccinium Botrychium lunaria
+##    Cryptogramma crispa Diphasium alpinum Huperzia selago
+##    Polypodium vulgare Selaginella selaginoides Indeterminable: unknown
+##    Compositae Carpinus orientalis Geraniaceae Juglans regia
+##    Polypodiaceae undiff. Cichorium Pteridium undiff. Abies nordmanniana
+##    Picea orientalis Pterocarya pterocarpa Fagus orientalis
+##    Athyrium distentifolium
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 40 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">filter_taxagroups</span>(epd.<span class="dv">1</span>, <span class="kw">c</span>(<span class="st">&quot;DWAR&quot;</span>, <span class="st">&quot;HERB&quot;</span>, <span class="st">&quot;LIAN&quot;</span>, <span class="st">&quot;TRSH&quot;</span>, <span class="st">&quot;UPHE&quot;</span>, <span class="st">&quot;INUN&quot;</span>))
+epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">taxa_to_acceptedtaxa</span>(epd.<span class="fl">1.</span>int, <span class="kw">get_taxonomy_epd</span>(epd.connection))
+epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">taxa_to_highertaxa</span>(epd.<span class="fl">1.</span>int, <span class="kw">get_taxonomy_epd</span>(epd.connection))
 
-<span class="kw">get_psamples</span>(<span class="dv">1</span>, epdConnection)
-<span class="kw">get_entity</span>(<span class="dv">1</span>, epdConnection)
-
-<span class="kw">get_taxonomy_epd</span>(epdConnection)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Export functions ----</span>
-c14.clam &lt;-<span class="st"> </span><span class="kw">export_c14</span>(c14)
-
-<span class="co"># Extract functions ----</span>
-
-<span class="co"># Standardize functions ----</span>
+epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">filter_taxa</span>(epd.<span class="dv">1</span>, <span class="kw">c</span>(<span class="st">&quot;Aesculus&quot;</span>, <span class="st">&quot;Aluns&quot;</span>, <span class="st">&quot;Betula&quot;</span>, <span class="st">&quot;Corpinus&quot;</span>, <span class="st">&quot;Salix&quot;</span>), <span class="kw">get_taxonomy_epd</span>(epd.connection))
+epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">counts_to_percentages</span>(epd.<span class="dv">1</span>)
+epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">giesecke_default_chron</span>(epd.<span class="dv">1</span>)
+epd.<span class="fl">1.</span>int &lt;-<span class="st"> </span><span class="kw">interpolate_counts</span>(epd.<span class="dv">1</span>, <span class="kw">c</span>(<span class="dv">1000</span>, <span class="dv">2000</span>, <span class="dv">3000</span>), <span class="dt">method=</span><span class="st">&quot;linear&quot;</span>)
+<span class="kw">intervals_counts</span>(epd.<span class="dv">1</span>, <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">2000</span>,<span class="dv">3000</span>), <span class="kw">c</span>(<span class="dv">999</span>, <span class="dv">1999</span>, <span class="dv">2999</span>, <span class="dv">3999</span>))
+<span class="kw">blois_quality</span>(epd.<span class="dv">1</span>)
 
 <span class="co"># Tabulate functions ----</span>
+<span class="kw">table_by_taxa_age</span>(epd.<span class="dv">1</span>, <span class="kw">as.character</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)), <span class="st">&quot;Pinus&quot;</span>)
 
 <span class="co"># Plotting functions ----</span>
+<span class="kw">plot_diagram</span>(epd.<span class="dv">1</span>)
 
 
-<span class="co"># Section 1 - Recalibrate chronologies ------------------------------------------</span>
+entity.list &lt;-<span class="st"> </span><span class="kw">list_e</span>(epdConnection, <span class="dt">country=</span><span class="kw">c</span>(<span class="st">&quot;Spain&quot;</span>, <span class="st">&quot;Portugal&quot;</span>, <span class="st">&quot;France&quot;</span>, <span class="st">&quot;Switzerland&quot;</span>, <span class="st">&quot;Austria&quot;</span>, <span class="st">&quot;Italy&quot;</span>, <span class="st">&quot;Malta&quot;</span>, <span class="st">&quot;Algeria&quot;</span>, <span class="st">&quot;Tunisia&quot;</span>, <span class="st">&quot;Morocco&quot;</span>, <span class="st">&quot;Atlantic ocean&quot;</span>, <span class="st">&quot;Mediterranean Sea&quot;</span>))
+entity.list &lt;-<span class="st"> </span><span class="kw">list_e</span>(epdConnection)<span class="op">$</span>e_
+counts.all &lt;-<span class="st"> </span><span class="kw">lapply</span>(entity.list, get_entity, epdConnection)
 
-<span class="co"># Site with one chronologies with EXTRA data</span>
-<span class="kw">core4Clam</span>(<span class="dv">1</span>, epdConnection)
-<span class="kw">clam</span>(<span class="st">&quot;1&quot;</span>)
+counts.po &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.all, filter_taxagroups, <span class="kw">c</span>(<span class="st">&quot;HERB&quot;</span>, <span class="st">&quot;TRSH&quot;</span>, <span class="st">&quot;DWAR&quot;</span>, <span class="st">&quot;LIAN&quot;</span>, <span class="st">&quot;HEMI&quot;</span>, <span class="st">&quot;UPHE&quot;</span>))
+counts.gi &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.po, giesecke_default_chron)
+counts.un &lt;-<span class="st"> </span><span class="kw">remove_restricted</span>(counts.gi)
+counts.wa &lt;-<span class="st"> </span><span class="kw">remove_wo_ages</span>(counts.un)
 
-<span class="co"># Site with two chronologies, one with EXTRA data</span>
-<span class="kw">core4Clam</span>(<span class="dv">4</span>, epdConnection)
-<span class="kw">clam</span>(<span class="st">&quot;4&quot;</span>)
-
-entity.list &lt;-<span class="st"> </span><span class="kw">listE</span>(epdConnection, <span class="dt">country=</span><span class="kw">c</span>(<span class="st">&quot;Spain&quot;</span>, <span class="st">&quot;Portugal&quot;</span>, <span class="st">&quot;France&quot;</span>, <span class="st">&quot;Switzerland&quot;</span>, <span class="st">&quot;Austria&quot;</span>, <span class="st">&quot;Italy&quot;</span>, <span class="st">&quot;Malta&quot;</span>, <span class="st">&quot;Algeria&quot;</span>, <span class="st">&quot;Tunisia&quot;</span>, <span class="st">&quot;Morocco&quot;</span>, <span class="st">&quot;Atlantic ocean&quot;</span>, <span class="st">&quot;Mediterranean Sea&quot;</span>))
-entity.list &lt;-<span class="st"> </span><span class="kw">listE</span>(epdConnection)<span class="op">$</span>e_
-counts.all &lt;-<span class="st"> </span><span class="kw">lapply</span>(entity.list, getAgedCounts, epdConnection)
+<span class="co"># Extract functions ----</span>
+<span class="kw">extract_e</span>(epd.<span class="dv">1</span>)
 
 
-counts.po &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.all, filterTaxaGroups, <span class="kw">c</span>(<span class="st">&quot;HERB&quot;</span>, <span class="st">&quot;TRSH&quot;</span>, <span class="st">&quot;DWAR&quot;</span>, <span class="st">&quot;LIAN&quot;</span>, <span class="st">&quot;HEMI&quot;</span>, <span class="st">&quot;UPHE&quot;</span>))
-counts.gi &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.po, gieseckeDefaultChronology)
-counts.un &lt;-<span class="st"> </span><span class="kw">removeRestricted</span>(counts.gi)
-counts.wa &lt;-<span class="st"> </span><span class="kw">removeWithoutAges</span>(counts.un)
+percent.wa &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.wa, counts_to_percentage)
+percent.int &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.wa, interpolate_counts, <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">22000</span>, <span class="dt">by=</span><span class="dv">1000</span>))
+percent.ran &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.wa, intervals_counts, <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">21000</span>, <span class="dt">by=</span><span class="dv">1000</span>), <span class="kw">seq</span>(<span class="dv">999</span>, <span class="dv">21999</span>, <span class="dt">by=</span><span class="dv">1000</span>))
 
-percent.wa &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.wa, trans2Percentages)
-percent.int &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.wa, interpolateCounts, <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">22000</span>, <span class="dt">by=</span><span class="dv">1000</span>))
-percent.ran &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.wa, intervalsCounts, <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">21000</span>, <span class="dt">by=</span><span class="dv">1000</span>), <span class="kw">seq</span>(<span class="dv">999</span>, <span class="dv">21999</span>, <span class="dt">by=</span><span class="dv">1000</span>))
+epd.taxonomy &lt;-<span class="st"> </span><span class="kw">get_taxonomy_epd</span>(epdConnection)
 
-epd.taxonomy &lt;-<span class="st"> </span><span class="kw">getTaxonomyEPD</span>(epdConnection)
+counts.wa.acc &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.wa, taxa_to_acceptedtaxa, epd.taxonomy)
+percent.wa.acc &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.wa, taxa_to_acceptedtaxa, epd.taxonomy)
+percent.int.acc &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.int, taxa_to_acceptedtaxa, epd.taxonomy)
 
-counts.wa.acc &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.wa, taxa2AcceptedTaxa, epd.taxonomy)
-percent.wa.acc &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.wa, taxa2AcceptedTaxa, epd.taxonomy)
-percent.int.acc &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.int, taxa2AcceptedTaxa, epd.taxonomy)
+<span class="co"># counts.wa.hig &lt;- lapply(counts.wa, taxa_to_highertaxa, epd.taxonomy)</span>
+<span class="co"># percent.wa.hig &lt;- lapply(percent.wa, taxa_to_highertaxa, epd.taxonomy)</span>
+<span class="co"># percent.ran.hig &lt;- lapply(percent.ran, taxa_to_highertaxa, epd.taxonomy)</span>
+<span class="co"># percent.int.hig &lt;- lapply(percent.int, taxa_to_highertaxa, epd.taxonomy)</span>
 
-<span class="co"># counts.wa.hig &lt;- lapply(counts.wa, taxa2HigherTaxa, epd.taxonomy)</span>
-<span class="co"># percent.wa.hig &lt;- lapply(percent.wa, taxa2HigherTaxa, epd.taxonomy)</span>
-<span class="co"># percent.ran.hig &lt;- lapply(percent.ran, taxa2HigherTaxa, epd.taxonomy)</span>
-<span class="co"># percent.int.hig &lt;- lapply(percent.int, taxa2HigherTaxa, epd.taxonomy)</span>
+counts.wa.uni &lt;-<span class="st"> </span><span class="kw">unify_taxonomy</span>(counts.wa.acc, epd.taxonomy)
+percent.wa.uni &lt;-<span class="st"> </span><span class="kw">unify_taxonomy</span>(percent.wa.acc, epd.taxonomy)
+percent.int.uni &lt;-<span class="st"> </span><span class="kw">unify_taxonomy</span>(percent.int.acc, epd.taxonomy)
 
-counts.wa.uni &lt;-<span class="st"> </span><span class="kw">unifyTaxonomy</span>(counts.wa.acc, epd.taxonomy)
-percent.wa.uni &lt;-<span class="st"> </span><span class="kw">unifyTaxonomy</span>(percent.wa.acc, epd.taxonomy)
-percent.int.uni &lt;-<span class="st"> </span><span class="kw">unifyTaxonomy</span>(percent.int.acc, epd.taxonomy)
+
+
+
+  
+e &lt;-<span class="st"> </span><span class="kw">list_e</span>(epd.connection)<span class="op">$</span>e_
+entity.list &lt;-<span class="st"> </span><span class="kw">lapply</span>(e[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>], get_entity, epd.connection)
+<span class="kw">vapply</span>(entity.list, check_default_chron, <span class="dt">FUN.VALUE=</span><span class="kw">logical</span>(<span class="dv">1</span>))
+<span class="kw">vapply</span>(entity.list, check_restriction, <span class="dt">FUN.VALUE=</span><span class="kw">logical</span>(<span class="dv">1</span>))
+
+<span class="kw">remove_restricted</span>(entity.list)
+<span class="kw">remove_wo_ages</span>(entity.list)
+
+<span class="kw">lapply</span>(entity.list, extract_e)
+<span class="kw">lapply</span>(entity.list, giesecke_default_chron)
+
+<span class="kw">lapply</span>(entity.list, entity_to_matrices)
+
+<span class="kw">lapply</span>(entity.list, filter_taxa_groups, <span class="kw">c</span>(<span class="st">&quot;DWAR&quot;</span>, <span class="st">&quot;HERB&quot;</span>, <span class="st">&quot;LIAN&quot;</span>, <span class="st">&quot;TRSH&quot;</span>, <span class="st">&quot;UPHE&quot;</span>, <span class="st">&quot;INUN&quot;</span>))
+
+<span class="kw">lapply</span>(entity.list, filter_taxa, <span class="kw">c</span>(<span class="st">&quot;Pinus&quot;</span>,<span class="st">&quot;Quercus&quot;</span>,<span class="st">&quot;Urticaceae&quot;</span>), <span class="kw">get_taxonomy_epd</span>(epd.connection))
+<span class="kw">lapply</span>(entity.list, taxa_to_acceptedtaxa, <span class="kw">get_taxonomy_epd</span>(epd.connection))
+<span class="kw">lapply</span>(entity.list, taxa_to_highertaxa, <span class="kw">get_taxonomy_epd</span>(epd.connection))
+<span class="kw">lapply</span>(entity.list, counts_to_percentages)
+<span class="kw">lapply</span>(entity.list, interpolate_counts, <span class="kw">c</span>(<span class="dv">1000</span>, <span class="dv">2000</span>, <span class="dv">3000</span>))
+<span class="kw">lapply</span>(entity.list, intervals_counts, <span class="kw">c</span>(<span class="dv">1000</span>, <span class="dv">2000</span>, <span class="dv">3000</span>), <span class="kw">c</span>(<span class="dv">2000</span>, <span class="dv">3000</span>, <span class="dv">4000</span>))
+<span class="kw">unify_taxonomy</span>(entity.list, <span class="kw">get_taxonomy_epd</span>(epd.connection))
+<span class="kw">lapply</span>(entity.list, table_by_taxa_age, <span class="kw">c</span>(<span class="st">&quot;Quercus&quot;</span>), <span class="kw">c</span>(<span class="st">&quot;1000&quot;</span>, <span class="st">&quot;2000&quot;</span>))
+<span class="kw">map_taxa_age</span>(entity.list, <span class="st">&quot;Pinus&quot;</span>, <span class="st">&quot;1000&quot;</span>)
+<span class="kw">lapply</span>(entity.list, blois_quality)
+
 
 
 <span class="co"># Journals:</span>
 <span class="co">#   Quartenary International</span>
 
 Cedrus &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Cedrus&quot;</span>, <span class="st">&quot;Cedrus atlantica&quot;</span>, <span class="st">&quot;Cedrus cf. C. atlantica&quot;</span>, <span class="st">&quot;Cedrus-type&quot;</span>, <span class="st">&quot;cf. Cedrus&quot;</span>)
-
-
-
-
 
 <span class="kw">mapTaxaAge</span>(percent.unr.ranges,  Cedrus, <span class="st">&quot;20000-22000&quot;</span>, <span class="dt">pres_abse=</span>T, <span class="dt">pollen_thres=</span><span class="dv">0</span>)(percent.unr.ranges,  Cedrus, <span class="st">&quot;20000-22000&quot;</span>, <span class="dt">pres_abse=</span>T, <span class="dt">pollen_thres=</span><span class="dv">0</span>)
 <span class="kw">mapTaxaAge</span>(percent.unr.ranges, Cedrus, <span class="st">&quot;5500-6500&quot;</span>, <span class="dt">pres_abse=</span>F, <span class="dt">legend_range=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">5</span>))
@@ -449,37 +853,11 @@ Pinus &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&
 <span class="kw">mapTaxaAge</span>(percent.unr.ranges, Pinus, <span class="st">&quot;20000-22000&quot;</span>, <span class="dt">pres_abse=</span>F)
 
 
-
-
 <span class="kw">mapTaxaAge</span>(percent.int.uni, <span class="st">&quot;Cedrus&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="dt">pres_abse=</span>F, <span class="dt">zoom_coords=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">20</span>, <span class="dv">180</span>, <span class="dv">30</span>, <span class="dv">80</span>), <span class="dt">points_pch=</span><span class="dv">21</span>,
            <span class="dt">points_colour=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="dt">points_fill=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>),
            <span class="dt">points_range_size=</span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">map_title=</span><span class="st">&quot;EPD sites&quot;</span>,
            <span class="dt">legend_range=</span><span class="ot">NULL</span>, <span class="dt">legend_title=</span><span class="ot">NULL</span>, <span class="dt">napoints_size=</span><span class="dv">1</span>, <span class="dt">napoints_pch=</span><span class="dv">21</span>, 
-           <span class="dt">napoints_colour=</span><span class="st">&quot;red&quot;</span>, <span class="dt">napoints_fill=</span><span class="st">&quot;red&quot;</span>, <span class="dt">countries_fill_colour=</span><span class="st">&quot;grey80&quot;</span>, <span class="dt">countries_border_colour=</span><span class="st">&quot;grey90&quot;</span>)
-
-
-
-entity.list &lt;-<span class="st"> </span><span class="kw">sapply</span>(counts.wa.uni, extractE)
-datation.co.wa.uni &lt;-<span class="st"> </span><span class="kw">lapply</span>(entity.list, getDatation, epdConnection)
-
-entity.list &lt;-<span class="st"> </span><span class="kw">sapply</span>(percent.wa.uni, extractE)
-datation.pe.wa.uni &lt;-<span class="st"> </span><span class="kw">lapply</span>(entity.list, getDatation, epdConnection)
-
-entity.list &lt;-<span class="st"> </span><span class="kw">sapply</span>(percent.ran.uni, extractE)
-datation.pe.ran.uni &lt;-<span class="st"> </span><span class="kw">lapply</span>(entity.list, getDatation, epdConnection)
-
-entity.list &lt;-<span class="st"> </span><span class="kw">sapply</span>(percent.int.uni, extractE)
-datation.pe.int.uni &lt;-<span class="st"> </span><span class="kw">lapply</span>(entity.list, getDatation, epdConnection)
-
-
-<span class="co"># Aquí me quedo con el problema de que hay algunos e_ que tienen NA en las fechas y casca a la hora de calcular el indice de calidad</span>
-<span class="cf">for</span>(ii <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(entity.list)){
-  <span class="cf">for</span>(ii <span class="cf">in</span> <span class="dv">44</span>){
-    counts.wa.uni.q &lt;-<span class="st"> </span><span class="kw">mapply</span>(qualityIndex, counts.wa.uni[ii], datation.co.wa.uni[ii])
-  }
-  percent.wa.uni.q &lt;-<span class="st"> </span><span class="kw">mapply</span>(qualityIndex, percent.wa.uni, datation.pe.wa.uni)
-  percent.ran.uni.q &lt;-<span class="st"> </span><span class="kw">mapply</span>(qualityIndex, percent.ran.uni, datation.pe.ran.uni)
-  percent.int.uni.q &lt;-<span class="st"> </span><span class="kw">mapply</span>(qualityIndex, percent.int.uni, datation.pe.int.uni)</code></pre></div>
+           <span class="dt">napoints_colour=</span><span class="st">&quot;red&quot;</span>, <span class="dt">napoints_fill=</span><span class="st">&quot;red&quot;</span>, <span class="dt">countries_fill_colour=</span><span class="st">&quot;grey80&quot;</span>, <span class="dt">countries_border_colour=</span><span class="st">&quot;grey90&quot;</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">disconnectFromEPD</span>(epdConnection)</code></pre></div>
 </div>
 </div>

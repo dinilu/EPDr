@@ -31,15 +31,15 @@ the higher taxa names. If these changes result in duplicated columns of
 the same taxa their values are unified by summing them.
 }
 \examples{
-# epd.connection <- connect_to_epd(host="localhost", database="epd",
-#                                  user="epdr", password="epdrpw")
-# epd.1 <- get_entity(1, epd.connection)
-# epd.1 <- entity_to_matrices(epd.1)
-# epd.1@commdf@taxanames
-# colnames(epd.1@commdf@counts)
-# epd.1.hn <- taxa_to_highertaxa(epd.1, get_taxonomy_epd(epd.connection))
-# epd.1.hn@commdf@taxanames
-# colnames(epd.1.hn@commdf@counts)
-
-
+\dontrun{
+epd.connection <- connect_to_epd(host="localhost", database="epd",
+                                 user="epdr", password="epdrpw")
+epd.1 <- get_entity(1, epd.connection)
+epd.1 <- entity_to_matrices(epd.1)
+epd.1@commdf@taxanames
+colnames(epd.1@commdf@counts)
+epd.1.hn <- taxa_to_highertaxa(epd.1, get_taxonomy_epd(epd.connection))
+epd.1.hn@commdf@taxanames
+colnames(epd.1.hn@commdf@counts)
+}
 }

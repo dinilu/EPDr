@@ -141,11 +141,10 @@ description of the info type codes returned by \code{.get_siteinfo}.
 }
 
 \examples{
-# Not run
-# library(EPDr)
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                               user = "epdr", password = "epdrpw")
-# site.400 <- get_site(400, epd.connection)
-# site.400
-
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                              user = "epdr", password = "epdrpw")
+site.400 <- get_site(400, epd.connection)
+site.400
+}
 }

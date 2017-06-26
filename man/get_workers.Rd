@@ -23,9 +23,9 @@ tables of the EPD, such as analyst of chronological and/or palynological
 samples, etc. The information comes from the WORKERS table.
 }
 \examples{
-# Not run
-# epd.connection <- connect_to_epd(database = "epd", user = "epdr",
-#                                 password = "epdrpw", host = "localhost")
-# get_workers(1, epd.connection)
-
+\dontrun{
+epd.connection <- connect_to_epd(database = "epd", user = "epdr",
+                                password = "epdrpw", host = "localhost")
+get_workers(1, epd.connection)
+}
 }

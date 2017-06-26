@@ -27,10 +27,9 @@ administrative level. Because the function returns a whole table,
 it only needs a parameter with a valid connection to the database.
 }
 \examples{
-# Not run
-# library(EPDr)
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                                  user = "epdr", password = "epdrpw")
-# list_countries(epd.connection)
-
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                                 user = "epdr", password = "epdrpw")
+list_countries(epd.connection)
+}
 }

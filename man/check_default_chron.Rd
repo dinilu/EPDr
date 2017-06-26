@@ -25,8 +25,10 @@ The function check EPDr objects with slot @defaultchron
 chronology specified.
 }
 \examples{
-# epd.connection <- connect_to_epd(host="localhost", database="epd",
-#                                user="epdr", password="epdrpw")
-# epd.1 <- get_entity(1, epd.connection)
-# check_default_chron(epd.1)
+\dontrun{
+epd.connection <- connect_to_epd(host="localhost", database="epd",
+                                 user="epdr", password="epdrpw")
+epd.1 <- get_entity(1, epd.connection)
+check_default_chron(epd.1)
+}
 }

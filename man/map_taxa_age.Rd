@@ -98,33 +98,33 @@ are represented diferently to reflect \code{NA}, avoiding confusion
 with \code{0} (zero) values.
 }
 \examples{
-# Not run
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                                user = "epdr", password = "epdrpw")
-# entity.list <- list_e(epd.connection, country = c("Spain","Portugal",
-#                                                   "France", "Switzerland",
-#                                                   "Austria", "Italy",
-#                                                   "Malta", "Algeria",
-#                                                   "Tunisia", "Morocco",
-#                                                   "Atlantic ocean",
-#                                                   "Mediterranean Sea"))
-# epd.all <- lapply(entity.list$e_, get_entity, epd.connection)
-# epd.all <- lapply(epd.all, filter_taxagroups, c("HERB", "TRSH", "DWAR",
-#                                                 "LIAN", "HEMI", "UPHE"))
-# epd.all <- lapply(epd.all, giesecke_default_chron)
-# epd.all <- remove_restricted(epd.all)
-# epd.all <- remove_wo_ages(epd.all)
-# 
-# epd.int <- lapply(epd.all, interpolate_counts, seq(0, 22000, by = 1000))
-# epd.taxonomy <- getTaxonomyEPD(epd.connection)
-# epd.int <- lapply(epd.int, taxa_to_acceptedtaxa, epd.taxonomy)
-# epd.int <- unify_taxonomy(epd.int, epd.taxonomy)
-# 
-# epd.int.per <- lapply(epd.int, counts_to_percentage)
-# 
-# map_taxa_age(epd.int, "Cedrus", "21000", pres_abse = F)
-# map_taxa_age(epd.int, "Cedrus", "21000", pres_abse = T)
-# map_taxa_age(epd.int.per, "Cedrus", "21000", pres_abse = F)
-# map_taxa_age(epd.int.per, "Cedrus", "21000", pres_abse = T)
-# 
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                               user = "epdr", password = "epdrpw")
+entity.list <- list_e(epd.connection, country = c("Spain","Portugal",
+                                                  "France", "Switzerland",
+                                                  "Austria", "Italy",
+                                                  "Malta", "Algeria",
+                                                  "Tunisia", "Morocco",
+                                                  "Atlantic ocean",
+                                                  "Mediterranean Sea"))
+epd.all <- lapply(entity.list$e_, get_entity, epd.connection)
+epd.all <- lapply(epd.all, filter_taxagroups, c("HERB", "TRSH", "DWAR",
+                                                "LIAN", "HEMI", "UPHE"))
+epd.all <- lapply(epd.all, giesecke_default_chron)
+epd.all <- remove_restricted(epd.all)
+epd.all <- remove_wo_ages(epd.all)
+
+epd.int <- lapply(epd.all, interpolate_counts, seq(0, 22000, by = 1000))
+epd.taxonomy <- get_taxonomy_epd(epd.connection)
+epd.int <- lapply(epd.int, taxa_to_acceptedtaxa, epd.taxonomy)
+epd.int <- unify_taxonomy(epd.int, epd.taxonomy)
+
+epd.int.per <- lapply(epd.int, counts_to_percentage)
+
+map_taxa_age(epd.int, "Cedrus", "21000", pres_abse = F)
+map_taxa_age(epd.int, "Cedrus", "21000", pres_abse = T)
+map_taxa_age(epd.int.per, "Cedrus", "21000", pres_abse = F)
+map_taxa_age(epd.int.per, "Cedrus", "21000", pres_abse = T)
+} 
 }

@@ -55,15 +55,16 @@ Time intervals without sample (data) in the entity are fill with
 multiple entities.
 }
 \examples{
-# epd.connection <- connect_to_epd(host="localhost", database="epd",
-#                                  user="epdr", password="epdrpw")
-# epd.1 <- get_entity(1, epd.connection)
-# epd.1.int <- intervals_counts(epd.1, tmin = seq(0, 21000, by = 1000),
-#                               tmax = seq(999, 21999, by = 1000))
-#
-# epd.3 <- get_entity(3, epd.connection)
-# epd.3.int <- intervals_counts(epd.3, tmin = seq(0, 21000, by = 1000),
-#                               tmax = seq(999, 21999, by = 1000))
-# epd.3.int <- intervals_counts(epd.3, tmin = seq(0, 21000, by = 1000),
-#                               tmax = seq(999, 21999, by = 1000), 2)
+\dontrun{
+epd.connection <- connect_to_epd(host="localhost", database="epd",
+                                 user="epdr", password="epdrpw")
+epd.1 <- get_entity(1, epd.connection)
+epd.1.int <- intervals_counts(epd.1, tmin = seq(0, 21000, by = 1000),
+                              tmax = seq(999, 21999, by = 1000))
+epd.3 <- get_entity(3, epd.connection)
+epd.3.int <- intervals_counts(epd.3, tmin = seq(0, 21000, by = 1000),
+                              tmax = seq(999, 21999, by = 1000))
+epd.3.int <- intervals_counts(epd.3, tmin = seq(0, 21000, by = 1000),
+                              tmax = seq(999, 21999, by = 1000), 2)
+}
 }

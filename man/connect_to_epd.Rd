@@ -44,14 +44,15 @@ A companion vignette is provided in the package to explain how to
 \href{../doc/EPD-PostgreSQL.html}{set up the EPD in a PostgreSQL server}.
 }
 \examples{
-# Not run
-# epd.connection <- connect_to_epd()
-# epd.connection <- connect_to_epd(database="epd", user="epdr",
-#                                 password="epdrpw", host="localhost")
-# epd.connection
+\dontrun{
+epd.connection <- connect_to_epd()
+epd.connection <- connect_to_epd(database="epd", user="epdr",
+                                password="epdrpw", host="localhost")
+epd.connection
 # To list all the tables in the database we have connected with
-# dbListTables(epd.connection)
-# Query data from the connection with a SQL statement
-# dbGetQuery(epd.connection, "SELECT e_ FROM synevent;")
-# disconnect_from_epd(connection=epd.connection)
+dbListTables(epd.connection)
+Query data from the connection with a SQL statement
+dbGetQuery(epd.connection, "SELECT e_ FROM synevent;")
+disconnect_from_epd(connection=epd.connection)
+}
 }

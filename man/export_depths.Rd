@@ -27,12 +27,14 @@ This function takes depths data, as returned by
 to comply with CLAM or BACON format.
 }
 \examples{
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                               user = "epdr", password = "epdrpw")
-# depths.1 <- .get_psamples(1, epd.connection)
-# export_depths(depths.1)
-# epd.1 <- get_entity(1, epd.connection)
-# export_depths(epd.1)
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                              user = "epdr", password = "epdrpw")
+depths.1 <- .get_psamples(1, epd.connection)
+export_depths(depths.1)
+epd.1 <- get_entity(1, epd.connection)
+export_depths(epd.1)
+}
 }
 \references{
 \url{http://www.chrono.qub.ac.uk/blaauw/clam.html}

@@ -35,13 +35,15 @@ If \code{x} is an \code{\link[EPDr]{epd.entity}} or an
 \code{\link[EPDr]{epd.entity.df}} object, \code{y} is not used.
 }
 \examples{
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                               user = "epdr", password = "epdrpw")
-# epd.51 <- get_entity(51, epd.connection)
-# export_events("clam", epd.51)
-# export_events("clam", .get_synevent(51, epd.connection), .get_event(26, epd.connection))
-# export_events("bacon", epd.51)
-# export_events("bacon", .get_synevent(51, epd.connection), .get_event(26, epd.connection))
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                              user = "epdr", password = "epdrpw")
+epd.51 <- get_entity(51, epd.connection)
+export_events("clam", epd.51)
+export_events("clam", .get_synevent(51, epd.connection), .get_event(26, epd.connection))
+export_events("bacon", epd.51)
+export_events("bacon", .get_synevent(51, epd.connection), .get_event(26, epd.connection))
+}
 }
 \references{
 \url{http://www.chrono.qub.ac.uk/blaauw/clam.html}

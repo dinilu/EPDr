@@ -24,20 +24,14 @@ or \code{\link[EPDr]{epd.entity.df}} classes), returning the entity
 number of the objects.
 }
 \examples{
-##NOT TO RUN
-# Not run
-# epd.connection <- connectToEPD()
-# epd.connection <- connectToEPD(database="epd", user="epdr",
-#                                 password="epdrpw", host="localhost")
-# epd.connection
-
+\dontrun{
+epd.connection <- connectToEPD()
 # To list all the tables in the database we have connected with
-# data <- getDatation(1, epd.connection)
-# extract_e(data)
-# [1] 1
-# data <- getDatation(45, epd.connection)
-# extract_e(data)
-# [1] 45
-# disconnectFromEPD(connection=epd.connection)
-
+epd.1 <- get_entity(1, epd.connection)
+extract_e(epd.1)
+[1] 1
+epd.45 <- get_entity(45, epd.connection)
+extract_e(epd.45)
+[1] 45
+}
 }

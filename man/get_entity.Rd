@@ -31,12 +31,11 @@ check the geographical location of the entity and import the postbomb
 zone of the world.
 }
 \examples{
-# Not run
-# library(EPDr)
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                               user = "epdr", password = "epdrpw")
-# epd.400 <- get_entity(400, epd.connection)
-
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                              user = "epdr", password = "epdrpw")
+epd.400 <- get_entity(400, epd.connection)
+}
 }
 \references{
 Giesecke, T., Davis, B., Brewer, S., Finsinger, W., 

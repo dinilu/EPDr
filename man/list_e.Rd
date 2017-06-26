@@ -62,17 +62,17 @@ This function allows to search entities records by different search
 criteria that can be combined as desired.
 }
 \examples{
-# Not run
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                               user = "epdr", password = "epdrpw")
-# list_e(epd.connection)
-# list_e(epd.connection, site = 1)
-# list_e(epd.connection, site = "Adange")
-# list_e(epd.connection, site = c(1:10))
-# list_e(epd.connection, country = "ESP")
-# list_e(epd.connection, country = "Spain")
-# list_e(epd.connection, country = "Spain", region = "Andalucia")
-# list_e(epd.connection, lastname = "Tzedakis")
-# list_e(epd.connection, restrictions = "R")
-
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                              user = "epdr", password = "epdrpw")
+list_e(epd.connection)
+list_e(epd.connection, site = 1)
+list_e(epd.connection, site = "Adange")
+list_e(epd.connection, site = c(1:10))
+list_e(epd.connection, country = "ESP")
+list_e(epd.connection, country = "Spain")
+list_e(epd.connection, country = "Spain", region = "Andalucia")
+list_e(epd.connection, lastname = "Tzedakis")
+list_e(epd.connection, restrictions = "R")
+}
 }

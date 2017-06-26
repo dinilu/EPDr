@@ -21,15 +21,17 @@
 #' @references \url{http://chrono.qub.ac.uk/blaauw/bacon.html}
 #' 
 #' @examples
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                               user = "epdr", password = "epdrpw")
-#' # epd.400 <- get_entity(400, epd.connection)
-#' # epd.400.c14 <- export_c14("clam", epd.400)
-#' # epd.400.ageb <- export_agebasis("clam", epd.400)
-#' # rbind(epd.400.c14, epd.400.ageb)
-#' # epd.400.c14 <- export_c14("bacon", epd.400)
-#' # epd.400.ageb <- export_agebasis("bacon", epd.400)
-#' # rbind(epd.400.c14, epd.400.ageb)
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                               user = "epdr", password = "epdrpw")
+#' epd.400 <- get_entity(400, epd.connection)
+#' epd.400.c14 <- export_c14("clam", epd.400)
+#' epd.400.ageb <- export_agebasis("clam", epd.400)
+#' rbind(epd.400.c14, epd.400.ageb)
+#' epd.400.c14 <- export_c14("bacon", epd.400)
+#' epd.400.ageb <- export_agebasis("bacon", epd.400)
+#' rbind(epd.400.c14, epd.400.ageb)
+#' }
 #' @rdname export_agebasis
 #' @exportMethod export_agebasis
 setGeneric("export_agebasis", function(format, x){
@@ -114,16 +116,17 @@ setMethod("export_agebasis", signature(format = "character", x = "epd.entity"),
 #' @references \url{http://chrono.qub.ac.uk/blaauw/bacon.html}
 #' 
 #' @examples
-#' # Not run
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                               user = "epdr", password = "epdrpw")
-#' # epd.400 <- get_entity(400, epd.connection)
-#' # epd.400.c14 <- export_c14("clam", epd.400)
-#' # epd.400.ageb <- export_agebasis("clam", epd.400)
-#' # rbind(epd.400.c14, epd.400.ageb)
-#' # epd.400.c14 <- export_c14("bacon", epd.400)
-#' # epd.400.ageb <- export_agebasis("bacon", epd.400)
-#' # rbind(epd.400.c14, epd.400.ageb)
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                               user = "epdr", password = "epdrpw")
+#' epd.400 <- get_entity(400, epd.connection)
+#' epd.400.c14 <- export_c14("clam", epd.400)
+#' epd.400.ageb <- export_agebasis("clam", epd.400)
+#' rbind(epd.400.c14, epd.400.ageb)
+#' epd.400.c14 <- export_c14("bacon", epd.400)
+#' epd.400.ageb <- export_agebasis("bacon", epd.400)
+#' rbind(epd.400.c14, epd.400.ageb)
+#' }
 #' @rdname export_c14
 #' @exportMethod export_c14
 setGeneric("export_c14", function(format, x, y){
@@ -196,12 +199,14 @@ setMethod("export_c14", signature(format = "character", x = "epd.entity",
 #' @references \url{http://www.chrono.qub.ac.uk/blaauw/clam.html}
 #' @references \url{http://chrono.qub.ac.uk/blaauw/bacon.html}
 #' @examples
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                               user = "epdr", password = "epdrpw")
-#' # depths.1 <- .get_psamples(1, epd.connection)
-#' # export_depths(depths.1)
-#' # epd.1 <- get_entity(1, epd.connection)
-#' # export_depths(epd.1)
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                               user = "epdr", password = "epdrpw")
+#' depths.1 <- .get_psamples(1, epd.connection)
+#' export_depths(depths.1)
+#' epd.1 <- get_entity(1, epd.connection)
+#' export_depths(epd.1)
+#' }
 #' @rdname export_depths
 #' @exportMethod export_depths
 setGeneric("export_depths", function(x){
@@ -244,7 +249,6 @@ setMethod("export_depths", signature(x = "epd.entity"), function(x){
 #' @param x epd.entity \code{\link[EPDr]{epd.entity}} or 
 #' \code{\link[EPDr]{epd.entity.df}} objects from which all information 
 #' will be extracted to compose the clam or bacon table and file.
-#' @param ... Not used with current methods.
 #' @param chronology numeric Number indicating the chronology from which 
 #' to extract the agebasis for the "clam" or "bacon" file. If 
 #' unspecified, the function use the default chronology according to 
@@ -269,7 +273,7 @@ setMethod("export_depths", signature(x = "epd.entity"), function(x){
 #' samples should be exported too. The default value is TRUE. This is 
 #' helpful because running CLAM or BACON with depths calculate the 
 #' calibrated ages for those samples in the same step.
-#' @param incl_envents logical Logical value indicating whether events information 
+#' @param incl_events logical Logical value indicating whether events information 
 #' should be included (TRUE), or not (FALSE).
 #'
 #' @return Data frame with specific format for "CLAM" or "BACON" age-depth
@@ -298,44 +302,35 @@ setMethod("export_depths", signature(x = "epd.entity"), function(x){
 #' @references \url{http://chrono.qub.ac.uk/blaauw/bacon.html}
 #' 
 #' @examples
-#' # Not run
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                               user = "epdr", password = "epdrpw")
-#' # epd.400 <- get_entity(400, epd.connection)
-#' # export_entity("clam", epd.400) # Also check new folders in your working directory
-#' # export_entity("bacon", epd.400) # Also check new folders in your working directory
-#' # epd.1 <- get_entity(1, epd.connection)
-#' # export_entity("clam", epd.1)
-#' # export_entity("bacon", epd.1)
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                               user = "epdr", password = "epdrpw")
+#' epd.400 <- get_entity(400, epd.connection)
+#' export_entity("clam", epd.400) # Also check new folders in your working directory
+#' export_entity("bacon", epd.400) # Also check new folders in your working directory
+#' epd.1 <- get_entity(1, epd.connection)
+#' export_entity("clam", epd.1)
+#' export_entity("bacon", epd.1)
+#' }
 #' @rdname export_entity
 #' @exportMethod export_entity
 setGeneric("export_entity", function(format,
                                     x,
-                                    ...,
                                     chronology = NULL,
                                     incl_chron_not_in_c14 = NULL,
                                     incl_c14_not_in_chron = NULL,
                                     use_c14_conf_age = NULL,
                                     use_c14_conf_depth = NULL,
                                     include_depths = TRUE,
-                                    incl_envents = NULL){
+                                    incl_events = NULL){
   standardGeneric("export_entity")
 })
 
 #' @rdname export_entity
 setMethod("export_entity", signature(format = "character", x = "epd.entity"),
-          function(format, x, ...){
-  # format <- "clam"
-  # x <- entity.list[[1]]
-  # chronology <- NULL
-  # incl_chron_not_in_c14 <- NULL
-  # incl_c14_not_in_chron <- NULL
-  # use_c14_conf_age <- NULL
-  # use_c14_conf_depth <- NULL
-  # include_depths <- NULL
-  # incl_envents <- NULL
-
+          function(format, x, chronology, incl_chron_not_in_c14,
+                   incl_c14_not_in_chron, use_c14_conf_age,
+                   use_c14_conf_depth, include_depths, incl_events){
             # Define internal functions
             .print_data <- function(data, format){
               if (format == "clam"){
@@ -587,29 +582,29 @@ setMethod("export_entity", signature(format = "character", x = "epd.entity"),
               cat("\n")
               cat("Events data:\n")
               .print_events(events)
-              while (!.is_true_false(incl_envents) &&
-                     !is.numeric(incl_envents)){
-                incl_envents <- readline(paste0("Include events information ",
+              while (!.is_true_false(incl_events) &&
+                     !is.numeric(incl_events)){
+                incl_events <- readline(paste0("Include events information ",
                                                 "in the files? (Yes: TRUE ",
                                                 "then Intro, No: FALSE ",
                                                 "then Intro, or write ",
                                                 "c(n1,n2, ...) to ",
                                                 "specify which data should ",
                                                 "be included.)"))
-                try(incl_envents <- eval(parse(text = incl_envents)))
-                if (!.is_true_false(incl_envents) &&
-                    !is.numeric(incl_envents)){
+                try(incl_events <- eval(parse(text = incl_events)))
+                if (!.is_true_false(incl_events) &&
+                    !is.numeric(incl_events)){
                   warning("Sorry! Invalid value.",
                           call. = FALSE,
                           immediate. = TRUE)
                 }
               }
             }else{
-              incl_envents <- FALSE
+              incl_events <- FALSE
             }
-            if (isTRUE(incl_envents) || is.numeric(incl_envents)){
-              if (is.numeric(incl_envents)){
-                events_ <- events[incl_envents, "event_"]
+            if (isTRUE(incl_events) || is.numeric(incl_events)){
+              if (is.numeric(incl_events)){
+                events_ <- events[incl_events, "event_"]
                 event <- event[which(event$event_ %in% events_)]
                 synevent <- synevent[which(synevent$event_ %in% events_)]
               }
@@ -679,13 +674,15 @@ setMethod("export_entity", signature(format = "character", x = "epd.entity"),
 #' @references \url{http://chrono.qub.ac.uk/blaauw/bacon.html}
 #' 
 #' @examples
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                               user = "epdr", password = "epdrpw")
-#' # epd.51 <- get_entity(51, epd.connection)
-#' # export_events("clam", epd.51)
-#' # export_events("clam", .get_synevent(51, epd.connection), .get_event(26, epd.connection))
-#' # export_events("bacon", epd.51)
-#' # export_events("bacon", .get_synevent(51, epd.connection), .get_event(26, epd.connection))
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                               user = "epdr", password = "epdrpw")
+#' epd.51 <- get_entity(51, epd.connection)
+#' export_events("clam", epd.51)
+#' export_events("clam", .get_synevent(51, epd.connection), .get_event(26, epd.connection))
+#' export_events("bacon", epd.51)
+#' export_events("bacon", .get_synevent(51, epd.connection), .get_event(26, epd.connection))
+#' }
 #' @rdname export_events
 #' @exportMethod export_events
 setGeneric("export_events", function(format, x, y){

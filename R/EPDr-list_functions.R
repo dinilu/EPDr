@@ -20,12 +20,11 @@
 #' @export
 #'
 #' @examples
-#' # Not run
-#' # library(EPDr)
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                                  user = "epdr", password = "epdrpw")
-#' # list_countries(epd.connection)
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                                  user = "epdr", password = "epdrpw")
+#' list_countries(epd.connection)
+#' }
 list_countries <- function(connection){
   sql_query <- paste("SELECT * FROM poldiv1;")
   result <- RPostgreSQL::dbGetQuery(connection, sql_query)
@@ -78,19 +77,19 @@ list_countries <- function(connection){
 #' @export
 #'
 #' @examples
-#' # Not run
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                               user = "epdr", password = "epdrpw")
-#' # list_e(epd.connection)
-#' # list_e(epd.connection, site = 1)
-#' # list_e(epd.connection, site = "Adange")
-#' # list_e(epd.connection, site = c(1:10))
-#' # list_e(epd.connection, country = "ESP")
-#' # list_e(epd.connection, country = "Spain")
-#' # list_e(epd.connection, country = "Spain", region = "Andalucia")
-#' # list_e(epd.connection, lastname = "Tzedakis")
-#' # list_e(epd.connection, restrictions = "R")
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                               user = "epdr", password = "epdrpw")
+#' list_e(epd.connection)
+#' list_e(epd.connection, site = 1)
+#' list_e(epd.connection, site = "Adange")
+#' list_e(epd.connection, site = c(1:10))
+#' list_e(epd.connection, country = "ESP")
+#' list_e(epd.connection, country = "Spain")
+#' list_e(epd.connection, country = "Spain", region = "Andalucia")
+#' list_e(epd.connection, lastname = "Tzedakis")
+#' list_e(epd.connection, restrictions = "R")
+#' }
 list_e <- function(connection, site = NULL, coords = NULL, lastname = NULL,
                    firstname = NULL, initials = NULL, publ = NULL,
                    country = NULL, region = NULL, restrictions = NULL,
@@ -283,19 +282,18 @@ list_e <- function(connection, site = NULL, coords = NULL, lastname = NULL,
 #' @export
 #'
 #' @examples
-#' # Not run
-#' # library(EPDr)
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                                  user = "epdr", password = "epdrpw")
-#' # list_publ(epd.connection)
-#' # list_publ(epd.connection, e_ = 1)
-#' # list_publ(epd.connection, site = "1")
-#' # list_publ(epd.connection, country = "ESP", site = 1)
-#' # list_publ(epd.connection, country = "Spain", region = "01")
-#' # str(list_publ(epd.connection))
-#' # list_publ(epd.connection, coords = c(2.5, 22, 45.5, 53.5))
-#' # str(list_publ(epd.connection, coords = c(2.5, 22, 45.5, 53.5)))
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                                  user = "epdr", password = "epdrpw")
+#' list_publ(epd.connection)
+#' list_publ(epd.connection, e_ = 1)
+#' list_publ(epd.connection, site = "1")
+#' list_publ(epd.connection, country = "ESP", site = 1)
+#' list_publ(epd.connection, country = "Spain", region = "01")
+#' str(list_publ(epd.connection))
+#' list_publ(epd.connection, coords = c(2.5, 22, 45.5, 53.5))
+#' str(list_publ(epd.connection, coords = c(2.5, 22, 45.5, 53.5)))
+#' }
 list_publ <- function(connection, e_ = NULL, country = NULL, region = NULL,
                       site = NULL, coords = NULL){
   if (is.null(e_)){
@@ -344,15 +342,14 @@ list_publ <- function(connection, e_ = NULL, country = NULL, region = NULL,
 #' @export
 #'
 #' @examples
-#' # Not run
-#' # library(EPDr)
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                               user = "epdr", password = "epdrpw")
-#' # list_regions(epd.connection)
-#' # list_regions(epd.connection, "ESP")
-#' # list_regions(epd.connection, "Spain")
-#' # list_regions(epd.connection, c("Spain", "France", "Germany"))
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                               user = "epdr", password = "epdrpw")
+#' list_regions(epd.connection)
+#' list_regions(epd.connection, "ESP")
+#' list_regions(epd.connection, "Spain")
+#' list_regions(epd.connection, c("Spain", "France", "Germany"))
+#' }
 list_regions <- function(connection, country = NULL){
     if (is.null(country)){
         country <- list_countries(connection)$poldiv1
@@ -411,17 +408,16 @@ list_regions <- function(connection, country = NULL){
 #' @export
 #'
 #' @examples
-#' # Not run
-#' # library(EPDr)
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                                  user = "epdr", password = "epdrpw")
-#' # list_sites(epd.connection)
-#' # list_sites(epd.connection, "ESP")
-#' # list_sites(epd.connection, "Spain", "01")
-#' # summary(list_sites(epd.connection))
-#' # list_sites(epd.connection, coords = c(2.5, 22, 45.5, 53.5))
-#' # summary(list_sites(epd.connection, coords = c(2.5, 22, 45.5, 53.5)))
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                                  user = "epdr", password = "epdrpw")
+#' list_sites(epd.connection)
+#' list_sites(epd.connection, "ESP")
+#' list_sites(epd.connection, "Spain", "01")
+#' summary(list_sites(epd.connection))
+#' list_sites(epd.connection, coords = c(2.5, 22, 45.5, 53.5))
+#' summary(list_sites(epd.connection, coords = c(2.5, 22, 45.5, 53.5)))
+#' }
 list_sites <- function(connection,
                        country = NULL,
                        region = NULL,
@@ -511,13 +507,12 @@ list_sites <- function(connection,
 #' @export
 #'
 #' @examples
-#' # Not run
-#' # library(EPDr)
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                                  user = "epdr", password = "epdrpw")
-#' # list_taxa(epd.connection, "HERB")
-#' # list_taxa(epd.connection, c("HERB", "TRSH"))
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                                  user = "epdr", password = "epdrpw")
+#' list_taxa(epd.connection, "HERB")
+#' list_taxa(epd.connection, c("HERB", "TRSH"))
+#' }
 list_taxa <- function(connection, group_id = NULL){
   if (is.null(group_id)){
     group_id <- list_taxagroups(connection)$groupid
@@ -551,12 +546,11 @@ list_taxa <- function(connection, group_id = NULL){
 #' @export
 #'
 #' @examples
-#' # Not run
-#' # library(EPDr)
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                                  user = "epdr", password = "epdrpw")
-#' # list_taxagroups(epd.connection)
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                                  user = "epdr", password = "epdrpw")
+#' list_taxagroups(epd.connection)
+#' }
 list_taxagroups <- function(connection){
   sql_query <- paste("SELECT * FROM groups;")
   result <- RPostgreSQL::dbGetQuery(connection, sql_query)

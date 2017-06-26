@@ -21,13 +21,14 @@ The function parses all the elements on the list and remove those without a defa
 chronology (see \code{\link[EPDr]{check_default_chron}}).
 }
 \examples{
-# epd.connection <- connect_to_epd(host="localhost", database="epd",
-#                                user="epdr", password="epdrpw")
-# e.list <- listE(epd.connection, country=c("Spain"))
-# e.list <- e.list$e_
-# spain.agedcounts <- lapply(e.list, getAgedCounts, epd.connection)
-# spain.agedcounts.wo <- remove_wo_ages(spain.agedcounts)
-# length(spain.agedcounts)
-# length(spain.agedcounts.wo)
-
+\dontrun{
+epd.connection <- connect_to_epd(host="localhost", database="epd",
+                               user="epdr", password="epdrpw")
+e.list <- listE(epd.connection, country=c("Spain"))
+e.list <- e.list$e_
+spain.agedcounts <- lapply(e.list, getAgedCounts, epd.connection)
+spain.agedcounts.wo <- remove_wo_ages(spain.agedcounts)
+length(spain.agedcounts)
+length(spain.agedcounts.wo)
+}
 }

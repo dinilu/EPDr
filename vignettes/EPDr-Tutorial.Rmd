@@ -94,30 +94,30 @@ The EPDr package provide several ways to retrieve data from the database: Listin
 
 For users unfamiliar with the database it might be useful to list elements in the database, for instance to know which countries are represented or which publications are associated with the entities in the database. To do so, the package provides a series of `list` functions that return specific tables from the database where important information can be looked at.
 
-Some of these functions (`listCountries` and `listTaxagroups`) only accept one argument (`connection`), which must be a valid connection to the EPD database. 
+Some of these functions (`list_countries` and `list_taxagroups`) only accept one argument (`connection`), which must be a valid connection to the EPD database. 
 
-```{r listCountries and listTaxagroups, R.options=list(max.print=15)}
+```{r list_countries and list_taxagroups, R.options=list(max.print=15)}
 list_countries(epdConnection)
 list_taxagroups(epdConnection)
 ```
 
-However, other `list` functions accept several arguments to further filter the result of the query. For instance, `listRegions` accepts an extra argument (`country`) to limit the query to particular countries. 
+However, other `list` functions accept several arguments to further filter the result of the query. For instance, `list_regions` accepts an extra argument (`country`) to limit the query to particular countries. 
 
-```{r listRegions, R.options=list(max.print=40)}
+```{r list_regions, R.options=list(max.print=40)}
 list_regions(epdConnection)
 list_regions(epdConnection, country="Spain")
 ```
 
-Each function has their own relevant parameters. For instance, `listTaxa` accepts the argument `group_id`, which refers to the taxa groups from `listTaxagroups`.
+Each function has their own relevant parameters. For instance, `list_taxa` accepts the argument `group_id`, which refers to the taxa groups from `list_taxagroups`.
 
-```{r listTaxa, R.options=list(max.print=20)}
+```{r list_taxa, R.options=list(max.print=20)}
 list_taxa(epdConnection)
 list_taxa(epdConnection, group_id="HERB")
 ```
 
 Other `list` functions accept more arguments. Sample sites, for instance, can be listed specifying the `country` and `region` of interest, but also a set of four geographical coordinates (longitude and latitude) encompasing the area of interest (xmin, xmax, ymin, ymax).
 
-```{r listSites, R.options=list(max.print=30)}
+```{r list_sites, R.options=list(max.print=30)}
 list_sites(epdConnection)
 list_sites(epdConnection, country="Spain", region="Andalucia")
 list_sites(epdConnection, coords=c(-4, 10, 36, 40))
@@ -127,121 +127,246 @@ Biological counts and datation data in the EPD database are refered to entities.
 
 Entities thus can be listed according to many different criteria: site name or site ID (`site`), geographical coordinates (`coords`), last name of the author (`lastname`), first name of the author (`firstname`), initials of the author (`initials`), publication number (`publ`), country (`country`) and region (`region`), and restriction on the use of data (`restrictions`). If multiple criteria are going to be used, the author can decide to use a logical operator to control for an additive (`AND`) or alternative (`OR`) interaction between criteria.
 
-```{r listE, R.options=list(max.print=50)}
+```{r list_e, R.options=list(max.print=50)}
 list_e(epdConnection)
 list_e(epdConnection, site="Adange")
 list_e(epdConnection, lastname="Tzedakis")
 ```
 
-When using any of these `list` functions with arguments to filter the query, we can specify multiple values. That means for instance that we can pass a vector of names as the argument `country` to the `listE` function to get information about all the entities in all those countries.
+When using any of these `list` functions with arguments to filter the query, we can specify multiple values. That means for instance that we can pass a vector of names as the argument `country` to the `list_e` function to get information about all the entities in all those countries.
 
-```{r listE multiple countries, R.options=list(max.print=60)}
+```{r list_e multiple countries, R.options=list(max.print=60)}
 list_e(epdConnection, country=c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
 ```
 
-Finally, the `listPubl` function allow to search the publications we need to cite if are going to use any of the datasets in the database. This function thus allow to search publications for several criteria, including entity number (`e_`).
+Finally, the `list_publ` function allow to search the publications we need to cite if are going to use any of the datasets in the database. This function thus allow to search publications for several criteria, including entity number (`e_`).
 
-```{r listPubl, R.options=list(max.print=10)}
+```{r list_publ, R.options=list(max.print=10)}
 list_publ(epdConnection)
 list_publ(epdConnection, e_=1)
 ```
 
-## Getting biological counts and datation information (`get` functions)
+## Retrieving information for particular entities (`get` functions)
 
 So far, we have been able to look for metadata information (details on country, region, or site) to which entities of the database belong to, but most times we are interested in extracting biological information, along with chronological information that allows us to dating the corresponding biological information, for those particular entities. The `EPDr` package provide a set of `get` functions specially designed for this.
 
-All these `get` functions have been designed to query data for a particular entity in the database. Hence, all of them (but `getTaxonomyEPD`) accept two arguments: entity ID (`e_`) and a valid connection to the EPD database (`connection`). Note that entities has to be referred by their ID number and not by their sigle name. If you know the sigle of a particular entity, you need to use the `listE` function and look for the `e_` number for that particular `sigle`.
+All these `get` functions have been designed to query data for a particular entity in the database. Hence, all of them (but `get_taxonomy_epd`) accept two arguments: entity ID (`e_`) and a valid connection to the EPD database (`connection`). Note that entities has to be referred by their ID number and not by their sigle name. If you know the sigle of a particular entity, you need to use the `list_e` function and look for the `e_` number for that particular `sigle`.
 
-Some of the `get` functions retrieve metadata for the entity, the site, or the use restriction for data in that particular entity. The result from these functions are regular data frames.
+These functions are divided in two groups. The first one is comprised by a set of `get` functions that returns single data frames that resemble the tables in the EPD in which information is restricted for the queried entity (`e_`). All these functions are called `.get_` functions followed by a reference to the table they query. The second group of functions, named as `get_` functions followed by a small descriptor, retrieve information from different tables (using `.get_` functions) for related data in an entity. For instance, `get_chron` retrieves all data relative to the chronologies that are stored in the EPD for a particular entity. Similarly, `get_samples` retrieves information from all tables about biological samples for the entity. Because this wrapping functions query information from different tables, they return especial S4 class objects that has been designed for the package. Among these wrapping functions, there is a special one (`get_entity`), which in turns retrieve all possible information from the different tables and get functions from an entity. Most user, will only need `get_entity` in their working flow. Only most advanced users will look into the rest of the `get_` functions: `get_ent`, `get_site`, `get_geochron`, `get_chron`, or `get_samples`.
 
-```{r getEntity getSite and getRestriction, eval=F}
-get_entity(1, epdConnection)
-get_site(1, epdConnection)
-get_restriction(1, epdConnection)
+
+```{r get_ functions, R.options=list(max.print=10)}
+ent.1 <- get_ent(1, epdConnection)
+class(ent.1)
+slotNames(ent.1)
+site.1 <- get_site(1, epdConnection)
+slotNames(site.1)
+chron.1 <- get_chron(1, epdConnection)
+slotNames(chron.1)
+geochron.1 <- get_geochron(1, epdConnection)
+slotNames(geochron.1)
+samples.1 <- get_samples(1, epdConnection)
+slotNames(samples.1)
+epd.1 <- get_entity(1, epdConnection)
+class(epd.1)
 ```
 
-However, most of the functions recover actual data from the entities. There are two groups of data that can be retrieved: datation information and biological samples/counts.
+As you can see in the previous code, epd.1 is an `epd.entity` object, with 10 different slots. The first five slots, contain some basic information: the entity number that was retrieved (`e_`), the postbomb zone in which this entity is (`postbombzone`), the number of chronologies that are available for that entity in the EPD (`numberofchron`), whether the entity has datation information in Giesecke et al. (2013) (`isingiesecke`), and which one is the default chronology (`defaultchron`) to look for ages in the EPD. Then, the object has five slots (`entity`, `site`, `geochron`, `chron`, and `samples`) that store information from the previous `get_` functions. Hence, `epd.entity` objects store all available information from a particular entity in the EPD. This is the basic object in the package, and most methods works in the base of this object or the `epd.entity.df` object that expand it (we will see that later).
 
-### Retrieving datation information for particular entities
+Each one of these slots can be looked using the symbol `@` or the `slot` function
 
-Among the datation data most relevant data are radiocarbon dates from radiocarbon samples, which can be retrieved with `getC14`. 
+```{r epd.entity structure, R.options=list(max.print=10)}
+epd.1@e_
+slot(epd.1, "e_")
+epd.1@postbombzone
+epd.1@numberofchron
+epd.1@isingiesecke
+epd.1@defaultchron
+epd.1@entity
+epd.1@site
+epd.1@geochron
+epd.1@chron
+epd.1@samples
+```
+Some of the relevant information can be also queried with specific functions from the `EPDr` package. In general, these functions use the name `check_` plus a descriptor of the information they check in the `epd.entity` object. For instance, `check_restriction` looks into the specific slots and tables that contains information on the use restrictions that apply to the dataset, and returns TRUE or FALSE depending on the case. However, `check_default_chron` returns also a logical (`TRUE` or `FALSE`) indicating whether the entity has a default chronology.
 
-```{r, eval=F}
-get_c14(1, epdConnection)
-get_events(1, epdConnection)
-get_chronology(1, epdConnection)
-get_datation(1, epdConnection)
+```{r check functions}
+check_restriction(epd.1)
+check_default_chron(epd.1)
+```
 
-get_ages(1, epdConnection)
+# Working with data from the EPD
 
-get_psamples(1, epdConnection)
-get_entity(1, epdConnection)
+Once the user have find the dataset he want to work with and have downloaded the data for that particular entity, there are several thinks he can do: Export data for (re-)calibration in CLAM or BACON, apply several transformations and standarization, and, finally, rearrange the data for further analysis or plotting the data.
 
-get_taxonomy_epd(epdConnection)
+## Exporting data for CLAM or BACON
+
+`EPDr` package provides several functions to reformat and export data to comply with format requirements from CLAM or BACON. These functions are named `export_` functions. There are five `export_` functions. One to export data from the C14 and GEOCHRON tables (`export_c14`), these tables store information for samples and radiocarbon dates. Another function (`export_agebasis`) export the table AGEBASIS, which stores information on the data used to calibrate the different chronologies. `export_events` function reformats and exports the data stored in the EVENTS and SYNEVENT tables, which refer to geological events registered in the entity (e.g., tephra, etc.), while `export_depths` look into biological samples depth and export them. Finally, `export_entity` function is a wrapping function that sequentially call all other `export_` functions and combine the information to prepare a set of data ready for CLAM or BACON. Because, some data might be duplicated or may have conflicts between them (especially between AGEBASIS and C14), `export_entity` have several arguments to control how to resolve these conflicts. If that arguments are not called, the function runs interactively and request input from the user to resolve the conflicts on the way.
+
+`export_c14` requires a character string indicating the output format ("clam" or "bacon"), the C14 table (`x`) and the GEOCHRON table (`y`). Alternatively, it can be passed only a `epd.entity` object and the function will look for both tables automatically on it.
+
+```{r export_c14 function, R.options=list(max.print=10)}
+export_c14("clam", epd.1@geochron@c14, epd.1@geochron@geochron)
+export_c14("bacon", epd.1@geochron@c14, epd.1@geochron@geochron)
+export_c14("clam", epd.1)
+```
+
+`export_agebasis` takes also as arguments a character vector with output format, and an AGEBASIS table or an `epd.entity` object to look for it.
+
+```{r export_agebasis function, R.options=list(max.print=10)}
+export_agebasis("clam", epd.1@chron@agebasis)
+export_agebasis("bacon", epd.1)
+```
+
+Similarly, `export_events` requires two tables (SYNEVENT and EVENT) or the `epd.entity` objects in which to look for them. Because, depths has the same output format in CLAM and BACON, `export_depths` do not require to specify the outputformat, and only needs a PSAMPLES or an `epd.entity` to look for that data.
+
+```{r export_events and export_depths functions, R.options=list(max.print=10)}
+export_events("clam", epd.1@chron@synevent, epd.1@chron@event)
+export_events("bacon", epd.1)
+export_depths(epd.1@samples@psamples)
+export_depths(epd.1)
+```
+Finally, `export_entity` requires the output format and an `epd.entity` object to look for all the data. 
+
+```{r export_entity function, eval=F, R.options=list(max.print=10)}
+export_entity("clam", epd.1)
+
+##  Chronology has coincident data with C14 data and, hence, the later will be used
+##  C14 data:
+##  lab_ID	C14_age	cal_age	error	reserv.	depth	thickn.
+##  KIGI-350	 910	NA	 20	NA	 83	 5	
+##  KIGI-349	2420	NA	200	NA	118	 5	
+##  KIGI-348	2900	NA	190	NA	140	10	
+##  
+##  Chronology data:
+##  lab_ID	C14_age	cal_age	error	reserv.	depth	thickn.
+##  E1_CH1_S2	 910	NA	1	NA	 83	NA	
+##  E1_CH1_S3	2420	NA	1	NA	118	NA	
+##  E1_CH1_S4	2900	NA	1	NA	140	NA	
+##  
+##  Chronology has additional no-C14 data.
+##  Chronology data:
+##  lab_ID	C14_age	cal_age	error	reserv.	depth	thickn.
+##  E1_CH1_S1	   0	NA	1	NA	  2	NA	
+##  E1_CH1_S5	4000	NA	1	NA	200	NA
+##  
+##  Incorporate these data to the chronology? (Yes: TRUE then Intro, No: FALSE then Intro)TRUE
+##  
+##        lab_ID C14_age cal_age error reservoir depth thickness
+##  11 E1_CH1_S1       0      NA     1        NA     2        NA
+##  1   KIGI-350     910      NA    20        NA    83         5
+##  2   KIGI-349    2420      NA   200        NA   118         5
+##  3   KIGI-348    2900      NA   190        NA   140        10
+##  5  E1_CH1_S5    4000      NA     1        NA   200        NA
+```
+
+The function, besides returning the data.frame with the right output format, write files in the working directory. It creates a different folder structure for CLAM or BACON files and then stores the files with the entity number (`e_`) and the appropriate extensions. If you are running the examples, just check your working directory (`getwd()`)
+
+## Standardizing data
+
+Because the data stored in the EPD are in the original format with minimal standardization, the user will need to run several manipulation and standarization steps depending on the goal of their analysis. `EPDr` package provides a set of functions to run some of these standardizations on the top of `epd.entity` objects.
+
+### Reformat data into matrices
+
+As explained before, `epd.entity` objects store a copy of the EPD tables for a specific entity. Hence, the data format are the same than in the PostgreSQL database, which is very convenient for database management but not so much for data visualization and interpretation. The function `entity_to_matrices` transform several tables in the `epd.entity` objects and transform then in matrices that are more interpretable for normal use. For instance, ages are returned in the form of `samples`x`chronologies` matrix, while biological samples are transformed into `samples`x`taxa` matrices. In order to keep a backup copy of the original data and another copy of the data in the matrices formats the functions return an object of the class `epd.entity.df`. This object inherit all properties of `epd.entity` objects and expand them with new slots: `@countstype`, `@countsprocessing`, `@taxatype`, `@taxaprocessing`, `@samplesdf`, `@agesdf`, `@commdf`, and `@nopodf`.
+
+The four first slots trace information on data modification and standardizations from other functions (see later). The four last store the data in the matrix (or data.frame) format. `@samplesdf` has information on the biological samples id and labels, `@agesdf` stores information on the depth, ages and data quality of the samples, `@commdf` stores taxa names, taxa ids, accepted taxa ids, higher taxa ids, taxagroups, and counts for each taxa, and finally `@nopodf` stores the same information than `@commdf` but for no-biological particles in the samples (e.g., added particles, total sums, etc.)
+
+```{r entity_to_matrices function, R.options=list(max.print=20)}
+epd.1 <- entity_to_matrices(epd.1)
+slotNames(epd.1)
+epd.1@commdf@counts
 ```
 
 
-```{r export functions, eval=F}
-# Export functions ----
-c14.clam <- export_c14(c14)
 
-# Extract functions ----
+```{r standardize functions, eval=F}
+epd.1 <- filter_taxagroups(epd.1, c("DWAR", "HERB", "LIAN", "TRSH", "UPHE", "INUN"))
+epd.1 <- taxa_to_acceptedtaxa(epd.1.int, get_taxonomy_epd(epd.connection))
+epd.1 <- taxa_to_highertaxa(epd.1.int, get_taxonomy_epd(epd.connection))
 
-# Standardize functions ----
+epd.1 <- filter_taxa(epd.1, c("Aesculus", "Aluns", "Betula", "Corpinus", "Salix"), get_taxonomy_epd(epd.connection))
+epd.1 <- counts_to_percentages(epd.1)
+epd.1 <- giesecke_default_chron(epd.1)
+epd.1.int <- interpolate_counts(epd.1, c(1000, 2000, 3000), method="linear")
+intervals_counts(epd.1, c(0,1000,2000,3000), c(999, 1999, 2999, 3999))
+blois_quality(epd.1)
 
 # Tabulate functions ----
+table_by_taxa_age(epd.1, as.character(c(1:10)), "Pinus")
 
 # Plotting functions ----
+plot_diagram(epd.1)
 
 
-# Section 1 - Recalibrate chronologies ------------------------------------------
+entity.list <- list_e(epdConnection, country=c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
+entity.list <- list_e(epdConnection)$e_
+counts.all <- lapply(entity.list, get_entity, epdConnection)
 
-# Site with one chronologies with EXTRA data
-core4Clam(1, epdConnection)
-clam("1")
+counts.po <- lapply(counts.all, filter_taxagroups, c("HERB", "TRSH", "DWAR", "LIAN", "HEMI", "UPHE"))
+counts.gi <- lapply(counts.po, giesecke_default_chron)
+counts.un <- remove_restricted(counts.gi)
+counts.wa <- remove_wo_ages(counts.un)
 
-# Site with two chronologies, one with EXTRA data
-core4Clam(4, epdConnection)
-clam("4")
-
-entity.list <- listE(epdConnection, country=c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
-entity.list <- listE(epdConnection)$e_
-counts.all <- lapply(entity.list, getAgedCounts, epdConnection)
+# Extract functions ----
+extract_e(epd.1)
 
 
-counts.po <- lapply(counts.all, filterTaxaGroups, c("HERB", "TRSH", "DWAR", "LIAN", "HEMI", "UPHE"))
-counts.gi <- lapply(counts.po, gieseckeDefaultChronology)
-counts.un <- removeRestricted(counts.gi)
-counts.wa <- removeWithoutAges(counts.un)
+percent.wa <- lapply(counts.wa, counts_to_percentage)
+percent.int <- lapply(percent.wa, interpolate_counts, seq(0, 22000, by=1000))
+percent.ran <- lapply(percent.wa, intervals_counts, seq(0, 21000, by=1000), seq(999, 21999, by=1000))
 
-percent.wa <- lapply(counts.wa, trans2Percentages)
-percent.int <- lapply(percent.wa, interpolateCounts, seq(0, 22000, by=1000))
-percent.ran <- lapply(percent.wa, intervalsCounts, seq(0, 21000, by=1000), seq(999, 21999, by=1000))
+epd.taxonomy <- get_taxonomy_epd(epdConnection)
 
-epd.taxonomy <- getTaxonomyEPD(epdConnection)
+counts.wa.acc <- lapply(counts.wa, taxa_to_acceptedtaxa, epd.taxonomy)
+percent.wa.acc <- lapply(percent.wa, taxa_to_acceptedtaxa, epd.taxonomy)
+percent.int.acc <- lapply(percent.int, taxa_to_acceptedtaxa, epd.taxonomy)
 
-counts.wa.acc <- lapply(counts.wa, taxa2AcceptedTaxa, epd.taxonomy)
-percent.wa.acc <- lapply(percent.wa, taxa2AcceptedTaxa, epd.taxonomy)
-percent.int.acc <- lapply(percent.int, taxa2AcceptedTaxa, epd.taxonomy)
+# counts.wa.hig <- lapply(counts.wa, taxa_to_highertaxa, epd.taxonomy)
+# percent.wa.hig <- lapply(percent.wa, taxa_to_highertaxa, epd.taxonomy)
+# percent.ran.hig <- lapply(percent.ran, taxa_to_highertaxa, epd.taxonomy)
+# percent.int.hig <- lapply(percent.int, taxa_to_highertaxa, epd.taxonomy)
 
-# counts.wa.hig <- lapply(counts.wa, taxa2HigherTaxa, epd.taxonomy)
-# percent.wa.hig <- lapply(percent.wa, taxa2HigherTaxa, epd.taxonomy)
-# percent.ran.hig <- lapply(percent.ran, taxa2HigherTaxa, epd.taxonomy)
-# percent.int.hig <- lapply(percent.int, taxa2HigherTaxa, epd.taxonomy)
+counts.wa.uni <- unify_taxonomy(counts.wa.acc, epd.taxonomy)
+percent.wa.uni <- unify_taxonomy(percent.wa.acc, epd.taxonomy)
+percent.int.uni <- unify_taxonomy(percent.int.acc, epd.taxonomy)
 
-counts.wa.uni <- unifyTaxonomy(counts.wa.acc, epd.taxonomy)
-percent.wa.uni <- unifyTaxonomy(percent.wa.acc, epd.taxonomy)
-percent.int.uni <- unifyTaxonomy(percent.int.acc, epd.taxonomy)
+
+
+
+  
+e <- list_e(epd.connection)$e_
+entity.list <- lapply(e[1:100], get_entity, epd.connection)
+vapply(entity.list, check_default_chron, FUN.VALUE=logical(1))
+vapply(entity.list, check_restriction, FUN.VALUE=logical(1))
+
+remove_restricted(entity.list)
+remove_wo_ages(entity.list)
+
+lapply(entity.list, extract_e)
+lapply(entity.list, giesecke_default_chron)
+
+lapply(entity.list, entity_to_matrices)
+
+lapply(entity.list, filter_taxa_groups, c("DWAR", "HERB", "LIAN", "TRSH", "UPHE", "INUN"))
+
+lapply(entity.list, filter_taxa, c("Pinus","Quercus","Urticaceae"), get_taxonomy_epd(epd.connection))
+lapply(entity.list, taxa_to_acceptedtaxa, get_taxonomy_epd(epd.connection))
+lapply(entity.list, taxa_to_highertaxa, get_taxonomy_epd(epd.connection))
+lapply(entity.list, counts_to_percentages)
+lapply(entity.list, interpolate_counts, c(1000, 2000, 3000))
+lapply(entity.list, intervals_counts, c(1000, 2000, 3000), c(2000, 3000, 4000))
+unify_taxonomy(entity.list, get_taxonomy_epd(epd.connection))
+lapply(entity.list, table_by_taxa_age, c("Quercus"), c("1000", "2000"))
+map_taxa_age(entity.list, "Pinus", "1000")
+lapply(entity.list, blois_quality)
+
 
 
 # Journals:
 #   Quartenary International
 
 Cedrus <- c("Cedrus", "Cedrus atlantica", "Cedrus cf. C. atlantica", "Cedrus-type", "cf. Cedrus")
-
-
-
-
 
 mapTaxaAge(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse=T, pollen_thres=0)(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse=T, pollen_thres=0)
 mapTaxaAge(percent.unr.ranges, Cedrus, "5500-6500", pres_abse=F, legend_range=c(0,5))
@@ -254,39 +379,11 @@ mapTaxaAge(percent.unr.ranges, Pinus, "5500-6500", pres_abse=F)
 mapTaxaAge(percent.unr.ranges, Pinus, "20000-22000", pres_abse=F)
 
 
-
-
 mapTaxaAge(percent.int.uni, "Cedrus", "0", pres_abse=F, zoom_coords=c(-20, 180, 30, 80), points_pch=21,
            points_colour=c("red", "red"), points_fill=c("red", "red"),
            points_range_size=c(1, 1), map_title="EPD sites",
            legend_range=NULL, legend_title=NULL, napoints_size=1, napoints_pch=21, 
            napoints_colour="red", napoints_fill="red", countries_fill_colour="grey80", countries_border_colour="grey90")
-
-
-
-entity.list <- sapply(counts.wa.uni, extractE)
-datation.co.wa.uni <- lapply(entity.list, getDatation, epdConnection)
-
-entity.list <- sapply(percent.wa.uni, extractE)
-datation.pe.wa.uni <- lapply(entity.list, getDatation, epdConnection)
-
-entity.list <- sapply(percent.ran.uni, extractE)
-datation.pe.ran.uni <- lapply(entity.list, getDatation, epdConnection)
-
-entity.list <- sapply(percent.int.uni, extractE)
-datation.pe.int.uni <- lapply(entity.list, getDatation, epdConnection)
-
-
-# Aquí me quedo con el problema de que hay algunos e_ que tienen NA en las fechas y casca a la hora de calcular el indice de calidad
-for(ii in 1:length(entity.list)){
-  for(ii in 44){
-    counts.wa.uni.q <- mapply(qualityIndex, counts.wa.uni[ii], datation.co.wa.uni[ii])
-  }
-  percent.wa.uni.q <- mapply(qualityIndex, percent.wa.uni, datation.pe.wa.uni)
-  percent.ran.uni.q <- mapply(qualityIndex, percent.ran.uni, datation.pe.ran.uni)
-  percent.int.uni.q <- mapply(qualityIndex, percent.int.uni, datation.pe.int.uni)
-  
-  
 
 ```
 

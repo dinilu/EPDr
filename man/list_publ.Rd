@@ -51,17 +51,16 @@ countries, administrative regions, sites, or a geographical region
 defined by geographical coordinates (longitude and latitude) of its corners.
 }
 \examples{
-# Not run
-# library(EPDr)
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                                  user = "epdr", password = "epdrpw")
-# list_publ(epd.connection)
-# list_publ(epd.connection, e_ = 1)
-# list_publ(epd.connection, site = "1")
-# list_publ(epd.connection, country = "ESP", site = 1)
-# list_publ(epd.connection, country = "Spain", region = "01")
-# str(list_publ(epd.connection))
-# list_publ(epd.connection, coords = c(2.5, 22, 45.5, 53.5))
-# str(list_publ(epd.connection, coords = c(2.5, 22, 45.5, 53.5)))
-
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                                 user = "epdr", password = "epdrpw")
+list_publ(epd.connection)
+list_publ(epd.connection, e_ = 1)
+list_publ(epd.connection, site = "1")
+list_publ(epd.connection, country = "ESP", site = 1)
+list_publ(epd.connection, country = "Spain", region = "01")
+str(list_publ(epd.connection))
+list_publ(epd.connection, coords = c(2.5, 22, 45.5, 53.5))
+str(list_publ(epd.connection, coords = c(2.5, 22, 45.5, 53.5)))
+}
 }

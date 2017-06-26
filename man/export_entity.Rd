@@ -6,15 +6,14 @@
 \alias{export_entity,character,epd.entity-method}
 \title{Reshape epd.entity objects to CLAM or BACON format}
 \usage{
-export_entity(format, x, ..., chronology = NULL,
+export_entity(format, x, chronology = NULL, incl_chron_not_in_c14 = NULL,
+  incl_c14_not_in_chron = NULL, use_c14_conf_age = NULL,
+  use_c14_conf_depth = NULL, include_depths = TRUE, incl_events = NULL)
+
+\S4method{export_entity}{character,epd.entity}(format, x, chronology = NULL,
   incl_chron_not_in_c14 = NULL, incl_c14_not_in_chron = NULL,
   use_c14_conf_age = NULL, use_c14_conf_depth = NULL,
-  include_depths = TRUE, incl_envents = NULL)
-
-\S4method{export_entity}{character,epd.entity}(format, x, ...,
-  chronology = NULL, incl_chron_not_in_c14 = NULL,
-  incl_c14_not_in_chron = NULL, use_c14_conf_age = NULL,
-  use_c14_conf_depth = NULL, include_depths = TRUE, incl_envents = NULL)
+  include_depths = TRUE, incl_events = NULL)
 }
 \arguments{
 \item{format}{character Character string indicating whether to export to "clam" 
@@ -23,8 +22,6 @@ or to "bacon" format.}
 \item{x}{epd.entity \code{\link[EPDr]{epd.entity}} or 
 \code{\link[EPDr]{epd.entity.df}} objects from which all information 
 will be extracted to compose the clam or bacon table and file.}
-
-\item{...}{Not used with current methods.}
 
 \item{chronology}{numeric Number indicating the chronology from which 
 to extract the agebasis for the "clam" or "bacon" file. If 
@@ -56,7 +53,7 @@ samples should be exported too. The default value is TRUE. This is
 helpful because running CLAM or BACON with depths calculate the 
 calibrated ages for those samples in the same step.}
 
-\item{incl_envents}{logical Logical value indicating whether events information 
+\item{incl_events}{logical Logical value indicating whether events information 
 should be included (TRUE), or not (FALSE).}
 }
 \value{
@@ -98,16 +95,16 @@ it should proceed regarding some conflicts in the data between C14 data
 and agebasis tables.
 }
 \examples{
-# Not run
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                               user = "epdr", password = "epdrpw")
-# epd.400 <- get_entity(400, epd.connection)
-# export_entity("clam", epd.400) # Also check new folders in your working directory
-# export_entity("bacon", epd.400) # Also check new folders in your working directory
-# epd.1 <- get_entity(1, epd.connection)
-# export_entity("clam", epd.1)
-# export_entity("bacon", epd.1)
-
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                              user = "epdr", password = "epdrpw")
+epd.400 <- get_entity(400, epd.connection)
+export_entity("clam", epd.400) # Also check new folders in your working directory
+export_entity("bacon", epd.400) # Also check new folders in your working directory
+epd.1 <- get_entity(1, epd.connection)
+export_entity("clam", epd.1)
+export_entity("bacon", epd.1)
+}
 }
 \references{
 \url{http://www.chrono.qub.ac.uk/blaauw/clam.html}

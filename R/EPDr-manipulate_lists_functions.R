@@ -16,15 +16,16 @@
 #' @export
 #'
 #' @examples
-#' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' #                                  user="epdr", password="epdrpw")
-#' # e.list <- list_e(epd.connection, country=c("Spain"))
-#' # e.list <- e.list$e_
-#' # epd.spain <- lapply(e.list, get_entity, epd.connection)
-#' # epd.spain.un <- remove_restricted(epd.spain)
-#' # length(epd.spain)
-#' # length(epd.spain.un)
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                  user="epdr", password="epdrpw")
+#' e.list <- list_e(epd.connection, country=c("Spain"))
+#' e.list <- e.list$e_
+#' epd.spain <- lapply(e.list, get_entity, epd.connection)
+#' epd.spain.un <- remove_restricted(epd.spain)
+#' length(epd.spain)
+#' length(epd.spain.un)
+#' }
 remove_restricted <- function(list){
   index <- which(!vapply(list, check_restriction, FUN.VALUE = logical(1)))
   list <- list[index]
@@ -51,15 +52,16 @@ remove_restricted <- function(list){
 #' @export
 #' 
 #' @examples
-#' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' #                                user="epdr", password="epdrpw")
-#' # e.list <- listE(epd.connection, country=c("Spain"))
-#' # e.list <- e.list$e_
-#' # spain.agedcounts <- lapply(e.list, getAgedCounts, epd.connection)
-#' # spain.agedcounts.wo <- remove_wo_ages(spain.agedcounts)
-#' # length(spain.agedcounts)
-#' # length(spain.agedcounts.wo)
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                user="epdr", password="epdrpw")
+#' e.list <- listE(epd.connection, country=c("Spain"))
+#' e.list <- e.list$e_
+#' spain.agedcounts <- lapply(e.list, getAgedCounts, epd.connection)
+#' spain.agedcounts.wo <- remove_wo_ages(spain.agedcounts)
+#' length(spain.agedcounts)
+#' length(spain.agedcounts.wo)
+#' }
 remove_wo_ages <- function(list){
   index <- which(vapply(list, check_default_chron, FUN.VALUE = logical(1)))
   list <- list[index]
@@ -87,15 +89,16 @@ remove_wo_ages <- function(list){
 #' @export
 #'
 #' @examples
-#' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' #                                user="epdr", password="epdrpw")
-#' # e.list <- listE(epd.connection, country=c("Spain"))
-#' # e.list <- e.list$e_
-#' # spain.agedcounts <- lapply(e.list, getAgedCounts, epd.connection)
-#' # spain.agedcounts.ut <- unify_taxonomy(spain.agedcounts, get_taxonomy_epd(epd.connection))
-#' # colnames(spain.agedcounts[[1]]@counts@counts)
-#' # colnames(spain.agedcounts.ut[[1]]@counts@counts)
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                user="epdr", password="epdrpw")
+#' e.list <- listE(epd.connection, country=c("Spain"))
+#' e.list <- e.list$e_
+#' spain.agedcounts <- lapply(e.list, getAgedCounts, epd.connection)
+#' spain.agedcounts.ut <- unify_taxonomy(spain.agedcounts, get_taxonomy_epd(epd.connection))
+#' colnames(spain.agedcounts[[1]]@counts@counts)
+#' colnames(spain.agedcounts.ut[[1]]@counts@counts)
+#' }
 unify_taxonomy <- function(list, epd.taxonomy){
   if (!all(lapply(list, class) %in% "epd.entity.df")){
     stop("'list' has to be a list of 'epd.entity.df' objects.

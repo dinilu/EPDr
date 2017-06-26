@@ -137,11 +137,10 @@ variable groups.
 }
 
 \examples{
-# Not run
-# library(EPDr)
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                                  user = "epdr", password = "epdrpw")
-# chron.400 <- get_samples(400, epd.connection)
-# chron.400
-
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                                 user = "epdr", password = "epdrpw")
+chron.400 <- get_samples(400, epd.connection)
+chron.400
+}
 }

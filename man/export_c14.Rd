@@ -35,16 +35,17 @@ object, and modifies it to fit into a new table that complies with CLAM
 or BACON format.
 }
 \examples{
-# Not run
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                               user = "epdr", password = "epdrpw")
-# epd.400 <- get_entity(400, epd.connection)
-# epd.400.c14 <- export_c14("clam", epd.400)
-# epd.400.ageb <- export_agebasis("clam", epd.400)
-# rbind(epd.400.c14, epd.400.ageb)
-# epd.400.c14 <- export_c14("bacon", epd.400)
-# epd.400.ageb <- export_agebasis("bacon", epd.400)
-# rbind(epd.400.c14, epd.400.ageb)
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                              user = "epdr", password = "epdrpw")
+epd.400 <- get_entity(400, epd.connection)
+epd.400.c14 <- export_c14("clam", epd.400)
+epd.400.ageb <- export_agebasis("clam", epd.400)
+rbind(epd.400.c14, epd.400.ageb)
+epd.400.c14 <- export_c14("bacon", epd.400)
+epd.400.ageb <- export_agebasis("bacon", epd.400)
+rbind(epd.400.c14, epd.400.ageb)
+}
 }
 \references{
 \url{http://www.chrono.qub.ac.uk/blaauw/clam.html}

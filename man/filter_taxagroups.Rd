@@ -35,10 +35,12 @@ shrubs (TRSH) or with algae (ALGA). If \code{x} is an
 \code{\link[EPDr]{entity_to_matrices}}.
 }
 \examples{
-# epd.connection <- connect_to_epd(host="localhost", database="epd",
-#                                  user="epdr", password="epdrpw")
-# epd.1 <- get_entity(1, epd.connection)
-# epd.1.trsh <- filter_taxagroups(epd.1, "TRSH")
-# str(epd.1@commdf@counts)
-# str(epd.1.trsh@commdf@counts)
+\dontrun{
+epd.connection <- connect_to_epd(host="localhost", database="epd",
+                                 user="epdr", password="epdrpw")
+epd.1 <- get_entity(1, epd.connection)
+epd.1.trsh <- filter_taxagroups(epd.1, "TRSH")
+str(epd.1@commdf@counts)
+str(epd.1.trsh@commdf@counts)
+}
 }

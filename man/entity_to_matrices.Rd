@@ -37,9 +37,10 @@ information to track changes made from standardization and modification
 functions (e.g., \code{\link[EPDr]{counts_to_percentage}}.
 }
 \examples{
-# epd.connection <- connect_to_epd(host="localhost", database="epd",
-# user="epdr", password="epdrpw")
-# epd.1 <- get_entity(1, epd.connection)
-# epd.1 <- entity_to_matrices(epd.1)
-
+\dontrun{
+epd.connection <- connect_to_epd(host="localhost", database="epd",
+                                 user="epdr", password="epdrpw")
+epd.1 <- get_entity(1, epd.connection)
+epd.1 <- entity_to_matrices(epd.1)
+}
 }

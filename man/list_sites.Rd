@@ -52,15 +52,14 @@ regions, or a geographical region defined by geographical coordinates
 (longitude and latitude) of its corners.
 }
 \examples{
-# Not run
-# library(EPDr)
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                                  user = "epdr", password = "epdrpw")
-# list_sites(epd.connection)
-# list_sites(epd.connection, "ESP")
-# list_sites(epd.connection, "Spain", "01")
-# summary(list_sites(epd.connection))
-# list_sites(epd.connection, coords = c(2.5, 22, 45.5, 53.5))
-# summary(list_sites(epd.connection, coords = c(2.5, 22, 45.5, 53.5)))
-
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                                 user = "epdr", password = "epdrpw")
+list_sites(epd.connection)
+list_sites(epd.connection, "ESP")
+list_sites(epd.connection, "Spain", "01")
+summary(list_sites(epd.connection))
+list_sites(epd.connection, coords = c(2.5, 22, 45.5, 53.5))
+summary(list_sites(epd.connection, coords = c(2.5, 22, 45.5, 53.5)))
+}
 }

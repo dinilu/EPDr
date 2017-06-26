@@ -25,10 +25,9 @@ is only interested in Algae. Because the function return the whole table,
 it only requires a valid connection to the database server.
 }
 \examples{
-# Not run
-# library(EPDr)
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                                  user = "epdr", password = "epdrpw")
-# list_taxagroups(epd.connection)
-
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                                 user = "epdr", password = "epdrpw")
+list_taxagroups(epd.connection)
+}
 }

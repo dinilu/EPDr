@@ -37,13 +37,12 @@ with a valid connection to the database. The list can be restricted
 to specific countries using parameter \code{country}.
 }
 \examples{
-# Not run
-# library(EPDr)
-# epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#                               user = "epdr", password = "epdrpw")
-# list_regions(epd.connection)
-# list_regions(epd.connection, "ESP")
-# list_regions(epd.connection, "Spain")
-# list_regions(epd.connection, c("Spain", "France", "Germany"))
-
+\dontrun{
+epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+                              user = "epdr", password = "epdrpw")
+list_regions(epd.connection)
+list_regions(epd.connection, "ESP")
+list_regions(epd.connection, "Spain")
+list_regions(epd.connection, c("Spain", "France", "Germany"))
+}
 }

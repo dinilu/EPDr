@@ -28,7 +28,6 @@
 #' 
 #' @param x epd.entity \code{\link[EPDr]{epd.entity.df}} or a
 #' \code{\link[EPDr]{epd.entity}} object.
-#' @param ... Not in use with current methods.
 #' @param chron numeric Chronology number to look for samples and control points ages.
 #' This value become the default chronology in the new object. If not 
 #' specified the function check the default chronology in  
@@ -56,25 +55,26 @@
 #' Archaeobotany, 23, 75-86.
 #'
 #' @examples
-#' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' # user="epdr", password="epdrpw")
-#' # epd.1 <- get_entity(1, epd.connection)
-#' # epd.1.qi <- blois_quality(epd.1)
-#' # epd.1.qi@agesdf@dataquality
-#' # 
-#' # epd.1.ran <- intervals_counts(epd.1, tmin = seq(0, 21000, by = 1000),
-#' # tmax = seq(999, 21999, by = 1000))
-#' # epd.1.ran.qi <- blois_quality(epd.1.ran)
-#' # epd.1.ran.qi@agesdf@dataquality
-#' # 
-#' # t <- c(seq(0, 21000, by = 500))
-#' # epd.1.int <- interpolate_counts(epd.1, t)
-#' # epd.1.int.qi <- blois_quality(epd.1.int)
-#' # epd.1.int.qi@agesdf@dataquality
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                  user="epdr", password="epdrpw")
+#' epd.1 <- get_entity(1, epd.connection)
+#' epd.1.qi <- blois_quality(epd.1)
+#' epd.1.qi@agesdf@dataquality
+#' 
+#' epd.1.ran <- intervals_counts(epd.1, tmin = seq(0, 21000, by = 1000),
+#'                               tmax = seq(999, 21999, by = 1000))
+#' epd.1.ran.qi <- blois_quality(epd.1.ran)
+#' epd.1.ran.qi@agesdf@dataquality
+#' 
+#' t <- c(seq(0, 21000, by = 500))
+#' epd.1.int <- interpolate_counts(epd.1, t)
+#' epd.1.int.qi <- blois_quality(epd.1.int)
+#' epd.1.int.qi@agesdf@dataquality
+#' }
 #' @rdname blois_quality
 #' @exportMethod blois_quality
 setGeneric("blois_quality", function(x,
-                                     ...,
                                      chron = NULL,
                                      max_sample_dist = 2000,
                                      max_control_dist = 5000){
@@ -83,7 +83,7 @@ setGeneric("blois_quality", function(x,
 
 #' @rdname blois_quality
 setMethod("blois_quality", signature(x = "epd.entity.df"),
-          function(x, ...){
+          function(x, chron, max_sample_dist, max_control_dist){
             if (is.null(chron)){
               if (!check_default_chron(x)){
                 stop(paste0("The 'x' object has no sample ages ",
@@ -134,9 +134,9 @@ setMethod("blois_quality", signature(x = "epd.entity.df"),
 
 #' @rdname blois_quality
 setMethod("blois_quality", signature(x = "epd.entity"),
-          function(x, ...){
+          function(x, chron, max_sample_dist, max_control_dist){
             x <- entity_to_matrices(x)
-            x <- blois_quality(x, ...)
+            x <- blois_quality(x, chron, max_sample_dist, max_control_dist)
             return(x)
           })
 
@@ -156,12 +156,14 @@ setMethod("blois_quality", signature(x = "epd.entity"),
 #' @return logical value indicating whether the data are restricted (TRUE) or
 #' unrestricted (FALSE).
 #' @examples
-#' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' # user="epdr", password="epdrpw")
-#' # epd.1 <- get_entity(1, epd.connection)
-#' # check_restriction(epd.1)
-#' # epd.1046 <- get_entity(1046, epd.connection)
-#' # check_restriction(epd.1046)
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                  user="epdr", password="epdrpw")
+#' epd.1 <- get_entity(1, epd.connection)
+#' check_restriction(epd.1)
+#' epd.1046 <- get_entity(1046, epd.connection)
+#' check_restriction(epd.1046)
+#' }
 #' @rdname check_restriction
 #' @exportMethod check_restriction
 setGeneric("check_restriction", function(x){
@@ -193,10 +195,12 @@ setMethod("check_restriction", signature(x = "epd.entity"), function(x){
 #' @return Logical value indicating whether the object has a default 
 #' chronology (TRUE) or not (FALSE).
 #' @examples
-#' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' #                                user="epdr", password="epdrpw")
-#' # epd.1 <- get_entity(1, epd.connection)
-#' # check_default_chron(epd.1)
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                  user="epdr", password="epdrpw")
+#' epd.1 <- get_entity(1, epd.connection)
+#' check_default_chron(epd.1)
+#' }
 #' @rdname check_default_chron
 #' @exportMethod check_default_chron
 setGeneric("check_default_chron", function(x){
@@ -247,7 +251,6 @@ setMethod("check_default_chron", signature(x = "epd.entity"), function(x){
 #' numerical zero and not NA. This is relevant to discriminate sites and
 #' times combinations where pollen counts are not available (NA) and not
 #' numerically zero.
-#' @param ... Useless with current methods.
 #' 
 #' @return The function returns a \code{\link[EPDr]{epd.entity.df}} object, 
 #' which is a modified version of \code{x} (or \code{entity_to_matrices(x)}
@@ -255,26 +258,27 @@ setMethod("check_default_chron", signature(x = "epd.entity"), function(x){
 #' values in @@counts slot represent percentages instead of raw counts.
 #' 
 #' @examples
-#' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' # user="epdr", password="epdrpw")
-#' # epd.1 <- get_entity(1, epd.connection)
-#' # epd.1 <- entity_to_matrices(epd.1)
-#' # epd.1 <- filter_taxagroups(epd.1, c("DWAR", "HERB", "LIAN",
-#' # "TRSH", "UPHE", "INUN")) ## All pollen taxa groups
-#' # epd.1.percent <- counts_to_percentage(epd.1)
-#' # head(epd.1.percent@commdf@counts)
-#' # head(epd.1@commdf@counts)
-#'
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                  user="epdr", password="epdrpw")
+#' epd.1 <- get_entity(1, epd.connection)
+#' epd.1 <- entity_to_matrices(epd.1)
+#' epd.1 <- filter_taxagroups(epd.1, c("DWAR", "HERB", "LIAN", "TRSH",
+#'                            "UPHE", "INUN")) ## All pollen taxa groups
+#' epd.1.percent <- counts_to_percentage(epd.1)
+#' head(epd.1.percent@commdf@counts)
+#' head(epd.1@commdf@counts)
+#' }
 #' @rdname counts_to_percentage
 #' @exportMethod counts_to_percentage
-setGeneric("counts_to_percentage", function(x, ..., offset = 0.0001){
+setGeneric("counts_to_percentage", function(x, offset = 0.0001){
   standardGeneric("counts_to_percentage")
 })
 
 
 #' @rdname counts_to_percentage
 setMethod("counts_to_percentage", signature(x = "epd.entity.df"),
-          function(x, ...){
+          function(x, offset){
             counts <- x@commdf@counts
             countstype <- factor("Percentages",
                                  levels = c("Counts", "Percentages"))
@@ -287,9 +291,9 @@ setMethod("counts_to_percentage", signature(x = "epd.entity.df"),
           })
 
 #' @rdname counts_to_percentage
-setMethod("counts_to_percentage", signature(x = "epd.entity"), function(x, ...){
+setMethod("counts_to_percentage", signature(x = "epd.entity"), function(x, offset){
   x <- entity_to_matrices(x)
-  x <- counts_to_percentage(x, ...)
+  x <- counts_to_percentage(x, offset)
   return(x)
 })
 
@@ -321,11 +325,12 @@ setMethod("counts_to_percentage", signature(x = "epd.entity"), function(x, ...){
 #' reformated into data matrices instead of the native EPD format.
 #' 
 #' @examples
-#' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' # user="epdr", password="epdrpw")
-#' # epd.1 <- get_entity(1, epd.connection)
-#' # epd.1 <- entity_to_matrices(epd.1)
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                  user="epdr", password="epdrpw")
+#' epd.1 <- get_entity(1, epd.connection)
+#' epd.1 <- entity_to_matrices(epd.1)
+#' }
 #' @rdname entity_to_matrices
 #' @exportMethod entity_to_matrices
 setGeneric("entity_to_matrices", function(x){
@@ -461,17 +466,18 @@ setMethod("entity_to_matrices", signature(x = "epd.entity"), function(x){
 #' \code{@@commdf@@counts} slot.
 #' 
 #' @examples
-#' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' #                                  user="epdr", password="epdrpw")
-#' # epd.1 <- get_entity(1, epd.connection)
-#' # epd.1@commdf@taxanames
-#' # colnames(epd.1@commdf@counts)
-#' # epd.1.ft <- filter_taxa(epd.1, c(epd.1@commdf@taxa_names, "prueba"),
-#' #                         get_taxonomy_epd(epd.connection))
-#' # colnames(epd.1.ft@commdf@counts)
-#' # epd.1.ft@commdf@taxanames
-#' # head(epd.1.ft@commdf@counts)
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                  user="epdr", password="epdrpw")
+#' epd.1 <- get_entity(1, epd.connection)
+#' epd.1@commdf@taxanames
+#' colnames(epd.1@commdf@counts)
+#' epd.1.ft <- filter_taxa(epd.1, c(epd.1@commdf@taxa_names, "prueba"),
+#'                         get_taxonomy_epd(epd.connection))
+#' colnames(epd.1.ft@commdf@counts)
+#' epd.1.ft@commdf@taxanames
+#' head(epd.1.ft@commdf@counts)
+#' }
 #' @rdname filter_taxa
 #' @exportMethod filter_taxa
 setGeneric("filter_taxa", function(x, taxa, epd.taxonomy){
@@ -547,12 +553,14 @@ setMethod("filter_taxa", signature(x = "epd.entity", taxa = "character",
 #' only for taxa belonging to the specified taxa groups.
 #' 
 #' @examples
-#' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' #                                  user="epdr", password="epdrpw")
-#' # epd.1 <- get_entity(1, epd.connection)
-#' # epd.1.trsh <- filter_taxagroups(epd.1, "TRSH")
-#' # str(epd.1@commdf@counts)
-#' # str(epd.1.trsh@commdf@counts)
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                  user="epdr", password="epdrpw")
+#' epd.1 <- get_entity(1, epd.connection)
+#' epd.1.trsh <- filter_taxagroups(epd.1, "TRSH")
+#' str(epd.1@commdf@counts)
+#' str(epd.1.trsh@commdf@counts)
+#' }
 #' @rdname filter_taxagroups
 #' @exportMethod filter_taxagroups
 setGeneric("filter_taxagroups", function(x, taxagroups){
@@ -617,13 +625,14 @@ setMethod("filter_taxagroups", signature(x = "epd.entity",
 #' Archaeobotany, 23, 75-86.
 #' 
 #' @examples
-#' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' #                                  user="epdr", password="epdrpw")
-#' # epd.1 <- get_entity(1, epd.connection)
-#' # epd.1@defaultchron
-#' # epd.1 <- giesecke_default_chron(epd.1)
-#' # epd.1@defaultchron
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                  user="epdr", password="epdrpw")
+#' epd.1 <- get_entity(1, epd.connection)
+#' epd.1@defaultchron
+#' epd.1 <- giesecke_default_chron(epd.1)
+#' epd.1@defaultchron
+#' }
 #' @rdname giesecke_default_chron
 #' @exportMethod giesecke_default_chron
 setGeneric("giesecke_default_chron", function(x){
@@ -690,37 +699,41 @@ setMethod("giesecke_default_chron",
 #' time periods specified in time and the counts estimated for these periods.
 #' 
 #' @examples
-#' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' #                                  user="epdr", password="epdrpw")
-#' # t <- c(seq(0, 21000, by = 500))
-#' # epd.1 <- get_entity(1, epd.connection)
-#' # epd.1.int <- interpolate_counts(epd.1, t)
-#' #
-#' # epd.3 <- get_entity(3, epd.connection)
-#' # epd.3.int <- interpolate_counts(epd.3, t, method="linear")
-#' # epd.3.int <- interpolate_counts(epd.3, t, method="loess")
-#' # epd.3.int <- interpolate_counts(epd.3, t, method="sspline")
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                  user="epdr", password="epdrpw")
+#' t <- c(seq(0, 21000, by = 500))
+#' epd.1 <- get_entity(1, epd.connection)
+#' epd.1.int <- interpolate_counts(epd.1, t)
+#' 
+#' epd.3 <- get_entity(3, epd.connection)
+#' epd.3.int <- interpolate_counts(epd.3, t, method="linear")
+#' epd.3.int <- interpolate_counts(epd.3, t, method="loess")
+#' epd.3.int <- interpolate_counts(epd.3, t, method="sspline")
+#' }
 #' @rdname interpolate_counts
 #' @exportMethod interpolate_counts
 setGeneric("interpolate_counts", function(x,
-                                          time,
-                                          ...,
-                                          chronology = NULL,
-                                          method = c("linear",
-                                                     "loess",
-                                                     "sspline"),
-                                          rep_negt = TRUE,
-                                          span = 0.25,
-                                          df = min(20,
-                                                   nrow(x@commdf@counts) *
-                                                     0.7)){
+  time,
+  chronology = NULL,
+  method = c("linear",
+             "loess",
+             "sspline"),
+  rep_negt = TRUE,
+  span = 0.25,
+  df = min(20,
+           nrow(x@commdf@counts) *
+             0.7),
+  ...)
+  {
   standardGeneric("interpolate_counts")
 })
 
 #' @rdname interpolate_counts
 setMethod("interpolate_counts", signature(x = "epd.entity.df",
                                           time = "numeric"),
-          function(x, time, ...){
+          function(x, time, chronology, method, rep_negt, span,
+                   df, ...){
             if (is.null(chronology)){
               chronology <- x@defaultchron
             }
@@ -839,9 +852,11 @@ setMethod("interpolate_counts", signature(x = "epd.entity.df",
 
 #' @rdname interpolate_counts
 setMethod("interpolate_counts", signature(x = "epd.entity", time = "numeric"),
-          function(x, time, ...){
+          function(x, time, chronology, method, rep_negt, span,
+                   df, ...){
             x <- entity_to_matrices(x)
-            x <- interpolate_counts(x, time, ...)
+            x <- interpolate_counts(x, time, chronology, method, rep_negt,
+                                    span, df, ...)
             return(x)
           })
 
@@ -881,17 +896,18 @@ setMethod("interpolate_counts", signature(x = "epd.entity", time = "numeric"),
 #' to the time intervarls specified and the counts estimated for these periods.
 #' 
 #' @examples
-#' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' #                                  user="epdr", password="epdrpw")
-#' # epd.1 <- get_entity(1, epd.connection)
-#' # epd.1.int <- intervals_counts(epd.1, tmin = seq(0, 21000, by = 1000),
-#' #                               tmax = seq(999, 21999, by = 1000))
-#' #
-#' # epd.3 <- get_entity(3, epd.connection)
-#' # epd.3.int <- intervals_counts(epd.3, tmin = seq(0, 21000, by = 1000),
-#' #                               tmax = seq(999, 21999, by = 1000))
-#' # epd.3.int <- intervals_counts(epd.3, tmin = seq(0, 21000, by = 1000),
-#' #                               tmax = seq(999, 21999, by = 1000), 2)
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                  user="epdr", password="epdrpw")
+#' epd.1 <- get_entity(1, epd.connection)
+#' epd.1.int <- intervals_counts(epd.1, tmin = seq(0, 21000, by = 1000),
+#'                               tmax = seq(999, 21999, by = 1000))
+#' epd.3 <- get_entity(3, epd.connection)
+#' epd.3.int <- intervals_counts(epd.3, tmin = seq(0, 21000, by = 1000),
+#'                               tmax = seq(999, 21999, by = 1000))
+#' epd.3.int <- intervals_counts(epd.3, tmin = seq(0, 21000, by = 1000),
+#'                               tmax = seq(999, 21999, by = 1000), 2)
+#' }
 #' @rdname intervals_counts
 #' @exportMethod intervals_counts
 setGeneric("intervals_counts", function(x, tmin, tmax, ...,
@@ -1038,21 +1054,21 @@ setMethod("intervals_counts", signature(x = "epd.entity",
 #' \item{"taxa_label"}{The taxa that has been counted.}
 #' }
 #' @examples
-#' # Not run
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                                user = "epdr", password = "epdrpw")
-#' # epd.1 <- get_entity(1, epd.connection)
-#' # epd.1 <- filter_taxagroups(epd.1, c("HERB", "TRSH", "DWAR",
-#' #                                       "LIAN", "HEMI", "UPHE"))
-#' # epd.1 <- giesecke_default_chron(epd.1)
-#' # 
-#' # epd.1 <- interpolate_counts(epd.1, seq(0, 22000, by = 1000))
-#' # epd.taxonomy <- getTaxonomyEPD(epd.connection)
-#' # epd.1 <- taxa_to_acceptedtaxa(epd.1, epd.taxonomy)
-#' # 
-#' # table_by_taxa_age(epd.1, "Cedrus", 
-#' #                   as.character(seq(0, 21000, by=1000)))
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                                user = "epdr", password = "epdrpw")
+#' epd.1 <- get_entity(1, epd.connection)
+#' epd.1 <- filter_taxagroups(epd.1, c("HERB", "TRSH", "DWAR",
+#'                                       "LIAN", "HEMI", "UPHE"))
+#' epd.1 <- giesecke_default_chron(epd.1)
 #' 
+#' epd.1 <- interpolate_counts(epd.1, seq(0, 22000, by = 1000))
+#' epd.taxonomy <- getTaxonomyEPD(epd.connection)
+#' epd.1 <- taxa_to_acceptedtaxa(epd.1, epd.taxonomy)
+#' 
+#' table_by_taxa_age(epd.1, "Cedrus", 
+#'                   as.character(seq(0, 21000, by=1000)))
+#' }
 #' @rdname table_by_taxa_age
 #' @exportMethod table_by_taxa_age
 setGeneric("table_by_taxa_age", function(x, taxa, sample_label){
@@ -1120,16 +1136,17 @@ setMethod("table_by_taxa_age", signature(x = "epd.entity",
 #' @return \code{\link[EPDr]{epd.entity.df}} object with new taxa names.
 #' 
 #' @examples
-#' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' #                                  user="epdr", password="epdrpw")
-#' # epd.1 <- get_entity(1, epd.connection)
-#' # epd.1 <- entity_to_matrices(epd.1)
-#' # epd.1@commdf@taxanames
-#' # colnames(epd.1@commdf@counts)
-#' # epd.1.acc <- taxa_to_acceptedtaxa(epd.1, get_taxonomy_epd(epd.connection))
-#' # epd.1.acc@commdf@taxanames
-#' # colnames(epd.1.acc@commdf@counts)
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                  user="epdr", password="epdrpw")
+#' epd.1 <- get_entity(1, epd.connection)
+#' epd.1 <- entity_to_matrices(epd.1)
+#' epd.1@commdf@taxanames
+#' colnames(epd.1@commdf@counts)
+#' epd.1.acc <- taxa_to_acceptedtaxa(epd.1, get_taxonomy_epd(epd.connection))
+#' epd.1.acc@commdf@taxanames
+#' colnames(epd.1.acc@commdf@counts)
+#' }
 #' @rdname taxa_to_acceptedtaxa
 #' @exportMethod taxa_to_acceptedtaxa
 setGeneric("taxa_to_acceptedtaxa", function(x, epd.taxonomy){
@@ -1212,17 +1229,17 @@ setMethod("taxa_to_acceptedtaxa", signature(x = "epd.entity",
 #' taxa names.
 #' 
 #' @examples
-#' # epd.connection <- connect_to_epd(host="localhost", database="epd",
-#' #                                  user="epdr", password="epdrpw")
-#' # epd.1 <- get_entity(1, epd.connection)
-#' # epd.1 <- entity_to_matrices(epd.1)
-#' # epd.1@commdf@taxanames
-#' # colnames(epd.1@commdf@counts)
-#' # epd.1.hn <- taxa_to_highertaxa(epd.1, get_taxonomy_epd(epd.connection))
-#' # epd.1.hn@commdf@taxanames
-#' # colnames(epd.1.hn@commdf@counts)
-#' 
-#' 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                  user="epdr", password="epdrpw")
+#' epd.1 <- get_entity(1, epd.connection)
+#' epd.1 <- entity_to_matrices(epd.1)
+#' epd.1@commdf@taxanames
+#' colnames(epd.1@commdf@counts)
+#' epd.1.hn <- taxa_to_highertaxa(epd.1, get_taxonomy_epd(epd.connection))
+#' epd.1.hn@commdf@taxanames
+#' colnames(epd.1.hn@commdf@counts)
+#' }
 #' @rdname taxa_to_highertaxa
 #' @exportMethod taxa_to_highertaxa
 setGeneric("taxa_to_highertaxa", function(x, epd.taxonomy){
@@ -1301,7 +1318,9 @@ setMethod("taxa_to_highertaxa", signature(x = "epd.entity",
 #' #'
 #' #' @return TBW
 #' #' @examples
-#' #' # TBW
+#' #' \dontrun{
+#' #' TBW
+#' #' }
 #' #' @rdname TBW
 #' #' @exportMethod TBW
 #' setGeneric("functionname", function(param){

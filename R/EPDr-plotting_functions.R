@@ -71,35 +71,35 @@
 #' @export
 #'
 #' @examples
-#' # Not run
-#' # epd.connection <- connect_to_epd(host = "localhost", database = "epd",
-#' #                                user = "epdr", password = "epdrpw")
-#' # entity.list <- list_e(epd.connection, country = c("Spain","Portugal",
-#' #                                                   "France", "Switzerland",
-#' #                                                   "Austria", "Italy",
-#' #                                                   "Malta", "Algeria",
-#' #                                                   "Tunisia", "Morocco",
-#' #                                                   "Atlantic ocean",
-#' #                                                   "Mediterranean Sea"))
-#' # epd.all <- lapply(entity.list$e_, get_entity, epd.connection)
-#' # epd.all <- lapply(epd.all, filter_taxagroups, c("HERB", "TRSH", "DWAR",
-#' #                                                 "LIAN", "HEMI", "UPHE"))
-#' # epd.all <- lapply(epd.all, giesecke_default_chron)
-#' # epd.all <- remove_restricted(epd.all)
-#' # epd.all <- remove_wo_ages(epd.all)
-#' # 
-#' # epd.int <- lapply(epd.all, interpolate_counts, seq(0, 22000, by = 1000))
-#' # epd.taxonomy <- getTaxonomyEPD(epd.connection)
-#' # epd.int <- lapply(epd.int, taxa_to_acceptedtaxa, epd.taxonomy)
-#' # epd.int <- unify_taxonomy(epd.int, epd.taxonomy)
-#' # 
-#' # epd.int.per <- lapply(epd.int, counts_to_percentage)
-#' # 
-#' # map_taxa_age(epd.int, "Cedrus", "21000", pres_abse = F)
-#' # map_taxa_age(epd.int, "Cedrus", "21000", pres_abse = T)
-#' # map_taxa_age(epd.int.per, "Cedrus", "21000", pres_abse = F)
-#' # map_taxa_age(epd.int.per, "Cedrus", "21000", pres_abse = T)
-#' # 
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host = "localhost", database = "epd",
+#'                                user = "epdr", password = "epdrpw")
+#' entity.list <- list_e(epd.connection, country = c("Spain","Portugal",
+#'                                                   "France", "Switzerland",
+#'                                                   "Austria", "Italy",
+#'                                                   "Malta", "Algeria",
+#'                                                   "Tunisia", "Morocco",
+#'                                                   "Atlantic ocean",
+#'                                                   "Mediterranean Sea"))
+#' epd.all <- lapply(entity.list$e_, get_entity, epd.connection)
+#' epd.all <- lapply(epd.all, filter_taxagroups, c("HERB", "TRSH", "DWAR",
+#'                                                 "LIAN", "HEMI", "UPHE"))
+#' epd.all <- lapply(epd.all, giesecke_default_chron)
+#' epd.all <- remove_restricted(epd.all)
+#' epd.all <- remove_wo_ages(epd.all)
+#' 
+#' epd.int <- lapply(epd.all, interpolate_counts, seq(0, 22000, by = 1000))
+#' epd.taxonomy <- get_taxonomy_epd(epd.connection)
+#' epd.int <- lapply(epd.int, taxa_to_acceptedtaxa, epd.taxonomy)
+#' epd.int <- unify_taxonomy(epd.int, epd.taxonomy)
+#' 
+#' epd.int.per <- lapply(epd.int, counts_to_percentage)
+#' 
+#' map_taxa_age(epd.int, "Cedrus", "21000", pres_abse = F)
+#' map_taxa_age(epd.int, "Cedrus", "21000", pres_abse = T)
+#' map_taxa_age(epd.int.per, "Cedrus", "21000", pres_abse = F)
+#' map_taxa_age(epd.int.per, "Cedrus", "21000", pres_abse = T)
+#' } 
 map_taxa_age <- function(x, taxa, sample_label, pres_abse = FALSE,
                        pollen_thres = NULL, zoom_coords = NULL,
                        points_pch = 21, points_colour = NULL,
@@ -257,122 +257,217 @@ map_taxa_age <- function(x, taxa, sample_label, pres_abse = FALSE,
 
 #' Plot pollen diagram of an entity
 #'
-#' Description TBW
+#' The function takes information on an \code{\link[EPDr]{epd.entity.df}} object
+#' and plot a pollen diagram. The function also return the ggplot object, so the 
+#' object can be stored and afterward combined with other plots.
 #'
-#' Details TBW
+#' @param x epd.entity.df An object of class \code{\link[EPDr]{epd.entity.df}}.
+#' @param chronology numeric A number indicating the chronology to be used in 
+#' the pollen diagram. If not specified the default chronology specified in
+#' \code{x} is used.
+#' @param use_ages logical Indicating whether to plot the pollen diagram
+#' with ages or depth of the samples. 
+#' @param exag_low_values numeric A single value indicating an exageration
+#' factor to improve visibility of low pollen values.
+#' @param color_by_group logical or numeric or character If logical and
+#' TRUE the function plot all taxa from the same taxa groups with the 
+#' same color. If FALSE, each taxon will be represented in a different 
+#' color. If numeric or character \code{color_by_group} should have
+#' length equal number of taxa in \code{x} indicating the color to be used.
+#' @param order_taxa logical or numeric. If logical and TRUE the diagram is
+#' arranged to show taxa from maximum pollen count (at the left) to
+#' minimum pollen count (at the right). If numeric \code{order_taxa} should
+#' be length equal the number of taxa in \code{x} indicating the position in
+#' which to plot each taxon.
+#' @param x_breaks numeric Vector of numbers indicating the break points 
+#' for the age-depth axis.
+#' @param y_breaks numeric Vector of numbers indicating the break points
+#' for the pollen counts axis.
+#' @param legend_position character One element character indicating the
+#' desired position of the legend (\code{"bottom"}, \code{"left"}, 
+#' \code{"right"}, or \code{"upper"}).
+#' @param legend_title character One element character indicating the 
+#' title of the legend.
+#' @param ... Not used with current methods.
 #'
-#' @param x TBW
-#' @param chronology TBW
-#' @param use_ages TBW
-#' @param low_values_exag TBW
-#' @param color_by_group TBW
-#' @param order_taxa TBW
-#' @param ... TBW
-#'
-#' @return TBW
+#' @return The function returns a ggplot object with the pollen diagram. It
+#' can be stored and plotted afterwards.
 #' 
 #' @references \url{http://blarquez.com/684-2/}
 #' 
 #' @examples
-#' # TBW
+#' \dontrun{
+#' epd.connection <- connect_to_epd()
+#' epd.1 <- get_entity(1, epd.connection)
+#' epd.1 <- entity_to_matrices(epd.1)
+#' epd.1 <- filter_taxagroups(epd.1, c("DWAR", "HERB", "TRSH"))
+#' epd.1.per <- counts_to_percentage(epd.1)
+#' plot_diagram(epd.1)
+#' plot_diagram(epd.1.per)
+#' }
 #' @rdname plot_diagram
 #' @exportMethod plot_diagram
-setGeneric("plot_diagram", function(x, ...,
-                                    chronology = NULL,
-                                    use_ages = TRUE,
-                                    low_values_exag = TRUE,
-                                    color_by_group = TRUE,
-                                    order_taxa = TRUE){
-  standardGeneric("plot_diagram")
+setGeneric("plot_diagram",
+           function(x,
+                    chronology = NULL,
+                    use_ages = TRUE,
+                    exag_low_values = 10,
+                    color_by_group = TRUE,
+                    order_taxa = TRUE,
+                    x_breaks = NULL,
+                    y_breaks = NULL,
+                    legend_position = NULL,
+                    legend_title = "Legend"){
+             standardGeneric("plot_diagram")
 })
 
 #' @rdname plot_diagram
-setMethod("plot_diagram", signature(x = "epd.entity.df"),
-          function(x, ...){
-  # Plotting pollen diagrams
-  if (is.null(chronology)){
-    chronology <- x@defaultchron
-  }
-  if (chronology == 9999){
-    chronology <- "giesecke"
-  }
-  if (use_ages){
-    if (nrow(x@agesdf@depthages) == 0){
-      warning(paste0("The entity has not ages, and hence depths will be used ",
-                     "for the y axis of the pollen diagram."))
+setMethod("plot_diagram",
+  signature(x = "epd.entity.df"),
+  function(x,
+           chronology,
+           use_ages,
+           exag_low_values,
+           color_by_group,
+           order_taxa,
+           x_breaks,
+           y_breaks,
+           legend_position,
+           legend_title){
+    counts <- x@commdf@counts
+    maxcounts <- apply(counts, MARGIN = 2,
+                       FUN = max, na.rm = TRUE)
+    dec_order <- order(maxcounts, decreasing = TRUE)
+    if (length(order_taxa) == 1 & is.logical(order_taxa)){
+      if (order_taxa == TRUE){
+        order <- dec_order
+      } else if (order_taxa == FALSE){
+        order <- seq_along(counts)
+      }
+    } else if (length(order_taxa) == ncol(counts) && is.numeric(order_taxa)){
+      order <- order_taxa
+    } else {
+      stop(paste0("'order_taxa' of the wrong format. Check ",
+                  "'?plot_diagram' for valid formats information."))
+    }
+    counts <- counts[, order]
+    maxcounts <- maxcounts[order]
+    if (is.null(chronology)){
+      chronology <- x@defaultchron
+    }
+    if (chronology == 9999){
+      chronology <- "giesecke"
+    }
+    if (use_ages){
+      if (nrow(x@agesdf@depthages) == 0){
+        warning(paste0("The entity has not ages, and hence depths will be ",
+                       "used for the y axis of the pollen diagram."))
+        ages <- x@agesdf@depthcm
+        xlabel <- "Depth (cm)"
+        if (is.null(x_breaks)){
+          x_breaks <- seq(0, 10000, 500)
+        }
+      }else{
+        ages <- x@agesdf@depthages[, as.character(chronology)]
+        xlabel <- "Age (cal. BP)"
+        if (is.null(x_breaks)){
+          x_breaks <- seq(0, 100000, 500)
+        }
+      }
+    }else{
       ages <- x@agesdf@depthcm
       xlabel <- "Depth (cm)"
-      x_breaks <- seq(0, 100000, 500)
-    }else{
-      ages <- x@agesdf@depthages[, as.character(chronology)]
-      xlabel <- "Age (cal. BP)"
+      if (is.null(x_breaks)){
+        x_breaks <- seq(0, 10000, 50)
+      }
     }
-  }else{
-    ages <- x@agesdf@depthcm
-    xlabel <- "Depth (cm)"
-    x_breaks <- seq(0, 10000, 50)
-  }
-  if (is.null(color_by_group) || color_by_group == TRUE){
-    groups <- x@commdf@taxagroupid
-  }else{
-    groups <- x@commdf@taxanames
-  }
-  counts <- x@commdf@counts
-  maxcounts <- apply(counts, MARGIN = 2, FUN = max, na.rm = TRUE)
-  dec_order <- order(maxcounts, decreasing = TRUE)
-  if (x@countstype == "Percentages"){
-    ylabel <- "Percentage (%)"
-    y_breaks <- seq(0, 100, 10)
-  }else{
-    ylabel <- "Counts (n)"
-    y_breaks <- seq(0, max(maxcounts), 10)
-  }
-  if (low_values_exag){
-    maxcounts <- as.data.frame(do.call(rbind,
-                                       replicate(nrow(counts),
-                                                 maxcounts,
-                                                 FALSE)))
-    exag <- counts * 10
-    exag <- pmin(exag, maxcounts)
-  }else{
-    exag <- counts
-  }
-  if (is.logical(order_taxa) && order_taxa == TRUE){
-    counts <- counts[, dec_order]
-    exag <- exag[, dec_order]
-    groups <- groups[dec_order]
-  } else if (is.numeric(order_taxa)){
-    counts <- counts[, order_taxa]
-    exag <- exag[, order_taxa]
-    groups <- groups[order_taxa]
-  }
-  df <- reshape2::melt(counts)
-  exag <- reshape2::melt(exag)
-  df$yr <- rep(ages, ncol(counts))
-  df$group <- rep(groups, each = nrow(counts))
-  df$exag <- exag$value
-  theme_new <- ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
-                     panel.grid.minor = ggplot2::element_blank(), # remove grids
-                     panel.background = ggplot2::element_blank(),
-                     axis.line = ggplot2::element_line(colour = "black"),
-                     strip.text.x = ggplot2::element_text(size = 10,
-                                                 angle = 90,
-                                                 vjust = 0),
-                     strip.background = ggplot2::element_blank(),
-                     strip.text.y = ggplot2::element_text(angle = 0),
-                     panel.border = ggplot2::element_blank(),
-                     axis.text.x = ggplot2::element_text(angle = 90,
-                                                hjust = 1))
-nplot <- ggplot2::ggplot(df) +
-    ggplot2::geom_area(ggplot2::aes(df$yr, df$exag, fill = df$group)) +
-    ggplot2::geom_area(ggplot2::aes(df$yr, df$value)) +
-    ggplot2::scale_x_reverse(breaks = x_breaks) +
-    ggplot2::scale_y_continuous(breaks = y_breaks) +
-    ggplot2::xlab(xlabel) + 
-    ggplot2::ylab(ylabel) +
-    ggplot2::coord_flip() +
-    theme_new +
-    ggplot2::facet_grid(~df$variable, scales = "free", space = "free")
-  nplot
-  return(nplot)
-})
+    if (is.null(color_by_group)) {
+      color_by_group <- TRUE
+    }
+    if (is.logical(color_by_group) && length(color_by_group) == 1){
+      if (color_by_group == TRUE){
+        groups <- x@commdf@taxagroupid[order]
+        if (is.null(legend_position)){
+          legend_position <- "right"
+        }
+      }else{
+        groups <- x@commdf@taxanames[order]
+        if (is.null(legend_position)){
+          legend_position <- "none"
+        }
+    }
+    }else if (length(color_by_group) == ncol(counts)){
+      groups <- color_by_group # Do not specify order
+      if (is.null(legend_position)){
+        legend_position <- "right"
+      }
+    }else{
+      stop(paste0("wrong length or format in 'color_by_group'. ",
+                  "Check '?plot_diagram' for valid format."))
+    }
+    if (x@countstype == "Percentages"){
+      ylabel <- "Percentage (%)"
+      if (is.null(y_breaks)){
+        y_breaks <- seq(0, 100, 10)
+      }
+    }else{
+      ylabel <- "Counts (n)"
+      if (is.null(y_breaks)){
+        y_breaks <- seq(0, max(maxcounts), 10)
+      }
+    }
+    if (is.numeric(exag_low_values)){
+      if (length(exag_low_values) > 1){
+        warning(paste0("'length(exag_low_values) > 1' hence ",
+                       "only the first value will be used."))
+        exag_low_values <- exag_low_values[1]
+      }
+      maxcounts <- as.data.frame(
+        do.call(rbind,
+                replicate(nrow(counts),
+                          maxcounts,
+                          FALSE)))
+      exag <- counts * exag_low_values
+      exag <- pmin(exag, maxcounts)
+    }else{
+      stop(paste0("'exag_low_values' has to be numeric and
+                          'length(exag_low_values) == 1'"))
+    }
+    df <- reshape2::melt(counts)
+    exag <- reshape2::melt(exag)
+    df$yr <- rep(ages, ncol(counts))
+    df$group <- rep(groups, each = nrow(counts))
+    df$exag <- exag$value
+    theme_new <- ggplot2::theme(
+      panel.grid.major = ggplot2::element_blank(),
+      panel.grid.minor = ggplot2::element_blank(),
+      panel.background = ggplot2::element_blank(),
+      axis.line = ggplot2::element_line(colour = "black"),
+      strip.text.x = ggplot2::element_text(size = 10,
+                                           angle = 90,
+                                           vjust = 0),
+      strip.background = ggplot2::element_blank(),
+      strip.text.y = ggplot2::element_text(angle = 0),
+      panel.border = ggplot2::element_blank(),
+      axis.text.x = ggplot2::element_text(angle = 90,
+                                          hjust = 1),
+      legend.position = legend_position)
+    nplot <- ggplot2::ggplot(df) +
+      ggplot2::geom_area(ggplot2::aes(df$yr,
+                                      df$exag,
+                                      fill = df$group)) +
+      ggplot2::geom_area(ggplot2::aes(df$yr,
+                                      df$value)) +
+      ggplot2::scale_x_reverse(breaks = x_breaks) +
+      ggplot2::scale_y_continuous(breaks = y_breaks) +
+      ggplot2::xlab(xlabel) +
+      ggplot2::ylab(ylabel) +
+      ggplot2::scale_fill_discrete(name = legend_title) +
+      ggplot2::coord_flip() +
+      theme_new +
+      ggplot2::facet_grid(~df$variable,
+                          scales = "free",
+                          space = "free")
+    nplot
+    return(nplot)
+  })

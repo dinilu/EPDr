@@ -20,13 +20,14 @@ on the list and remove those with restriction on their use. See
 \code{\link[EPDr]{check_restriction}}.
 }
 \examples{
-# epd.connection <- connect_to_epd(host="localhost", database="epd",
-#                                  user="epdr", password="epdrpw")
-# e.list <- list_e(epd.connection, country=c("Spain"))
-# e.list <- e.list$e_
-# epd.spain <- lapply(e.list, get_entity, epd.connection)
-# epd.spain.un <- remove_restricted(epd.spain)
-# length(epd.spain)
-# length(epd.spain.un)
-
+\dontrun{
+epd.connection <- connect_to_epd(host="localhost", database="epd",
+                                 user="epdr", password="epdrpw")
+e.list <- list_e(epd.connection, country=c("Spain"))
+e.list <- e.list$e_
+epd.spain <- lapply(e.list, get_entity, epd.connection)
+epd.spain.un <- remove_restricted(epd.spain)
+length(epd.spain)
+length(epd.spain.un)
+}
 }

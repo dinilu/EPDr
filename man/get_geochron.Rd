@@ -133,12 +133,12 @@ entity. This corresponds with Uranium-series data for datation samples.
 }
 
 \examples{
-# Not run
-# epd.connection <- connect_to_epd(database = "epd", user = "epdr",
-#                                 password = "epdrpw", host = "localhost")
-# .get_c14(1, epd.connection)
-# .get_c14(400, epd.connection)
+\dontrun{
+epd.connection <- connect_to_epd(database = "epd", user = "epdr",
+                                password = "epdrpw", host = "localhost")
+.get_c14(1, epd.connection)
+.get_c14(400, epd.connection)
 #
-# get_geochron(400, epd.connection)
-
+get_geochron(400, epd.connection)
+}
 }
