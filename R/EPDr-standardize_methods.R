@@ -291,7 +291,9 @@ setMethod("counts_to_percentage", signature(x = "epd.entity.df"),
           })
 
 #' @rdname counts_to_percentage
-setMethod("counts_to_percentage", signature(x = "epd.entity"), function(x, offset){
+setMethod("counts_to_percentage",
+          signature(x = "epd.entity"),
+          function(x, offset){
   x <- entity_to_matrices(x)
   x <- counts_to_percentage(x, offset)
   return(x)
