@@ -7,17 +7,22 @@
 \alias{taxa_to_highertaxa,epd.entity,data.frame-method}
 \title{Change taxa to higher taxa level}
 \usage{
-taxa_to_highertaxa(x, epd.taxonomy)
+taxa_to_highertaxa(x, epd.taxonomy, rm_null_mhvar = FALSE)
 
-\S4method{taxa_to_highertaxa}{epd.entity.df,data.frame}(x, epd.taxonomy)
+\S4method{taxa_to_highertaxa}{epd.entity.df,data.frame}(x, epd.taxonomy,
+  rm_null_mhvar = FALSE)
 
-\S4method{taxa_to_highertaxa}{epd.entity,data.frame}(x, epd.taxonomy)
+\S4method{taxa_to_highertaxa}{epd.entity,data.frame}(x, epd.taxonomy,
+  rm_null_mhvar = FALSE)
 }
 \arguments{
 \item{x}{epd.entity \code{\link[EPDr]{epd.entity.df}} object.}
 
 \item{epd.taxonomy}{data.frame Data frame with the taxonomy from 
 the EPD as from the \code{\link[EPDr]{get_taxonomy_epd}} function.}
+
+\item{rm_null_mhvar}{logical Logical value indicating whether to remove
+or not those taxa that has no value for higher level taxa.}
 }
 \value{
 Object of class \code{\link[EPDr]{epd.entity.df}} with new 

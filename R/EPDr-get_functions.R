@@ -1587,7 +1587,10 @@ get_taxonomy_epd <- function(connection){
 #' Semmler, M., and Bradshaw, R.H.W (2013). Towards mapping the late
 #' Quaternary vegetation change of Europe. Vegetation History and
 #' Archaeobotany, 23, 75-86.
-#'
+#' @references \url{https://journals.uair.arizona.edu/index.php/radiocarbon/article/view/16177/pdf}
+#' @references Hua, Q., Barbetti, M., and Rakowski, A.Z. (2013). Atmospheric 
+#' radiocarbon for the period 1950-2010. Radiocarbon 55(4): 2059-2072. 
+#' 
 #' @export
 #'
 #' @examples

@@ -45,4 +45,9 @@ Kuhl, N., van Leeuwen, J.F.N, Leydet, M., Lotter, A.F., Ortu, E.,
 Semmler, M., and Bradshaw, R.H.W (2013). Towards mapping the late
 Quaternary vegetation change of Europe. Vegetation History and
 Archaeobotany, 23, 75-86.
+
+\url{https://journals.uair.arizona.edu/index.php/radiocarbon/article/view/16177/pdf}
+
+Hua, Q., Barbetti, M., and Rakowski, A.Z. (2013). Atmospheric 
+radiocarbon for the period 1950-2010. Radiocarbon 55(4): 2059-2072.
 }

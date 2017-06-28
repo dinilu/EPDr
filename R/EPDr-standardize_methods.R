@@ -502,23 +502,17 @@ setMethod("filter_taxa", signature(x = "epd.entity.df",
               new_counts[, diff_names] <- NA
             }
             new_counts <- subset(new_counts, select = taxa)
-            new_taxa_type <- factor("Expanded",
+            x@taxatype <- factor("Expanded",
                                     levels = c("Samples",
                                                "Accepted",
                                                "Higher"))
-            new_taxa_names <- colnames(new_counts)
-            index <- match(new_taxa_names, epd.taxonomy$varname)
-            new_taxa_ <- epd.taxonomy$var_[index]
-            new_taxa_acc <- epd.taxonomy$accvar_[index]
-            new_taxa_mhvar <- epd.taxonomy$mhvar_[index]
-            new_taxa_groupid <- epd.taxonomy$groupid[index]
+            x@commdf@taxanames <- colnames(new_counts)
+            index <- match(colnames(new_counts), epd.taxonomy$varname)
+            x@commdf@taxa_ <- epd.taxonomy$var_[index]
+            x@commdf@taxaaccepted <- epd.taxonomy$accvar_[index]
+            x@commdf@taxamhvar <- epd.taxonomy$mhvar_[index]
+            x@commdf@taxagroupid <- epd.taxonomy$groupid[index]
             x@commdf@counts <- new_counts
-            x@taxatype <- new_taxa_type
-            x@commdf@taxanames <- new_taxa_names
-            x@commdf@taxa_ <- new_taxa_
-            x@commdf@taxaaccepted <- new_taxa_acc
-            x@commdf@taxamhvar <- new_taxa_mhvar
-            x@commdf@taxagroupid <- new_taxa_groupid
             return(x)
           })
 
@@ -1159,47 +1153,38 @@ setGeneric("taxa_to_acceptedtaxa", function(x, epd.taxonomy){
 setMethod("taxa_to_acceptedtaxa", signature(x = "epd.entity.df",
                                             epd.taxonomy = "data.frame"),
           function(x, epd.taxonomy){
-            taxa_names <- x@commdf@taxanames
+#            taxa_names <- x@commdf@taxanames
             taxa_ <- x@commdf@taxa_
             taxa_acc <- x@commdf@taxaaccepted
-            new_taxa_type <- factor("Accepted",
-                                    levels = c("Samples", "Accepted",
-                                               "Higher"))
             if (length(taxa_) == 0){
               warning(paste0("Entity has no count data for any taxon.",
                              "Returning the original object in the format",
                              "of a 'epd.entity.df' object."))
               return(x)
             }
-            new_taxa_names <- epd.taxonomy$varname[match(taxa_acc,
-                                                         epd.taxonomy$var_)]
-            new_counts <- x@commdf@counts
-            colnames(new_counts) <- new_taxa_names
-            if (nrow(new_counts) == 0){
-              new_counts <- new_counts[, seq_along(new_taxa_names)]
-              colnames(new_counts) <- sort(unique(new_taxa_names))
+            ii <- match(taxa_acc,
+                        epd.taxonomy$var_)
+            index <- unique(ii)
+            x@taxatype <- factor("Accepted",
+                                 levels = c("Samples", "Accepted",
+                                            "Higher"))
+            x@commdf@taxanames <- epd.taxonomy$varname[index]
+            x@commdf@taxa_ <- epd.taxonomy$var_[index]
+            x@commdf@taxaaccepted <- epd.taxonomy$accvar_[index]
+            x@commdf@taxamhvar <- epd.taxonomy$mhvar_[index]
+            x@commdf@taxagroupid <- epd.taxonomy$groupid[index]
+            counts <- x@commdf@counts
+            if (nrow(counts) == 0){
+              counts <- counts[, seq_along(index)]
             }else{
-              new_counts$sample_ <- seq_len(nrow(new_counts))
-              new_counts <- reshape2::melt(new_counts, id.vars = c("sample_"))
-              new_counts <- subset(reshape2::dcast(new_counts,
-                                                   sample_ ~ variable,
-                                                   fun.aggregate = sum,
-                                                   value.var = "value"),
-                                   select = -1)
+              colnames(counts) <- taxa_acc
+              t_counts <- as.data.frame(t(counts))
+              t_counts <- stats::aggregate(t_counts, by = list(ii), FUN = sum)
+              t_counts <- subset(t_counts, select = -1)
+              counts <- as.data.frame(t(t_counts))
             }
-            new_taxa_names <- colnames(new_counts)
-            index <- match(new_taxa_names, epd.taxonomy$varname)
-            new_taxa_ <- epd.taxonomy$var_[index]
-            new_taxa_acc <- epd.taxonomy$accvar_[index]
-            new_taxa_mhvar <- epd.taxonomy$mhvar_[index]
-            new_taxa_groupid <- epd.taxonomy$groupid[index]
-            x@commdf@counts <- new_counts
-            x@taxatype <- new_taxa_type
-            x@commdf@taxanames <- new_taxa_names
-            x@commdf@taxa_ <- new_taxa_
-            x@commdf@taxaaccepted <- new_taxa_acc
-            x@commdf@taxamhvar <- new_taxa_mhvar
-            x@commdf@taxagroupid <- new_taxa_groupid
+            colnames(counts) <- epd.taxonomy$varname[index]
+            x@commdf@counts <- counts
             return(x)
           })
 
@@ -1226,6 +1211,8 @@ setMethod("taxa_to_acceptedtaxa", signature(x = "epd.entity",
 #' @param x epd.entity \code{\link[EPDr]{epd.entity.df}} object.
 #' @param epd.taxonomy data.frame Data frame with the taxonomy from 
 #' the EPD as from the \code{\link[EPDr]{get_taxonomy_epd}} function.
+#' @param rm_null_mhvar logical Logical value indicating whether to remove
+#' or not those taxa that has no value for higher level taxa.
 #'
 #' @return Object of class \code{\link[EPDr]{epd.entity.df}} with new 
 #' taxa names.
@@ -1244,66 +1231,63 @@ setMethod("taxa_to_acceptedtaxa", signature(x = "epd.entity",
 #' }
 #' @rdname taxa_to_highertaxa
 #' @exportMethod taxa_to_highertaxa
-setGeneric("taxa_to_highertaxa", function(x, epd.taxonomy){
+setGeneric("taxa_to_highertaxa",
+           function(x, epd.taxonomy, rm_null_mhvar = FALSE){
   standardGeneric("taxa_to_highertaxa")
 })
 
 #' @rdname taxa_to_highertaxa
 setMethod("taxa_to_highertaxa", signature(x = "epd.entity.df",
                                           epd.taxonomy = "data.frame"),
-          function(x, epd.taxonomy){
-            taxa_names <- x@commdf@taxanames
+          function(x, epd.taxonomy, rm_null_mhvar){
+            if (!is.logical(rm_null_mhvar)){
+              stop(paste0("'rm_null_mhvar' of the wrong format. It has to be",
+                          "TRUE or FALSE. Check ?taxa_to_highertaxa"))
+            }
+            # taxa_names <- x@commdf@taxanames
             taxa_ <- x@commdf@taxa_
             taxa_mhvar <- x@commdf@taxamhvar
-            na_index <- which(is.na(taxa_mhvar))
-            taxa_mhvar[na_index] <- taxa_[na_index]
-            new_taxa_type <- factor("Higher", levels = c("Samples",
-                                                         "Accepted",
-                                                         "Higher"))
+            if (!rm_null_mhvar){
+              na_index <- which(is.na(taxa_mhvar))
+              taxa_mhvar[na_index] <- taxa_[na_index]
+            }
             if (length(taxa_) == 0){
               warning(paste0("Entity has no count data for any taxon.",
                              "Returning the original object in the format",
                              "of a 'epd.entity.df' object."))
               return(x)
             }
-            new_taxa_names <- epd.taxonomy$varname[match(taxa_mhvar,
-                                                         epd.taxonomy$var_)]
-            new_counts <- x@commdf@counts
-            colnames(new_counts) <- new_taxa_names
-            if (nrow(new_counts) == 0){
-              new_counts <- new_counts[, seq_along(new_taxa_names)]
-              colnames(new_counts) <- sort(unique(new_taxa_names))
+            ii <- match(taxa_mhvar, epd.taxonomy$var_)
+            index <- unique(stats::na.omit(ii))
+            x@taxatype <- factor("Higher", levels = c("Samples",
+                                                         "Accepted",
+                                                         "Higher"))
+            x@commdf@taxa_ <- epd.taxonomy$var_[index]
+            x@commdf@taxanames <- epd.taxonomy$varname[index]
+            x@commdf@taxaaccepted <- epd.taxonomy$accvar_[index]
+            x@commdf@taxamhvar <- epd.taxonomy$mhvar_[index]
+            x@commdf@taxagroupid <- epd.taxonomy$groupid[index]
+            counts <- x@commdf@counts
+            if (nrow(counts) == 0){
+              counts <- counts[, seq_along(index)]
             }else{
-              new_counts$sample_ <- seq_len(nrow(new_counts))
-              new_counts <- reshape2::melt(new_counts, id.vars = c("sample_"))
-              new_counts <- subset(reshape2::dcast(new_counts,
-                                                   sample_ ~ variable,
-                                                   fun.aggregate = sum,
-                                                   value.var = "value"),
-                                   select = -1)
+              colnames(counts) <- taxa_mhvar
+              t_counts <- as.data.frame(t(counts))
+              t_counts <- stats::aggregate(t_counts, by = list(ii), FUN = sum)
+              t_counts <- subset(t_counts, select = -1)
+              counts <- as.data.frame(t(t_counts))
             }
-            new_taxa_names <- colnames(new_counts)
-            index <- match(new_taxa_names, epd.taxonomy$varname)
-            new_taxa_ <- epd.taxonomy$var_[index]
-            new_taxa_acc <- epd.taxonomy$accvar_[index]
-            new_taxa_mhvar <- epd.taxonomy$mhvar_[index]
-            new_taxa_groupid <- epd.taxonomy$groupid[index]
-            x@commdf@counts <- new_counts
-            x@taxatype <- new_taxa_type
-            x@commdf@taxanames <- new_taxa_names
-            x@commdf@taxa_ <- new_taxa_
-            x@commdf@taxaaccepted <- new_taxa_acc
-            x@commdf@taxamhvar <- new_taxa_mhvar
-            x@commdf@taxagroupid <- new_taxa_groupid
+            colnames(counts) <- epd.taxonomy$varname[index]
+            x@commdf@counts <- counts
             return(x)
           })
 
 #' @rdname taxa_to_highertaxa
 setMethod("taxa_to_highertaxa", signature(x = "epd.entity",
                                           epd.taxonomy = "data.frame"),
-          function(x, epd.taxonomy){
+          function(x, epd.taxonomy, rm_null_mhvar){
             x <- entity_to_matrices(x)
-            x <- taxa_to_highertaxa(x, epd.taxonomy)
+            x <- taxa_to_highertaxa(x, epd.taxonomy, rm_null_mhvar)
             return(x)
           })
 

@@ -1,106 +1,123 @@
-## ----setup, include=FALSE------------------------------------------------
-knitr::opts_chunk$set(message=FALSE, warning=FALSE)
+## ----setup, include = FALSE----------------------------------------------
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 
-## ----Install from github, eval=F-----------------------------------------
+## ----Install from github, eval = F---------------------------------------
 #  library(devtools)
-#  install_github("dinilu/EPDr", force=T)
+#  install_github("dinilu/EPDr", force = T)
 
-## ----Install from CRAN, eval=F-------------------------------------------
+## ----Install from CRAN, eval = F-----------------------------------------
 #  install.packages("EPDr")
 
-## ----Setting up EPD server, eval=F---------------------------------------
-#  vignette("EPD-PostgreSQL", package="EPDr")
+## ----Setting up EPD server, eval = F-------------------------------------
+#  vignette("EPD-PostgreSQL", package = "EPDr")
 
 ## ----Loading EPDr--------------------------------------------------------
 library(EPDr)
 
 ## ----Connect to local EPD------------------------------------------------
-epdConnection <- connect_to_epd(database="epd", user="epdr", password="epdrpw")
+epd.connection <- connect_to_epd(database = "epd", user = "epdr", password = "epdrpw")
 
-## ----Connect to remote EPD, eval=F---------------------------------------
-#  epdConnection <- connect_to_epd(database="epd", user="epdr", password="epdrpw", host="http://remote.epd.server")
+## ----Connect to remote EPD, eval = F-------------------------------------
+#  epd.connection <- connect_to_epd(database = "epd", user = "epdr", password = "epdrpw", host = "http://remote.epd.server")
 
 ## ----Test the connection-------------------------------------------------
 library(DBI)
-dbListTables(epdConnection)
+dbListTables(epd.connection)
 
-## ----list_countries and list_taxagroups, R.options=list(max.print=15)----
-list_countries(epdConnection)
-list_taxagroups(epdConnection)
+## ----list_countries and list_taxagroups, R.options = list(max.print = 15)----
+list_countries(epd.connection)
+list_taxagroups(epd.connection)
 
-## ----list_regions, R.options=list(max.print=40)--------------------------
-list_regions(epdConnection)
-list_regions(epdConnection, country="Spain")
+## ----list_regions, R.options = list(max.print = 40)----------------------
+list_regions(epd.connection)
+list_regions(epd.connection, country = "Spain")
 
-## ----list_taxa, R.options=list(max.print=20)-----------------------------
-list_taxa(epdConnection)
-list_taxa(epdConnection, group_id="HERB")
+## ----list_taxa, R.options = list(max.print = 20)-------------------------
+list_taxa(epd.connection)
+list_taxa(epd.connection, group_id = "HERB")
 
-## ----list_sites, R.options=list(max.print=30)----------------------------
-list_sites(epdConnection)
-list_sites(epdConnection, country="Spain", region="Andalucia")
-list_sites(epdConnection, coords=c(-4, 10, 36, 40))
+## ----list_sites, R.options = list(max.print = 30)------------------------
+list_sites(epd.connection)
+list_sites(epd.connection, country = "Spain", region = "Andalucia")
+list_sites(epd.connection, coords = c(-4, 10, 36, 40))
 
-## ----list_e, R.options=list(max.print=50)--------------------------------
-list_e(epdConnection)
-list_e(epdConnection, site="Adange")
-list_e(epdConnection, lastname="Tzedakis")
+## ----list_e, R.options = list(max.print = 50)----------------------------
+list_e(epd.connection)
+list_e(epd.connection, site = "Adange")
+list_e(epd.connection, lastname = "Tzedakis")
 
-## ----list_e multiple countries, R.options=list(max.print=60)-------------
-list_e(epdConnection, country=c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
+## ----list_e multiple countries, R.options = list(max.print = 60)---------
+list_e(epd.connection, country = c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
 
-## ----list_publ, R.options=list(max.print=10)-----------------------------
-list_publ(epdConnection)
-list_publ(epdConnection, e_=1)
+## ----list_publ, R.options = list(max.print = 10)-------------------------
+list_publ(epd.connection)
+list_publ(epd.connection, e_ = 1)
 
-## ----get_ functions, R.options=list(max.print=10)------------------------
-ent.1 <- get_ent(1, epdConnection)
+## ----get_ent, R.options = list(max.print = 10)---------------------------
+ent.1 <- get_ent(1, epd.connection)
 class(ent.1)
 slotNames(ent.1)
-site.1 <- get_site(1, epdConnection)
-slotNames(site.1)
-chron.1 <- get_chron(1, epdConnection)
-slotNames(chron.1)
-geochron.1 <- get_geochron(1, epdConnection)
-slotNames(geochron.1)
-samples.1 <- get_samples(1, epdConnection)
-slotNames(samples.1)
-epd.1 <- get_entity(1, epdConnection)
-class(epd.1)
 
-## ----epd.entity structure, R.options=list(max.print=10)------------------
+## ----get_site, R.options = list(max.print = 10)--------------------------
+site.1 <- get_site(1, epd.connection)
+class(site.1)
+slotNames(site.1)
+
+## ----get_geochron, R.options = list(max.print = 10)----------------------
+geochron.1 <- get_geochron(1, epd.connection)
+class(geochron.1)
+slotNames(geochron.1)
+
+## ----get_chron, R.options = list(max.print = 10)-------------------------
+chron.1 <- get_chron(1, epd.connection)
+class(chron.1)
+slotNames(chron.1)
+
+## ----get_sample, R.options = list(max.print = 10)------------------------
+samples.1 <- get_samples(1, epd.connection)
+class(samples.1)
+slotNames(samples.1)
+
+## ----get_entity, R.options = list(max.print = 10)------------------------
+epd.1 <- get_entity(1, epd.connection)
+class(epd.1)
+slotNames(epd.1)
+
+## ----epd.entity structure, R.options = list(max.print = 10)--------------
 epd.1@e_
 slot(epd.1, "e_")
 epd.1@postbombzone
 epd.1@numberofchron
 epd.1@isingiesecke
 epd.1@defaultchron
-epd.1@entity
-epd.1@site
-epd.1@geochron
-epd.1@chron
-epd.1@samples
+slotNames(epd.1@entity)
+slotNames(epd.1@site)
+slotNames(epd.1@geochron)
+slotNames(epd.1@chron)
+slotNames(epd.1@samples)
 
-## ----check functions-----------------------------------------------------
+## ----check_--------------------------------------------------------------
 check_restriction(epd.1)
 check_default_chron(epd.1)
 
-## ----export_c14 function, R.options=list(max.print=10)-------------------
+## ----export_c14, R.options = list(max.print = 25)------------------------
 export_c14("clam", epd.1@geochron@c14, epd.1@geochron@geochron)
 export_c14("bacon", epd.1@geochron@c14, epd.1@geochron@geochron)
 export_c14("clam", epd.1)
 
-## ----export_agebasis function, R.options=list(max.print=10)--------------
+## ----export_agebasis, R.options = list(max.print = 10)-------------------
 export_agebasis("clam", epd.1@chron@agebasis)
 export_agebasis("bacon", epd.1)
 
-## ----export_events and export_depths functions, R.options=list(max.print=10)----
+## ----export_events, R.options = list(max.print = 10)---------------------
 export_events("clam", epd.1@chron@synevent, epd.1@chron@event)
 export_events("bacon", epd.1)
+
+## ----export_depths, R.options = list(max.print = 10)---------------------
 export_depths(epd.1@samples@psamples)
 export_depths(epd.1)
 
-## ----export_entity function, eval=F, R.options=list(max.print=10)--------
+## ----export_entity function, eval = F, R.options = list(max.print = 10)----
 #  export_entity("clam", epd.1)
 #  
 #  ##  Chronology has coincident data with C14 data and, hence, the later will be used
@@ -131,20 +148,69 @@ export_depths(epd.1)
 #  ##  3   KIGI-348    2900      NA   190        NA   140        10
 #  ##  5  E1_CH1_S5    4000      NA     1        NA   200        NA
 
-## ----entity_to_matrices function, R.options=list(max.print=20)-----------
+## ----entity_to_matrices, R.options = list(max.print = 20)----------------
 epd.1 <- entity_to_matrices(epd.1)
 slotNames(epd.1)
-epd.1@commdf@counts
 
-## ----standardize functions, eval=F---------------------------------------
-#  epd.1 <- filter_taxagroups(epd.1, c("DWAR", "HERB", "LIAN", "TRSH", "UPHE", "INUN"))
-#  epd.1 <- taxa_to_acceptedtaxa(epd.1.int, get_taxonomy_epd(epd.connection))
-#  epd.1 <- taxa_to_highertaxa(epd.1.int, get_taxonomy_epd(epd.connection))
-#  
-#  epd.1 <- filter_taxa(epd.1, c("Aesculus", "Aluns", "Betula", "Corpinus", "Salix"), get_taxonomy_epd(epd.connection))
-#  epd.1 <- counts_to_percentages(epd.1)
+## ----epd.entity.df structure, R.options = list(max.print = 20)-----------
+epd.1@countstype
+epd.1@countsprocessing
+epd.1@taxatype
+epd.1@taxaprocessing
+
+## ----samplesdf structure, R.options = list(max.print = 20)---------------
+slotNames(epd.1@samplesdf)
+
+## ----agesdf structure, R.options = list(max.print = 20)------------------
+slotNames(epd.1@agesdf)
+
+## ----commdf structure, R.options = list(max.print = 20)------------------
+slotNames(epd.1@commdf)
+
+## ----nopodf structure, R.options = list(max.print = 20)------------------
+slotNames(epd.1@nopodf)
+
+## ----get_taxonomy_epd, R.options = list(max.print = 60)------------------
+epd.taxonomy <- get_taxonomy_epd(epd.connection)
+epd.taxonomy
+
+## ----taxa_to_acceptedtaxa, R.options = list(max.print = 50)--------------
+epd.1@commdf@taxanames
+epd.1 <- taxa_to_acceptedtaxa(epd.1, epd.taxonomy)
+epd.1@commdf@taxanames
+
+## ----taxa_to_highertaxa, R.options = list(max.print = 50)----------------
+epd.1@commdf@taxanames
+epd.1.ht <- taxa_to_highertaxa(epd.1, epd.taxonomy)
+epd.1.ht@commdf@taxanames
+
+## ----taxa_to_highertaxa @counts, R.options = list(max.print = 300)-------
+rowSums(epd.1@commdf@counts)
+rowSums(epd.1.ht@commdf@counts)
+
+## ----filter_taxagroups, R.options = list(max.print = 40)-----------------
+epd.1 <- filter_taxagroups(epd.1, c("DWAR", "HERB", "LIAN", "TRSH", "UPHE", "INUN"))
+epd.1@commdf@taxanames
+rowSums(epd.1@commdf@counts)
+
+## ----filter_taxa, R.options = list(max.print = 40)-----------------------
+epd.1.ft <- filter_taxa(epd.1, c("Alnus", "Artemisia", "Betula", "Carpinus betulus", "Corylus"), epd.taxonomy)
+head(epd.1.ft@commdf@counts)
+
+## ----filter_taxa misspelling, R.options = list(max.print = 40)-----------
+epd.1.ft <- filter_taxa(epd.1, c("Aluns", "Artemisia", "Betula", "Carpinus betulus", "Carylus"), epd.taxonomy)
+head(epd.1.ft@commdf@counts)
+
+## ----counts_to_percentage, R.options = list(max.print = 40)--------------
+epd.1 <- counts_to_percentage(epd.1)
+head(epd.1@commdf@counts)
+
+## ----counts_to_percentage check, R.options = list(max.print = 40)--------
+rowSums(epd.1@commdf@counts)
+
+## ----standardize functions, eval = F-------------------------------------
 #  epd.1 <- giesecke_default_chron(epd.1)
-#  epd.1.int <- interpolate_counts(epd.1, c(1000, 2000, 3000), method="linear")
+#  epd.1.int <- interpolate_counts(epd.1, c(1000, 2000, 3000), method = "linear")
 #  intervals_counts(epd.1, c(0,1000,2000,3000), c(999, 1999, 2999, 3999))
 #  blois_quality(epd.1)
 #  
@@ -155,9 +221,9 @@ epd.1@commdf@counts
 #  plot_diagram(epd.1)
 #  
 #  
-#  entity.list <- list_e(epdConnection, country=c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
-#  entity.list <- list_e(epdConnection)$e_
-#  counts.all <- lapply(entity.list, get_entity, epdConnection)
+#  entity.list <- list_e(epd.connection, country = c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
+#  entity.list <- list_e(epd.connection)$e_
+#  counts.all <- lapply(entity.list, get_entity, epd.connection)
 #  
 #  counts.po <- lapply(counts.all, filter_taxagroups, c("HERB", "TRSH", "DWAR", "LIAN", "HEMI", "UPHE"))
 #  counts.gi <- lapply(counts.po, giesecke_default_chron)
@@ -169,10 +235,10 @@ epd.1@commdf@counts
 #  
 #  
 #  percent.wa <- lapply(counts.wa, counts_to_percentage)
-#  percent.int <- lapply(percent.wa, interpolate_counts, seq(0, 22000, by=1000))
-#  percent.ran <- lapply(percent.wa, intervals_counts, seq(0, 21000, by=1000), seq(999, 21999, by=1000))
+#  percent.int <- lapply(percent.wa, interpolate_counts, seq(0, 22000, by = 1000))
+#  percent.ran <- lapply(percent.wa, intervals_counts, seq(0, 21000, by = 1000), seq(999, 21999, by = 1000))
 #  
-#  epd.taxonomy <- get_taxonomy_epd(epdConnection)
+#  epd.taxonomy <- get_taxonomy_epd(epd.connection)
 #  
 #  counts.wa.acc <- lapply(counts.wa, taxa_to_acceptedtaxa, epd.taxonomy)
 #  percent.wa.acc <- lapply(percent.wa, taxa_to_acceptedtaxa, epd.taxonomy)
@@ -193,8 +259,8 @@ epd.1@commdf@counts
 #  
 #  e <- list_e(epd.connection)$e_
 #  entity.list <- lapply(e[1:100], get_entity, epd.connection)
-#  vapply(entity.list, check_default_chron, FUN.VALUE=logical(1))
-#  vapply(entity.list, check_restriction, FUN.VALUE=logical(1))
+#  vapply(entity.list, check_default_chron, FUN.VALUE = logical(1))
+#  vapply(entity.list, check_restriction, FUN.VALUE = logical(1))
 #  
 #  remove_restricted(entity.list)
 #  remove_wo_ages(entity.list)
@@ -224,24 +290,24 @@ epd.1@commdf@counts
 #  
 #  Cedrus <- c("Cedrus", "Cedrus atlantica", "Cedrus cf. C. atlantica", "Cedrus-type", "cf. Cedrus")
 #  
-#  mapTaxaAge(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse=T, pollen_thres=0)(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse=T, pollen_thres=0)
-#  mapTaxaAge(percent.unr.ranges, Cedrus, "5500-6500", pres_abse=F, legend_range=c(0,5))
-#  mapTaxaAge(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse=F, legend_range=c(0,5))
+#  mapTaxaAge(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse = T, pollen_thres = 0)(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse = T, pollen_thres = 0)
+#  mapTaxaAge(percent.unr.ranges, Cedrus, "5500-6500", pres_abse = F, legend_range = c(0,5))
+#  mapTaxaAge(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse = F, legend_range = c(0,5))
 #  
 #  Pinus <- c("Pinus", "Pinus pinaster", "Pinus pinea", "Pinus sylvestris", "Pinus-type", "Pinus sp.")
-#  mapTaxaAge(percent.unr.ranges, Pinus, "5500-6500", pres_abse=T)
-#  mapTaxaAge(percent.unr.ranges, Pinus, "20000-22000", pres_abse=T)
-#  mapTaxaAge(percent.unr.ranges, Pinus, "5500-6500", pres_abse=F)
-#  mapTaxaAge(percent.unr.ranges, Pinus, "20000-22000", pres_abse=F)
+#  mapTaxaAge(percent.unr.ranges, Pinus, "5500-6500", pres_abse = T)
+#  mapTaxaAge(percent.unr.ranges, Pinus, "20000-22000", pres_abse = T)
+#  mapTaxaAge(percent.unr.ranges, Pinus, "5500-6500", pres_abse = F)
+#  mapTaxaAge(percent.unr.ranges, Pinus, "20000-22000", pres_abse = F)
 #  
 #  
-#  mapTaxaAge(percent.int.uni, "Cedrus", "0", pres_abse=F, zoom_coords=c(-20, 180, 30, 80), points_pch=21,
-#             points_colour=c("red", "red"), points_fill=c("red", "red"),
-#             points_range_size=c(1, 1), map_title="EPD sites",
-#             legend_range=NULL, legend_title=NULL, napoints_size=1, napoints_pch=21,
-#             napoints_colour="red", napoints_fill="red", countries_fill_colour="grey80", countries_border_colour="grey90")
+#  mapTaxaAge(percent.int.uni, "Cedrus", "0", pres_abse = F, zoom_coords = c(-20, 180, 30, 80), points_pch = 21,
+#             points_colour = c("red", "red"), points_fill = c("red", "red"),
+#             points_range_size = c(1, 1), map_title = "EPD sites",
+#             legend_range = NULL, legend_title = NULL, napoints_size = 1, napoints_pch = 21,
+#             napoints_colour = "red", napoints_fill = "red", countries_fill_colour = "grey80", countries_border_colour = "grey90")
 #  
 
-## ----Disconnecting from the EPD database, eval=F-------------------------
-#  disconnectFromEPD(epdConnection)
+## ----Disconnecting from the EPD database, eval = F-----------------------
+#  disconnectFromEPD(epd.connection)
 
