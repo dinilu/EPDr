@@ -675,7 +675,7 @@ setMethod("giesecke_default_chron",
 #' @param span numeric Span for loess, default = 0.25.
 #' @param df numeric Degress of freedome for smoothing spline, default is 
 #' the lower of 20 or 0.7 * number of samples.
-#' @param ...	additional arguments to loess, smooth.spline and aspline.
+#' @param ...	additional arguments to loess and smooth.spline.
 #'
 #' @details Data for time periods in \code{time} but not recorded in the 
 #' entity are fill with \code{NA}. This is convenient if analysis are 
@@ -683,9 +683,9 @@ setMethod("giesecke_default_chron",
 #' 
 #' Interpolation can be done using linear interpolation between 
 #' data points in the original series (default) using 
-#' \code{\link[stats:approx]{approx}}, using a fitted 
-#' \code{\link[stats:loess]{loess}} locally weighted regression, or by 
-#' \code{\link[stats:smooth.spline]{smooth.spline}}. The latter two methods 
+#' \code{\link[stats]{approx}}, using a fitted 
+#' \code{\link[stats]{loess}} locally weighted regression, or by 
+#' \code{\link[stats]{smooth.spline}}. The latter two methods 
 #' will also smooth the data and additional arguments may be passed to 
 #' these functions to control the amount of smoothing, or to force replacing
 #' negative values with zeros.
@@ -837,7 +837,7 @@ setMethod("interpolate_counts", signature(x = "epd.entity.df",
             x@countsprocessing <- factor("Interpolated",
                                          levels = c("Samples", "Interpolated",
                                                     "Ranged means"))
-            x@samplesdf@sample_ <- seq(20001, length.out = length(output_ages))
+            x@samplesdf@sample_ <- 10000 + seq_along(output_ages)
             x@samplesdf@samplelabel <- as.character(output_ages)
             x@agesdf@depthages <- data.frame(output_ages)
             colnames(x@agesdf@depthages) <- chronology
@@ -885,7 +885,6 @@ setMethod("interpolate_counts", signature(x = "epd.entity", time = "numeric"),
 #' ages should be used to calculate the interpolations. If none is provided 
 #' the function uses the default chronology from the object (see
 #' \code{\link[EPDr]{giesecke_default_chron}}).
-#' @param ...	Not used with current methods.
 #'
 #' @return The function returns a \code{\link[EPDr]{epd.entity.df}} object, 
 #' similar to \code{epd.entity.df} in which ages and counts has been modified
@@ -906,15 +905,19 @@ setMethod("interpolate_counts", signature(x = "epd.entity", time = "numeric"),
 #' }
 #' @rdname intervals_counts
 #' @exportMethod intervals_counts
-setGeneric("intervals_counts", function(x, tmin, tmax, ...,
-                                        newlabels = NULL, chronology = NULL){
+setGeneric("intervals_counts", function(x,
+                                        tmin,
+                                        tmax, 
+                                        chronology = NULL,
+                                        newlabels = NULL){
   standardGeneric("intervals_counts")
 })
 
 #' @rdname intervals_counts
 setMethod("intervals_counts", signature(x = "epd.entity.df",
-                                        tmin = "numeric", tmax = "numeric"),
-          function(x, tmin, tmax, ...){
+                                        tmin = "numeric",
+                                        tmax = "numeric"),
+          function(x, tmin, tmax, chronology, newlabels){
             if (length(tmin) != length(tmax)){
               stop(paste0("length(tmin) != length(tmax). Please, specify ",
                           "two vectors of the same length"))
@@ -955,7 +958,7 @@ setMethod("intervals_counts", signature(x = "epd.entity.df",
               index <- unlist(apply(index, MARGIN = 2, FUN = which))
             }
             output_depthcm <- rep(NA, length(newlabels))
-            output_ages <- rowMeans(cbind(tmin, tmax), na.rm = TRUE)
+            output_ages <- rep(NA, length(newlabels))
             output_counts <- as.data.frame(matrix(NA, nrow = length(newlabels),
                                                   ncol = ncol(sample_counts)))
             colnames(output_counts) <- colnames(sample_counts)
@@ -968,14 +971,15 @@ setMethod("intervals_counts", signature(x = "epd.entity.df",
                                    FUN = function(x, y, z){
                                      stats::aggregate(x, by = list(y = y),
                                                       FUN = z, na.rm = TRUE)
-                                   }
-                                   , intervalid, mean)
-              range_means <- reshape2::dcast(reshape2::melt(range_means,
-                                                            id.vars = "y"),
-                                             y ~ L1)
-              col_index <- -which(colnames(range_means) == "y")
-              range_means <- subset(range_means,
-                                    select = col_index)
+                                   }, intervalid, mean)
+              range_means <- lapply(range_means, function(x){x$x})
+              range_means <- do.call(cbind, range_means)
+              # range_means <- reshape2::dcast(reshape2::melt(range_means,
+              #                                               id.vars = "y"),
+              #                                y ~ L1)
+              # col_index <- -which(colnames(range_means) == "y")
+              # range_means <- subset(range_means,
+              #                       select = col_index)
               range_depth_means <- stats::aggregate(range.depthcm,
                                                     by = list(y = intervalid),
                                                     FUN = mean, na.rm = TRUE)
@@ -993,11 +997,15 @@ setMethod("intervals_counts", signature(x = "epd.entity.df",
                                          levels = c("Samples",
                                                     "Interpolated",
                                                     "Ranged means"))
-            x@samplesdf@sample_ <- 10000 + seq_along(newlabels)
+            x@samplesdf@sample_ <- 20000 + seq_along(newlabels)
             x@samplesdf@samplelabel <- newlabels
-            x@defaultchron <- 1
+            if (chronology == "giesecke"){
+              x@defaultchron <- 9999
+            }else{
+              x@defaultchron <- chronology
+            }
             x@agesdf@depthages <- data.frame(output_ages)
-            colnames(x@agesdf@depthages) <- 1
+            colnames(x@agesdf@depthages) <- chronology
             x@agesdf@depthcm <- as.numeric(output_depthcm)
             x@commdf@counts <- output_counts
             return(x)
@@ -1006,9 +1014,9 @@ setMethod("intervals_counts", signature(x = "epd.entity.df",
 #' @rdname intervals_counts
 setMethod("intervals_counts", signature(x = "epd.entity",
                                         tmin = "numeric", tmax = "numeric"),
-          function(x, tmin, tmax, ...){
+          function(x, tmin, tmax, chronology, newlabels){
             x <- entity_to_matrices(x)
-            x <- intervals_counts(x, tmin, tmax, ...)
+            x <- intervals_counts(x, tmin, tmax, chronology, newlabels)
             return(x)
           })
 

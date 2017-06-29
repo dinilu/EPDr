@@ -47,7 +47,7 @@ negative values with zero in the interpolated data.}
 \item{df}{numeric Degress of freedome for smoothing spline, default is 
 the lower of 20 or 0.7 * number of samples.}
 
-\item{...}{additional arguments to loess, smooth.spline and aspline.}
+\item{...}{additional arguments to loess and smooth.spline.}
 }
 \value{
 The function returns an \code{\link[EPDr]{epd.entity.df}} object,
@@ -69,9 +69,9 @@ carried out with multiple entities.
 
 Interpolation can be done using linear interpolation between 
 data points in the original series (default) using 
-\code{\link[stats:approx]{approx}}, using a fitted 
-\code{\link[stats:loess]{loess}} locally weighted regression, or by 
-\code{\link[stats:smooth.spline]{smooth.spline}}. The latter two methods 
+\code{\link[stats]{approx}}, using a fitted 
+\code{\link[stats]{loess}} locally weighted regression, or by 
+\code{\link[stats]{smooth.spline}}. The latter two methods 
 will also smooth the data and additional arguments may be passed to 
 these functions to control the amount of smoothing, or to force replacing
 negative values with zeros.

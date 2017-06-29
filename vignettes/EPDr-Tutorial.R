@@ -202,16 +202,54 @@ epd.1.ft <- filter_taxa(epd.1, c("Aluns", "Artemisia", "Betula", "Carpinus betul
 head(epd.1.ft@commdf@counts)
 
 ## ----counts_to_percentage, R.options = list(max.print = 40)--------------
+epd.1@countstype
 epd.1 <- counts_to_percentage(epd.1)
+epd.1@countstype
 head(epd.1@commdf@counts)
 
 ## ----counts_to_percentage check, R.options = list(max.print = 40)--------
 rowSums(epd.1@commdf@counts)
 
+## ----giesecke_default_chron----------------------------------------------
+epd.1@defaultchron
+epd.1@numberofchron
+epd.1@isingiesecke
+epd.1 <- giesecke_default_chron(epd.1)
+epd.1@defaultchron
+
+## ----interpolate_counts--------------------------------------------------
+epd.1.int <- interpolate_counts(epd.1, c(1000, 2000, 3000), method = "linear")
+
+## ----interpolate_counts check @commdf@counts, R.options = list(max.print = 50)----
+epd.1@commdf@counts[, 1:5]
+epd.1.int@commdf@counts[, 1:5]
+
+## ----interpolate_counts check @countsprocessing--------------------------
+epd.1@countsprocessing
+epd.1.int@countsprocessing
+
+## ----interpolate_counts check @agesdf, R.options = list(max.print = 18)----
+epd.1@agesdf
+epd.1.int@agesdf
+
+## ----interpolate_counts check @samplesdf, R.options = list(max.print = 20)----
+epd.1@samplesdf
+epd.1.int@samplesdf
+
+## ----intervals_counts----------------------------------------------------
+epd.1.ran <- intervals_counts(epd.1, c(0,1000,2000,3000), c(999, 1999, 2999, 3999))
+epd.1.ran@commdf@counts[, 1:5]
+
+## ----intervals_counts check @countsprocessing----------------------------
+epd.1.ran@countsprocessing
+
+## ----intervals_counts check @agesdf, R.options = list(max.print = 18)----
+epd.1.ran@agesdf
+
+## ----intervals_counts check @samplesdf, R.options = list(max.print = 20)----
+epd.1.ran@samplesdf
+
 ## ----standardize functions, eval = F-------------------------------------
-#  epd.1 <- giesecke_default_chron(epd.1)
-#  epd.1.int <- interpolate_counts(epd.1, c(1000, 2000, 3000), method = "linear")
-#  intervals_counts(epd.1, c(0,1000,2000,3000), c(999, 1999, 2999, 3999))
 #  blois_quality(epd.1)
 #  
 #  # Tabulate functions ----

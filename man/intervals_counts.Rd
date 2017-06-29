@@ -7,13 +7,13 @@
 \alias{intervals_counts,epd.entity,numeric,numeric-method}
 \title{Mean counts for specific time intervals}
 \usage{
-intervals_counts(x, tmin, tmax, ..., newlabels = NULL, chronology = NULL)
+intervals_counts(x, tmin, tmax, chronology = NULL, newlabels = NULL)
 
-\S4method{intervals_counts}{epd.entity.df,numeric,numeric}(x, tmin, tmax, ...,
-  newlabels = NULL, chronology = NULL)
+\S4method{intervals_counts}{epd.entity.df,numeric,numeric}(x, tmin, tmax,
+  chronology = NULL, newlabels = NULL)
 
-\S4method{intervals_counts}{epd.entity,numeric,numeric}(x, tmin, tmax, ...,
-  newlabels = NULL, chronology = NULL)
+\S4method{intervals_counts}{epd.entity,numeric,numeric}(x, tmin, tmax,
+  chronology = NULL, newlabels = NULL)
 }
 \arguments{
 \item{x}{epd.entity.df An \code{\link[EPDr]{epd.entity.df}} object as 
@@ -25,16 +25,14 @@ returned by the \code{\link[EPDr]{entity_to_matrices}} function.}
 \item{tmax}{numeric Numeric vector indicating the upper limits 
 (in years cal. BP) for the time intervals}
 
-\item{...}{Not used with current methods.}
-
-\item{newlabels}{character Character vector with labels for each time 
-intervals, if none are provided the functions generate them with the 
-following format \code{tmin}-\code{tmax}.}
-
 \item{chronology}{numeric Number specifying the chronology from which 
 ages should be used to calculate the interpolations. If none is provided 
 the function uses the default chronology from the object (see
 \code{\link[EPDr]{giesecke_default_chron}}).}
+
+\item{newlabels}{character Character vector with labels for each time 
+intervals, if none are provided the functions generate them with the 
+following format \code{tmin}-\code{tmax}.}
 }
 \value{
 The function returns a \code{\link[EPDr]{epd.entity.df}} object, 

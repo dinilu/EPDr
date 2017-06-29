@@ -413,12 +413,16 @@ head(epd.1.ft@commdf@counts)
 
 Once, the data are reduced to those taxa of interest, the raw counts stored in the EPD can be transformed into percentages using the `counts_to_percentages` functions. This function only requires one argument with the `epd.entity.df` from which counts will be transformed into percentages relative to the complete sum of particles in each sample. It is thus important to previously properly filter the taxa to the taxa groups of interest to get meaningful percentages.
 
+The function also modifies the slot `@countstype` to reflect that now the function has percentages and no raw counts.
+
 ```{r counts_to_percentage, R.options = list(max.print = 40)}
+epd.1@countstype
 epd.1 <- counts_to_percentage(epd.1)
+epd.1@countstype
 head(epd.1@commdf@counts)
 ```
 
-Now, the sum of the couns for each sample should be 100 for all samples.
+Now, the sum of the counts for each sample should be 100 for all samples.
 
 ```{r counts_to_percentage check, R.options = list(max.print = 40)}
 rowSums(epd.1@commdf@counts)
@@ -426,10 +430,102 @@ rowSums(epd.1@commdf@counts)
 
 
 
-```{r standardize functions, eval = F}
+### Using updated ages from Giesecke *et al.* [-@giesecke_2013]
+
+In a publication from 2013, Giesecke *et al.* [-@giesecke_2013] updated the chronologies (ages-depth models) for more than 800 entities in the database. Although the database itself was not updated with these new chronologies, they released all the information in four different tables in the [data repository Pagaea](https://doi.pangaea.de/10.1594/PANGAEA.804597), under [Creative Commons Attribution 3.0 Unported](https://creativecommons.org/licenses/by/3.0/). The EPDr package provide a copy of these tables, and import the data from some of them into the `epd.entity` and `epd.entity.df` objects. When Giesecke *et al.* [-@giesecke_2013] provide a chronology for an entity, the slot `@isingiesecke` is `TRUE`, and `FALSE` if they do not. However, the default chronology for each entity is recorded as in the original EPD. So, if you want to use ages estimated by Giesecke *et al.* [-@giesecke_2013] you need to modified the slot `@defaultchron`. Most entities in the EPD have one or few chronologies, so `@defaultchron` is usually a number between `1` and `2(3)`, unless the entity has no chronologies at all and thus it is `0` or `NA`. To specify that other functions should use ages estimated by Giesecke *et al.* [-@giesecke_2013] `@defaultchron` has to be `9999`.
+
+We provide a function `giesecke_default_chron` that automatically check if the entity has updated ages in Giesecke *et al.* [-@giesecke_2013] and, if so, update `@defaultchron` to `9999`.
+
+```{r giesecke_default_chron}
+epd.1@defaultchron
+epd.1@numberofchron
+epd.1@isingiesecke
 epd.1 <- giesecke_default_chron(epd.1)
+epd.1@defaultchron
+```
+
+> Note that `@numberofchron` reflect the total number of chronologies in the EPD without including those in Giesecke *et al.* [-@giesecke_2013] 
+
+### Interpolating counts data to specific time periods
+
+Each EPD entity has counts data for samples at different depths, which combined with the different stratigraphy of each site (e.g., differential sedimentation rates among lakes), make that each counting data correspond to no particular and prestablished ages. Some times the user may need to estimate the counts data for a particular time period (and this can be important when comparing data from multiple entities and sites, but we will cover that later). The `interpolate_counts` function allow to interpolate counts in an `epd.entity.df` object (if an `epd.entity` object is provided this is previously transformed into an `edp.entity.df`) to those particular time periods specified by the user. The interpolation can be accomplished with three different methods: "linear", "loess", and "smooth spline". 
+
+The function takes two mandatory arguments: `x` and `time`. `x` has to be an object of class `epd.entity.df` to be interpolated, and `time` has to be a numeric vector indicating the ages to which interpolate the counts. Other arguments are `chronology`, indicating the chronology that should be used to look for ages of the actual samples (if not provided the function use the default chronology according to the one specified in `x`), `method`, indicating the interpolation method to be used, `rep_negt` that should be `TRUE` or `FALSE`, indicating whether negative interpolated values should be replaced by `0`, and further arguments (e.g., `span`, `df`, and `...`) to control loess and smooth spline interpolation methods.
+
+The function, in addition to calculate the
+
+```{r interpolate_counts}
 epd.1.int <- interpolate_counts(epd.1, c(1000, 2000, 3000), method = "linear")
-intervals_counts(epd.1, c(0,1000,2000,3000), c(999, 1999, 2999, 3999))
+```
+
+The new `epd.entity.df` object returned by the function has been modified in several ways. In the first place the countings now reflect those estimated for the desired time periods.
+
+```{r interpolate_counts check @commdf@counts, R.options = list(max.print = 50)}
+epd.1@commdf@counts[, 1:5]
+epd.1.int@commdf@counts[, 1:5]
+```
+
+Hence, the slot `@countsprocessing` is also modified to reflect the fact that data have been interpolated.
+
+```{r interpolate_counts check @countsprocessing}
+epd.1@countsprocessing
+epd.1.int@countsprocessing
+```
+
+Because the new ages are based in one of the chronologies, the function modifies also the tables with the ages (`@depthages`) and depths (`@depthcm`) to report the new ages (one column only with the chronology in which they were based) and estimated depths . 
+
+```{r interpolate_counts check @agesdf, R.options = list(max.print = 18)}
+epd.1@agesdf
+epd.1.int@agesdf
+```
+> Note that argument `chronology` was not specified and the default chronology ("giesecke") was used here. 
+
+Accordingly, the samples ids and labels are also modified.
+
+```{r interpolate_counts check @samplesdf, R.options = list(max.print = 20)}
+epd.1@samplesdf
+epd.1.int@samplesdf
+```
+> Note that samples ids (`samples_`) start now from 10001 onwards, instead from 1 (which are reserved for original --not interpolated-- data). This can be used as an extra warning flag.
+
+### Average counts data to specific time ranges
+
+Another approach to standardize counts through time is calculating average countings in particular time ranges (e.g., mean *Cedrus* pollen concentration between 1000 and 2000 cal BP). This can be carried out with the `intervals_counts` function. The function is quite similar to `interpolate_counts`, but it requires to arguments to specify time ranges (or intervals). The first one (`tmin`) is a numeric vector with starting values of the intervals and the second one (`tmax`) another numeric vector with the ending values of the intervals. It also requires an `epd.entity.df` object (as argument `x`), a chronology number (argument `chronology`), and accept a vector with labels for the new sample labels (argument `newlabels`). If `chronology` is not specified it use the default one for that entity, as specified in `x@defaultchron`. If `newlabels`is not specified the function creates new labels with the ranges definition.
+
+Similarly to `interpolate_counts`, the new `epd.entity.df` object returned by the function is modified in several ways. In the first place the countings now reflect those estimated for the desired time ranges.
+
+
+```{r intervals_counts}
+epd.1.ran <- intervals_counts(epd.1, c(0,1000,2000,3000), c(999, 1999, 2999, 3999))
+epd.1.ran@commdf@counts[, 1:5]
+```
+> Compare the values with those from percentages in the samples or as those interpolated for particular time periods.
+
+The slot `@countsprocessing` was also modified to reflect the fact that data have been averaged at time intervals.
+
+```{r intervals_counts check @countsprocessing}
+epd.1.ran@countsprocessing
+```
+
+Because the new ages are based in one of the chronologies, the function modifies also the tables with the ages (`@depthages`) and depths (`@depthcm`) to report the new ages (one column only with the chronology in which they were based) and estimated depths . 
+
+```{r intervals_counts check @agesdf, R.options = list(max.print = 18)}
+epd.1.ran@agesdf
+```
+> Note that argument `chronology` was not specified and the default chronology ("giesecke") was used here. Also note that ages do not exactly match the intervals midpoint, they represent the average age of the samples used to calculate the average counts for each time range. Same thing happen with depth of the samples.
+
+Accordingly, the samples ids and labels are also modified.
+
+```{r intervals_counts check @samplesdf, R.options = list(max.print = 20)}
+epd.1.ran@samplesdf
+```
+> Note that samples ids (`samples_`) start now from 20001 onwards, instead from 1 (which are reserved for original --not interpolated-- data). This can be used as an extra warning flag. Note also the samples labels indicating the right ranges.
+
+### Calculating data quality using [@blois_2011]
+
+
+
+```{r standardize functions, eval = F}
 blois_quality(epd.1)
 
 # Tabulate functions ----
