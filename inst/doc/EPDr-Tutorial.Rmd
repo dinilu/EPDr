@@ -1,0 +1,298 @@
+---
+title: "EPDr vignette"
+author: "Diego Nieto Lugilde"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    css: myvignette.css
+    number_sections: true
+    toc: true
+    toc_depth: 2
+
+vignette: >
+  %\VignetteIndexEntry{Using the EPDr package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, warning=FALSE)
+```
+
+In this vignette we will illustrate the use of EPDr package, from installing the package to retrieving data from a local server of the European Pollen Database (EPD) and how to use those data to perform some basic analysis and produce most common plots in paleopalynology, like palynograms or maps.
+
+
+# Installing the EPDr package
+User can choose to install the latest development version from github or the latest released version from CRAN.
+
+The development version from github can be installed using the `install_github` function from the `devtools`package.
+```{r Install from github, eval=F}
+library(devtools)
+install_github("dinilu/EPDr", force=T)
+```
+
+Alternatively, the last released version can be installed from CRAN using the usual `install.package` function
+
+```{r Install from CRAN, eval=F}
+install.packages("EPDr")
+```
+
+
+# Setting up the EPD database
+
+Before moving on with this vignette, it is important that the user have access to a running PostgreSQL server with the EPD database. This is where the data are going to be pulled out. Detailed, and step by step, instructions to do so in a local-host are in a specific vignette along with the EPDr package. Check the vignette in the following code if you have not yet.
+
+```{r Setting up EPD server, eval=F}
+vignette("EPD-PostgreSQL", package="EPDr")
+```
+
+
+# Loading the EPDr package
+
+As any other R-package, `ÈPDr` is loaded in the working environment with the `library` function.
+
+```{r Loading EPDr}
+library(EPDr)
+```
+
+
+# Connecting to the EPD database
+
+The `EPDr` package uses the `RPostgreSQL` package to establish a connection between the R session and the EPD database in the PostgreSQL server. Although this can be done to a online server, we assume most users do not have the expertise to setup an online server and most are thus running the server and the R session in the same computer (localhost configuration). 
+
+To establish the connection we use the `connect_to_epd` function, which requires the following arguments:
+*`database`: database name. No default database name is specified in the function.
+*`user`: user name. Name of the user with privileges to access the database. No default user name is specified in the function.
+*`password`: user's password. Password of the user to access the database.
+*`host`: address to the server. "localhost" is the default value indicating that the server is running in the local computer.
+
+If the function is called with no arguments `connect_to_epd()`, the function assume the server is running in the local computer ("locahost"), and interactively ask for the necessary arguments to connect with the database: `database`, `user`, and `password`.
+
+```{r Connect to local EPD}
+epdConnection <- connect_to_epd(database="epd", user="epdr", password="epdrpw")
+```
+
+In case you have access to a remote EPD server, you only have to provide the online address to the server using the argument `host`.
+
+```{r Connect to remote EPD, eval=F}
+epdConnection <- connect_to_epd(database="epd", user="epdr", password="epdrpw", host="http://remote.epd.server")
+```
+
+Now, we are ready to check the connection with some of the functions in the `RPostgreSQL` and/or `DBI` packages. For instance, we can use the `dbListTables` function to get a list of all the tables in the database. The function should return a list of 45 tables.
+
+```{r Test the connection}
+library(DBI)
+dbListTables(epdConnection)
+```
+
+
+# Querying data from the database
+
+The EPDr package provide several ways to retrieve data from the database: Listing information from different fields in the database with `list` functions, or extracting especific data for a particular entity (pollen core, polster sample, etc.) with `get` functions.
+
+## Listing fields from the EPD (`list` functions)
+
+For users unfamiliar with the database it might be useful to list elements in the database, for instance to know which countries are represented or which publications are associated with the entities in the database. To do so, the package provides a series of `list` functions that return specific tables from the database where important information can be looked at.
+
+Some of these functions (`listCountries` and `listTaxagroups`) only accept one argument (`connection`), which must be a valid connection to the EPD database. 
+
+```{r listCountries and listTaxagroups, R.options=list(max.print=15)}
+list_countries(epdConnection)
+list_taxagroups(epdConnection)
+```
+
+However, other `list` functions accept several arguments to further filter the result of the query. For instance, `listRegions` accepts an extra argument (`country`) to limit the query to particular countries. 
+
+```{r listRegions, R.options=list(max.print=40)}
+list_regions(epdConnection)
+list_regions(epdConnection, country="Spain")
+```
+
+Each function has their own relevant parameters. For instance, `listTaxa` accepts the argument `group_id`, which refers to the taxa groups from `listTaxagroups`.
+
+```{r listTaxa, R.options=list(max.print=20)}
+list_taxa(epdConnection)
+list_taxa(epdConnection, group_id="HERB")
+```
+
+Other `list` functions accept more arguments. Sample sites, for instance, can be listed specifying the `country` and `region` of interest, but also a set of four geographical coordinates (longitude and latitude) encompasing the area of interest (xmin, xmax, ymin, ymax).
+
+```{r listSites, R.options=list(max.print=30)}
+list_sites(epdConnection)
+list_sites(epdConnection, country="Spain", region="Andalucia")
+list_sites(epdConnection, coords=c(-4, 10, 36, 40))
+```
+
+Biological counts and datation data in the EPD database are refered to entities. This account for the fact that multiple samples can be taken in the same site. For instance, several cores drilled in the the same lake, or a core and a surface sample (moss polster or pollen trap) being collected in a peatbog.
+
+Entities thus can be listed according to many different criteria: site name or site ID (`site`), geographical coordinates (`coords`), last name of the author (`lastname`), first name of the author (`firstname`), initials of the author (`initials`), publication number (`publ`), country (`country`) and region (`region`), and restriction on the use of data (`restrictions`). If multiple criteria are going to be used, the author can decide to use a logical operator to control for an additive (`AND`) or alternative (`OR`) interaction between criteria.
+
+```{r listE, R.options=list(max.print=50)}
+list_e(epdConnection)
+list_e(epdConnection, site="Adange")
+list_e(epdConnection, lastname="Tzedakis")
+```
+
+When using any of these `list` functions with arguments to filter the query, we can specify multiple values. That means for instance that we can pass a vector of names as the argument `country` to the `listE` function to get information about all the entities in all those countries.
+
+```{r listE multiple countries, R.options=list(max.print=60)}
+list_e(epdConnection, country=c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
+```
+
+Finally, the `listPubl` function allow to search the publications we need to cite if are going to use any of the datasets in the database. This function thus allow to search publications for several criteria, including entity number (`e_`).
+
+```{r listPubl, R.options=list(max.print=10)}
+list_publ(epdConnection)
+list_publ(epdConnection, e_=1)
+```
+
+## Getting biological counts and datation information (`get` functions)
+
+So far, we have been able to look for metadata information (details on country, region, or site) to which entities of the database belong to, but most times we are interested in extracting biological information, along with chronological information that allows us to dating the corresponding biological information, for those particular entities. The `EPDr` package provide a set of `get` functions specially designed for this.
+
+All these `get` functions have been designed to query data for a particular entity in the database. Hence, all of them (but `getTaxonomyEPD`) accept two arguments: entity ID (`e_`) and a valid connection to the EPD database (`connection`). Note that entities has to be referred by their ID number and not by their sigle name. If you know the sigle of a particular entity, you need to use the `listE` function and look for the `e_` number for that particular `sigle`.
+
+Some of the `get` functions retrieve metadata for the entity, the site, or the use restriction for data in that particular entity. The result from these functions are regular data frames.
+
+```{r getEntity getSite and getRestriction, eval=F}
+get_entity(1, epdConnection)
+get_site(1, epdConnection)
+get_restriction(1, epdConnection)
+```
+
+However, most of the functions recover actual data from the entities. There are two groups of data that can be retrieved: datation information and biological samples/counts.
+
+### Retrieving datation information for particular entities
+
+Among the datation data most relevant data are radiocarbon dates from radiocarbon samples, which can be retrieved with `getC14`. 
+
+```{r, eval=F}
+get_c14(1, epdConnection)
+get_events(1, epdConnection)
+get_chronology(1, epdConnection)
+get_datation(1, epdConnection)
+
+get_ages(1, epdConnection)
+
+get_psamples(1, epdConnection)
+get_entity(1, epdConnection)
+
+get_taxonomy_epd(epdConnection)
+```
+
+
+```{r export functions, eval=F}
+# Export functions ----
+c14.clam <- export_c14(c14)
+
+# Extract functions ----
+
+# Standardize functions ----
+
+# Tabulate functions ----
+
+# Plotting functions ----
+
+
+# Section 1 - Recalibrate chronologies ------------------------------------------
+
+# Site with one chronologies with EXTRA data
+core4Clam(1, epdConnection)
+clam("1")
+
+# Site with two chronologies, one with EXTRA data
+core4Clam(4, epdConnection)
+clam("4")
+
+entity.list <- listE(epdConnection, country=c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
+entity.list <- listE(epdConnection)$e_
+counts.all <- lapply(entity.list, getAgedCounts, epdConnection)
+
+
+counts.po <- lapply(counts.all, filterTaxaGroups, c("HERB", "TRSH", "DWAR", "LIAN", "HEMI", "UPHE"))
+counts.gi <- lapply(counts.po, gieseckeDefaultChronology)
+counts.un <- removeRestricted(counts.gi)
+counts.wa <- removeWithoutAges(counts.un)
+
+percent.wa <- lapply(counts.wa, trans2Percentages)
+percent.int <- lapply(percent.wa, interpolateCounts, seq(0, 22000, by=1000))
+percent.ran <- lapply(percent.wa, intervalsCounts, seq(0, 21000, by=1000), seq(999, 21999, by=1000))
+
+epd.taxonomy <- getTaxonomyEPD(epdConnection)
+
+counts.wa.acc <- lapply(counts.wa, taxa2AcceptedTaxa, epd.taxonomy)
+percent.wa.acc <- lapply(percent.wa, taxa2AcceptedTaxa, epd.taxonomy)
+percent.int.acc <- lapply(percent.int, taxa2AcceptedTaxa, epd.taxonomy)
+
+# counts.wa.hig <- lapply(counts.wa, taxa2HigherTaxa, epd.taxonomy)
+# percent.wa.hig <- lapply(percent.wa, taxa2HigherTaxa, epd.taxonomy)
+# percent.ran.hig <- lapply(percent.ran, taxa2HigherTaxa, epd.taxonomy)
+# percent.int.hig <- lapply(percent.int, taxa2HigherTaxa, epd.taxonomy)
+
+counts.wa.uni <- unifyTaxonomy(counts.wa.acc, epd.taxonomy)
+percent.wa.uni <- unifyTaxonomy(percent.wa.acc, epd.taxonomy)
+percent.int.uni <- unifyTaxonomy(percent.int.acc, epd.taxonomy)
+
+
+# Journals:
+#   Quartenary International
+
+Cedrus <- c("Cedrus", "Cedrus atlantica", "Cedrus cf. C. atlantica", "Cedrus-type", "cf. Cedrus")
+
+
+
+
+
+mapTaxaAge(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse=T, pollen_thres=0)(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse=T, pollen_thres=0)
+mapTaxaAge(percent.unr.ranges, Cedrus, "5500-6500", pres_abse=F, legend_range=c(0,5))
+mapTaxaAge(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse=F, legend_range=c(0,5))
+
+Pinus <- c("Pinus", "Pinus pinaster", "Pinus pinea", "Pinus sylvestris", "Pinus-type", "Pinus sp.")
+mapTaxaAge(percent.unr.ranges, Pinus, "5500-6500", pres_abse=T)
+mapTaxaAge(percent.unr.ranges, Pinus, "20000-22000", pres_abse=T)
+mapTaxaAge(percent.unr.ranges, Pinus, "5500-6500", pres_abse=F)
+mapTaxaAge(percent.unr.ranges, Pinus, "20000-22000", pres_abse=F)
+
+
+
+
+mapTaxaAge(percent.int.uni, "Cedrus", "0", pres_abse=F, zoom_coords=c(-20, 180, 30, 80), points_pch=21,
+           points_colour=c("red", "red"), points_fill=c("red", "red"),
+           points_range_size=c(1, 1), map_title="EPD sites",
+           legend_range=NULL, legend_title=NULL, napoints_size=1, napoints_pch=21, 
+           napoints_colour="red", napoints_fill="red", countries_fill_colour="grey80", countries_border_colour="grey90")
+
+
+
+entity.list <- sapply(counts.wa.uni, extractE)
+datation.co.wa.uni <- lapply(entity.list, getDatation, epdConnection)
+
+entity.list <- sapply(percent.wa.uni, extractE)
+datation.pe.wa.uni <- lapply(entity.list, getDatation, epdConnection)
+
+entity.list <- sapply(percent.ran.uni, extractE)
+datation.pe.ran.uni <- lapply(entity.list, getDatation, epdConnection)
+
+entity.list <- sapply(percent.int.uni, extractE)
+datation.pe.int.uni <- lapply(entity.list, getDatation, epdConnection)
+
+
+# Aquí me quedo con el problema de que hay algunos e_ que tienen NA en las fechas y casca a la hora de calcular el indice de calidad
+for(ii in 1:length(entity.list)){
+  for(ii in 44){
+    counts.wa.uni.q <- mapply(qualityIndex, counts.wa.uni[ii], datation.co.wa.uni[ii])
+  }
+  percent.wa.uni.q <- mapply(qualityIndex, percent.wa.uni, datation.pe.wa.uni)
+  percent.ran.uni.q <- mapply(qualityIndex, percent.ran.uni, datation.pe.ran.uni)
+  percent.int.uni.q <- mapply(qualityIndex, percent.int.uni, datation.pe.int.uni)
+  
+  
+
+```
+
+
+
+```{r Disconnecting from the EPD database, eval=F}
+disconnectFromEPD(epdConnection)
+```
+

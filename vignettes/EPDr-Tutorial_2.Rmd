@@ -1,0 +1,110 @@
+---
+title: "EPDr vignette 2"
+author: "Diego Nieto Lugilde"
+date: "`r Sys.Date()`"
+bibliography: bibliography.bib
+output:
+  rmarkdown::html_vignette:
+    number_sections: true
+    toc: true
+    toc_depth: 3
+
+vignette: >
+  %\VignetteIndexEntry{Working with multiple entities}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+```
+
+New tutorial
+
+```{r standardize functions, eval = F}
+# Plotting functions ----
+entity.list <- list_e(epd.connection, country = c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
+entity.list <- list_e(epd.connection)$e_
+counts.all <- lapply(entity.list, get_entity, epd.connection)
+
+counts.po <- lapply(counts.all, filter_taxagroups, c("HERB", "TRSH", "DWAR", "LIAN", "HEMI", "UPHE"))
+counts.gi <- lapply(counts.po, giesecke_default_chron)
+counts.un <- remove_restricted(counts.gi)
+counts.wa <- remove_wo_ages(counts.un)
+
+# Extract functions ----
+extract_e(epd.1)
+
+
+percent.wa <- lapply(counts.wa, counts_to_percentage)
+percent.int <- lapply(percent.wa, interpolate_counts, seq(0, 22000, by = 1000))
+percent.ran <- lapply(percent.wa, intervals_counts, seq(0, 21000, by = 1000), seq(999, 21999, by = 1000))
+
+epd.taxonomy <- get_taxonomy_epd(epd.connection)
+
+counts.wa.acc <- lapply(counts.wa, taxa_to_acceptedtaxa, epd.taxonomy)
+percent.wa.acc <- lapply(percent.wa, taxa_to_acceptedtaxa, epd.taxonomy)
+percent.int.acc <- lapply(percent.int, taxa_to_acceptedtaxa, epd.taxonomy)
+
+# counts.wa.hig <- lapply(counts.wa, taxa_to_highertaxa, epd.taxonomy)
+# percent.wa.hig <- lapply(percent.wa, taxa_to_highertaxa, epd.taxonomy)
+# percent.ran.hig <- lapply(percent.ran, taxa_to_highertaxa, epd.taxonomy)
+# percent.int.hig <- lapply(percent.int, taxa_to_highertaxa, epd.taxonomy)
+
+counts.wa.uni <- unify_taxonomy(counts.wa.acc, epd.taxonomy)
+percent.wa.uni <- unify_taxonomy(percent.wa.acc, epd.taxonomy)
+percent.int.uni <- unify_taxonomy(percent.int.acc, epd.taxonomy)
+
+
+
+
+  
+e <- list_e(epd.connection)$e_
+entity.list <- lapply(e[1:100], get_entity, epd.connection)
+vapply(entity.list, check_default_chron, FUN.VALUE = logical(1))
+vapply(entity.list, check_restriction, FUN.VALUE = logical(1))
+
+remove_restricted(entity.list)
+remove_wo_ages(entity.list)
+
+lapply(entity.list, extract_e)
+lapply(entity.list, giesecke_default_chron)
+
+lapply(entity.list, entity_to_matrices)
+
+lapply(entity.list, filter_taxa_groups, c("DWAR", "HERB", "LIAN", "TRSH", "UPHE", "INUN"))
+
+lapply(entity.list, filter_taxa, c("Pinus","Quercus","Urticaceae"), get_taxonomy_epd(epd.connection))
+lapply(entity.list, taxa_to_acceptedtaxa, get_taxonomy_epd(epd.connection))
+lapply(entity.list, taxa_to_highertaxa, get_taxonomy_epd(epd.connection))
+lapply(entity.list, counts_to_percentages)
+lapply(entity.list, interpolate_counts, c(1000, 2000, 3000))
+lapply(entity.list, intervals_counts, c(1000, 2000, 3000), c(2000, 3000, 4000))
+unify_taxonomy(entity.list, get_taxonomy_epd(epd.connection))
+lapply(entity.list, table_by_taxa_age, c("Quercus"), c("1000", "2000"))
+map_taxa_age(entity.list, "Pinus", "1000")
+lapply(entity.list, blois_quality)
+
+
+Cedrus <- c("Cedrus", "Cedrus atlantica", "Cedrus cf. C. atlantica", "Cedrus-type", "cf. Cedrus")
+
+mapTaxaAge(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse = T, pollen_thres = 0)(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse = T, pollen_thres = 0)
+mapTaxaAge(percent.unr.ranges, Cedrus, "5500-6500", pres_abse = F, legend_range = c(0,5))
+mapTaxaAge(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse = F, legend_range = c(0,5))
+
+Pinus <- c("Pinus", "Pinus pinaster", "Pinus pinea", "Pinus sylvestris", "Pinus-type", "Pinus sp.")
+mapTaxaAge(percent.unr.ranges, Pinus, "5500-6500", pres_abse = T)
+mapTaxaAge(percent.unr.ranges, Pinus, "20000-22000", pres_abse = T)
+mapTaxaAge(percent.unr.ranges, Pinus, "5500-6500", pres_abse = F)
+mapTaxaAge(percent.unr.ranges, Pinus, "20000-22000", pres_abse = F)
+
+
+mapTaxaAge(percent.int.uni, "Cedrus", "0", pres_abse = F, zoom_coords = c(-20, 180, 30, 80), points_pch = 21,
+           points_colour = c("red", "red"), points_fill = c("red", "red"),
+           points_range_size = c(1, 1), map_title = "EPD sites",
+           legend_range = NULL, legend_title = NULL, napoints_size = 1, napoints_pch = 21, 
+           napoints_colour = "red", napoints_fill = "red", countries_fill_colour = "grey80", countries_border_colour = "grey90")
+```
+
+
+# References

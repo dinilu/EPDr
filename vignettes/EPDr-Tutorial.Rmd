@@ -153,7 +153,7 @@ So far, we have been able to look for metadata information (details on country, 
 
 All these `get` functions have been designed to query data for a particular entity in the database. Hence, most of them (but `get_taxonomy_epd` and some others) accept two arguments: entity ID (`e_`) and a valid connection to the EPD database (`connection`). Note that entities has to be referred by their ID number and not by their sigle name. If you know the sigle of a particular entity, you need to use the `list_e` function and look for the `e_` number for that particular `sigle`.
 
-These functions are divided in two groups. The first one is comprised by a set of `get` functions that returns single data frames that resemble the tables in the EPD in which information is restricted for the queried entity (`e_`). All these functions are called `.get_` functions followed by a reference to the table they query. Because the standar user usually won't use these functions we do not provide here any example. These functions works also behind the hook in other `get_` functions. 
+These functions are divided in two groups. The first one is comprised by a set of `get` functions that returns single data frames that resemble the tables in the EPD in which information is restricted for the queried entity (`e_`). All these functions are called `.get_` functions followed by a reference to the table they query. Because the standard user usually won't use these functions we do not provide here any example. These functions works also behind the hook in other `get_` functions. 
 
 The second group of functions, named as `get_` functions followed by a small descriptor, retrieve information from different tables (using `.get_` functions) for related data in an entity. Although most user won't need these functions, it is good for them to get familiar with the data structure they return, because they are the same in other more common functions and objects they return. These functions are: `get_ent`, `get_site`, `get_geochron`, `get_chron`, or `get_samples`. Because these wrapping functions query information from different tables, they return especial S4 class objects that have been designed for the package. Different tables are stored in different slots of the objects. 
 
@@ -173,7 +173,7 @@ class(site.1)
 slotNames(site.1)
 ```
 
-The `get_geochron` function returns all geochronological data for a particular entity. This is a description of the geochronological samples (sample id, depth, thickness, etc.) as well as the details of the analitical results from different techniques (C^14^, aminoacid racemization, etc.)
+The `get_geochron` function returns all geochronological data for a particular entity. This is a description of the geochronological samples (sample id, depth, thickness, etc.) as well as the details of the analytical results from different techniques (C^14^, aminoacid racemization, etc.)
 
 ```{r get_geochron, R.options = list(max.print = 10)}
 geochron.1 <- get_geochron(1, epd.connection)
@@ -248,7 +248,7 @@ Another function (`export_agebasis`) export the table AGEBASIS, which stores inf
 export_agebasis("clam", epd.1@chron@agebasis)
 export_agebasis("bacon", epd.1)
 ```
-`export_events` function reformats and exports the data stored in the EVENTS and SYNEVENT tables, which refer to geological events registered in the entity (e.g., tephra, etc.). Similarly to `export_c14`, `export_events` requires two tables (SYNEVENT and EVENT) or the `epd.entity` objects in which to look for them. 
+`export_events` function re-formats and exports the data stored in the EVENTS and SYNEVENT tables, which refer to geological events registered in the entity (e.g., tephra, etc.). Similarly to `export_c14`, `export_events` requires two tables (SYNEVENT and EVENT) or the `epd.entity` objects in which to look for them. 
 
 ```{r export_events, R.options = list(max.print = 10)}
 export_events("clam", epd.1@chron@synevent, epd.1@chron@event)
@@ -359,7 +359,7 @@ epd.1@commdf@taxanames
 ```
 > Check how the two `taxanames` lists have changed.
 
-Another column in the taxonomy table of the EPD (`mhvar`) has the `var_` numbers of the taxon higher taxonomical level, allowing to switch each variable to the higher taxonomical variable (or name). 
+Another column in the taxonomy table of the EPD (`mhvar`) has the `var_` numbers of the taxon higher taxonomic level, allowing to switch each variable to the higher taxonomic variable (or name). 
 
 ```{r taxa_to_highertaxa, R.options = list(max.print = 50)}
 epd.1@commdf@taxanames
@@ -379,11 +379,11 @@ rowSums(epd.1@commdf@counts)
 rowSums(epd.1.ht@commdf@counts)
 ```
 
-This is the only way that EPD allow to upscale taxonomy. This implementation is however quite limited because it does not allow to standardize taxonomy at a specific taxonomic range (e.g., genus level). Further developments in the package may explore how to combine data from the entities with taxonomical databases, like those mined by packages like `taxize`.
+This is the only way that EPD allow to upscale taxonomy. This implementation is however quite limited because it does not allow to standardize taxonomy at a specific taxonomic range (e.g., genus level). Further developments in the package may explore how to combine data from the entities with taxonomic databases, like those mined by packages like `taxize`.
 
 ### Filtering taxa
 
-Despite its name, entities in the EPD can contain data from different taxonomical groups, and not only for pollen or spores. Some entities can contain data for algae, acritarchs, etcetera (check `list_taxagroup` for the whole list). Hence, if one is interested in a particular biological group, he has to filter and remove the data from the rest of the groups. This is accomplished with the `filter_taxagroups` function. It takes two arguments. The first one must be an `epd.entity.df` object (or an `epd.entity` that is automatically transformed into an `epd.entity.df`) to be filtered. The second one is a character vector with the groups ids of interest to be retained. For instance, `DWAR` , `HERB`, `LIAN`, `TRSH`, `UPHE`, and `INUN` are all groups of pollen. So, if you want to work with upland plants pollen you can run the following code:
+Despite its name, entities in the EPD can contain data from different taxonomic groups, and not only for pollen or spores. Some entities can contain data for algae, acritarchs, etc (check `list_taxagroup` for the whole list). Hence, if one is interested in a particular biological group, he has to filter and remove the data from the rest of the groups. This is accomplished with the `filter_taxagroups` function. It takes two arguments. The first one must be an `epd.entity.df` object (or an `epd.entity` that is automatically transformed into an `epd.entity.df`) to be filtered. The second one is a character vector with the groups ids of interest to be retained. For instance, `DWAR` , `HERB`, `LIAN`, `TRSH`, `UPHE`, and `INUN` are all groups of pollen. So, if you want to work with upland plants pollen you can run the following code:
 
 ```{r filter_taxagroups, R.options = list(max.print = 40)}
 epd.1 <- filter_taxagroups(epd.1, c("DWAR", "HERB", "LIAN", "TRSH", "UPHE", "INUN"))
@@ -448,14 +448,14 @@ epd.1@defaultchron
 
 ### Interpolating counts data to specific time periods
 
-Each EPD entity has counts data for samples at different depths, which combined with the different stratigraphy of each site (e.g., differential sedimentation rates among lakes), make that each counting data correspond to no particular and prestablished ages. Some times the user may need to estimate the counts data for a particular time period (and this can be important when comparing data from multiple entities and sites, but we will cover that later). The `interpolate_counts` function allow to interpolate counts in an `epd.entity.df` object (if an `epd.entity` object is provided this is previously transformed into an `edp.entity.df`) to those particular time periods specified by the user. The interpolation can be accomplished with three different methods: "linear", "loess", and "smooth spline". 
+Each EPD entity has counts data for samples at different depths, which combined with the different stratigraphy of each site (e.g., differential sedimentation rates among lakes), make that each counting data correspond to no particular and pre-established ages. Some times the user may need to estimate the counts data for a particular time period (and this can be important when comparing data from multiple entities and sites, but we will cover that later). The `interpolate_counts` function allow to interpolate counts in an `epd.entity.df` object (if an `epd.entity` object is provided this is previously transformed into an `edp.entity.df`) to those particular time periods specified by the user. The interpolation can be accomplished with three different methods: "linear", "loess", and "smooth spline". 
 
 The function takes two mandatory arguments: `x` and `time`. `x` has to be an object of class `epd.entity.df` to be interpolated, and `time` has to be a numeric vector indicating the ages to which interpolate the counts. Other arguments are `chronology`, indicating the chronology that should be used to look for ages of the actual samples (if not provided the function use the default chronology according to the one specified in `x`), `method`, indicating the interpolation method to be used, `rep_negt` that should be `TRUE` or `FALSE`, indicating whether negative interpolated values should be replaced by `0`, and further arguments (e.g., `span`, `df`, and `...`) to control loess and smooth spline interpolation methods.
 
 The function, in addition to calculate the
 
 ```{r interpolate_counts}
-epd.1.int <- interpolate_counts(epd.1, c(1000, 2000, 3000), method = "linear")
+epd.1.int <- interpolate_counts(epd.1, c(0, 1000, 2000, 3000, 4000, 5000), method = "linear")
 ```
 
 The new `epd.entity.df` object returned by the function has been modified in several ways. In the first place the countings now reflect those estimated for the desired time periods.
@@ -496,7 +496,7 @@ Similarly to `interpolate_counts`, the new `epd.entity.df` object returned by th
 
 
 ```{r intervals_counts}
-epd.1.ran <- intervals_counts(epd.1, c(0,1000,2000,3000), c(999, 1999, 2999, 3999))
+epd.1.ran <- intervals_counts(epd.1, c(0,1000,2000,3000, 4000, 5000), c(999, 1999, 2999, 3999, 4999, 5999))
 epd.1.ran@commdf@counts[, 1:5]
 ```
 > Compare the values with those from percentages in the samples or as those interpolated for particular time periods.
@@ -523,110 +523,42 @@ epd.1.ran@samplesdf
 
 ### Calculating data quality using [@blois_2011]
 
+Because datations of counting samples rely on age-depth models fitted with radiocarbon ages from datation samples there are some uncertainty on the exact ages they belong to. Furthermore, if counts are interpolated or mean values are calculated for time intervals, the uncertainty of the counts increase because of the interpolation methods. Blois *et al.* [-@blois_2011] proposed an algorithm to calculate an uncertainty (or quality) index. This method basically measure the distance (in time) from any count to the closest control data in the chronology and from any count to the closest counting sample. These two distances are standardized by certain thresholds that can be modified. Finally, the complementary of these distances are averaged to calculate the final quality index. 
 
+The `blois_quality` function implement this calculation on `epd.entity.df` objects. The function takes the following arguments: `x` an `epd.entity.df` object to be used for make the calculations, `chronology` a number indicating the chronology to be used for ages of the samples and the control points, `max_sample_dist` a number indicating the maximum distance to actual counting samples to standardize the samples distance, and `max_control_dist` a number indicating the maximum distance to geochronological control points to standardize the control distances. If `chronology` is not specified, the function use the default one from `x`. If `max_sample_dist` and `max_control_dist` are not specified the default values are 2000 and 5000, respectively [@blois_2011].
 
-```{r standardize functions, eval = F}
-blois_quality(epd.1)
-
-# Tabulate functions ----
-table_by_taxa_age(epd.1, as.character(c(1:10)), "Pinus")
-
-# Plotting functions ----
-plot_diagram(epd.1)
-
-
-entity.list <- list_e(epd.connection, country = c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
-entity.list <- list_e(epd.connection)$e_
-counts.all <- lapply(entity.list, get_entity, epd.connection)
-
-counts.po <- lapply(counts.all, filter_taxagroups, c("HERB", "TRSH", "DWAR", "LIAN", "HEMI", "UPHE"))
-counts.gi <- lapply(counts.po, giesecke_default_chron)
-counts.un <- remove_restricted(counts.gi)
-counts.wa <- remove_wo_ages(counts.un)
-
-# Extract functions ----
-extract_e(epd.1)
-
-
-percent.wa <- lapply(counts.wa, counts_to_percentage)
-percent.int <- lapply(percent.wa, interpolate_counts, seq(0, 22000, by = 1000))
-percent.ran <- lapply(percent.wa, intervals_counts, seq(0, 21000, by = 1000), seq(999, 21999, by = 1000))
-
-epd.taxonomy <- get_taxonomy_epd(epd.connection)
-
-counts.wa.acc <- lapply(counts.wa, taxa_to_acceptedtaxa, epd.taxonomy)
-percent.wa.acc <- lapply(percent.wa, taxa_to_acceptedtaxa, epd.taxonomy)
-percent.int.acc <- lapply(percent.int, taxa_to_acceptedtaxa, epd.taxonomy)
-
-# counts.wa.hig <- lapply(counts.wa, taxa_to_highertaxa, epd.taxonomy)
-# percent.wa.hig <- lapply(percent.wa, taxa_to_highertaxa, epd.taxonomy)
-# percent.ran.hig <- lapply(percent.ran, taxa_to_highertaxa, epd.taxonomy)
-# percent.int.hig <- lapply(percent.int, taxa_to_highertaxa, epd.taxonomy)
-
-counts.wa.uni <- unify_taxonomy(counts.wa.acc, epd.taxonomy)
-percent.wa.uni <- unify_taxonomy(percent.wa.acc, epd.taxonomy)
-percent.int.uni <- unify_taxonomy(percent.int.acc, epd.taxonomy)
-
-
-
-
-  
-e <- list_e(epd.connection)$e_
-entity.list <- lapply(e[1:100], get_entity, epd.connection)
-vapply(entity.list, check_default_chron, FUN.VALUE = logical(1))
-vapply(entity.list, check_restriction, FUN.VALUE = logical(1))
-
-remove_restricted(entity.list)
-remove_wo_ages(entity.list)
-
-lapply(entity.list, extract_e)
-lapply(entity.list, giesecke_default_chron)
-
-lapply(entity.list, entity_to_matrices)
-
-lapply(entity.list, filter_taxa_groups, c("DWAR", "HERB", "LIAN", "TRSH", "UPHE", "INUN"))
-
-lapply(entity.list, filter_taxa, c("Pinus","Quercus","Urticaceae"), get_taxonomy_epd(epd.connection))
-lapply(entity.list, taxa_to_acceptedtaxa, get_taxonomy_epd(epd.connection))
-lapply(entity.list, taxa_to_highertaxa, get_taxonomy_epd(epd.connection))
-lapply(entity.list, counts_to_percentages)
-lapply(entity.list, interpolate_counts, c(1000, 2000, 3000))
-lapply(entity.list, intervals_counts, c(1000, 2000, 3000), c(2000, 3000, 4000))
-unify_taxonomy(entity.list, get_taxonomy_epd(epd.connection))
-lapply(entity.list, table_by_taxa_age, c("Quercus"), c("1000", "2000"))
-map_taxa_age(entity.list, "Pinus", "1000")
-lapply(entity.list, blois_quality)
-
-
-
-# Journals:
-#   Quartenary International
-
-Cedrus <- c("Cedrus", "Cedrus atlantica", "Cedrus cf. C. atlantica", "Cedrus-type", "cf. Cedrus")
-
-mapTaxaAge(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse = T, pollen_thres = 0)(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse = T, pollen_thres = 0)
-mapTaxaAge(percent.unr.ranges, Cedrus, "5500-6500", pres_abse = F, legend_range = c(0,5))
-mapTaxaAge(percent.unr.ranges,  Cedrus, "20000-22000", pres_abse = F, legend_range = c(0,5))
-
-Pinus <- c("Pinus", "Pinus pinaster", "Pinus pinea", "Pinus sylvestris", "Pinus-type", "Pinus sp.")
-mapTaxaAge(percent.unr.ranges, Pinus, "5500-6500", pres_abse = T)
-mapTaxaAge(percent.unr.ranges, Pinus, "20000-22000", pres_abse = T)
-mapTaxaAge(percent.unr.ranges, Pinus, "5500-6500", pres_abse = F)
-mapTaxaAge(percent.unr.ranges, Pinus, "20000-22000", pres_abse = F)
-
-
-mapTaxaAge(percent.int.uni, "Cedrus", "0", pres_abse = F, zoom_coords = c(-20, 180, 30, 80), points_pch = 21,
-           points_colour = c("red", "red"), points_fill = c("red", "red"),
-           points_range_size = c(1, 1), map_title = "EPD sites",
-           legend_range = NULL, legend_title = NULL, napoints_size = 1, napoints_pch = 21, 
-           napoints_colour = "red", napoints_fill = "red", countries_fill_colour = "grey80", countries_border_colour = "grey90")
-
+```{r blois_quality, R.options = list(max.print = 20)}
+epd.1 <- blois_quality(epd.1)
+epd.1.int <- blois_quality(epd.1.int)
+epd.1@agesdf@dataquality
+epd.1.int@agesdf@dataquality
 ```
 
+## Extracting data in a table for specific taxa and age
 
+Once, the data are standardized in the desired manner, you can tabulate data to be used in analysis or for exporting to other softwares. One of the functions that help with this is `table_by_taxa_age`. The function requires the following arguments: `x` an `epd.entity.df` object to extract the data from, `taxa`a character vector with the taxa names that are of interest, and `sample_label` indicating the sample that are desired to be exported.
 
-```{r Disconnecting from the EPD database, eval = F}
-disconnectFromEPD(epd.connection)
+```{r taxa_by_taxa_age, R.options = list(max.print = 20)}
+table_by_taxa_age(epd.1, c("Pinus", "Quercus"), as.character(c(1:10)))
+table_by_taxa_age(epd.1.int, "Quercus", c("1000", "2000", "3000"))
+```
+
+## Plotting pollen diagrams from data in `epd.entity.df` objects
+
+One of the most useful tools in palynology are the pollen diagrams, where particles concetrations are plotted againts depth/age. We have implemented a function to plot pollen diagrams in ggplot. Which allow for a great variaty of customization using semi-automatically information in the objects that are being plotted. Check `?plot_diagram`
+
+```{r plot_diagram, fig.width = 7, fig.height = 9, fig.align = "center"}
+plot_diagram(epd.1)
+plot_diagram(epd.1.int)
+```
+> Note that plots are shrinked to fit in the tutorial width.
+
+# Disconnecting from the EPD server
+
+Finally and although it is not mandatory, it might be convenient to close the connection to the EPD server. That is accomplished with the `disconnec_from_epd` function. It only requires one argument with a valid connection object to the database.
+
+```{r disconnect_from_epd}
+disconnect_from_epd(epd.connection)
 ```
 
 # References

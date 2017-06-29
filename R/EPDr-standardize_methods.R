@@ -28,7 +28,7 @@
 #' 
 #' @param x epd.entity \code{\link[EPDr]{epd.entity.df}} or a
 #' \code{\link[EPDr]{epd.entity}} object.
-#' @param chron numeric Chronology number to look for samples and control points ages.
+#' @param chronology numeric Chronology number to look for samples and control points ages.
 #' This value become the default chronology in the new object. If not 
 #' specified the function check the default chronology in  
 #' \code{x}. It can be any of the chronologies in the EPD for that 
@@ -40,7 +40,7 @@
 #'
 #' @return \code{\link[EPDr]{epd.entity.df}} object with no empty
 #' \code{@@agesdf@@dataquality} slot. The default chronology in \code{x@@defaultchron}
-#' is changed to the one specified in \code{chron}. 
+#' is changed to the one specified in \code{chronology}. 
 #' 
 #' @references Blois, J.L., Williams, J.W., Fitzpatrick, M.C., Ferrier, S.,
 #' Veloz, S.D., He, F., Liu, Z., Manion, G., and Otto-Bliesner, B. (2013).
@@ -75,7 +75,7 @@
 #' @rdname blois_quality
 #' @exportMethod blois_quality
 setGeneric("blois_quality", function(x,
-                                     chron = NULL,
+                                     chronology = NULL,
                                      max_sample_dist = 2000,
                                      max_control_dist = 5000){
   standardGeneric("blois_quality")
@@ -83,18 +83,29 @@ setGeneric("blois_quality", function(x,
 
 #' @rdname blois_quality
 setMethod("blois_quality", signature(x = "epd.entity.df"),
-          function(x, chron, max_sample_dist, max_control_dist){
-            if (is.null(chron)){
+          function(x, chronology, max_sample_dist, max_control_dist){
+            if ("blois" %in% colnames(x@agesdf@dataquality)){
+              stop(paste0("`x` already has blois quality index calculated.",
+                          "If you need to calculate them again, make sure ", 
+                          "you remove the 'blois' column in the ",
+                          "@agesdf@dataquality slot."))
+            }
+            if (is.null(chronology)){
               if (!check_default_chron(x)){
                 stop(paste0("The 'x' object has no sample ages ",
                             "and the quality index cannot be calculated."))
               }
-              chron <- x@defaultchron
+              chron_ <- x@defaultchron
             }
-            index <- which(x@samples@pagedpt$chron_ == chron)
+            if (chron_ == 9999){
+              chronology <- "giesecke"
+            }else{
+              chronology <- chron_
+            }
+            index <- which(x@samples@pagedpt$chron_ == chron_)
             sample_ages <- x@samples@pagedpt[index, "agebp"]
-            data_ages <- x@agesdf@depthages
-            index <- which(x@chron@agebasis$chron_ == chron)
+            data_ages <- subset(x@agesdf@depthages, select=chronology)
+            index <- which(x@chron@agebasis$chron_ == chron_)
             agebasis <- x@chron@agebasis[index, ]
             .mindiff <- function(z, w, max_diff){
               if (length(w) == 0){
@@ -128,15 +139,20 @@ setMethod("blois_quality", signature(x = "epd.entity.df"),
             control_dist <- 1 - (control_dist / max_control_dist)
             sample_dist <- 1 - (sample_dist / max_sample_dist)
             data.quality <- (control_dist + sample_dist) / 2
-            x@agesdf@dataquality <- as.data.frame(data.quality)
+            colnames(data.quality) <- "blois"
+            if(nrow(x@agesdf@dataquality) == 0){
+              x@agesdf@dataquality <- as.data.frame(data.quality)
+            }else{
+              x@agesdf@dataquality <- cbind(x@agesdf@dataquality, data.quality)
+            }
             return(x)
           })
 
 #' @rdname blois_quality
 setMethod("blois_quality", signature(x = "epd.entity"),
-          function(x, chron, max_sample_dist, max_control_dist){
+          function(x, chronology, max_sample_dist, max_control_dist){
             x <- entity_to_matrices(x)
-            x <- blois_quality(x, chron, max_sample_dist, max_control_dist)
+            x <- blois_quality(x, chronology, max_sample_dist, max_control_dist)
             return(x)
           })
 

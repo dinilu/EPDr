@@ -7,20 +7,20 @@
 \alias{blois_quality,epd.entity-method}
 \title{Blois quality index for palynological samples}
 \usage{
-blois_quality(x, chron = NULL, max_sample_dist = 2000,
+blois_quality(x, chronology = NULL, max_sample_dist = 2000,
   max_control_dist = 5000)
 
-\S4method{blois_quality}{epd.entity.df}(x, chron = NULL,
+\S4method{blois_quality}{epd.entity.df}(x, chronology = NULL,
   max_sample_dist = 2000, max_control_dist = 5000)
 
-\S4method{blois_quality}{epd.entity}(x, chron = NULL,
+\S4method{blois_quality}{epd.entity}(x, chronology = NULL,
   max_sample_dist = 2000, max_control_dist = 5000)
 }
 \arguments{
 \item{x}{epd.entity \code{\link[EPDr]{epd.entity.df}} or a
 \code{\link[EPDr]{epd.entity}} object.}
 
-\item{chron}{numeric Chronology number to look for samples and control points ages.
+\item{chronology}{numeric Chronology number to look for samples and control points ages.
 This value become the default chronology in the new object. If not 
 specified the function check the default chronology in  
 \code{x}. It can be any of the chronologies in the EPD for that 
@@ -35,7 +35,7 @@ to the control points (e.g., C14, top, bottom, etc.).}
 \value{
 \code{\link[EPDr]{epd.entity.df}} object with no empty
 \code{@agesdf@dataquality} slot. The default chronology in \code{x@defaultchron}
-is changed to the one specified in \code{chron}.
+is changed to the one specified in \code{chronology}.
 }
 \description{
 This function apply the quality index described in Blois et al. (2013). 
