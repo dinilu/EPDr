@@ -1,10 +1,11 @@
 ---
-title: "EPDr vignette"
+title: "Using the EPDr package"
 author: "Diego Nieto Lugilde"
 date: "`r Sys.Date()`"
 bibliography: bibliography.bib
 output:
   rmarkdown::html_vignette:
+    css: myvignette.css
     number_sections: true
     toc: true
     toc_depth: 3
@@ -13,7 +14,6 @@ vignette: >
   %\VignetteIndexEntry{Using the EPDr package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-
 ---
 
 ```{r setup, include = FALSE}

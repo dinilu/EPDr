@@ -1,70 +1,69 @@
 ## ----setup, include = FALSE----------------------------------------------
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 
+## ----Connect to local EPD------------------------------------------------
+library(EPDr)
+epd.connection <- connect_to_epd(database = "epd", user = "epdr", password = "epdrpw")
+
+## ----list_countries, R.options = list(max.print = 30)--------------------
+list_countries(epd.connection)
+
+## ----list_e, R.options = list(max.print = 30)----------------------------
+e_ids <- list_e(epd.connection, country = c("Spain", "Portugal"))
+e_ids <- e_ids$e_
+
+## ----list_e 2, eval = FALSE----------------------------------------------
+#  # e_ids <- list_e(epd.connection)
+#  # e_ids <- e_ids$e_
+
+## ----lapply(get_entity)--------------------------------------------------
+epd_all <- lapply(e_ids, get_entity, epd.connection)
+class(epd_all)
+class(epd_all[[1]])
+
+## ----lapply(entity_to_matrices)------------------------------------------
+epd_all <- lapply(epd_all, entity_to_matrices)
+class(epd_all[[1]])
+
+## ----remove_restricted, R.options = list(max.print = 30)-----------------
+length(epd_all)
+sapply(epd_all, check_restriction)
+epd_all <- remove_restricted(epd_all)
+length(epd_all)
+
+## ----remove_wo_ages, R.options = list(max.print = 30)--------------------
+sapply(epd_all, check_default_chron)
+epd_all <- remove_wo_ages(epd_all)
+length(epd_all)
+
+## ----lapply(extract_e)---------------------------------------------------
+sapply(epd_all, extract_e)
+
+## ----lapply(giesecke_default_chron)--------------------------------------
+epd_all <- lapply(epd_all, giesecke_default_chron)
+
+## ----lapply(filter_taxagroups)-------------------------------------------
+epd_all <- lapply(epd_all, filter_taxagroups, c("HERB", "TRSH", "DWAR", "LIAN", "HEMI", "UPHE", "INUN"))
+
+## ----lapply(taxa_to_accepted)--------------------------------------------
+epd.taxonomy <- get_taxonomy_epd(epd.connection)
+epd_all <- lapply(epd_all, taxa_to_acceptedtaxa, epd.taxonomy)
+
+## ----unify_taxonomy------------------------------------------------------
+epd_all <- unify_taxonomy(epd_all, epd.taxonomy)
+
+## ----lapply(counts_to_percentage)----------------------------------------
+epd_all <- lapply(epd_all, counts_to_percentage)
+
+## ----lapply(interpolate_counts), R.options = list(max.print = 50)--------
+epd_all <- lapply(epd_all, interpolate_counts, seq(0, 22000, by = 1000))
+epd_all[[2]]@commdf@counts[, 1:7]
+
 ## ----standardize functions, eval = F-------------------------------------
-#  # Plotting functions ----
-#  entity.list <- list_e(epd.connection, country = c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
-#  entity.list <- list_e(epd.connection)$e_
-#  counts.all <- lapply(entity.list, get_entity, epd.connection)
 #  
-#  counts.po <- lapply(counts.all, filter_taxagroups, c("HERB", "TRSH", "DWAR", "LIAN", "HEMI", "UPHE"))
-#  counts.gi <- lapply(counts.po, giesecke_default_chron)
-#  counts.un <- remove_restricted(counts.gi)
-#  counts.wa <- remove_wo_ages(counts.un)
-#  
-#  # Extract functions ----
-#  extract_e(epd.1)
-#  
-#  
-#  percent.wa <- lapply(counts.wa, counts_to_percentage)
-#  percent.int <- lapply(percent.wa, interpolate_counts, seq(0, 22000, by = 1000))
-#  percent.ran <- lapply(percent.wa, intervals_counts, seq(0, 21000, by = 1000), seq(999, 21999, by = 1000))
-#  
-#  epd.taxonomy <- get_taxonomy_epd(epd.connection)
-#  
-#  counts.wa.acc <- lapply(counts.wa, taxa_to_acceptedtaxa, epd.taxonomy)
-#  percent.wa.acc <- lapply(percent.wa, taxa_to_acceptedtaxa, epd.taxonomy)
-#  percent.int.acc <- lapply(percent.int, taxa_to_acceptedtaxa, epd.taxonomy)
-#  
-#  # counts.wa.hig <- lapply(counts.wa, taxa_to_highertaxa, epd.taxonomy)
-#  # percent.wa.hig <- lapply(percent.wa, taxa_to_highertaxa, epd.taxonomy)
-#  # percent.ran.hig <- lapply(percent.ran, taxa_to_highertaxa, epd.taxonomy)
-#  # percent.int.hig <- lapply(percent.int, taxa_to_highertaxa, epd.taxonomy)
-#  
-#  counts.wa.uni <- unify_taxonomy(counts.wa.acc, epd.taxonomy)
-#  percent.wa.uni <- unify_taxonomy(percent.wa.acc, epd.taxonomy)
-#  percent.int.uni <- unify_taxonomy(percent.int.acc, epd.taxonomy)
-#  
-#  
-#  
-#  
-#  
-#  e <- list_e(epd.connection)$e_
-#  entity.list <- lapply(e[1:100], get_entity, epd.connection)
-#  vapply(entity.list, check_default_chron, FUN.VALUE = logical(1))
-#  vapply(entity.list, check_restriction, FUN.VALUE = logical(1))
-#  
-#  remove_restricted(entity.list)
-#  remove_wo_ages(entity.list)
-#  
-#  lapply(entity.list, extract_e)
-#  lapply(entity.list, giesecke_default_chron)
-#  
-#  lapply(entity.list, entity_to_matrices)
-#  
-#  lapply(entity.list, filter_taxa_groups, c("DWAR", "HERB", "LIAN", "TRSH", "UPHE", "INUN"))
-#  
-#  lapply(entity.list, filter_taxa, c("Pinus","Quercus","Urticaceae"), get_taxonomy_epd(epd.connection))
-#  lapply(entity.list, taxa_to_acceptedtaxa, get_taxonomy_epd(epd.connection))
-#  lapply(entity.list, taxa_to_highertaxa, get_taxonomy_epd(epd.connection))
-#  lapply(entity.list, counts_to_percentages)
-#  lapply(entity.list, interpolate_counts, c(1000, 2000, 3000))
-#  lapply(entity.list, intervals_counts, c(1000, 2000, 3000), c(2000, 3000, 4000))
-#  unify_taxonomy(entity.list, get_taxonomy_epd(epd.connection))
-#  lapply(entity.list, table_by_taxa_age, c("Quercus"), c("1000", "2000"))
-#  map_taxa_age(entity.list, "Pinus", "1000")
-#  lapply(entity.list, blois_quality)
-#  
+#  lapply(epd_all, table_by_taxa_age, c("Quercus"), c("1000", "2000"))
+#  map_taxa_age(epd_all, "Pinus", "1000")
+#  lapply(epd_all, blois_quality)
 #  
 #  Cedrus <- c("Cedrus", "Cedrus atlantica", "Cedrus cf. C. atlantica", "Cedrus-type", "cf. Cedrus")
 #  

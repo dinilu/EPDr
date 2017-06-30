@@ -12,9 +12,9 @@
 
 <meta name="author" content="Diego Nieto Lugilde" />
 
-<meta name="date" content="2017-06-29" />
+<meta name="date" content="2017-06-30" />
 
-<title>EPDr vignette 2</title>
+<title>Working with multiple entities</title>
 
 
 
@@ -59,7 +59,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+<link href="data:text/css;charset=utf-8,body%20%7B%0Acounter%2Dreset%3Atable%20figure%3B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23bbbbbb%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0Afont%2Dsize%3A%2012px%3B%0Acolor%3A%20%234d4d4d%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0Aborder%3A1px%20solid%20%23021a40%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Acaption%3A%3Abefore%7B%0Acounter%2Dincrement%3A%20table%3B%0Acontent%3A%20%22Table%20%22%20counter%28table%29%20%22%3A%20%22%3B%0A%7D%0A%2Ecaption%3A%3Abefore%7B%0Acounter%2Dincrement%3A%20figure%3B%0Acontent%3A%20%22Figure%20%22%20counter%28figure%29%20%22%3A%20%22%3B%0A%7D%0Ap%2Ecaption%20%7B%0Afont%2Dstyle%3A%20italic%3B%0Afont%2Dsize%3A%2090%25%3B%0Acolor%3A%20grey%3B%0Amargin%2Dbottom%3A%203%2E5em%3B%0A%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -68,81 +68,163 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">EPDr vignette 2</h1>
+<h1 class="title toc-ignore">Working with multiple entities</h1>
 <h4 class="author"><em>Diego Nieto Lugilde</em></h4>
-<h4 class="date"><em>2017-06-29</em></h4>
+<h4 class="date"><em>2017-06-30</em></h4>
 
 
 <div id="TOC">
 <ul>
-<li><a href="#references"><span class="toc-section-number">1</span> References</a></li>
+<li><a href="#searching-for-entities"><span class="toc-section-number">1</span> Searching for entities</a></li>
+<li><a href="#retrieving-data-for-multiple-entities"><span class="toc-section-number">2</span> Retrieving data for multiple entities</a></li>
+<li><a href="#standardizing-data-across-multiple-entities"><span class="toc-section-number">3</span> Standardizing data across multiple entities</a><ul>
+<li><a href="#filtering-and-discarding-entities"><span class="toc-section-number">3.1</span> Filtering and discarding entities</a></li>
+<li><a href="#selecting-chronologies-and-standardizing-the-taxonomy"><span class="toc-section-number">3.2</span> Selecting chronologies and standardizing the taxonomy</a></li>
+<li><a href="#standardizing-counts-to-percentages"><span class="toc-section-number">3.3</span> Standardizing counts to percentages</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
 </ul>
 </div>
 
-<p>New tutorial</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plotting functions ----</span>
-entity.list &lt;-<span class="st"> </span><span class="kw">list_e</span>(epd.connection, <span class="dt">country =</span> <span class="kw">c</span>(<span class="st">&quot;Spain&quot;</span>, <span class="st">&quot;Portugal&quot;</span>, <span class="st">&quot;France&quot;</span>, <span class="st">&quot;Switzerland&quot;</span>, <span class="st">&quot;Austria&quot;</span>, <span class="st">&quot;Italy&quot;</span>, <span class="st">&quot;Malta&quot;</span>, <span class="st">&quot;Algeria&quot;</span>, <span class="st">&quot;Tunisia&quot;</span>, <span class="st">&quot;Morocco&quot;</span>, <span class="st">&quot;Atlantic ocean&quot;</span>, <span class="st">&quot;Mediterranean Sea&quot;</span>))
-entity.list &lt;-<span class="st"> </span><span class="kw">list_e</span>(epd.connection)<span class="op">$</span>e_
-counts.all &lt;-<span class="st"> </span><span class="kw">lapply</span>(entity.list, get_entity, epd.connection)
-
-counts.po &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.all, filter_taxagroups, <span class="kw">c</span>(<span class="st">&quot;HERB&quot;</span>, <span class="st">&quot;TRSH&quot;</span>, <span class="st">&quot;DWAR&quot;</span>, <span class="st">&quot;LIAN&quot;</span>, <span class="st">&quot;HEMI&quot;</span>, <span class="st">&quot;UPHE&quot;</span>))
-counts.gi &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.po, giesecke_default_chron)
-counts.un &lt;-<span class="st"> </span><span class="kw">remove_restricted</span>(counts.gi)
-counts.wa &lt;-<span class="st"> </span><span class="kw">remove_wo_ages</span>(counts.un)
-
-<span class="co"># Extract functions ----</span>
-<span class="kw">extract_e</span>(epd.<span class="dv">1</span>)
-
-
-percent.wa &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.wa, counts_to_percentage)
-percent.int &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.wa, interpolate_counts, <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">22000</span>, <span class="dt">by =</span> <span class="dv">1000</span>))
-percent.ran &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.wa, intervals_counts, <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">21000</span>, <span class="dt">by =</span> <span class="dv">1000</span>), <span class="kw">seq</span>(<span class="dv">999</span>, <span class="dv">21999</span>, <span class="dt">by =</span> <span class="dv">1000</span>))
-
-epd.taxonomy &lt;-<span class="st"> </span><span class="kw">get_taxonomy_epd</span>(epd.connection)
-
-counts.wa.acc &lt;-<span class="st"> </span><span class="kw">lapply</span>(counts.wa, taxa_to_acceptedtaxa, epd.taxonomy)
-percent.wa.acc &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.wa, taxa_to_acceptedtaxa, epd.taxonomy)
-percent.int.acc &lt;-<span class="st"> </span><span class="kw">lapply</span>(percent.int, taxa_to_acceptedtaxa, epd.taxonomy)
-
-<span class="co"># counts.wa.hig &lt;- lapply(counts.wa, taxa_to_highertaxa, epd.taxonomy)</span>
-<span class="co"># percent.wa.hig &lt;- lapply(percent.wa, taxa_to_highertaxa, epd.taxonomy)</span>
-<span class="co"># percent.ran.hig &lt;- lapply(percent.ran, taxa_to_highertaxa, epd.taxonomy)</span>
-<span class="co"># percent.int.hig &lt;- lapply(percent.int, taxa_to_highertaxa, epd.taxonomy)</span>
-
-counts.wa.uni &lt;-<span class="st"> </span><span class="kw">unify_taxonomy</span>(counts.wa.acc, epd.taxonomy)
-percent.wa.uni &lt;-<span class="st"> </span><span class="kw">unify_taxonomy</span>(percent.wa.acc, epd.taxonomy)
-percent.int.uni &lt;-<span class="st"> </span><span class="kw">unify_taxonomy</span>(percent.int.acc, epd.taxonomy)
-
-
-
-
-  
-e &lt;-<span class="st"> </span><span class="kw">list_e</span>(epd.connection)<span class="op">$</span>e_
-entity.list &lt;-<span class="st"> </span><span class="kw">lapply</span>(e[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>], get_entity, epd.connection)
-<span class="kw">vapply</span>(entity.list, check_default_chron, <span class="dt">FUN.VALUE =</span> <span class="kw">logical</span>(<span class="dv">1</span>))
-<span class="kw">vapply</span>(entity.list, check_restriction, <span class="dt">FUN.VALUE =</span> <span class="kw">logical</span>(<span class="dv">1</span>))
-
-<span class="kw">remove_restricted</span>(entity.list)
-<span class="kw">remove_wo_ages</span>(entity.list)
-
-<span class="kw">lapply</span>(entity.list, extract_e)
-<span class="kw">lapply</span>(entity.list, giesecke_default_chron)
-
-<span class="kw">lapply</span>(entity.list, entity_to_matrices)
-
-<span class="kw">lapply</span>(entity.list, filter_taxa_groups, <span class="kw">c</span>(<span class="st">&quot;DWAR&quot;</span>, <span class="st">&quot;HERB&quot;</span>, <span class="st">&quot;LIAN&quot;</span>, <span class="st">&quot;TRSH&quot;</span>, <span class="st">&quot;UPHE&quot;</span>, <span class="st">&quot;INUN&quot;</span>))
-
-<span class="kw">lapply</span>(entity.list, filter_taxa, <span class="kw">c</span>(<span class="st">&quot;Pinus&quot;</span>,<span class="st">&quot;Quercus&quot;</span>,<span class="st">&quot;Urticaceae&quot;</span>), <span class="kw">get_taxonomy_epd</span>(epd.connection))
-<span class="kw">lapply</span>(entity.list, taxa_to_acceptedtaxa, <span class="kw">get_taxonomy_epd</span>(epd.connection))
-<span class="kw">lapply</span>(entity.list, taxa_to_highertaxa, <span class="kw">get_taxonomy_epd</span>(epd.connection))
-<span class="kw">lapply</span>(entity.list, counts_to_percentages)
-<span class="kw">lapply</span>(entity.list, interpolate_counts, <span class="kw">c</span>(<span class="dv">1000</span>, <span class="dv">2000</span>, <span class="dv">3000</span>))
-<span class="kw">lapply</span>(entity.list, intervals_counts, <span class="kw">c</span>(<span class="dv">1000</span>, <span class="dv">2000</span>, <span class="dv">3000</span>), <span class="kw">c</span>(<span class="dv">2000</span>, <span class="dv">3000</span>, <span class="dv">4000</span>))
-<span class="kw">unify_taxonomy</span>(entity.list, <span class="kw">get_taxonomy_epd</span>(epd.connection))
-<span class="kw">lapply</span>(entity.list, table_by_taxa_age, <span class="kw">c</span>(<span class="st">&quot;Quercus&quot;</span>), <span class="kw">c</span>(<span class="st">&quot;1000&quot;</span>, <span class="st">&quot;2000&quot;</span>))
-<span class="kw">map_taxa_age</span>(entity.list, <span class="st">&quot;Pinus&quot;</span>, <span class="st">&quot;1000&quot;</span>)
-<span class="kw">lapply</span>(entity.list, blois_quality)
-
+<p>In a <a href="EPDr-Tutorial.html">previous tutorial</a>, we have illustrated how to use the EPDr package to work with data of single entities (e.g., sediment cores) in the European Pollen Database (EPD). However and as in many other databases from international efforts, the spatial extent of the EPD makes it suitable for integrative studies where data from multiple entities can be analyzed together. <code>EPDr</code> does not provide specific objects to store such data, but this can be easily accomplished in R using <code>list</code> objects and functions in the <code>lapply</code> family. <code>EPDr</code> does, however, provide some functions to work on list of <code>epd.entity.df</code> objects. Here, we ilustrate how to combine <code>EPDr</code> with <code>list</code> objects and <code>lapply</code> functions, and how to use the <code>EPDr</code> functions that work on lists of objects.</p>
+<div id="searching-for-entities" class="section level1">
+<h1><span class="header-section-number">1</span> Searching for entities</h1>
+<p>The very first thing is to load the library and stablish a valid connection to the database server. Remember that this need to be done for each session we start, and that it automatically closes the connection if we re-start R session and/or Rstudio.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(EPDr)
+epd.connection &lt;-<span class="st"> </span><span class="kw">connect_to_epd</span>(<span class="dt">database =</span> <span class="st">&quot;epd&quot;</span>, <span class="dt">user =</span> <span class="st">&quot;epdr&quot;</span>, <span class="dt">password =</span> <span class="st">&quot;epdrpw&quot;</span>)</code></pre></div>
+<p>Then, you need to identify the ids for the entities of interest (i.e., <code>e_</code>). Here, the <code>list_</code> functions, and specially <code>list_e</code>, are your friends. For instance, if you want to work in a specific country. First, you can check which countries are represented in the EPD.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_countries</span>(epd.connection)</code></pre></div>
+<pre><code>##    poldiv1                                   name
+## 1      ADS                           Adriatic Sea
+## 2      AFG                            Afghanistan
+## 3      ALA                         Ãland Islands
+## 4      ALB                                Albania
+## 5      AND                                Andorra
+## 6      ARE                   United Arab Emirates
+## 7      ARM                                Armenia
+## 8      ATO                         Atlantic ocean
+## 9      AUT                                Austria
+## 10     AZE                             Azerbaijan
+## 11     BEL                                Belgium
+## 12     BGR                               Bulgaria
+## 13     BHR                                Bahrain
+## 14     BIH                 Bosnia and Herzegovina
+## 15     BLR                                Belarus
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 75 rows ]</code></pre>
+<p>Once you know the exact spelling of the country names of interest, you can pass them as an argument to the <code>list_e</code> function to get the list of all entities ids that fall into your study area.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">e_ids &lt;-<span class="st"> </span><span class="kw">list_e</span>(epd.connection, <span class="dt">country =</span> <span class="kw">c</span>(<span class="st">&quot;Spain&quot;</span>, <span class="st">&quot;Portugal&quot;</span>))
+e_ids &lt;-<span class="st"> </span>e_ids<span class="op">$</span>e_</code></pre></div>
+<blockquote>
+<p>Note that <code>list_</code> functions return a data.frame (table) from where we only need the entities ids. This is the reason we subset in the second line to extract just the numbers in the <code>e_</code> column.</p>
+</blockquote>
+<p>Alternatively, you could filter entities by any other criteria accepted by <code>list_e</code> check <code>?list_e</code> for further details. On the contrary, if you were interested to work with the whole EPD, you could just query the whole entities ids without passing any searching criteria to the function, which would return all entities.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># e_ids &lt;- list_e(epd.connection)</span>
+<span class="co"># e_ids &lt;- e_ids$e_</span></code></pre></div>
+<blockquote>
+<p>Note that we did not run this example, and just provide it to acknowledge the posibility.</p>
+</blockquote>
+</div>
+<div id="retrieving-data-for-multiple-entities" class="section level1">
+<h1><span class="header-section-number">2</span> Retrieving data for multiple entities</h1>
+<p>Now, you can use the <code>lapply</code> function combined with <code>get_entity</code> to receive a list of <code>epd.entity</code> objects for all the entities of interest.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd_all &lt;-<span class="st"> </span><span class="kw">lapply</span>(e_ids, get_entity, epd.connection)
+<span class="kw">class</span>(epd_all)</code></pre></div>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(epd_all[[<span class="dv">1</span>]])</code></pre></div>
+<pre><code>## [1] &quot;epd.entity&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;EPDr&quot;</code></pre>
+<p>TBW</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd_all &lt;-<span class="st"> </span><span class="kw">lapply</span>(epd_all, entity_to_matrices)
+<span class="kw">class</span>(epd_all[[<span class="dv">1</span>]])</code></pre></div>
+<pre><code>## [1] &quot;epd.entity.df&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;EPDr&quot;</code></pre>
+</div>
+<div id="standardizing-data-across-multiple-entities" class="section level1">
+<h1><span class="header-section-number">3</span> Standardizing data across multiple entities</h1>
+<p>Because each entity may have been analyzed by different researcher (with different taxonomical/morphological criteria, interests, etc.), these data need to be standardized before any analysis can be carried out.</p>
+<div id="filtering-and-discarding-entities" class="section level2">
+<h2><span class="header-section-number">3.1</span> Filtering and discarding entities</h2>
+<p><code>EPDr</code> provides several functions that work on list of <code>EPDr</code> objects (<code>epd.entity</code> or <code>epd.entity.df</code>) that facilitate that standardization. For instance, you might decide to not use entities with some restrictions on their use. The <code>remove_restricted</code> function look into all the objects in a list and return only those that are unrestricted.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(epd_all)</code></pre></div>
+<pre><code>## [1] 93</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sapply</span>(epd_all, check_restriction)</code></pre></div>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [12] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [23] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 63 entries ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd_all &lt;-<span class="st"> </span><span class="kw">remove_restricted</span>(epd_all)
+<span class="kw">length</span>(epd_all)</code></pre></div>
+<pre><code>## [1] 82</code></pre>
+<blockquote>
+<p>Note that we have lost five entities, that have restricted the use of the data.</p>
+</blockquote>
+<p>Usually, you will also remove all the entities that have no ages for the biological counts. You can use here the <code>remove_wo_ages</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sapply</span>(epd_all, check_default_chron)</code></pre></div>
+<pre><code>##  [1]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [12]  TRUE  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE
+## [23]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 52 entries ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd_all &lt;-<span class="st"> </span><span class="kw">remove_wo_ages</span>(epd_all)
+<span class="kw">length</span>(epd_all)</code></pre></div>
+<pre><code>## [1] 60</code></pre>
+<blockquote>
+<p>Note that we have removed another 22 entities for which there are no ages.</p>
+</blockquote>
+<p>Now, you may need to know what are exactly the entities you have lost in these filters. You can use the <code>extract_e</code> and <code>sapply</code> functions to get a list of the entities id numbers.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sapply</span>(epd_all, extract_e)</code></pre></div>
+<pre><code>##  [1]   33   44   56   58   68   80   97   98  184  189  216  244  284  366
+## [15]  469  470  471  539  556  572  574  616  651  660  820  891  892  893
+## [29]  894  918  919  926  927  931  969 1050 1053 1394 1483 1553 1554 1556
+## [43] 1560 1561 1562 1565 1566 1568 1569 1570 1629 1828 2034 2169 2246 2247
+## [57] 2256 2321 2324 2326</code></pre>
+</div>
+<div id="selecting-chronologies-and-standardizing-the-taxonomy" class="section level2">
+<h2><span class="header-section-number">3.2</span> Selecting chronologies and standardizing the taxonomy</h2>
+<p>Becasue, Giesecke <em>et al.</em> <span class="citation">(2013)</span> provides updated chronologies for a lot of entities, we want to be sure to use those chronologies when they are available. To do so, we need to change the default chronology in each object to <code>9999</code> (specific number for giesecke) when available.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd_all &lt;-<span class="st"> </span><span class="kw">lapply</span>(epd_all, giesecke_default_chron)</code></pre></div>
+<p>Next, let assume we are interested in pollen data. Here, we need to combine again <code>filter_taxagroups</code> function with <code>lapply</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd_all &lt;-<span class="st"> </span><span class="kw">lapply</span>(epd_all, filter_taxagroups, <span class="kw">c</span>(<span class="st">&quot;HERB&quot;</span>, <span class="st">&quot;TRSH&quot;</span>, <span class="st">&quot;DWAR&quot;</span>, <span class="st">&quot;LIAN&quot;</span>, <span class="st">&quot;HEMI&quot;</span>, <span class="st">&quot;UPHE&quot;</span>, <span class="st">&quot;INUN&quot;</span>))</code></pre></div>
+<blockquote>
+<p>Taxagroups represented here are all different type of pollen from plants of different life-forms: HERB for herbs, TRSH for trees and shrubs, DWARF for dwarf shrubs, LIAN for lianas, HEMI for hemiparasitic, and UPHE for upland herbs, and INUN for indeterminables and unknowns.</p>
+</blockquote>
+<p>Now, we can change each taxa name in the objects for the accepted name according to the EPD, using the combination of the <code>lapply</code> and <code>taxa_to_accepted</code> functions. You could also modify the taxonomy to the higher taxonomical level using <code>taxa_to_highertaxa</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.taxonomy &lt;-<span class="st"> </span><span class="kw">get_taxonomy_epd</span>(epd.connection)
+epd_all &lt;-<span class="st"> </span><span class="kw">lapply</span>(epd_all, taxa_to_acceptedtaxa, epd.taxonomy)</code></pre></div>
+<p>Finally, we want to all entities reflecting the same taxa. <code>unify_taxonomy</code> work on list of <code>epd.entity.df</code> objects. It looks for the taxa in all the objects and increment all datasets to reflect the same taxa in all. Taxa present in one entity but not in others are included with value = <code>0</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd_all &lt;-<span class="st"> </span><span class="kw">unify_taxonomy</span>(epd_all, epd.taxonomy)</code></pre></div>
+</div>
+<div id="standardizing-counts-to-percentages" class="section level2">
+<h2><span class="header-section-number">3.3</span> Standardizing counts to percentages</h2>
+<p>The following would be to transform raw pollen counts into pollen percentages. Here, again, we combine the <code>lapply</code> function with the <code>counts_to_percentage</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd_all &lt;-<span class="st"> </span><span class="kw">lapply</span>(epd_all, counts_to_percentage)</code></pre></div>
+<p>Because each entity in our list will have samples at different ages, if we need to run an analysis with sites refering to the same time period, we need to standardize the ages across all <code>epd.entity.df</code> objects in the list. Here, you can use <code>lapply</code> combined with <code>interpolate_counts</code> or <code>intervals_counts</code> depending on the objectives of your study. Here, we will illustrate the use of <code>interpolate_counts</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd_all &lt;-<span class="st"> </span><span class="kw">lapply</span>(epd_all, interpolate_counts, <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">22000</span>, <span class="dt">by =</span> <span class="dv">1000</span>))
+epd_all[[<span class="dv">2</span>]]<span class="op">@</span>commdf<span class="op">@</span>counts[, <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</code></pre></div>
+<pre><code>##         Abies Acacia Acaulon-type Acer campestre-type Aconitum
+## 1          NA     NA           NA                  NA       NA
+## 2  0.00000000      0            0          1.39720947        0
+## 3  1.83791892      0            0          0.39529099        0
+## 4  1.18775746      0            0          0.84607573        0
+## 5  0.63630773      0            0          0.39241748        0
+## 6  0.06739453      0            0          0.46121602        0
+## 7  0.00000000      0            0          0.11370232        0
+##    Aconitum napellus-type Aconitum-group
+## 1                      NA             NA
+## 2                       0              0
+## 3                       0              0
+## 4                       0              0
+## 5                       0              0
+## 6                       0              0
+## 7                       0              0
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 16 rows ]</code></pre>
+<blockquote>
+<p>Note that here we request to get a pollen concentration for every 500 years since 22000 to 0 calibrated years BP. For those entities with data partially covering this range, the data falling outside of the range are filled with <code>NA</code> to acknowledge that this periods are outside of the real data range.</p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lapply</span>(epd_all, table_by_taxa_age, <span class="kw">c</span>(<span class="st">&quot;Quercus&quot;</span>), <span class="kw">c</span>(<span class="st">&quot;1000&quot;</span>, <span class="st">&quot;2000&quot;</span>))
+<span class="kw">map_taxa_age</span>(epd_all, <span class="st">&quot;Pinus&quot;</span>, <span class="st">&quot;1000&quot;</span>)
+<span class="kw">lapply</span>(epd_all, blois_quality)
 
 Cedrus &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Cedrus&quot;</span>, <span class="st">&quot;Cedrus atlantica&quot;</span>, <span class="st">&quot;Cedrus cf. C. atlantica&quot;</span>, <span class="st">&quot;Cedrus-type&quot;</span>, <span class="st">&quot;cf. Cedrus&quot;</span>)
 
@@ -162,8 +244,15 @@ Pinus &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&
            <span class="dt">points_range_size =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">map_title =</span> <span class="st">&quot;EPD sites&quot;</span>,
            <span class="dt">legend_range =</span> <span class="ot">NULL</span>, <span class="dt">legend_title =</span> <span class="ot">NULL</span>, <span class="dt">napoints_size =</span> <span class="dv">1</span>, <span class="dt">napoints_pch =</span> <span class="dv">21</span>, 
            <span class="dt">napoints_colour =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">napoints_fill =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">countries_fill_colour =</span> <span class="st">&quot;grey80&quot;</span>, <span class="dt">countries_border_colour =</span> <span class="st">&quot;grey90&quot;</span>)</code></pre></div>
-<div id="references" class="section level1">
-<h1><span class="header-section-number">1</span> References</h1>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-giesecke_2013">
+<p>Giesecke, Thomas, Basil Davis, Simon Brewer, Walter Finsinger, Steffen Wolters, Maarten Blaauw, Jacques-Louis de Beaulieu, et al. 2013. “Towards Mapping the Late Quaternary Vegetation Change of Europe.” <em>Vegetation History and Archaeobotany</em> 23 (1): 75–86. doi:<a href="https://doi.org/10.1007/s00334-012-0390-y">10.1007/s00334-012-0390-y</a>.</p>
+</div>
+</div>
 </div>
 
 

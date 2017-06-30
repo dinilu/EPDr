@@ -1,10 +1,11 @@
 ---
-title: "EPDr vignette 2"
+title: "Working with multiple entities"
 author: "Diego Nieto Lugilde"
 date: "`r Sys.Date()`"
 bibliography: bibliography.bib
 output:
   rmarkdown::html_vignette:
+    css: myvignette.css
     number_sections: true
     toc: true
     toc_depth: 3
@@ -19,72 +20,137 @@ vignette: >
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 ```
 
-New tutorial
+In a [previous tutorial](EPDr-Tutorial.html), we have illustrated how to use the EPDr package to work with data of single entities (e.g., sediment cores) in the European Pollen Database (EPD). However and as in many other databases from international efforts, the spatial extent of the EPD makes it suitable for integrative studies where data from multiple entities can be analyzed together. `EPDr` does not provide specific objects to store such data, but this can be easily accomplished in R using `list` objects and functions in the `lapply` family. `EPDr` does, however, provide some functions to work on list of `epd.entity.df` objects. Here, we ilustrate how to combine `EPDr` with `list` objects and `lapply` functions, and how to use the `EPDr` functions that work on lists of objects.
+
+# Searching for entities
+
+The very first thing is to load the library and stablish a valid connection to the database server. Remember that this need to be done for each session we start, and that it automatically closes the connection if we re-start R session and/or Rstudio.
+
+```{r Connect to local EPD}
+library(EPDr)
+epd.connection <- connect_to_epd(database = "epd", user = "epdr", password = "epdrpw")
+```
+Then, you need to identify the ids for the entities of interest (i.e., `e_`). Here, the `list_` functions, and specially `list_e`, are your friends. For instance, if you want to work in a specific country. First, you can check which countries are represented in the EPD.
+
+```{r list_countries, R.options = list(max.print = 30)}
+list_countries(epd.connection)
+```
+
+Once you know the exact spelling of the country names of interest, you can pass them as an argument to the `list_e` function to get the list of all entities ids that fall into your study area.
+
+```{r list_e, R.options = list(max.print = 30)}
+e_ids <- list_e(epd.connection, country = c("Spain", "Portugal"))
+e_ids <- e_ids$e_
+```
+
+> Note that `list_` functions return a data.frame (table) from where we only need the entities ids. This is the reason we subset in the second line to extract just the numbers in the `e_` column.
+
+Alternatively, you could filter entities by any other criteria accepted by `list_e` check `?list_e` for further details. On the contrary, if you were interested to work with the whole EPD, you could just query the whole entities ids without passing any searching criteria to the function, which would return all entities.
+
+```{r list_e 2, eval = FALSE}
+# e_ids <- list_e(epd.connection)
+# e_ids <- e_ids$e_
+```
+> Note that we did not run this example, and just provide it to acknowledge the posibility.
+
+# Retrieving data for multiple entities
+
+Now, you can use the `lapply` function combined with `get_entity` to receive a list of `epd.entity` objects for all the entities of interest.
+
+```{r lapply(get_entity)}
+epd_all <- lapply(e_ids, get_entity, epd.connection)
+class(epd_all)
+class(epd_all[[1]])
+```
+
+TBW
+
+```{r lapply(entity_to_matrices)}
+epd_all <- lapply(epd_all, entity_to_matrices)
+class(epd_all[[1]])
+```
+
+# Standardizing data across multiple entities
+
+Because each entity may have been analyzed by different researcher (with different taxonomical/morphological criteria, interests, etc.), these data need to be standardized before any analysis can be carried out. 
+
+## Filtering and discarding entities
+
+`EPDr` provides several functions that work on list of `EPDr` objects (`epd.entity` or `epd.entity.df`) that facilitate that standardization. For instance, you might decide to not use entities with some restrictions on their use. The `remove_restricted` function look into all the objects in a list and return only those that are unrestricted.
+
+```{r remove_restricted, R.options = list(max.print = 30)}
+length(epd_all)
+sapply(epd_all, check_restriction)
+epd_all <- remove_restricted(epd_all)
+length(epd_all)
+```
+> Note that we have lost five entities, that have restricted the use of the data. 
+
+Usually, you will also remove all the entities that have no ages for the biological counts. You can use here the `remove_wo_ages` function.
+
+```{r remove_wo_ages, R.options = list(max.print = 30)}
+sapply(epd_all, check_default_chron)
+epd_all <- remove_wo_ages(epd_all)
+length(epd_all)
+```
+> Note that we have removed another 22 entities for which there are no ages.
+
+Now, you may need to know what are exactly the entities you have lost in these filters. You can use the `extract_e` and `sapply` functions to get a list of the entities id numbers.
+```{r lapply(extract_e)}
+sapply(epd_all, extract_e)
+```
+
+## Selecting chronologies and standardizing the taxonomy
+
+Becasue, Giesecke *et al.* [-@giesecke_2013] provides updated chronologies for a lot of entities, we want to be sure to use those chronologies when they are available. To do so, we need to change the default chronology in each object to `9999` (specific number for giesecke) when available.
+
+```{r lapply(giesecke_default_chron)}
+epd_all <- lapply(epd_all, giesecke_default_chron)
+```
+
+Next, let assume we are interested in pollen data. Here, we need to combine again `filter_taxagroups` function with `lapply`. 
+
+```{r lapply(filter_taxagroups)}
+epd_all <- lapply(epd_all, filter_taxagroups, c("HERB", "TRSH", "DWAR", "LIAN", "HEMI", "UPHE", "INUN"))
+```
+> Taxagroups represented here are all different type of pollen from plants of different life-forms: HERB for herbs, TRSH for trees and shrubs, DWARF for dwarf shrubs, LIAN for lianas, HEMI for hemiparasitic, and UPHE for upland herbs, and INUN for indeterminables and unknowns.
+
+Now, we can change each taxa name in the objects for the accepted name according to the EPD, using the combination of the `lapply` and `taxa_to_accepted` functions. You could also modify the taxonomy to the higher taxonomical level using `taxa_to_highertaxa`.
+
+```{r lapply(taxa_to_accepted)}
+epd.taxonomy <- get_taxonomy_epd(epd.connection)
+epd_all <- lapply(epd_all, taxa_to_acceptedtaxa, epd.taxonomy)
+```
+
+Finally, we want to all entities reflecting the same taxa. `unify_taxonomy` work on list of `epd.entity.df` objects. It looks for the taxa in all the objects and increment all datasets to reflect the same taxa in all. Taxa present in one entity but not in others are included with value = `0`.
+
+```{r unify_taxonomy}
+epd_all <- unify_taxonomy(epd_all, epd.taxonomy)
+```
+
+## Standardizing counts to percentages
+
+The following would be to transform raw pollen counts into pollen percentages. Here, again, we combine the `lapply` function with the `counts_to_percentage` function.
+
+```{r lapply(counts_to_percentage)}
+epd_all <- lapply(epd_all, counts_to_percentage)
+```
+
+Because each entity in our list will have samples at different ages, if we need to run an analysis with sites refering to the same time period, we need to standardize the ages across all `epd.entity.df` objects in the list. Here, you can use `lapply` combined with `interpolate_counts` or `intervals_counts` depending on the objectives of your study. Here, we will illustrate the use of `interpolate_counts`.
+
+```{r lapply(interpolate_counts), R.options = list(max.print = 50)}
+epd_all <- lapply(epd_all, interpolate_counts, seq(0, 22000, by = 1000))
+epd_all[[2]]@commdf@counts[, 1:7]
+```
+> Note that here we request to get a pollen concentration for every 500 years since 22000 to 0 calibrated years BP. For those entities with data partially covering this range, the data falling outside of the range are filled with `NA` to acknowledge that this periods are outside of the real data range.
+
+
 
 ```{r standardize functions, eval = F}
-# Plotting functions ----
-entity.list <- list_e(epd.connection, country = c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
-entity.list <- list_e(epd.connection)$e_
-counts.all <- lapply(entity.list, get_entity, epd.connection)
 
-counts.po <- lapply(counts.all, filter_taxagroups, c("HERB", "TRSH", "DWAR", "LIAN", "HEMI", "UPHE"))
-counts.gi <- lapply(counts.po, giesecke_default_chron)
-counts.un <- remove_restricted(counts.gi)
-counts.wa <- remove_wo_ages(counts.un)
-
-# Extract functions ----
-extract_e(epd.1)
-
-
-percent.wa <- lapply(counts.wa, counts_to_percentage)
-percent.int <- lapply(percent.wa, interpolate_counts, seq(0, 22000, by = 1000))
-percent.ran <- lapply(percent.wa, intervals_counts, seq(0, 21000, by = 1000), seq(999, 21999, by = 1000))
-
-epd.taxonomy <- get_taxonomy_epd(epd.connection)
-
-counts.wa.acc <- lapply(counts.wa, taxa_to_acceptedtaxa, epd.taxonomy)
-percent.wa.acc <- lapply(percent.wa, taxa_to_acceptedtaxa, epd.taxonomy)
-percent.int.acc <- lapply(percent.int, taxa_to_acceptedtaxa, epd.taxonomy)
-
-# counts.wa.hig <- lapply(counts.wa, taxa_to_highertaxa, epd.taxonomy)
-# percent.wa.hig <- lapply(percent.wa, taxa_to_highertaxa, epd.taxonomy)
-# percent.ran.hig <- lapply(percent.ran, taxa_to_highertaxa, epd.taxonomy)
-# percent.int.hig <- lapply(percent.int, taxa_to_highertaxa, epd.taxonomy)
-
-counts.wa.uni <- unify_taxonomy(counts.wa.acc, epd.taxonomy)
-percent.wa.uni <- unify_taxonomy(percent.wa.acc, epd.taxonomy)
-percent.int.uni <- unify_taxonomy(percent.int.acc, epd.taxonomy)
-
-
-
-
-  
-e <- list_e(epd.connection)$e_
-entity.list <- lapply(e[1:100], get_entity, epd.connection)
-vapply(entity.list, check_default_chron, FUN.VALUE = logical(1))
-vapply(entity.list, check_restriction, FUN.VALUE = logical(1))
-
-remove_restricted(entity.list)
-remove_wo_ages(entity.list)
-
-lapply(entity.list, extract_e)
-lapply(entity.list, giesecke_default_chron)
-
-lapply(entity.list, entity_to_matrices)
-
-lapply(entity.list, filter_taxa_groups, c("DWAR", "HERB", "LIAN", "TRSH", "UPHE", "INUN"))
-
-lapply(entity.list, filter_taxa, c("Pinus","Quercus","Urticaceae"), get_taxonomy_epd(epd.connection))
-lapply(entity.list, taxa_to_acceptedtaxa, get_taxonomy_epd(epd.connection))
-lapply(entity.list, taxa_to_highertaxa, get_taxonomy_epd(epd.connection))
-lapply(entity.list, counts_to_percentages)
-lapply(entity.list, interpolate_counts, c(1000, 2000, 3000))
-lapply(entity.list, intervals_counts, c(1000, 2000, 3000), c(2000, 3000, 4000))
-unify_taxonomy(entity.list, get_taxonomy_epd(epd.connection))
-lapply(entity.list, table_by_taxa_age, c("Quercus"), c("1000", "2000"))
-map_taxa_age(entity.list, "Pinus", "1000")
-lapply(entity.list, blois_quality)
-
+lapply(epd_all, table_by_taxa_age, c("Quercus"), c("1000", "2000"))
+map_taxa_age(epd_all, "Pinus", "1000")
+lapply(epd_all, blois_quality)
 
 Cedrus <- c("Cedrus", "Cedrus atlantica", "Cedrus cf. C. atlantica", "Cedrus-type", "cf. Cedrus")
 
@@ -105,6 +171,4 @@ mapTaxaAge(percent.int.uni, "Cedrus", "0", pres_abse = F, zoom_coords = c(-20, 1
            legend_range = NULL, legend_title = NULL, napoints_size = 1, napoints_pch = 21, 
            napoints_colour = "red", napoints_fill = "red", countries_fill_colour = "grey80", countries_border_colour = "grey90")
 ```
-
-
 # References
