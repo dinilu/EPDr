@@ -990,12 +990,6 @@ setMethod("intervals_counts", signature(x = "epd.entity.df",
                                    }, intervalid, mean)
               range_means <- lapply(range_means, function(x){x$x})
               range_means <- do.call(cbind, range_means)
-              # range_means <- reshape2::dcast(reshape2::melt(range_means,
-              #                                               id.vars = "y"),
-              #                                y ~ L1)
-              # col_index <- -which(colnames(range_means) == "y")
-              # range_means <- subset(range_means,
-              #                       select = col_index)
               range_depth_means <- stats::aggregate(range.depthcm,
                                                     by = list(y = intervalid),
                                                     FUN = mean, na.rm = TRUE)
