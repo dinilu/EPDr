@@ -4,13 +4,16 @@
 \alias{unify_taxonomy}
 \title{Unify taxonomy of counts in multiple objects}
 \usage{
-unify_taxonomy(list, epd.taxonomy)
+unify_taxonomy(list, epd.taxonomy, na_value = 0)
 }
 \arguments{
 \item{list}{List of \code{\link[EPDr]{epd.entity.df}} objects to be modified.}
 
 \item{epd.taxonomy}{Data frame with the taxonomy from the EPD as from the
 \code{\link[EPDr]{get_taxonomy_epd}} function.}
+
+\item{na_value}{numeric Number indicating the value to be used for
+taxa not previously present in the entities.}
 }
 \value{
 list of \code{\link[EPDr]{epd.entity.df}} objects with taxonomy

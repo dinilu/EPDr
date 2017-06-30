@@ -7,12 +7,13 @@
 \alias{filter_taxa,epd.entity,character,data.frame-method}
 \title{Expand EPDr objects with new taxa}
 \usage{
-filter_taxa(x, taxa, epd.taxonomy)
+filter_taxa(x, taxa, epd.taxonomy, na_value = 0)
 
 \S4method{filter_taxa}{epd.entity.df,character,data.frame}(x, taxa,
-  epd.taxonomy)
+  epd.taxonomy, na_value = 0)
 
-\S4method{filter_taxa}{epd.entity,character,data.frame}(x, taxa, epd.taxonomy)
+\S4method{filter_taxa}{epd.entity,character,data.frame}(x, taxa, epd.taxonomy,
+  na_value = 0)
 }
 \arguments{
 \item{x}{epd.entity \code{\link[EPDr]{epd.entity.df}} or
@@ -23,6 +24,9 @@ taxa in the \code{@epd.entity.df} slot.}
 
 \item{epd.taxonomy}{data.frame Data frame with the taxonomy from the 
 EPD as from the \code{\link[EPDr]{get_taxonomy_epd}} function.}
+
+\item{na_value}{numeric Number indicating the value to be used for
+taxa not previously present in the entity.}
 }
 \value{
 \code{\link[EPDr]{epd.entity.df}} object with the modified

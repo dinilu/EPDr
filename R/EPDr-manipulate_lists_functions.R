@@ -82,6 +82,8 @@ remove_wo_ages <- function(list){
 #' @param list List of \code{\link[EPDr]{epd.entity.df}} objects to be modified.
 #' @param epd.taxonomy Data frame with the taxonomy from the EPD as from the
 #' \code{\link[EPDr]{get_taxonomy_epd}} function.
+#' @param na_value numeric Number indicating the value to be used for
+#' taxa not previously present in the entities.
 #'
 #' @return list of \code{\link[EPDr]{epd.entity.df}} objects with taxonomy
 #' modified.
@@ -99,7 +101,7 @@ remove_wo_ages <- function(list){
 #' colnames(spain.agedcounts[[1]]@counts@counts)
 #' colnames(spain.agedcounts.ut[[1]]@counts@counts)
 #' }
-unify_taxonomy <- function(list, epd.taxonomy){
+unify_taxonomy <- function(list, epd.taxonomy, na_value = 0){
   if (!all(lapply(list, class) %in% "epd.entity.df")){
     stop("'list' has to be a list of 'epd.entity.df' objects.
          See ?entityToMatrices function.")
@@ -108,6 +110,6 @@ unify_taxonomy <- function(list, epd.taxonomy){
     x@commdf@taxanames
     })
   taxa_list <- sort(unique(unlist(taxa_list)))
-  list <- lapply(list, filter_taxa, taxa_list, epd.taxonomy)
+  list <- lapply(list, filter_taxa, taxa_list, epd.taxonomy, na_value)
   return(list)
 }

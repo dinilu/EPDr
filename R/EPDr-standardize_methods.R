@@ -479,6 +479,8 @@ setMethod("entity_to_matrices", signature(x = "epd.entity"), function(x){
 #' taxa in the \code{@@epd.entity.df} slot. 
 #' @param epd.taxonomy data.frame Data frame with the taxonomy from the 
 #' EPD as from the \code{\link[EPDr]{get_taxonomy_epd}} function.
+#' @param na_value numeric Number indicating the value to be used for
+#' taxa not previously present in the entity.
 #' 
 #' @return \code{\link[EPDr]{epd.entity.df}} object with the modified
 #' \code{@@commdf@@counts} slot.
@@ -498,7 +500,7 @@ setMethod("entity_to_matrices", signature(x = "epd.entity"), function(x){
 #' }
 #' @rdname filter_taxa
 #' @exportMethod filter_taxa
-setGeneric("filter_taxa", function(x, taxa, epd.taxonomy){
+setGeneric("filter_taxa", function(x, taxa, epd.taxonomy, na_value = 0){
   standardGeneric("filter_taxa")
 })
 
@@ -506,7 +508,7 @@ setGeneric("filter_taxa", function(x, taxa, epd.taxonomy){
 setMethod("filter_taxa", signature(x = "epd.entity.df",
                                    taxa = "character",
                                    epd.taxonomy = "data.frame"),
-          function(x, taxa, epd.taxonomy){
+          function(x, taxa, epd.taxonomy, na_value){
             site_taxa <- x@commdf@taxanames
             diff_names <- setdiff(taxa, site_taxa)
             if (nrow(x@commdf@counts) == 0){
@@ -515,7 +517,7 @@ setMethod("filter_taxa", signature(x = "epd.entity.df",
               colnames(new_counts) <- taxa
             }else{
               new_counts <- x@commdf@counts
-              new_counts[, diff_names] <- NA
+              new_counts[, diff_names] <- na_value
             }
             new_counts <- subset(new_counts, select = taxa)
             x@taxatype <- factor("Expanded",
@@ -536,7 +538,7 @@ setMethod("filter_taxa", signature(x = "epd.entity.df",
 #' @rdname filter_taxa
 setMethod("filter_taxa", signature(x = "epd.entity", taxa = "character",
                                    epd.taxonomy = "data.frame"),
-          function(x, taxa, epd.taxonomy){
+          function(x, taxa, epd.taxonomy, na_value){
             x <- entity_to_matrices(x)
             x <- filter_taxa(x, taxa, epd.taxonomy)
             return(x)
