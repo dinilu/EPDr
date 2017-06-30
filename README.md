@@ -3,3 +3,19 @@ R package to connect with the European Pollen Database (EPD), extract data, and 
 
 EPDr is an R package that intend to easy the connection between R and the European Pollen Database (EPDr). The aim is to automatize a whole working process to extract standardized data from the DDBB.
 
+To install the package from the github repository you can use the following code:
+
+
+install.packages("devtools") 
+
+
+library(devtools)
+
+
+install_github("dinilu/EPDr", build_vignettes = TRUE)
+
+
+library(EPDr)
+
+
+help(package=EPDr)
