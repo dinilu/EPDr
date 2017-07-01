@@ -12,7 +12,7 @@ install.packages("devtools")
 library(devtools)
 
 
-install_github("dinilu/EPDr", build_vignettes = TRUE)
+install_github("dinilu/EPDr")
 
 
 library(EPDr)
