@@ -12,7 +12,7 @@
 
 <meta name="author" content="Diego Nieto Lugilde" />
 
-<meta name="date" content="2017-06-30" />
+<meta name="date" content="2017-07-01" />
 
 <title>Working with multiple entities</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Working with multiple entities</h1>
 <h4 class="author"><em>Diego Nieto Lugilde</em></h4>
-<h4 class="date"><em>2017-06-30</em></h4>
+<h4 class="date"><em>2017-07-01</em></h4>
 
 
 <div id="TOC">
@@ -95,25 +95,25 @@ epd.connection &lt;-<span class="st"> </span><span class="kw">connect_to_epd</sp
 <p>Then, you need to identify the ids for the entities of interest (i.e., <code>e_</code>). Here, the <code>list_</code> functions, and specially <code>list_e</code>, are your friends. For instance, if you want to work in a specific country. First, you can check which countries are represented in the EPD.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_countries</span>(epd.connection)</code></pre></div>
 <pre><code>##    poldiv1                                   name
-## 1      ADS                           Adriatic Sea
-## 2      AFG                            Afghanistan
-## 3      ALA                         Ãland Islands
-## 4      ALB                                Albania
-## 5      AND                                Andorra
-## 6      ARE                   United Arab Emirates
-## 7      ARM                                Armenia
-## 8      ATO                         Atlantic ocean
-## 9      AUT                                Austria
-## 10     AZE                             Azerbaijan
-## 11     BEL                                Belgium
-## 12     BGR                               Bulgaria
-## 13     BHR                                Bahrain
-## 14     BIH                 Bosnia and Herzegovina
-## 15     BLR                                Belarus
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 75 rows ]</code></pre>
+## 1      AFG                            Afghanistan
+## 2      ALA                         Ãland Islands
+## 3      ALB                                Albania
+## 4      AND                                Andorra
+## 5      ARE                   United Arab Emirates
+## 6      ARM                                Armenia
+## 7      ATO                         Atlantic ocean
+## 8      AUT                                Austria
+## 9      AZE                             Azerbaijan
+## 10     BEL                                Belgium
+## 11     BGR                               Bulgaria
+## 12     BHR                                Bahrain
+## 13     BIH                 Bosnia and Herzegovina
+## 14     BLR                                Belarus
+## 15     BLS                              Black Sea
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 73 rows ]</code></pre>
 <p>Once you know the exact spelling of the country names of interest, you can pass them as an argument to the <code>list_e</code> function to get the list of all entities ids that fall into your study area.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">e_ids &lt;-<span class="st"> </span><span class="kw">list_e</span>(epd.connection, <span class="dt">country =</span> <span class="kw">c</span>(<span class="st">&quot;Spain&quot;</span>, <span class="st">&quot;Portugal&quot;</span>))
-e_ids &lt;-<span class="st"> </span>e_ids<span class="op">$</span>e_</code></pre></div>
+e_ids &lt;-<span class="st"> </span>e_ids$e_</code></pre></div>
 <blockquote>
 <p>Note that <code>list_</code> functions return a data.frame (table) from where we only need the entities ids. This is the reason we subset in the second line to extract just the numbers in the <code>e_</code> column.</p>
 </blockquote>
@@ -148,15 +148,15 @@ e_ids &lt;-<span class="st"> </span>e_ids<span class="op">$</span>e_</code></pre
 <h2><span class="header-section-number">3.1</span> Filtering and discarding entities</h2>
 <p><code>EPDr</code> provides several functions that work on list of <code>EPDr</code> objects (<code>epd.entity</code> or <code>epd.entity.df</code>) that facilitate that standardization. For instance, you might decide to not use entities with some restrictions on their use. The <code>remove_restricted</code> function look into all the objects in a list and return only those that are unrestricted.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(epd_all)</code></pre></div>
-<pre><code>## [1] 93</code></pre>
+<pre><code>## [1] 86</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sapply</span>(epd_all, check_restriction)</code></pre></div>
 <pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
 ## [12] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
 ## [23] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 63 entries ]</code></pre>
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 56 entries ]</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd_all &lt;-<span class="st"> </span><span class="kw">remove_restricted</span>(epd_all)
 <span class="kw">length</span>(epd_all)</code></pre></div>
-<pre><code>## [1] 82</code></pre>
+<pre><code>## [1] 75</code></pre>
 <blockquote>
 <p>Note that we have lost five entities, that have restricted the use of the data.</p>
 </blockquote>
@@ -165,10 +165,10 @@ e_ids &lt;-<span class="st"> </span>e_ids<span class="op">$</span>e_</code></pre
 <pre><code>##  [1]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
 ## [12]  TRUE  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE
 ## [23]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
-##  [ reached getOption(&quot;max.print&quot;) -- omitted 52 entries ]</code></pre>
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 45 entries ]</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd_all &lt;-<span class="st"> </span><span class="kw">remove_wo_ages</span>(epd_all)
 <span class="kw">length</span>(epd_all)</code></pre></div>
-<pre><code>## [1] 60</code></pre>
+<pre><code>## [1] 57</code></pre>
 <blockquote>
 <p>Note that we have removed another 22 entities for which there are no ages.</p>
 </blockquote>
@@ -178,7 +178,7 @@ e_ids &lt;-<span class="st"> </span>e_ids<span class="op">$</span>e_</code></pre
 ## [15]  469  470  471  539  556  572  574  616  651  660  820  891  892  893
 ## [29]  894  918  919  926  927  931  969 1050 1053 1394 1483 1553 1554 1556
 ## [43] 1560 1561 1562 1565 1566 1568 1569 1570 1629 1828 2034 2169 2246 2247
-## [57] 2256 2321 2324 2326</code></pre>
+## [57] 2256</code></pre>
 </div>
 <div id="selecting-chronologies-and-standardizing-the-taxonomy" class="section level2">
 <h2><span class="header-section-number">3.2</span> Selecting chronologies and standardizing the taxonomy</h2>
@@ -201,7 +201,7 @@ epd_all &lt;-<span class="st"> </span><span class="kw">lapply</span>(epd_all, ta
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd_all &lt;-<span class="st"> </span><span class="kw">lapply</span>(epd_all, counts_to_percentage)</code></pre></div>
 <p>Because each entity in our list will have samples at different ages, if we need to run an analysis with sites refering to the same time period, we need to standardize the ages across all <code>epd.entity.df</code> objects in the list. Here, you can use <code>lapply</code> combined with <code>interpolate_counts</code> or <code>intervals_counts</code> depending on the objectives of your study. Here, we will illustrate the use of <code>interpolate_counts</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd_all &lt;-<span class="st"> </span><span class="kw">lapply</span>(epd_all, interpolate_counts, <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">22000</span>, <span class="dt">by =</span> <span class="dv">1000</span>))
-epd_all[[<span class="dv">2</span>]]<span class="op">@</span>commdf<span class="op">@</span>counts[, <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</code></pre></div>
+epd_all[[<span class="dv">2</span>]]@commdf@counts[, <span class="dv">1</span>:<span class="dv">7</span>]</code></pre></div>
 <pre><code>##         Abies Acacia Acaulon-type Acer campestre-type Aconitum
 ## 1          NA     NA           NA                  NA       NA
 ## 2  0.00000000      0            0          1.39720947        0
@@ -210,14 +210,14 @@ epd_all[[<span class="dv">2</span>]]<span class="op">@</span>commdf<span class="
 ## 5  0.63630773      0            0          0.39241748        0
 ## 6  0.06739453      0            0          0.46121602        0
 ## 7  0.00000000      0            0          0.11370232        0
-##    Aconitum napellus-type Aconitum-group
-## 1                      NA             NA
-## 2                       0              0
-## 3                       0              0
-## 4                       0              0
-## 5                       0              0
-## 6                       0              0
-## 7                       0              0
+##    Adonis aestivalis-type Agrimonia eupatoria
+## 1                      NA                  NA
+## 2                       0                   0
+## 3                       0                   0
+## 4                       0                   0
+## 5                       0                   0
+## 6                       0                   0
+## 7                       0                   0
 ##  [ reached getOption(&quot;max.print&quot;) -- omitted 16 rows ]</code></pre>
 <blockquote>
 <p>Note that here we request to get a pollen concentration for every 500 years since 22000 to 0 calibrated years BP. For those entities with data partially covering this range, the data falling outside of the range are filled with <code>NA</code> to acknowledge that this periods are outside of the real data range.</p>
@@ -239,7 +239,7 @@ Pinus &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&
 <span class="kw">mapTaxaAge</span>(percent.unr.ranges, Pinus, <span class="st">&quot;20000-22000&quot;</span>, <span class="dt">pres_abse =</span> F)
 
 
-<span class="kw">mapTaxaAge</span>(percent.int.uni, <span class="st">&quot;Cedrus&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="dt">pres_abse =</span> F, <span class="dt">zoom_coords =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">20</span>, <span class="dv">180</span>, <span class="dv">30</span>, <span class="dv">80</span>), <span class="dt">points_pch =</span> <span class="dv">21</span>,
+<span class="kw">mapTaxaAge</span>(percent.int.uni, <span class="st">&quot;Cedrus&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="dt">pres_abse =</span> F, <span class="dt">zoom_coords =</span> <span class="kw">c</span>(-<span class="dv">20</span>, <span class="dv">180</span>, <span class="dv">30</span>, <span class="dv">80</span>), <span class="dt">points_pch =</span> <span class="dv">21</span>,
            <span class="dt">points_colour =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="dt">points_fill =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>),
            <span class="dt">points_range_size =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">map_title =</span> <span class="st">&quot;EPD sites&quot;</span>,
            <span class="dt">legend_range =</span> <span class="ot">NULL</span>, <span class="dt">legend_title =</span> <span class="ot">NULL</span>, <span class="dt">napoints_size =</span> <span class="dv">1</span>, <span class="dt">napoints_pch =</span> <span class="dv">21</span>, 
