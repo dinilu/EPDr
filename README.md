@@ -5,17 +5,10 @@ EPDr is an R package that intend to easy the connection between R and the Europe
 
 To install the package from the github repository you can use the following code:
 
-
+```r
 install.packages("devtools") 
-
-
 library(devtools)
-
-
 install_github("dinilu/EPDr")
-
-
 library(EPDr)
-
-
 help(package=EPDr)
+```
