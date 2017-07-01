@@ -1111,8 +1111,7 @@ get_samples <- function(e_, connection){
     sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
     colnames(sql_out) <- names
   }
-  sql_out$groupid[which(sql_out$var_  ==  "5148")] <- "AQUA"
-  sql_out$groupid[which(sql_out$var_  ==  "5205")] <- "NOPO"
+  sql_out$groupid[which(is.na(sql_out$groupid))] <- "INUN"
   return(sql_out)
 }
 
