@@ -86,7 +86,7 @@ setMethod("blois_quality", signature(x = "epd.entity.df"),
           function(x, chronology, max_sample_dist, max_control_dist){
             if ("blois" %in% colnames(x@agesdf@dataquality)){
               stop(paste0("`x` already has blois quality index calculated.",
-                          "If you need to calculate them again, make sure ", 
+                          "If you need to calculate them again, make sure ",
                           "you remove the 'blois' column in the ",
                           "@agesdf@dataquality slot."))
             }
@@ -104,7 +104,7 @@ setMethod("blois_quality", signature(x = "epd.entity.df"),
             }
             index <- which(x@samples@pagedpt$chron_ == chron_)
             sample_ages <- x@samples@pagedpt[index, "agebp"]
-            data_ages <- subset(x@agesdf@depthages, select=chronology)
+            data_ages <- subset(x@agesdf@depthages, select = chronology)
             index <- which(x@chron@agebasis$chron_ == chron_)
             agebasis <- x@chron@agebasis[index, ]
             .mindiff <- function(z, w, max_diff){
@@ -140,7 +140,7 @@ setMethod("blois_quality", signature(x = "epd.entity.df"),
             sample_dist <- 1 - (sample_dist / max_sample_dist)
             data.quality <- (control_dist + sample_dist) / 2
             colnames(data.quality) <- "blois"
-            if(nrow(x@agesdf@dataquality) == 0){
+            if (nrow(x@agesdf@dataquality) == 0){
               x@agesdf@dataquality <- as.data.frame(data.quality)
             }else{
               x@agesdf@dataquality <- cbind(x@agesdf@dataquality, data.quality)
@@ -414,6 +414,7 @@ setMethod("entity_to_matrices", signature(x = "epd.entity"), function(x){
     counts.cast <- subset(counts.cast, select = -1)
     counts.cast <- counts.cast[match(taxa_, colnames(counts.cast))]
     colnames(counts.cast) <- taxanames
+    taxagroupid[which(is.na(taxagroupid))] <- ""
     if (any(taxagroupid == "NOPO")){
       npi <- which(taxagroupid == "NOPO")
       nnpi <- which(taxagroupid != "NOPO")
@@ -738,8 +739,7 @@ setGeneric("interpolate_counts", function(x,
   df = min(20,
            nrow(x@commdf@counts) *
              0.7),
-  ...)
-  {
+  ...){
   standardGeneric("interpolate_counts")
 })
 
@@ -925,7 +925,7 @@ setMethod("interpolate_counts", signature(x = "epd.entity", time = "numeric"),
 #' @exportMethod intervals_counts
 setGeneric("intervals_counts", function(x,
                                         tmin,
-                                        tmax, 
+                                        tmax,
                                         chronology = NULL,
                                         newlabels = NULL){
   standardGeneric("intervals_counts")
@@ -989,8 +989,11 @@ setMethod("intervals_counts", signature(x = "epd.entity.df",
                                    FUN = function(x, y, z){
                                      stats::aggregate(x, by = list(y = y),
                                                       FUN = z, na.rm = TRUE)
-                                   }, intervalid, mean)
-              range_means <- lapply(range_means, function(x){x$x})
+                                   }
+                                   , intervalid, mean)
+              range_means <- lapply(range_means, function(x){
+                x$x
+              })
               range_means <- do.call(cbind, range_means)
               range_depth_means <- stats::aggregate(range.depthcm,
                                                     by = list(y = intervalid),
@@ -1173,7 +1176,6 @@ setGeneric("taxa_to_acceptedtaxa", function(x, epd.taxonomy){
 setMethod("taxa_to_acceptedtaxa", signature(x = "epd.entity.df",
                                             epd.taxonomy = "data.frame"),
           function(x, epd.taxonomy){
-#            taxa_names <- x@commdf@taxanames
             taxa_ <- x@commdf@taxa_
             taxa_acc <- x@commdf@taxaaccepted
             if (length(taxa_) == 0){
@@ -1264,7 +1266,6 @@ setMethod("taxa_to_highertaxa", signature(x = "epd.entity.df",
               stop(paste0("'rm_null_mhvar' of the wrong format. It has to be",
                           "TRUE or FALSE. Check ?taxa_to_highertaxa"))
             }
-            # taxa_names <- x@commdf@taxanames
             taxa_ <- x@commdf@taxa_
             taxa_mhvar <- x@commdf@taxamhvar
             if (!rm_null_mhvar){

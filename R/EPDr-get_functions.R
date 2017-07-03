@@ -1111,7 +1111,6 @@ get_samples <- function(e_, connection){
     sql_out <- data.frame(t(rep(NA, length(names))))[-1, ]
     colnames(sql_out) <- names
   }
-  sql_out$groupid[which(is.na(sql_out$groupid))] <- "INUN"
   return(sql_out)
 }
 
@@ -1659,7 +1658,6 @@ get_entity <- function(e_, connection){
   }else{
     isingiesecke <- FALSE
   }
-
   coords <- subset(site@siteloc, select = c("londd", "latdd"))
   postbombzone <- sp::over(sp::SpatialPoints(coords), postbomb.map)$Zone
   numberofchron <- nrow(chron@chron)
@@ -1670,7 +1668,6 @@ get_entity <- function(e_, connection){
   if (length(defaultchron)  ==  0){
     defaultchron <- 0
   }
-
   epd.entity <- new("epd.entity",
                     e_ = e_,
                     postbombzone = postbombzone,
