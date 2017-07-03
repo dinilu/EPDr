@@ -134,10 +134,10 @@ epd_all <- unify_taxonomy(epd_all, epd.taxonomy)
 
 ## Standardizing counts to percentages
 
-The following would be to transform raw pollen counts into pollen percentages. Here, again, we combine the `lapply` function with the `counts_to_percentage` function.
+The following would be to transform raw pollen counts into pollen percentages. Here, again, we combine the `lapply` function with the `counts_to_percentages` function.
 
-```{r lapply(counts_to_percentage)}
-epd_all <- lapply(epd_all, counts_to_percentage)
+```{r lapply(counts_to_percentages)}
+epd_all <- lapply(epd_all, counts_to_percentages)
 ```
 
 ## Standardizing time of counts data (interpolation or averaging)

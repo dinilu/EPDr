@@ -59,7 +59,7 @@ an \code{\link[EPDr]{epd.entity}} object.}
 
 \item{\code{countstype}}{factor. Indicating if counts in \code{@commdf@counts}
 slot are in raw counts or percentages. See 
-\code{\link[EPDr]{counts_to_percentage}}.}
+\code{\link[EPDr]{counts_to_percentages}}.}
 
 \item{\code{countsprocessing}}{factor. Indicating whether the 
 counts are those counted (or percentaged) for the samples, or

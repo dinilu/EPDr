@@ -866,7 +866,7 @@ prototype = list(
 #' an \code{\link[EPDr]{epd.entity}} object.
 #' @slot countstype factor. Indicating if counts in \code{@@commdf@@counts}
 #' slot are in raw counts or percentages. See 
-#' \code{\link[EPDr]{counts_to_percentage}}.
+#' \code{\link[EPDr]{counts_to_percentages}}.
 #' @slot countsprocessing factor. Indicating whether the 
 #' counts are those counted (or percentaged) for the samples, or
 #' have been interpolated or intervaled for particular time periods

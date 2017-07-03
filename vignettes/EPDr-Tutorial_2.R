@@ -57,8 +57,8 @@ epd_all <- lapply(epd_all, taxa_to_acceptedtaxa, epd.taxonomy)
 ## ----unify_taxonomy------------------------------------------------------
 epd_all <- unify_taxonomy(epd_all, epd.taxonomy)
 
-## ----lapply(counts_to_percentage)----------------------------------------
-epd_all <- lapply(epd_all, counts_to_percentage)
+## ----lapply(counts_to_percentages)---------------------------------------
+epd_all <- lapply(epd_all, counts_to_percentages)
 
 ## ----lapply(interpolate_counts), R.options = list(max.print = 50)--------
 epd_all <- lapply(epd_all, interpolate_counts, seq(0, 22000, by = 1000))

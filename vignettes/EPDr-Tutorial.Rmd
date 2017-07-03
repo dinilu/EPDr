@@ -430,16 +430,16 @@ Once, the data are reduced to those taxa of interest, the raw counts stored in t
 
 The function also modifies the slot `@countstype` to reflect that now the function has percentages and no raw counts.
 
-```{r counts_to_percentage, R.options = list(max.print = 40)}
+```{r counts_to_percentages, R.options = list(max.print = 40)}
 epd.1@countstype
-epd.1 <- counts_to_percentage(epd.1)
+epd.1 <- counts_to_percentages(epd.1)
 epd.1@countstype
 head(epd.1@commdf@counts)
 ```
 
 Now, the sum of the counts for each sample should be 100 for all samples.
 
-```{r counts_to_percentage check, R.options = list(max.print = 40)}
+```{r counts_to_percentages check, R.options = list(max.print = 40)}
 rowSums(epd.1@commdf@counts)
 ```
 

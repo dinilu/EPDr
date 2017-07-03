@@ -34,7 +34,7 @@ standardizations but keeping an unmodified version of the data and
 structure of the \code{\link[EPDr]{epd.entity}} object.
 Four slots contains the data in the new format, while four others store
 information to track changes made from standardization and modification
-functions (e.g., \code{\link[EPDr]{counts_to_percentage}}.
+functions (e.g., \code{\link[EPDr]{counts_to_percentages}}.
 }
 \examples{
 \dontrun{

@@ -85,7 +85,7 @@ setGeneric("blois_quality", function(x,
 setMethod("blois_quality", signature(x = "epd.entity.df"),
           function(x, chronology, max_sample_dist, max_control_dist){
             if ("blois" %in% colnames(x@agesdf@dataquality)){
-              stop(paste0("`x` already has blois quality index calculated.",
+              stop(paste0("`x` already has blois quality index calculated. ",
                           "If you need to calculate them again, make sure ",
                           "you remove the 'blois' column in the ",
                           "@agesdf@dataquality slot."))
@@ -237,7 +237,47 @@ setMethod("check_default_chron", signature(x = "epd.entity"), function(x){
 })
 
 
-# counts_to_percentage -------------------------------------------------------
+# check_counts --------------------------------------------------
+
+#' Check counts data on EPDr objects
+#' 
+#' The function check \code{\link[EPDr]{epd.entity.df}} objects (with
+#' slot @@commdf@@counts) to see if there are counts data on it.
+#'
+#' @param x epd.entity.df \code{\link[EPDr]{epd.entity.df}} object.
+#'
+#' @return Logical value indicating whether the object has a default 
+#' chronology (TRUE) or not (FALSE).
+#' @examples
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                  user="epdr", password="epdrpw")
+#' epd.1 <- get_entity(1, epd.connection)
+#' check_counts(epd.1)
+#' epd.763 <- get_entity(763, epd.connection)
+#' check_counts(epd.763)
+#' }
+#' @rdname check_counts
+#' @exportMethod check_counts
+setGeneric("check_counts", function(x){
+  standardGeneric("check_counts")
+})
+
+#' @rdname check_counts
+setMethod("check_counts", signature(x = "epd.entity.df"), function(x){
+  if (nrow(x@commdf@counts) == 0){
+    return(FALSE)
+  }else{
+    if (ncol(x@commdf@counts) == 0){
+      return(FALSE)
+    }else{
+      return(TRUE)
+    }
+  }
+})
+
+
+# counts_to_percentages -------------------------------------------------------
 
 #' Calculate counts percentages
 #'
@@ -281,19 +321,19 @@ setMethod("check_default_chron", signature(x = "epd.entity"), function(x){
 #' epd.1 <- entity_to_matrices(epd.1)
 #' epd.1 <- filter_taxagroups(epd.1, c("DWAR", "HERB", "LIAN", "TRSH",
 #'                            "UPHE", "INUN")) ## All pollen taxa groups
-#' epd.1.percent <- counts_to_percentage(epd.1)
+#' epd.1.percent <- counts_to_percentages(epd.1)
 #' head(epd.1.percent@commdf@counts)
 #' head(epd.1@commdf@counts)
 #' }
-#' @rdname counts_to_percentage
-#' @exportMethod counts_to_percentage
-setGeneric("counts_to_percentage", function(x, offset = 0.0001){
-  standardGeneric("counts_to_percentage")
+#' @rdname counts_to_percentages
+#' @exportMethod counts_to_percentages
+setGeneric("counts_to_percentages", function(x, offset = 0.0001){
+  standardGeneric("counts_to_percentages")
 })
 
 
-#' @rdname counts_to_percentage
-setMethod("counts_to_percentage", signature(x = "epd.entity.df"),
+#' @rdname counts_to_percentages
+setMethod("counts_to_percentages", signature(x = "epd.entity.df"),
           function(x, offset){
             counts <- x@commdf@counts
             countstype <- factor("Percentages",
@@ -306,12 +346,12 @@ setMethod("counts_to_percentage", signature(x = "epd.entity.df"),
             return(x)
           })
 
-#' @rdname counts_to_percentage
-setMethod("counts_to_percentage",
+#' @rdname counts_to_percentages
+setMethod("counts_to_percentages",
           signature(x = "epd.entity"),
           function(x, offset){
   x <- entity_to_matrices(x)
-  x <- counts_to_percentage(x, offset)
+  x <- counts_to_percentages(x, offset)
   return(x)
 })
 
@@ -334,7 +374,7 @@ setMethod("counts_to_percentage",
 #' structure of the \code{\link[EPDr]{epd.entity}} object.
 #' Four slots contains the data in the new format, while four others store
 #' information to track changes made from standardization and modification
-#' functions (e.g., \code{\link[EPDr]{counts_to_percentage}}. 
+#' functions (e.g., \code{\link[EPDr]{counts_to_percentages}}. 
 #' 
 #' @param x epd.entity Object of class \code{\link[EPDr]{epd.entity}} to be 
 #' modified.
@@ -758,6 +798,10 @@ setMethod("interpolate_counts", signature(x = "epd.entity.df",
               stop(paste0("The entity has not ages, and interpolation cannot ",
                           "be performed."))
             }
+            if (nrow(x@commdf@counts) == 0){
+              stop(paste0("The entity has not counts, and interpolation ",
+                          "cannot be performed."))
+            }
             sample_ages <- subset(x@agesdf@depthages,
                                   select = as.character(chronology))
             sample_depthcm <- x@agesdf@depthcm
@@ -853,7 +897,8 @@ setMethod("interpolate_counts", signature(x = "epd.entity.df",
               x@defaultchron <- chronology
             }
             x@countsprocessing <- factor("Interpolated",
-                                         levels = c("Samples", "Interpolated",
+                                         levels = c("Samples",
+                                                    "Interpolated",
                                                     "Ranged means"))
             x@samplesdf@sample_ <- 10000 + seq_along(output_ages)
             x@samplesdf@samplelabel <- as.character(output_ages)
@@ -1179,9 +1224,9 @@ setMethod("taxa_to_acceptedtaxa", signature(x = "epd.entity.df",
             taxa_ <- x@commdf@taxa_
             taxa_acc <- x@commdf@taxaaccepted
             if (length(taxa_) == 0){
-              warning(paste0("Entity has no count data for any taxon.",
-                             "Returning the original object in the format",
-                             "of a 'epd.entity.df' object."))
+              warning(paste0("Entity has no count data for any taxon. ",
+                             "Returning the original object in the format ",
+                             "of an 'epd.entity.df' object."))
               return(x)
             }
             ii <- match(taxa_acc,
@@ -1263,7 +1308,7 @@ setMethod("taxa_to_highertaxa", signature(x = "epd.entity.df",
                                           epd.taxonomy = "data.frame"),
           function(x, epd.taxonomy, rm_null_mhvar){
             if (!is.logical(rm_null_mhvar)){
-              stop(paste0("'rm_null_mhvar' of the wrong format. It has to be",
+              stop(paste0("'rm_null_mhvar' of the wrong format. It has to be ",
                           "TRUE or FALSE. Check ?taxa_to_highertaxa"))
             }
             taxa_ <- x@commdf@taxa_
@@ -1273,9 +1318,9 @@ setMethod("taxa_to_highertaxa", signature(x = "epd.entity.df",
               taxa_mhvar[na_index] <- taxa_[na_index]
             }
             if (length(taxa_) == 0){
-              warning(paste0("Entity has no count data for any taxon.",
-                             "Returning the original object in the format",
-                             "of a 'epd.entity.df' object."))
+              warning(paste0("Entity has no count data for any taxon. ",
+                             "Returning the original object in the format ",
+                             "of an 'epd.entity.df' object."))
               return(x)
             }
             ii <- match(taxa_mhvar, epd.taxonomy$var_)

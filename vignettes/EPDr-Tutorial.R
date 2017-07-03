@@ -217,13 +217,13 @@ epd.1.ft <- filter_taxa(epd.1, c("Aluns", "Artemisia", "Betula",
                         epd.taxonomy)
 head(epd.1.ft@commdf@counts)
 
-## ----counts_to_percentage, R.options = list(max.print = 40)--------------
+## ----counts_to_percentages, R.options = list(max.print = 40)-------------
 epd.1@countstype
-epd.1 <- counts_to_percentage(epd.1)
+epd.1 <- counts_to_percentages(epd.1)
 epd.1@countstype
 head(epd.1@commdf@counts)
 
-## ----counts_to_percentage check, R.options = list(max.print = 40)--------
+## ----counts_to_percentages check, R.options = list(max.print = 40)-------
 rowSums(epd.1@commdf@counts)
 
 ## ----giesecke_default_chron----------------------------------------------
