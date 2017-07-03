@@ -31,9 +31,9 @@ epd.connection <- connect_to_epd(host="localhost", database="epd",
                                user="epdr", password="epdrpw")
 e.list <- listE(epd.connection, country=c("Spain"))
 e.list <- e.list$e_
-spain.agedcounts <- lapply(e.list, getAgedCounts, epd.connection)
-spain.agedcounts.ut <- unify_taxonomy(spain.agedcounts, get_taxonomy_epd(epd.connection))
-colnames(spain.agedcounts[[1]]@counts@counts)
-colnames(spain.agedcounts.ut[[1]]@counts@counts)
+spain <- lapply(e.list, get_entity, epd.connection)
+spain.ut <- unify_taxonomy(spain, get_taxonomy_epd(epd.connection))
+colnames(spain[[1]]@commdf@counts)
+colnames(spain.ut[[1]]@commdf@counts)
 }
 }
