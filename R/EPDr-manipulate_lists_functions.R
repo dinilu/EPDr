@@ -57,8 +57,8 @@ remove_restricted <- function(list){
 #'                                user="epdr", password="epdrpw")
 #' e.list <- listE(epd.connection, country=c("Spain"))
 #' e.list <- e.list$e_
-#' spain.agedcounts <- lapply(e.list, getAgedCounts, epd.connection)
-#' spain.agedcounts.wo <- remove_wo_ages(spain.agedcounts)
+#' spain <- lapply(e.list, get_entity, epd.connection)
+#' spain.wo <- remove_wo_ages(spain)
 #' length(spain.agedcounts)
 #' length(spain.agedcounts.wo)
 #' }
@@ -69,6 +69,39 @@ remove_wo_ages <- function(list){
 }
 
 
+# remove_wo_counts -------------------------------------------------------
+
+#' Remove data without counts from a list of objects
+#' 
+#' This function is designed to work with list of EPDr objects
+#' (\code{\link[EPDr]{epd.entity.df}}, or
+#' \code{\link[EPDr]{epd.entity}}).
+#' The function parses all the elements on the list and remove those without 
+#' counts data for any taxa.
+#'
+#' @param list List of EPDr objects (\code{\link[EPDr]{epd.entity.df}},
+#' or \code{\link[EPDr]{epd.entity}})
+#'
+#' @return List of EPDr objects.
+#' 
+#' @export
+#' 
+#' @examples
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                user="epdr", password="epdrpw")
+#' e.list <- listE(epd.connection, country=c("France"))
+#' e.list <- e.list$e_
+#' france <- lapply(e.list, get_entity, epd.connection)
+#' france.wo <- remove_wo_counts(france)
+#' length(france)
+#' length(france.wo)
+#' }
+remove_wo_counts <- function(list){
+  index <- which(vapply(list, check_counts, FUN.VALUE = logical(1)))
+  list <- list[index]
+  return(list)
+}
 
 # unify_taxonomy -----------------------------------------------------------
 
@@ -96,10 +129,10 @@ remove_wo_ages <- function(list){
 #'                                user="epdr", password="epdrpw")
 #' e.list <- listE(epd.connection, country=c("Spain"))
 #' e.list <- e.list$e_
-#' spain.agedcounts <- lapply(e.list, getAgedCounts, epd.connection)
-#' spain.agedcounts.ut <- unify_taxonomy(spain.agedcounts, get_taxonomy_epd(epd.connection))
-#' colnames(spain.agedcounts[[1]]@counts@counts)
-#' colnames(spain.agedcounts.ut[[1]]@counts@counts)
+#' spain <- lapply(e.list, get_entity, epd.connection)
+#' spain.ut <- unify_taxonomy(spain, get_taxonomy_epd(epd.connection))
+#' colnames(spain[[1]]@commdf@counts)
+#' colnames(spain.ut[[1]]@commdf@counts)
 #' }
 unify_taxonomy <- function(list, epd.taxonomy, na_value = 0){
   if (!all(lapply(list, class) %in% "epd.entity.df")){
