@@ -26,8 +26,8 @@ epd.connection <- connect_to_epd(host="localhost", database="epd",
                                user="epdr", password="epdrpw")
 e.list <- listE(epd.connection, country=c("Spain"))
 e.list <- e.list$e_
-spain.agedcounts <- lapply(e.list, getAgedCounts, epd.connection)
-spain.agedcounts.wo <- remove_wo_ages(spain.agedcounts)
+spain <- lapply(e.list, get_entity, epd.connection)
+spain.wo <- remove_wo_ages(spain)
 length(spain.agedcounts)
 length(spain.agedcounts.wo)
 }
