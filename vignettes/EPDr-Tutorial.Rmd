@@ -5,7 +5,6 @@ date: "`r Sys.Date()`"
 bibliography: bibliography.bib
 output:
   rmarkdown::html_vignette:
-    css: myvignette.css
     number_sections: true
     toc: true
     toc_depth: 3
@@ -70,13 +69,18 @@ To establish the connection we use the `connect_to_epd` function, which requires
 If the function is called with no arguments `connect_to_epd()`, the function assume the server is running in the local computer ("locahost"), and interactively ask for the necessary arguments to connect with the database: `database`, `user`, and `password`.
 
 ```{r Connect to local EPD}
-epd.connection <- connect_to_epd(database = "epd", user = "epdr", password = "epdrpw")
+epd.connection <- connect_to_epd(database = "epd",
+                                 user = "epdr",
+                                 password = "epdrpw")
 ```
 
 In case you have access to a remote EPD server, you only have to provide the online address to the server using the argument `host`.
 
 ```{r Connect to remote EPD, eval = F}
-epd.connection <- connect_to_epd(database = "epd", user = "epdr", password = "epdrpw", host = "http://remote.epd.server")
+epd.connection <- connect_to_epd(database = "epd",
+                                 user = "epdr",
+                                 password = "epdrpw",
+                                 host = "http://remote.epd.server")
 ```
 
 Now, we are ready to check the connection with some of the functions in the `RPostgreSQL` and/or `DBI` packages. For instance, we can use the `dbListTables` function to get a list of all the tables in the database. The function should return a list of 45 tables.
@@ -137,7 +141,11 @@ list_e(epd.connection, lastname = "Tzedakis")
 When using any of these `list` functions with arguments to filter the query, we can specify multiple values. That means for instance that we can pass a vector of names as the argument `country` to the `list_e` function to get information about all the entities in all those countries.
 
 ```{r list_e multiple countries, R.options = list(max.print = 60)}
-list_e(epd.connection, country = c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
+list_e(epd.connection, country = c("Spain", "Portugal", "France",
+                                   "Switzerland", "Austria", "Italy",
+                                   "Malta", "Algeria", "Tunisia",
+                                   "Morocco", "Atlantic ocean",
+                                   "Mediterranean Sea"))
 ```
 
 Finally, the `list_publ` function allow to search the publications we need to cite if are going to use any of the data-sets in the database. This function thus allow to search publications for several criteria, including entity number (`e_`).
@@ -265,7 +273,8 @@ Finally, `export_entity` function is a wrapping function that sequentially call 
 ```{r export_entity function, eval = F, R.options = list(max.print = 10)}
 export_entity("clam", epd.1)
 
-##  Chronology has coincident data with C14 data and, hence, the later will be used
+##  Chronology has coincident data with C14 data and, hence, the later will
+##  be used
 ##  C14 data:
 ##  lab_ID	C14_age	cal_age	error	reserv.	depth	thickn.
 ##  KIGI-350	 910	NA	 20	NA	 83	 5	
@@ -284,7 +293,8 @@ export_entity("clam", epd.1)
 ##  E1_CH1_S1	   0	NA	1	NA	  2	NA	
 ##  E1_CH1_S5	4000	NA	1	NA	200	NA
 ##  
-##  Incorporate these data to the chronology? (Yes: TRUE then Intro, No: FALSE then Intro)TRUE
+##  Incorporate these data to the chronology? (Yes: TRUE then Intro,
+##  No: FALSE then Intro)TRUE
 ##  
 ##        lab_ID C14_age cal_age error reservoir depth thickness
 ##  11 E1_CH1_S1       0      NA     1        NA     2        NA
@@ -386,7 +396,8 @@ This is the only way that EPD allow to upscale taxonomy. This implementation is 
 Despite its name, entities in the EPD can contain data from different taxonomic groups, and not only for pollen or spores. Some entities can contain data for algae, acritarchs, etc (check `list_taxagroup` for the whole list). Hence, if one is interested in a particular biological group, he has to filter and remove the data from the rest of the groups. This is accomplished with the `filter_taxagroups` function. It takes two arguments. The first one must be an `epd.entity.df` object (or an `epd.entity` that is automatically transformed into an `epd.entity.df`) to be filtered. The second one is a character vector with the groups ids of interest to be retained. For instance, `DWAR` , `HERB`, `LIAN`, `TRSH`, `UPHE`, and `INUN` are all groups of pollen. So, if you want to work with upland plants pollen you can run the following code:
 
 ```{r filter_taxagroups, R.options = list(max.print = 40)}
-epd.1 <- filter_taxagroups(epd.1, c("DWAR", "HERB", "LIAN", "TRSH", "UPHE", "INUN"))
+epd.1 <- filter_taxagroups(epd.1, c("DWAR", "HERB", "LIAN",
+                                    "TRSH", "UPHE", "INUN"))
 epd.1@commdf@taxanames
 rowSums(epd.1@commdf@counts)
 ```
@@ -396,14 +407,18 @@ rowSums(epd.1@commdf@counts)
 While the `filter_taxagroups` function use the groups defined in the EPD, the user may want to run a more personalized filtering. To do so, the `filter_taxa` allow filter taxa directly by their names. This function allows great versatility, but it also require great caution, because you need to specify the names exactly in the same way they are spelled in the EPD and thus in the `epd.entity.df` object.
 
 ```{r filter_taxa, R.options = list(max.print = 40)}
-epd.1.ft <- filter_taxa(epd.1, c("Alnus", "Artemisia", "Betula", "Carpinus betulus", "Corylus"), epd.taxonomy)
+epd.1.ft <- filter_taxa(epd.1, c("Alnus", "Artemisia", "Betula",
+                                 "Carpinus betulus", "Corylus"),
+                        epd.taxonomy)
 head(epd.1.ft@commdf@counts)
 ```
 
 Caution has to be paid, because if you specify a taxon that is not in the `epd.entity.df` object, the function will create a new column with `NA` values. This is intentional, because when working with multiple entities you may still need to unify their taxonomy. However, if you misspell a name, the data will be withdrawn and a new column with a wrong name will be created.
 
 ```{r filter_taxa misspelling, R.options = list(max.print = 40)}
-epd.1.ft <- filter_taxa(epd.1, c("Aluns", "Artemisia", "Betula", "Carpinus betulus", "Carylus"), epd.taxonomy)
+epd.1.ft <- filter_taxa(epd.1, c("Aluns", "Artemisia", "Betula",
+                                 "Carpinus betulus", "Carylus"),
+                        epd.taxonomy)
 head(epd.1.ft@commdf@counts)
 ```
 
@@ -455,7 +470,9 @@ The function takes two mandatory arguments: `x` and `time`. `x` has to be an obj
 The function, in addition to calculate the
 
 ```{r interpolate_counts}
-epd.1.int <- interpolate_counts(epd.1, c(0, 1000, 2000, 3000, 4000, 5000), method = "linear")
+epd.1.int <- interpolate_counts(epd.1,
+                                c(0, 1000, 2000, 3000, 4000, 5000),
+                                method = "linear")
 ```
 
 The new `epd.entity.df` object returned by the function has been modified in several ways. In the first place the countings now reflect those estimated for the desired time periods.
@@ -496,7 +513,9 @@ Similarly to `interpolate_counts`, the new `epd.entity.df` object returned by th
 
 
 ```{r intervals_counts}
-epd.1.ran <- intervals_counts(epd.1, c(0,1000,2000,3000, 4000, 5000), c(999, 1999, 2999, 3999, 4999, 5999))
+epd.1.ran <- intervals_counts(epd.1,
+                              c(0, 1000, 2000, 3000, 4000, 5000),
+                              c(999, 1999, 2999, 3999, 4999, 5999))
 epd.1.ran@commdf@counts[, 1:5]
 ```
 > Compare the values with those from percentages in the samples or as those interpolated for particular time periods.

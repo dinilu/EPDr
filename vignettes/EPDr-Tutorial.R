@@ -15,10 +15,15 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 library(EPDr)
 
 ## ----Connect to local EPD------------------------------------------------
-epd.connection <- connect_to_epd(database = "epd", user = "epdr", password = "epdrpw")
+epd.connection <- connect_to_epd(database = "epd",
+                                 user = "epdr",
+                                 password = "epdrpw")
 
 ## ----Connect to remote EPD, eval = F-------------------------------------
-#  epd.connection <- connect_to_epd(database = "epd", user = "epdr", password = "epdrpw", host = "http://remote.epd.server")
+#  epd.connection <- connect_to_epd(database = "epd",
+#                                   user = "epdr",
+#                                   password = "epdrpw",
+#                                   host = "http://remote.epd.server")
 
 ## ----Test the connection-------------------------------------------------
 library(DBI)
@@ -47,7 +52,11 @@ list_e(epd.connection, site = "Adange")
 list_e(epd.connection, lastname = "Tzedakis")
 
 ## ----list_e multiple countries, R.options = list(max.print = 60)---------
-list_e(epd.connection, country = c("Spain", "Portugal", "France", "Switzerland", "Austria", "Italy", "Malta", "Algeria", "Tunisia", "Morocco", "Atlantic ocean", "Mediterranean Sea"))
+list_e(epd.connection, country = c("Spain", "Portugal", "France",
+                                   "Switzerland", "Austria", "Italy",
+                                   "Malta", "Algeria", "Tunisia",
+                                   "Morocco", "Atlantic ocean",
+                                   "Mediterranean Sea"))
 
 ## ----list_publ, R.options = list(max.print = 10)-------------------------
 list_publ(epd.connection)
@@ -120,7 +129,8 @@ export_depths(epd.1)
 ## ----export_entity function, eval = F, R.options = list(max.print = 10)----
 #  export_entity("clam", epd.1)
 #  
-#  ##  Chronology has coincident data with C14 data and, hence, the later will be used
+#  ##  Chronology has coincident data with C14 data and, hence, the later will
+#  ##  be used
 #  ##  C14 data:
 #  ##  lab_ID	C14_age	cal_age	error	reserv.	depth	thickn.
 #  ##  KIGI-350	 910	NA	 20	NA	 83	 5	
@@ -139,7 +149,8 @@ export_depths(epd.1)
 #  ##  E1_CH1_S1	   0	NA	1	NA	  2	NA	
 #  ##  E1_CH1_S5	4000	NA	1	NA	200	NA
 #  ##
-#  ##  Incorporate these data to the chronology? (Yes: TRUE then Intro, No: FALSE then Intro)TRUE
+#  ##  Incorporate these data to the chronology? (Yes: TRUE then Intro,
+#  ##  No: FALSE then Intro)TRUE
 #  ##
 #  ##        lab_ID C14_age cal_age error reservoir depth thickness
 #  ##  11 E1_CH1_S1       0      NA     1        NA     2        NA
@@ -189,16 +200,21 @@ rowSums(epd.1@commdf@counts)
 rowSums(epd.1.ht@commdf@counts)
 
 ## ----filter_taxagroups, R.options = list(max.print = 40)-----------------
-epd.1 <- filter_taxagroups(epd.1, c("DWAR", "HERB", "LIAN", "TRSH", "UPHE", "INUN"))
+epd.1 <- filter_taxagroups(epd.1, c("DWAR", "HERB", "LIAN",
+                                    "TRSH", "UPHE", "INUN"))
 epd.1@commdf@taxanames
 rowSums(epd.1@commdf@counts)
 
 ## ----filter_taxa, R.options = list(max.print = 40)-----------------------
-epd.1.ft <- filter_taxa(epd.1, c("Alnus", "Artemisia", "Betula", "Carpinus betulus", "Corylus"), epd.taxonomy)
+epd.1.ft <- filter_taxa(epd.1, c("Alnus", "Artemisia", "Betula",
+                                 "Carpinus betulus", "Corylus"),
+                        epd.taxonomy)
 head(epd.1.ft@commdf@counts)
 
 ## ----filter_taxa misspelling, R.options = list(max.print = 40)-----------
-epd.1.ft <- filter_taxa(epd.1, c("Aluns", "Artemisia", "Betula", "Carpinus betulus", "Carylus"), epd.taxonomy)
+epd.1.ft <- filter_taxa(epd.1, c("Aluns", "Artemisia", "Betula",
+                                 "Carpinus betulus", "Carylus"),
+                        epd.taxonomy)
 head(epd.1.ft@commdf@counts)
 
 ## ----counts_to_percentage, R.options = list(max.print = 40)--------------
@@ -218,7 +234,9 @@ epd.1 <- giesecke_default_chron(epd.1)
 epd.1@defaultchron
 
 ## ----interpolate_counts--------------------------------------------------
-epd.1.int <- interpolate_counts(epd.1, c(0, 1000, 2000, 3000, 4000, 5000), method = "linear")
+epd.1.int <- interpolate_counts(epd.1,
+                                c(0, 1000, 2000, 3000, 4000, 5000),
+                                method = "linear")
 
 ## ----interpolate_counts check @commdf@counts, R.options = list(max.print = 50)----
 epd.1@commdf@counts[, 1:5]
@@ -237,7 +255,9 @@ epd.1@samplesdf
 epd.1.int@samplesdf
 
 ## ----intervals_counts----------------------------------------------------
-epd.1.ran <- intervals_counts(epd.1, c(0,1000,2000,3000, 4000, 5000), c(999, 1999, 2999, 3999, 4999, 5999))
+epd.1.ran <- intervals_counts(epd.1,
+                              c(0, 1000, 2000, 3000, 4000, 5000),
+                              c(999, 1999, 2999, 3999, 4999, 5999))
 epd.1.ran@commdf@counts[, 1:5]
 
 ## ----intervals_counts check @countsprocessing----------------------------

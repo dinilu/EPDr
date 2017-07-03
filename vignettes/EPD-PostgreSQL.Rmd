@@ -3,8 +3,7 @@ title: "Setting up a PostgreSQL server for the European Pollen Database (EPD)"
 author: "Diego Nieto Lugilde"
 date: "`r Sys.Date()`"
 output:
-  rmarkdown::html_vignette:
-    css: myvignette.css
+  rmarkdown:::html_vignette:
     number_sections: true
     toc: true
     toc_depth: 2
