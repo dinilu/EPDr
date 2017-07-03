@@ -8,10 +8,6 @@ output:
     number_sections: true
     toc: true
     toc_depth: 3
-  pdf_document:
-    number_sections: true
-    toc: true
-    toc_depth: 3
 
 vignette: >
   %\VignetteIndexEntry{Working with multiple entities}
