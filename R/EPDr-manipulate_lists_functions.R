@@ -73,16 +73,15 @@ remove_wo_ages <- function(list){
 
 #' Remove data without counts from a list of objects
 #' 
-#' This function is designed to work with list of EPDr objects
-#' (\code{\link[EPDr]{epd.entity.df}}, or
-#' \code{\link[EPDr]{epd.entity}}).
+#' This function is designed to work with list of
+#' \code{\link[EPDr]{epd.entity.df}} objects.
 #' The function parses all the elements on the list and remove those without 
 #' counts data for any taxa.
 #'
-#' @param list List of EPDr objects (\code{\link[EPDr]{epd.entity.df}},
-#' or \code{\link[EPDr]{epd.entity}})
+#' @param list List of \code{\link[EPDr]{epd.entity.df}} objects.
 #'
-#' @return List of EPDr objects.
+#' @return List of \code{\link[EPDr]{epd.entity.df}} objects, which is a 
+#' subset of 'list' with counts data.
 #' 
 #' @export
 #' 
