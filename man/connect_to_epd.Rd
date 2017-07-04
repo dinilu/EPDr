@@ -5,7 +5,7 @@
 \title{Conect to a EPD database}
 \usage{
 connect_to_epd(database = NULL, user = NULL, password = NULL,
-  driver = "PostgreSQL", host = "localhost")
+  driver = "PostgreSQL", host = "localhost", ...)
 }
 \arguments{
 \item{database}{character Character string with the DDBB name. If not provided the 
@@ -22,10 +22,12 @@ function will ask for it before establishing the connection.}
 \item{driver}{character Character string with the driver used to connect 
 with the DDBB server (default: "PostgreSQL"). This value will depend
 on the DDBB server used to host the EPD database. Look at the 
-\code{\link[DBI]{dbConnect}} function for alternatives.}
+\code{\link[RPostgreSQL]{dbConnect-methods}} function for alternatives.}
 
 \item{host}{character Character string with the IP address of the DDBB 
 server (default: "localhost").}
+
+\item{...}{Other arguments to \code{\link[RPostgreSQL]{dbConnect-methods}}.}
 }
 \value{
 This function returns a RPostgreSQL connection object.

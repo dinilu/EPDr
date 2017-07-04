@@ -4,11 +4,13 @@
 \alias{disconnect_from_epd}
 \title{Disconnect a connection to a EPD database}
 \usage{
-disconnect_from_epd(connection = NULL)
+disconnect_from_epd(connection = NULL, ...)
 }
 \arguments{
 \item{connection}{PostgreSQLConnection The connection object created with 
 \code{\link[EPDr]{connect_to_epd}} to stablish the connection}
+
+\item{...}{Other arguments to \code{\link[RPostgreSQL]{dbDisconnect-methods}}.}
 }
 \value{
 NULL It just disconnects from the EPD DDBB server and modifies 

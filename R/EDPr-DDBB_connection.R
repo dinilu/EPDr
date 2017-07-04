@@ -22,9 +22,10 @@
 #' @param driver character Character string with the driver used to connect 
 #' with the DDBB server (default: "PostgreSQL"). This value will depend
 #' on the DDBB server used to host the EPD database. Look at the 
-#' \code{\link[DBI]{dbConnect}} function for alternatives.
+#' \code{\link[RPostgreSQL]{dbConnect-methods}} function for alternatives.
 #' @param host character Character string with the IP address of the DDBB 
 #' server (default: "localhost").
+#' @param ... Other arguments to \code{\link[RPostgreSQL]{dbConnect-methods}}.
 #'
 #' @return This function returns a RPostgreSQL connection object.
 #' 
@@ -43,13 +44,13 @@
 #' disconnect_from_epd(connection=epd.connection)
 #' }
 connect_to_epd <- function(database=NULL, user=NULL, password=NULL,
-                         driver="PostgreSQL", host="localhost"){
+                         driver="PostgreSQL", host="localhost", ...){
     if (is.null(driver)) driver <- readline("EPD DB driver:")
     if (is.null(database)) database <- readline("EPD DB name:")
     if (is.null(user)) user <- readline("EPD DB user:")
     if (is.null(password)) password <- readline("EPD DB password:")
     con <- RPostgreSQL::dbConnect(driver, dbname = database, host = host,
-                                  user = user, password = password)
+                                  user = user, password = password, ...)
     return(con)
 }
 
@@ -61,6 +62,7 @@ connect_to_epd <- function(database=NULL, user=NULL, password=NULL,
 #' 
 #' @param connection PostgreSQLConnection The connection object created with 
 #' \code{\link[EPDr]{connect_to_epd}} to stablish the connection
+#' @param ... Other arguments to \code{\link[RPostgreSQL]{dbDisconnect-methods}}.
 #' 
 #' @return NULL It just disconnects from the EPD DDBB server and modifies 
 #' the connection object to reflect the new status.
@@ -74,8 +76,8 @@ connect_to_epd <- function(database=NULL, user=NULL, password=NULL,
 #' disconnect_from_epd(connection=epd.connection)
 #' epd.connection
 #' }
-disconnect_from_epd <- function(connection=NULL){
+disconnect_from_epd <- function(connection=NULL, ...){
     if (is.null(connection)) stop("You have to define a working connection to
                                    the EPD to be stoped")
-    RPostgreSQL::dbDisconnect(connection)
+    RPostgreSQL::dbDisconnect(connection, ...)
 }
