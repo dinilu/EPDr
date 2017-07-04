@@ -8,13 +8,13 @@
 \title{Blois quality index for palynological samples}
 \usage{
 blois_quality(x, chronology = NULL, max_sample_dist = 2000,
-  max_control_dist = 5000)
+  max_control_dist = 5000, overwrite = FALSE)
 
 \S4method{blois_quality}{epd.entity.df}(x, chronology = NULL,
-  max_sample_dist = 2000, max_control_dist = 5000)
+  max_sample_dist = 2000, max_control_dist = 5000, overwrite = FALSE)
 
 \S4method{blois_quality}{epd.entity}(x, chronology = NULL,
-  max_sample_dist = 2000, max_control_dist = 5000)
+  max_sample_dist = 2000, max_control_dist = 5000, overwrite = FALSE)
 }
 \arguments{
 \item{x}{epd.entity \code{\link[EPDr]{epd.entity.df}} or a
@@ -31,6 +31,9 @@ to the palynological samples for interpolated or ranged data.}
 
 \item{max_control_dist}{numeric Maximum numeric distance in years to be considered
 to the control points (e.g., C14, top, bottom, etc.).}
+
+\item{overwrite}{logical TRUE or FALSE indicating whether to overwrite
+blois index in @agesdf@dataquality if it already has a 'blois' column.}
 }
 \value{
 \code{\link[EPDr]{epd.entity.df}} object with no empty

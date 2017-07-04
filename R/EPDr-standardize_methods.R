@@ -37,6 +37,8 @@
 #' to the palynological samples for interpolated or ranged data.
 #' @param max_control_dist numeric Maximum numeric distance in years to be considered
 #' to the control points (e.g., C14, top, bottom, etc.).
+#' @param overwrite logical TRUE or FALSE indicating whether to overwrite
+#' blois index in @@agesdf@@dataquality if it already has a 'blois' column.
 #'
 #' @return \code{\link[EPDr]{epd.entity.df}} object with no empty
 #' \code{@@agesdf@@dataquality} slot. The default chronology in \code{x@@defaultchron}
@@ -77,18 +79,25 @@
 setGeneric("blois_quality", function(x,
                                      chronology = NULL,
                                      max_sample_dist = 2000,
-                                     max_control_dist = 5000){
+                                     max_control_dist = 5000,
+                                     overwrite = FALSE){
   standardGeneric("blois_quality")
 })
 
 #' @rdname blois_quality
 setMethod("blois_quality", signature(x = "epd.entity.df"),
-          function(x, chronology, max_sample_dist, max_control_dist){
-            if ("blois" %in% colnames(x@agesdf@dataquality)){
-              stop(paste0("`x` already has blois quality index calculated. ",
-                          "If you need to calculate them again, make sure ",
-                          "you remove the 'blois' column in the ",
-                          "@agesdf@dataquality slot."))
+          function(x,
+                   chronology,
+                   max_sample_dist,
+                   max_control_dist,
+                   overwrite){
+            if ("blois" %in% colnames(x@agesdf@dataquality) & overwrite == FALSE){
+              stop(paste0("`x` already has blois quality index calculated ",
+                          "and 'overwrite = FALSE'. If you need to ",
+                          "calculate blois index again, make sure ",
+                          "to remove the 'blois' column in the ",
+                          "@agesdf@dataquality slot or turn ",
+                          "'overwrite = TRUE."))
             }
             if (is.null(chronology)){
               if (!check_default_chron(x)){
@@ -116,8 +125,10 @@ setMethod("blois_quality", signature(x = "epd.entity.df"),
               if (length(sorted.w) == 1){
                 mindist <- abs(z - sorted.w)
               }else{
-                myfun <- stats::stepfun(sorted.w, 0:length(sorted.w))
-                indices <- pmin(pmax(1, myfun(z)), length(sorted.w) - 1)
+                myfun <- stats::stepfun(sorted.w,
+                                        0:length(sorted.w))
+                indices <- pmin(pmax(1, myfun(z)),
+                                length(sorted.w) - 1)
                 mindist <- pmin(abs(z - sorted.w[indices]),
                                 abs(z - sorted.w[indices + 1]))
               }
@@ -139,20 +150,34 @@ setMethod("blois_quality", signature(x = "epd.entity.df"),
             control_dist <- 1 - (control_dist / max_control_dist)
             sample_dist <- 1 - (sample_dist / max_sample_dist)
             data.quality <- (control_dist + sample_dist) / 2
+            data.quality <- as.data.frame(data.quality)
             colnames(data.quality) <- "blois"
             if (nrow(x@agesdf@dataquality) == 0){
-              x@agesdf@dataquality <- as.data.frame(data.quality)
+              x@agesdf@dataquality <- data.quality
             }else{
-              x@agesdf@dataquality <- cbind(x@agesdf@dataquality, data.quality)
+              if ("blois" %in% colnames(x@agesdf@dataquality) & overwrite == TRUE){
+                x@agesdf@dataquality$blois <- data.quality$blois
+              }else{
+                x@agesdf@dataquality <- cbind(x@agesdf@dataquality,
+                                              data.quality)
+              }
             }
             return(x)
           })
 
 #' @rdname blois_quality
 setMethod("blois_quality", signature(x = "epd.entity"),
-          function(x, chronology, max_sample_dist, max_control_dist){
+          function(x,
+                   chronology,
+                   max_sample_dist,
+                   max_control_dist,
+                   overwrite){
             x <- entity_to_matrices(x)
-            x <- blois_quality(x, chronology, max_sample_dist, max_control_dist)
+            x <- blois_quality(x,
+                               chronology,
+                               max_sample_dist,
+                               max_control_dist,
+                               overwrite)
             return(x)
           })
 
