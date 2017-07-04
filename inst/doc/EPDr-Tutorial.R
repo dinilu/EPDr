@@ -1,25 +1,31 @@
 ## ----setup, include = FALSE----------------------------------------------
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 
-## ----Install from github, eval = F---------------------------------------
+## ----Install from github, eval = FALSE-----------------------------------
 #  library(devtools)
-#  install_github("dinilu/EPDr", force = T)
+#  install_github("dinilu/EPDr", force = TRUE)
 
-## ----Install from CRAN, eval = F-----------------------------------------
+## ----Install from CRAN, eval = FALSE-------------------------------------
 #  install.packages("EPDr")
 
-## ----Setting up EPD server, eval = F-------------------------------------
+## ----Setting up EPD server, eval = FALSE---------------------------------
 #  vignette("EPD-PostgreSQL", package = "EPDr")
 
 ## ----Loading EPDr--------------------------------------------------------
 library(EPDr)
 
-## ----Connect to local EPD------------------------------------------------
+## ----Connect to local EPD, eval = FALSE----------------------------------
+#  epd.connection <- connect_to_epd(database = "epd",
+#                                   user = "epdr",
+#                                   password = "epdrpw")
+
+## ----Connect to real remote EPD, include = FALSE-------------------------
 epd.connection <- connect_to_epd(database = "epd",
                                  user = "epdr",
-                                 password = "epdrpw")
+                                 password = "epdrpw", 
+                                 host = "rabbot19.uco.es")
 
-## ----Connect to remote EPD, eval = F-------------------------------------
+## ----Connect to remote EPD, eval = FALSE---------------------------------
 #  epd.connection <- connect_to_epd(database = "epd",
 #                                   user = "epdr",
 #                                   password = "epdrpw",
@@ -126,7 +132,7 @@ export_events("bacon", epd.1)
 export_depths(epd.1@samples@psamples)
 export_depths(epd.1)
 
-## ----export_entity function, eval = F, R.options = list(max.print = 10)----
+## ----export_entity function, eval = FALSE, R.options = list(max.print = 10)----
 #  export_entity("clam", epd.1)
 #  
 #  ##  Chronology has coincident data with C14 data and, hence, the later will
@@ -217,13 +223,13 @@ epd.1.ft <- filter_taxa(epd.1, c("Aluns", "Artemisia", "Betula",
                         epd.taxonomy)
 head(epd.1.ft@commdf@counts)
 
-## ----counts_to_percentage, R.options = list(max.print = 40)--------------
+## ----counts_to_percentages, R.options = list(max.print = 40)-------------
 epd.1@countstype
-epd.1 <- counts_to_percentage(epd.1)
+epd.1 <- counts_to_percentages(epd.1)
 epd.1@countstype
 head(epd.1@commdf@counts)
 
-## ----counts_to_percentage check, R.options = list(max.print = 40)--------
+## ----counts_to_percentages check, R.options = list(max.print = 40)-------
 rowSums(epd.1@commdf@counts)
 
 ## ----giesecke_default_chron----------------------------------------------

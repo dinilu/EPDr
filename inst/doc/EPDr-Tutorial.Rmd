@@ -26,14 +26,14 @@ In this vignette we will illustrate the use of EPDr package, from installing the
 User can choose to install the latest development version from github or the latest released version from CRAN.
 
 The development version from github can be installed using the `install_github` function from the `devtools`package.
-```{r Install from github, eval = F}
+```{r Install from github, eval = FALSE}
 library(devtools)
-install_github("dinilu/EPDr", force = T)
+install_github("dinilu/EPDr", force = TRUE)
 ```
 
 Alternatively, the last released version can be installed from CRAN using the usual `install.package` function
 
-```{r Install from CRAN, eval = F}
+```{r Install from CRAN, eval = FALSE}
 install.packages("EPDr")
 ```
 
@@ -42,7 +42,7 @@ install.packages("EPDr")
 
 Before moving on with this vignette, it is important that the user have access to a running PostgreSQL server with the EPD database. This is where the data are going to be pulled out. Detailed, and step by step, instructions to do so in a local-host are in a specific vignette along with the EPDr package. Check the vignette in the following code if you have not yet.
 
-```{r Setting up EPD server, eval = F}
+```{r Setting up EPD server, eval = FALSE}
 vignette("EPD-PostgreSQL", package = "EPDr")
 ```
 
@@ -68,15 +68,21 @@ To establish the connection we use the `connect_to_epd` function, which requires
 
 If the function is called with no arguments `connect_to_epd()`, the function assume the server is running in the local computer ("locahost"), and interactively ask for the necessary arguments to connect with the database: `database`, `user`, and `password`.
 
-```{r Connect to local EPD}
+```{r Connect to local EPD, eval = FALSE}
 epd.connection <- connect_to_epd(database = "epd",
                                  user = "epdr",
                                  password = "epdrpw")
 ```
+```{r Connect to real remote EPD, include = FALSE}
+epd.connection <- connect_to_epd(database = "epd",
+                                 user = "epdr",
+                                 password = "epdrpw", 
+                                 host = "rabbot19.uco.es")
+```
 
 In case you have access to a remote EPD server, you only have to provide the online address to the server using the argument `host`.
 
-```{r Connect to remote EPD, eval = F}
+```{r Connect to remote EPD, eval = FALSE}
 epd.connection <- connect_to_epd(database = "epd",
                                  user = "epdr",
                                  password = "epdrpw",
@@ -270,7 +276,7 @@ export_depths(epd.1)
 ```
 Finally, `export_entity` function is a wrapping function that sequentially call all previous `export_` functions and combine the information to prepare a set of data ready for CLAM or BACON. Because, some data might be duplicated or may have conflicts between them (especially between AGEBASIS and C14), `export_entity` have several arguments to control how to resolve these conflicts. If that arguments are not called, the function runs interactively and request input from the user to resolve the conflicts on the way. `export_entity` requires the output format and an `epd.entity` object to look for all the necessary data. 
 
-```{r export_entity function, eval = F, R.options = list(max.print = 10)}
+```{r export_entity function, eval = FALSE, R.options = list(max.print = 10)}
 export_entity("clam", epd.1)
 
 ##  Chronology has coincident data with C14 data and, hence, the later will
@@ -430,16 +436,16 @@ Once, the data are reduced to those taxa of interest, the raw counts stored in t
 
 The function also modifies the slot `@countstype` to reflect that now the function has percentages and no raw counts.
 
-```{r counts_to_percentage, R.options = list(max.print = 40)}
+```{r counts_to_percentages, R.options = list(max.print = 40)}
 epd.1@countstype
-epd.1 <- counts_to_percentage(epd.1)
+epd.1 <- counts_to_percentages(epd.1)
 epd.1@countstype
 head(epd.1@commdf@counts)
 ```
 
 Now, the sum of the counts for each sample should be 100 for all samples.
 
-```{r counts_to_percentage check, R.options = list(max.print = 40)}
+```{r counts_to_percentages check, R.options = list(max.print = 40)}
 rowSums(epd.1@commdf@counts)
 ```
 

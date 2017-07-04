@@ -8,10 +8,6 @@ output:
     number_sections: true
     toc: true
     toc_depth: 3
-  pdf_document:
-    number_sections: true
-    toc: true
-    toc_depth: 3
 
 vignette: >
   %\VignetteIndexEntry{Working with multiple entities}
@@ -29,12 +25,18 @@ In a [previous tutorial](EPDr-Tutorial.html), we have illustrated how to use the
 
 The very first thing is to load the library and stablish a valid connection to the database server. Remember that this need to be done for each session we start, and that it automatically closes the connection if we re-start R session and/or Rstudio.
 
-```{r Connect to local EPD}
-library(EPDr)
+```{r Connect to local EPD, eval = FALSE}
 epd.connection <- connect_to_epd(database = "epd",
                                  user = "epdr",
                                  password = "epdrpw")
 ```
+```{r Connect to remote EPD, include = FALSE}
+epd.connection <- connect_to_epd(database = "epd",
+                                 user = "epdr",
+                                 password = "epdrpw", 
+                                 host = "rabbot19.uco.es")
+```
+
 Then, you need to identify the ids for the entities of interest (i.e., `e_`). Here, the `list_` functions, and specially `list_e`, are your friends. For instance, if you want to work in a specific country. First, you can check which countries are represented in the EPD.
 
 ```{r list_countries, R.options = list(max.print = 30)}
@@ -138,10 +140,10 @@ epd_all <- unify_taxonomy(epd_all, epd.taxonomy)
 
 ## Standardizing counts to percentages
 
-The following would be to transform raw pollen counts into pollen percentages. Here, again, we combine the `lapply` function with the `counts_to_percentage` function.
+The following would be to transform raw pollen counts into pollen percentages. Here, again, we combine the `lapply` function with the `counts_to_percentages` function.
 
-```{r lapply(counts_to_percentage)}
-epd_all <- lapply(epd_all, counts_to_percentage)
+```{r lapply(counts_to_percentages)}
+epd_all <- lapply(epd_all, counts_to_percentages)
 ```
 
 ## Standardizing time of counts data (interpolation or averaging)

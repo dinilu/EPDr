@@ -1,11 +1,16 @@
 ## ----setup, include = FALSE----------------------------------------------
 knitr::opts_chunk$set(message = FALSE, warning = FALSE, fig.width = 7)
 
-## ----Connect to local EPD------------------------------------------------
-library(EPDr)
+## ----Connect to local EPD, eval = FALSE----------------------------------
+#  epd.connection <- connect_to_epd(database = "epd",
+#                                   user = "epdr",
+#                                   password = "epdrpw")
+
+## ----Connect to remote EPD, include = FALSE------------------------------
 epd.connection <- connect_to_epd(database = "epd",
                                  user = "epdr",
-                                 password = "epdrpw")
+                                 password = "epdrpw", 
+                                 host = "rabbot19.uco.es")
 
 ## ----list_countries, R.options = list(max.print = 30)--------------------
 list_countries(epd.connection)
@@ -57,8 +62,8 @@ epd_all <- lapply(epd_all, taxa_to_acceptedtaxa, epd.taxonomy)
 ## ----unify_taxonomy------------------------------------------------------
 epd_all <- unify_taxonomy(epd_all, epd.taxonomy)
 
-## ----lapply(counts_to_percentage)----------------------------------------
-epd_all <- lapply(epd_all, counts_to_percentage)
+## ----lapply(counts_to_percentages)---------------------------------------
+epd_all <- lapply(epd_all, counts_to_percentages)
 
 ## ----lapply(interpolate_counts), R.options = list(max.print = 50)--------
 epd_all <- lapply(epd_all, interpolate_counts, seq(0, 22000, by = 1000))

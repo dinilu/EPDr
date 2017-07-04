@@ -12,7 +12,7 @@
 
 <meta name="author" content="Diego Nieto Lugilde" />
 
-<meta name="date" content="2017-07-03" />
+<meta name="date" content="2017-07-04" />
 
 <title>Working with multiple entities</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Working with multiple entities</h1>
 <h4 class="author"><em>Diego Nieto Lugilde</em></h4>
-<h4 class="date"><em>2017-07-03</em></h4>
+<h4 class="date"><em>2017-07-04</em></h4>
 
 
 <div id="TOC">
@@ -93,8 +93,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="searching-for-entities" class="section level1">
 <h1><span class="header-section-number">1</span> Searching for entities</h1>
 <p>The very first thing is to load the library and stablish a valid connection to the database server. Remember that this need to be done for each session we start, and that it automatically closes the connection if we re-start R session and/or Rstudio.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(EPDr)
-epd.connection &lt;-<span class="st"> </span><span class="kw">connect_to_epd</span>(<span class="dt">database =</span> <span class="st">&quot;epd&quot;</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.connection &lt;-<span class="st"> </span><span class="kw">connect_to_epd</span>(<span class="dt">database =</span> <span class="st">&quot;epd&quot;</span>,
                                  <span class="dt">user =</span> <span class="st">&quot;epdr&quot;</span>,
                                  <span class="dt">password =</span> <span class="st">&quot;epdrpw&quot;</span>)</code></pre></div>
 <p>Then, you need to identify the ids for the entities of interest (i.e., <code>e_</code>). Here, the <code>list_</code> functions, and specially <code>list_e</code>, are your friends. For instance, if you want to work in a specific country. First, you can check which countries are represented in the EPD.</p>
@@ -205,8 +204,8 @@ epd_all &lt;-<span class="st"> </span><span class="kw">lapply</span>(epd_all, ta
 </div>
 <div id="standardizing-counts-to-percentages" class="section level2">
 <h2><span class="header-section-number">3.3</span> Standardizing counts to percentages</h2>
-<p>The following would be to transform raw pollen counts into pollen percentages. Here, again, we combine the <code>lapply</code> function with the <code>counts_to_percentage</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd_all &lt;-<span class="st"> </span><span class="kw">lapply</span>(epd_all, counts_to_percentage)</code></pre></div>
+<p>The following would be to transform raw pollen counts into pollen percentages. Here, again, we combine the <code>lapply</code> function with the <code>counts_to_percentages</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd_all &lt;-<span class="st"> </span><span class="kw">lapply</span>(epd_all, counts_to_percentages)</code></pre></div>
 </div>
 <div id="standardizing-time-of-counts-data-interpolation-or-averaging" class="section level2">
 <h2><span class="header-section-number">3.4</span> Standardizing time of counts data (interpolation or averaging)</h2>

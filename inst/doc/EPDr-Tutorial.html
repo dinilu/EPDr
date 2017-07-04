@@ -12,7 +12,7 @@
 
 <meta name="author" content="Diego Nieto Lugilde" />
 
-<meta name="date" content="2017-07-03" />
+<meta name="date" content="2017-07-04" />
 
 <title>Using the EPDr package</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Using the EPDr package</h1>
 <h4 class="author"><em>Diego Nieto Lugilde</em></h4>
-<h4 class="date"><em>2017-07-03</em></h4>
+<h4 class="date"><em>2017-07-04</em></h4>
 
 
 <div id="TOC">
@@ -109,7 +109,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>User can choose to install the latest development version from github or the latest released version from CRAN.</p>
 <p>The development version from github can be installed using the <code>install_github</code> function from the <code>devtools</code>package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
-<span class="kw">install_github</span>(<span class="st">&quot;dinilu/EPDr&quot;</span>, <span class="dt">force =</span> T)</code></pre></div>
+<span class="kw">install_github</span>(<span class="st">&quot;dinilu/EPDr&quot;</span>, <span class="dt">force =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>Alternatively, the last released version can be installed from CRAN using the usual <code>install.package</code> function</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;EPDr&quot;</span>)</code></pre></div>
 </div>
@@ -827,7 +827,7 @@ epd.<span class="dv">1</span><span class="op">@</span>commdf<span class="op">@</
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>countstype</code></pre></div>
 <pre><code>## [1] Counts
 ## Levels: Counts Percentages</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">counts_to_percentage</span>(epd.<span class="dv">1</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">counts_to_percentages</span>(epd.<span class="dv">1</span>)
 epd.<span class="dv">1</span><span class="op">@</span>countstype</code></pre></div>
 <pre><code>## [1] Percentages
 ## Levels: Counts Percentages</code></pre>
