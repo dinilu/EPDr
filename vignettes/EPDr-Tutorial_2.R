@@ -1,11 +1,16 @@
 ## ----setup, include = FALSE----------------------------------------------
 knitr::opts_chunk$set(message = FALSE, warning = FALSE, fig.width = 7)
 
-## ----Connect to local EPD------------------------------------------------
-library(EPDr)
+## ----Connect to local EPD, eval = FALSE----------------------------------
+#  epd.connection <- connect_to_epd(database = "epd",
+#                                   user = "epdr",
+#                                   password = "epdrpw")
+
+## ----Connect to remote EPD, include = FALSE------------------------------
 epd.connection <- connect_to_epd(database = "epd",
                                  user = "epdr",
-                                 password = "epdrpw")
+                                 password = "epdrpw", 
+                                 host = "rabbot19.uco.es")
 
 ## ----list_countries, R.options = list(max.print = 30)--------------------
 list_countries(epd.connection)
@@ -56,41 +61,4 @@ epd_all <- lapply(epd_all, taxa_to_acceptedtaxa, epd.taxonomy)
 
 ## ----unify_taxonomy------------------------------------------------------
 epd_all <- unify_taxonomy(epd_all, epd.taxonomy)
-
-## ----lapply(counts_to_percentages)---------------------------------------
-epd_all <- lapply(epd_all, counts_to_percentages)
-
-## ----lapply(interpolate_counts), R.options = list(max.print = 50)--------
-epd_all <- lapply(epd_all, interpolate_counts, seq(0, 22000, by = 1000))
-epd_all[[2]]@commdf@counts[, 1:7]
-
-## ----lapply(blois_quality), R.options = list(max.print = 10)-------------
-epd_all[[1]]@agesdf@dataquality
-epd_all <- lapply(epd_all, blois_quality)
-epd_all[[1]]@agesdf@dataquality
-
-## ----lapply(table_by_taxa_age), R.options = list(max.print = 20)---------
-epd_tables <- lapply(epd_all,
-                     table_by_taxa_age,
-                     c("Quercus"), c("1000", "2000"))
-epd_tables[[1]]
-
-## ----lapply(table_by_taxa_age) 2, R.options = list(max.print = 20)-------
-epd_table <- do.call(rbind, epd_tables)
-epd_table
-
-## ----map_taxa_age, R.options = list(max.print = 20)----------------------
-map_taxa_age(epd_all, "Pinus", "1000")
-
-## ----map_taxa_age 2, R.options = list(max.print = 70)--------------------
-pinus <- c("Pinus", "Pinus diploxylon-type", "Pinus halepensis-type",
-           "Pinus haploxylon-type", "Pinus nigra-type",
-           "Pinus pinaster-type", "Pinus pinea-type")
-map_taxa_age(epd_all, pinus, "1000")
-
-## ----map_taxa_age 3, R.options = list(max.print = 20)--------------------
-map_taxa_age(epd_all, pinus, "1000", pres_abse = T, pollen_thres = 0)
-
-## ----map_taxa_age 4, R.options = list(max.print = 20)--------------------
-map_taxa_age(epd_all, pinus, "1000", pres_abse = T, pollen_thres = 1)
 

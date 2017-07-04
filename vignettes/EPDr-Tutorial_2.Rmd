@@ -25,12 +25,18 @@ In a [previous tutorial](EPDr-Tutorial.html), we have illustrated how to use the
 
 The very first thing is to load the library and stablish a valid connection to the database server. Remember that this need to be done for each session we start, and that it automatically closes the connection if we re-start R session and/or Rstudio.
 
-```{r Connect to local EPD}
-library(EPDr)
+```{r Connect to local EPD, eval = FALSE}
 epd.connection <- connect_to_epd(database = "epd",
                                  user = "epdr",
                                  password = "epdrpw")
 ```
+```{r Connect to remote EPD, include = FALSE}
+epd.connection <- connect_to_epd(database = "epd",
+                                 user = "epdr",
+                                 password = "epdrpw", 
+                                 host = "rabbot19.uco.es")
+```
+
 Then, you need to identify the ids for the entities of interest (i.e., `e_`). Here, the `list_` functions, and specially `list_e`, are your friends. For instance, if you want to work in a specific country. First, you can check which countries are represented in the EPD.
 
 ```{r list_countries, R.options = list(max.print = 30)}
