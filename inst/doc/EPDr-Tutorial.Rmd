@@ -234,11 +234,11 @@ slotNames(epd.1@geochron)
 slotNames(epd.1@chron)
 slotNames(epd.1@samples)
 ```
-Some of the relevant information can be also queried with specific functions from the `EPDr` package. In general, these functions use the name `check_` plus a descriptor of the information they check in the `epd.entity` object. For instance, `check_restriction` looks into the specific slots and tables that contains information on the use restrictions that apply to the data-set, and returns TRUE or FALSE depending on the case. However, `check_default_chron` returns also a logical (`TRUE` or `FALSE`) indicating whether the entity has a default chronology.
+Some of the relevant information can be also queried with specific functions from the `EPDr` package. In general, these functions use the name `check_` plus a descriptor of the information they check in the `epd.entity` object. For instance, `check_restriction` looks into the specific slots and tables that contains information on the use restrictions that apply to the data-set, and returns TRUE or FALSE depending on the case. However, `check_defaultchron` returns also a logical (`TRUE` or `FALSE`) indicating whether the entity has a default chronology.
 
 ```{r check_}
 check_restriction(epd.1)
-check_default_chron(epd.1)
+check_defaultchron(epd.1)
 ```
 
 # Working with data from the EPD

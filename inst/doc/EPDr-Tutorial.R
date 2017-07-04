@@ -113,7 +113,7 @@ slotNames(epd.1@samples)
 
 ## ----check_--------------------------------------------------------------
 check_restriction(epd.1)
-check_default_chron(epd.1)
+check_defaultchron(epd.1)
 
 ## ----export_c14, R.options = list(max.print = 25)------------------------
 export_c14("clam", epd.1@geochron@c14, epd.1@geochron@geochron)

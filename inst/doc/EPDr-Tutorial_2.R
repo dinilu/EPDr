@@ -40,7 +40,7 @@ epd_all <- remove_restricted(epd_all)
 length(epd_all)
 
 ## ----remove_wo_ages, R.options = list(max.print = 30)--------------------
-vapply(epd_all, check_default_chron, FUN.VALUE=logical(1))
+vapply(epd_all, check_defaultchron, FUN.VALUE=logical(1))
 epd_all <- remove_wo_ages(epd_all)
 length(epd_all)
 
@@ -88,9 +88,8 @@ epd_table
 map_taxa_age(epd_all, "Pinus", "1000")
 
 ## ----map_taxa_age 2, R.options = list(max.print = 70)--------------------
-pinus <- c("Pinus", "Pinus diploxylon-type", "Pinus halepensis-type",
-           "Pinus haploxylon-type", "Pinus nigra-type",
-           "Pinus pinaster-type", "Pinus pinea-type")
+pinus <- c("Pinus", "Pinus cembra-type", "Pinus halepensis-type",
+           "Pinus pinaster", "Pinus sylvestris-type")
 map_taxa_age(epd_all, pinus, "1000")
 
 ## ----map_taxa_age 3, R.options = list(max.print = 20)--------------------
