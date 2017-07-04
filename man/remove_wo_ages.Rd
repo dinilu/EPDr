@@ -18,7 +18,7 @@ This function is designed to work with list of EPDr objects
 (\code{\link[EPDr]{epd.entity.df}}, or
 \code{\link[EPDr]{epd.entity}}).
 The function parses all the elements on the list and remove those without a default
-chronology (see \code{\link[EPDr]{check_default_chron}}).
+chronology (see \code{\link[EPDr]{check_defaultchron}}).
 }
 \examples{
 \dontrun{

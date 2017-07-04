@@ -100,7 +100,7 @@ setMethod("blois_quality", signature(x = "epd.entity.df"),
                           "'overwrite = TRUE."))
             }
             if (is.null(chronology)){
-              if (!check_default_chron(x)){
+              if (!check_defaultchron(x)){
                 stop(paste0("The 'x' object has no sample ages ",
                             "and the quality index cannot be calculated."))
               }
@@ -221,7 +221,7 @@ setMethod("check_restriction", signature(x = "epd.entity"), function(x){
 })
 
 
-# check_default_chron --------------------------------------------------
+# check_defaultchron --------------------------------------------------
 
 #' Check default chronology on EPDr objects
 #' 
@@ -240,16 +240,16 @@ setMethod("check_restriction", signature(x = "epd.entity"), function(x){
 #' epd.connection <- connect_to_epd(host="localhost", database="epd",
 #'                                  user="epdr", password="epdrpw")
 #' epd.1 <- get_entity(1, epd.connection)
-#' check_default_chron(epd.1)
+#' check_defaultchron(epd.1)
 #' }
-#' @rdname check_default_chron
-#' @exportMethod check_default_chron
-setGeneric("check_default_chron", function(x){
-  standardGeneric("check_default_chron")
+#' @rdname check_defaultchron
+#' @exportMethod check_defaultchron
+setGeneric("check_defaultchron", function(x){
+  standardGeneric("check_defaultchron")
 })
 
-#' @rdname check_default_chron
-setMethod("check_default_chron", signature(x = "epd.entity"), function(x){
+#' @rdname check_defaultchron
+setMethod("check_defaultchron", signature(x = "epd.entity"), function(x){
   if (length(x@defaultchron) == 0){
     return(FALSE)
   }else{
@@ -259,6 +259,41 @@ setMethod("check_default_chron", signature(x = "epd.entity"), function(x){
       return(TRUE)
     }
   }
+})
+
+
+# check_valid_defaultchron --------------------------------------------------
+
+#' Check that default chronology on EPDr objects is valid
+#' 
+#' The function check EPDr objects with slot @@defaultchron 
+#' (\code{\link[EPDr]{epd.entity}}, and
+#' \code{\link[EPDr]{epd.entity.df}}) to see if that chronology
+#' has ages for the counts samples.
+#'
+#' @param x epd.entity \code{\link[EPDr]{epd.entity}} or
+#' \code{\link[EPDr]{epd.entity.df}} objects.
+#'
+#' @return Logical value indicating whether the default chronology has ages 
+#' (TRUE) or not (FALSE).
+#' @examples
+#' \dontrun{
+#' epd.connection <- connect_to_epd(host="localhost", database="epd",
+#'                                  user="epdr", password="epdrpw")
+#' epd.1 <- get_entity(1, epd.connection)
+#' check_valid_defaultchron(epd.1)
+#' }
+#' @rdname check_valid_defaultchron
+#' @exportMethod check_valid_defaultchron
+setGeneric("check_valid_defaultchron", function(x){
+  standardGeneric("check_valid_defaultchron")
+})
+
+#' @rdname check_valid_defaultchron
+setMethod("check_valid_defaultchron", signature(x = "epd.entity"), function(x){
+  chron <- x@defaultchron
+  chron_pagedpt <- x@samples@pagedpt$chron
+  return(chron %in% chron_pagedpt)
 })
 
 
@@ -479,7 +514,6 @@ setMethod("entity_to_matrices", signature(x = "epd.entity"), function(x){
     counts.cast <- subset(counts.cast, select = -1)
     counts.cast <- counts.cast[match(taxa_, colnames(counts.cast))]
     colnames(counts.cast) <- taxanames
-    taxagroupid[which(is.na(taxagroupid))] <- ""
     if (any(taxagroupid == "NOPO")){
       npi <- which(taxagroupid == "NOPO")
       nnpi <- which(taxagroupid != "NOPO")
@@ -751,7 +785,7 @@ setMethod("giesecke_default_chron",
 #' which ages should be used to calculate the interpolations. If none is
 #' provided the function uses the default chronology from the object (see
 #' \code{\link[EPDr]{giesecke_default_chron}} or
-#' \code{\link[EPDr]{check_default_chron}}).
+#' \code{\link[EPDr]{check_defaultchron}}).
 #' @param method character Interpolation method, should be an unambiguous 
 #' abbreviation of either linear, loess, or sspline. See Details section.
 #' @param rep_negt logical logical to indicate whether or not to replace 

@@ -34,7 +34,7 @@ to be estimated.}
 which ages should be used to calculate the interpolations. If none is
 provided the function uses the default chronology from the object (see
 \code{\link[EPDr]{giesecke_default_chron}} or
-\code{\link[EPDr]{check_default_chron}}).}
+\code{\link[EPDr]{check_defaultchron}}).}
 
 \item{method}{character Interpolation method, should be an unambiguous 
 abbreviation of either linear, loess, or sspline. See Details section.}

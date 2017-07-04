@@ -42,7 +42,7 @@ remove_restricted <- function(list){
 #' (\code{\link[EPDr]{epd.entity.df}}, or
 #' \code{\link[EPDr]{epd.entity}}).
 #' The function parses all the elements on the list and remove those without a default
-#' chronology (see \code{\link[EPDr]{check_default_chron}}).
+#' chronology (see \code{\link[EPDr]{check_defaultchron}}).
 #'
 #' @param list List of EPDr objects (\code{\link[EPDr]{epd.entity.df}},
 #' or \code{\link[EPDr]{epd.entity}})
@@ -63,7 +63,7 @@ remove_restricted <- function(list){
 #' length(spain.agedcounts.wo)
 #' }
 remove_wo_ages <- function(list){
-  index <- which(vapply(list, check_default_chron, FUN.VALUE = logical(1)))
+  index <- which(vapply(list, check_defaultchron, FUN.VALUE = logical(1)))
   list <- list[index]
   return(list)
 }
