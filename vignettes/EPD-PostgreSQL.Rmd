@@ -95,7 +95,7 @@ postgres=#
 
 ### Create mandatory users for EPD
 
-First, you should create two specific users in your local PostgreSQL server: `wwwadm` and `epd`. These two users are defined in the original EPD database server and are required to properly dump the data into the database in your local server. Users in PostgreSQL are also know as roles. To create a new role for the server we use the `CREATE ROLE` command, with the argument `WITH PASSWORD` to specify the desired password for each user. You can use any password of your choice, but do not forget these passwords.
+First, you should create two specific users in your local PostgreSQL server: `wwwadm` and `epd`. These two users are defined in the original EPD database server and are required to properly dump the data into the database in your local server. Users in PostgreSQL are also know as roles. To create a new role for the server we use the `CREATE ROLE` command, with the argument `WITH PASSWORD` to specify the desired password for each user. You can use any password of your choice, but do not forget these passwords. `CREATE ROLE` creates a new role without login privileges. A shortcut to create the roles with login privileges is using `CREATE USER`.
 
 ```
 postgres=# CREATE USER wwwadm WITH PASSWORD 'wwwadm_password';
@@ -112,6 +112,30 @@ Now, you can create a database for the EPD with the `CREATE DATABASE` command. I
 postgres=# CREATE DATABASE epd;
 CREATE DATABASE
 ```
+
+### Create readonly users for EPD
+
+Most frequently, you would like to create a new user with reads only privileges but not to modify or delete any data in the database. To create this user we need to get into the `PostgreSQL` command line again, but now specifying the `epd` database. Then, we can create the roles without any privileges and grant access only to the `epd` database and to select (or query) data from all its tables. 
+
+```
+diego@server:~/epd-postgres-distribution$ psql -U postgres -h localhost -d epd
+Password for user postgres:
+psql (9.5.3)
+SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression:off)
+Type "help" for help.
+
+postgres=# CREATE ROLE epdr WITH PASSWORD 'epdr_password' LOGIN;
+CREATE ROLE
+postgres=# GRANT CONNECT ON DATABASE epd TO epdr;
+GRANT
+postgres=# GRANT USAGE ON SCHEMA public TO epdr;
+GRANT
+postgres=# GRANT SELECT ON ALL TABLES IN SCHEMA public TO epdr;
+GRANT
+```
+
+Now, you should be able to query the database using the new `epdr` user and `epdr_password` but this user won't be able to modify any of the data.
+
 
 ## pgAdminIII
 
