@@ -49,8 +49,8 @@ setMethod("export_agebasis", signature(format = "character", x = "data.frame"),
               warning(paste0("Table without chronology data. Returning ",
                              "an empty data.frame."))
               if (format == "clam"){
-                output <- data.frame(lab_ID = NA, C14_age = NA,
-                                     cal_age = NA, error = NA,
+                output <- data.frame(ID = NA, C14_age = NA,
+                                     cal_BP = NA, error = NA,
                                      reservoir = NA, depth = NA,
                                      thickness = NA)[-1, ]
               }else{
@@ -59,7 +59,7 @@ setMethod("export_agebasis", signature(format = "character", x = "data.frame"),
               }
               return(output)
             }
-            output <- data.frame(lab_ID = paste("E", x$e_,
+            output <- data.frame(ID = paste("E", x$e_,
                                                 "_CH", x$chron_,
                                                 "_S", x$sample_,
                                                 sep = ""),
@@ -67,17 +67,18 @@ setMethod("export_agebasis", signature(format = "character", x = "data.frame"),
                                  error = x$ageup - x$age,
                                  depth = x$depthcm,
                                  thickness = x$thickness)
-            output$cal_age <- NA
+            output$cal_BP <- NA
             output$error[which(is.na(output$error) | output$error == 0)] <- 1
+            output$thickness[which(is.na(output$thickness) | output$thickness == 0)] <- 1
             output$reservoir <- NA
             if (format == "clam"){
-              output <- subset(output, select = c("lab_ID", "C14_age",
-                                                  "cal_age", "error",
+              output <- subset(output, select = c("ID", "C14_age",
+                                                  "cal_BP", "error",
                                                   "reservoir", "depth",
                                                   "thickness"))
             }
             if (format == "bacon"){
-              output <- subset(output, select = c("lab_ID", "C14_age",
+              output <- subset(output, select = c("ID", "C14_age",
                                                   "error", "depth"))
               colnames(output) <- c("labID", "age", "error", "depth")
             }
@@ -144,7 +145,7 @@ setMethod("export_c14", signature(format = "character", x = "data.frame",
     warning(paste0("Table without c14 data. Returning an ",
                    "empty data.frame."))
     if (format == "clam"){
-      output <- data.frame(lab_ID = NA, C14_age = NA, cal_age = NA,
+      output <- data.frame(ID = NA, C14_age = NA, cal_BP = NA,
                            error = NA, reservoir = NA, depth = NA,
                            thickness = NA)[-1, ]
     }else{
@@ -154,20 +155,20 @@ setMethod("export_c14", signature(format = "character", x = "data.frame",
     return(output)
   }
   z <- merge(x, y, by = "sample_")
-  output <- data.frame(lab_ID = z$labnumber, C14_age = z$agebp,
+  output <- data.frame(ID = z$labnumber, C14_age = z$agebp,
                        error = z$agesdup)
   output$depth <- z$depthcm
   output$thickness <- z$thickness
-  output$cal_age <- NA
+  output$cal_BP <- NA
   output$reservoir <- NA
   if (format == "clam"){
-    output <- subset(output, select = c("lab_ID", "C14_age",
-                                        "cal_age", "error",
+    output <- subset(output, select = c("ID", "C14_age",
+                                        "cal_BP", "error",
                                         "reservoir", "depth",
                                         "thickness"))
   }
   if (format == "bacon"){
-    output <- subset(output, select = c("lab_ID", "C14_age",
+    output <- subset(output, select = c("ID", "C14_age",
                                         "error", "depth"))
     colnames(output) <- c("labID", "age",
                           "error", "depth")
@@ -277,9 +278,9 @@ setMethod("export_depths", signature(x = "epd.entity"), function(x){
 #' should be included (TRUE), or not (FALSE).
 #'
 #' @return Data frame with specific format for "CLAM" or "BACON" age-depth
-#' modelling softwares. CLAM format has 7 columns: \code{$lab_ID}, 
+#' modelling softwares. CLAM format has 7 columns: \code{$ID}, 
 #' \code{$C14_age}, \code{$cal_age}, \code{$error}, \code{$reservoir}, 
-#' \code{$depth}, and \code{$thickness}. \code{$lab_ID} is the code 
+#' \code{$depth}, and \code{$thickness}. \code{$ID} is the code 
 #' of the radiocarbon (C14) samples. \code{$C14_age} is the radiocarbon (C14)
 #' dates. \code{$error} is the error estimated in the radiocarbon (C14) 
 #' datation of the samples. \code{$reservoir} is to specify if the 
@@ -334,7 +335,7 @@ setMethod("export_entity", signature(format = "character", x = "epd.entity"),
             # Define internal functions
             .print_data <- function(data, format){
               if (format == "clam"){
-                cat(c("lab_ID", "C14_age", "cal_age", "error",
+                cat(c("ID", "C14_age", "cal_age", "error",
                       "reserv.", "depth", "thickn.\n"), sep = "\t")
               }
               if (format == "bacon"){
@@ -365,12 +366,18 @@ setMethod("export_entity", signature(format = "character", x = "epd.entity"),
             # Default chronology if no defined
             if (is.null(chronology)){
               chronology <- x@defaultchron
-            }else{
-              if (!chronology %in% 1:x@numberofchron){
-                stop(paste0("The chronology does not exist."))
+            }
+            if (!chronology %in% 1:x@numberofchron){
+              if (chronology != 9999){
+                stop(paste0("Invalid chronology. The entity has not ", 
+                            "chronology with this number"))
+              }else{
+                if (!x@isingiesecke){
+                  stop(paste0("Invalid chronology. The entity has not ",
+                              "data in Giesecke et al. (2013)."))
+                }
               }
             }
-
             # Get sub-objects from datation object
             e_ <- x@e_
             c14 <- x@geochron@c14
@@ -619,14 +626,14 @@ setMethod("export_entity", signature(format = "character", x = "epd.entity"),
             }
             # Order dataframe by depths and write to the directory
             output <- output[order(output$depth), ]
-            utils::write.csv(output, file = paste(format,
+            utils::write.table(output, file = paste(format,
                                                   "/Cores/",
                                                   e_,
                                                   "/",
                                                   e_,
                                                   ".csv",
                                                   sep = ""),
-                             na = "", row.names = FALSE)
+                             na = "", row.names = FALSE, sep = ",")
             # Extract depth columns for samples and create depths.txt files.
             if (exists("include_depths")){
               depths.export <- export_depths(psamples)
@@ -637,7 +644,8 @@ setMethod("export_entity", signature(format = "character", x = "epd.entity"),
                                                              e_,
                                                              "_depths.txt",
                                                              sep = ""),
-                                 col.names = FALSE, na = "", row.names = FALSE)
+                                 col.names = FALSE, na = "",
+                                 row.names = FALSE, sep = "")
               utils::write.table(psamples, file = paste(format,
                                                         "/Cores/",
                                                         e_,
@@ -703,8 +711,8 @@ setMethod("export_events", signature(format = "character",
               warning(paste0("Table without dated events. Returning ",
                              "an empty data.frame."))
               if (format == "clam"){
-                output <- data.frame(lab_ID = NA, C14_age = NA,
-                                     cal_age = NA, error = NA,
+                output <- data.frame(ID = NA, C14_age = NA,
+                                     cal_BP = NA, error = NA,
                                      reservoir = NA, depth = NA,
                                      thickness = NA)[-1, ]
               }else{
@@ -713,7 +721,7 @@ setMethod("export_events", signature(format = "character",
               }
               return(output)
             }
-            output <- data.frame(lab_ID = paste("E", z$e_,
+            output <- data.frame(ID = paste("E", z$e_,
                                                 "_EV",
                                                 z$event_,
                                                 sep = ""),
@@ -722,16 +730,17 @@ setMethod("export_events", signature(format = "character",
                                  depth = z$depthcm,
                                  thickness = z$thickness)
             output$error[which(is.na(output$error) | output$error == 0)] <- 1
-            output$cal_age <- NA
+            output$thickness[which(is.na(output$thickness) | output$thickness == 0)] <- 1
+            output$cal_BP <- NA
             output$reservoir <- NA
             if (format == "clam"){
-              output <- subset(output, select = c("lab_ID", "C14_age",
-                                                  "cal_age", "error",
+              output <- subset(output, select = c("ID", "C14_age",
+                                                  "cal_BP", "error",
                                                   "reservoir", "depth",
                                                   "thickness"))
             }
             if (format == "bacon"){
-              output <- subset(output, select = c("lab_ID", "C14_age",
+              output <- subset(output, select = c("ID", "C14_age",
                                                   "error", "depth"))
               colnames(output) <- c("labID", "age", "error", "depth")
             }

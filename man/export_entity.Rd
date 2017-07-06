@@ -58,9 +58,9 @@ should be included (TRUE), or not (FALSE).}
 }
 \value{
 Data frame with specific format for "CLAM" or "BACON" age-depth
-modelling softwares. CLAM format has 7 columns: \code{$lab_ID}, 
+modelling softwares. CLAM format has 7 columns: \code{$ID}, 
 \code{$C14_age}, \code{$cal_age}, \code{$error}, \code{$reservoir}, 
-\code{$depth}, and \code{$thickness}. \code{$lab_ID} is the code 
+\code{$depth}, and \code{$thickness}. \code{$ID} is the code 
 of the radiocarbon (C14) samples. \code{$C14_age} is the radiocarbon (C14)
 dates. \code{$error} is the error estimated in the radiocarbon (C14) 
 datation of the samples. \code{$reservoir} is to specify if the 
