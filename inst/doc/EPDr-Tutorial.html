@@ -12,7 +12,7 @@
 
 <meta name="author" content="Diego Nieto Lugilde" />
 
-<meta name="date" content="2017-07-04" />
+<meta name="date" content="2017-07-06" />
 
 <title>Using the EPDr package</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Using the EPDr package</h1>
 <h4 class="author"><em>Diego Nieto Lugilde</em></h4>
-<h4 class="date"><em>2017-07-04</em></h4>
+<h4 class="date"><em>2017-07-06</em></h4>
 
 
 <div id="TOC">
@@ -485,24 +485,24 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><code>EPDr</code> package provides several functions to reformat and export data to comply with format requirements from CLAM or BACON. These functions are named <code>export_</code> functions. There are five <code>export_</code> functions: <code>export_c14</code>, <code>export_agebasis</code>, <code>export_events</code>, <code>export_depths</code>, and <code>export_entity</code>.</p>
 <p><code>export_c14</code> exports data from the C14 and GEOCHRON tables, which store information for samples and radiocarbon dates. <code>export_c14</code> requires a character string indicating the output format (“clam” or “bacon”), the C14 table (<code>x</code>) and the GEOCHRON table (<code>y</code>). Alternatively, it can be passed only a <code>epd.entity</code> object (<code>x</code> and <code>y</code> missing) and the function will look for both tables automatically on it.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_c14</span>(<span class="st">&quot;clam&quot;</span>, epd.<span class="dv">1</span><span class="op">@</span>geochron<span class="op">@</span>c14, epd.<span class="dv">1</span><span class="op">@</span>geochron<span class="op">@</span>geochron)</code></pre></div>
-<pre><code>##     lab_ID C14_age cal_age error reservoir depth thickness
-## 1 KIGI-350     910      NA    20        NA    83         5
-## 2 KIGI-349    2420      NA   200        NA   118         5
-## 3 KIGI-348    2900      NA   190        NA   140        10</code></pre>
+<pre><code>##         ID C14_age cal_BP error reservoir depth thickness
+## 1 KIGI-350     910     NA    20        NA    83         5
+## 2 KIGI-349    2420     NA   200        NA   118         5
+## 3 KIGI-348    2900     NA   190        NA   140        10</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_c14</span>(<span class="st">&quot;bacon&quot;</span>, epd.<span class="dv">1</span><span class="op">@</span>geochron<span class="op">@</span>c14, epd.<span class="dv">1</span><span class="op">@</span>geochron<span class="op">@</span>geochron)</code></pre></div>
 <pre><code>##      labID  age error depth
 ## 1 KIGI-350  910    20    83
 ## 2 KIGI-349 2420   200   118
 ## 3 KIGI-348 2900   190   140</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_c14</span>(<span class="st">&quot;clam&quot;</span>, epd.<span class="dv">1</span>)</code></pre></div>
-<pre><code>##     lab_ID C14_age cal_age error reservoir depth thickness
-## 1 KIGI-350     910      NA    20        NA    83         5
-## 2 KIGI-349    2420      NA   200        NA   118         5
-## 3 KIGI-348    2900      NA   190        NA   140        10</code></pre>
+<pre><code>##         ID C14_age cal_BP error reservoir depth thickness
+## 1 KIGI-350     910     NA    20        NA    83         5
+## 2 KIGI-349    2420     NA   200        NA   118         5
+## 3 KIGI-348    2900     NA   190        NA   140        10</code></pre>
 <p>Another function (<code>export_agebasis</code>) export the table AGEBASIS, which stores information on the data used to calibrate the different chronologies. <code>export_agebasis</code> takes also as arguments a character vector with output format, and an AGEBASIS table or an <code>epd.entity</code> object to look for it.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_agebasis</span>(<span class="st">&quot;clam&quot;</span>, epd.<span class="dv">1</span><span class="op">@</span>chron<span class="op">@</span>agebasis)</code></pre></div>
-<pre><code>##         lab_ID C14_age cal_age error reservoir depth thickness
-## 1    E1_CH1_S1       0      NA     1        NA     2        NA
+<pre><code>##             ID C14_age cal_BP error reservoir depth thickness
+## 1    E1_CH1_S1       0     NA     1        NA     2         1
 ##  [ reached getOption(&quot;max.print&quot;) -- omitted 8 rows ]</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_agebasis</span>(<span class="st">&quot;bacon&quot;</span>, epd.<span class="dv">1</span>)</code></pre></div>
 <pre><code>##          labID  age error depth
@@ -511,7 +511,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##  [ reached getOption(&quot;max.print&quot;) -- omitted 7 rows ]</code></pre>
 <p><code>export_events</code> function re-formats and exports the data stored in the EVENTS and SYNEVENT tables, which refer to geological events registered in the entity (e.g., tephra, etc.). Similarly to <code>export_c14</code>, <code>export_events</code> requires two tables (SYNEVENT and EVENT) or the <code>epd.entity</code> objects in which to look for them.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_events</span>(<span class="st">&quot;clam&quot;</span>, epd.<span class="dv">1</span><span class="op">@</span>chron<span class="op">@</span>synevent, epd.<span class="dv">1</span><span class="op">@</span>chron<span class="op">@</span>event)</code></pre></div>
-<pre><code>## [1] lab_ID    C14_age   cal_age   error     reservoir depth     thickness
+<pre><code>## [1] ID        C14_age   cal_BP    error     reservoir depth     thickness
 ## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_events</span>(<span class="st">&quot;bacon&quot;</span>, epd.<span class="dv">1</span>)</code></pre></div>
 <pre><code>## [1] labID age   error depth

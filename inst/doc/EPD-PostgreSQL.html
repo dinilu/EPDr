@@ -12,7 +12,7 @@
 
 <meta name="author" content="Diego Nieto Lugilde" />
 
-<meta name="date" content="2017-07-04" />
+<meta name="date" content="2017-07-06" />
 
 <title>Setting up a PostgreSQL server for the European Pollen Database (EPD)</title>
 
@@ -32,7 +32,7 @@
 
 <h1 class="title toc-ignore">Setting up a PostgreSQL server for the European Pollen Database (EPD)</h1>
 <h4 class="author"><em>Diego Nieto Lugilde</em></h4>
-<h4 class="date"><em>2017-07-04</em></h4>
+<h4 class="date"><em>2017-07-06</em></h4>
 
 
 <div id="TOC">
@@ -131,7 +131,7 @@ Type &quot;help&quot; for help.
 postgres=#</code></pre>
 <div id="create-mandatory-users-for-epd" class="section level3">
 <h3><span class="header-section-number">3.1.1</span> Create mandatory users for EPD</h3>
-<p>First, you should create two specific users in your local PostgreSQL server: <code>wwwadm</code> and <code>epd</code>. These two users are defined in the original EPD database server and are required to properly dump the data into the database in your local server. Users in PostgreSQL are also know as roles. To create a new role for the server we use the <code>CREATE ROLE</code> command, with the argument <code>WITH PASSWORD</code> to specify the desired password for each user. You can use any password of your choice, but do not forget these passwords.</p>
+<p>First, you should create two specific users in your local PostgreSQL server: <code>wwwadm</code> and <code>epd</code>. These two users are defined in the original EPD database server and are required to properly dump the data into the database in your local server. Users in PostgreSQL are also know as roles. To create a new role for the server we use the <code>CREATE ROLE</code> command, with the argument <code>WITH PASSWORD</code> to specify the desired password for each user. You can use any password of your choice, but do not forget these passwords. <code>CREATE ROLE</code> creates a new role without login privileges. A shortcut to create the roles with login privileges is using <code>CREATE USER</code>.</p>
 <pre><code>postgres=# CREATE USER wwwadm WITH PASSWORD 'wwwadm_password';
 CREATE ROLE
 postgres=# CREATE USER epd WITH PASSWORD 'epd_password';
@@ -142,6 +142,25 @@ CREATE ROLE</code></pre>
 <p>Now, you can create a database for the EPD with the <code>CREATE DATABASE</code> command. In the example, we created a database called <code>epd</code> but you can select a different name if you want. Note that commands in postgresql prompt end with semicolom <code>;</code>.</p>
 <pre><code>postgres=# CREATE DATABASE epd;
 CREATE DATABASE</code></pre>
+</div>
+<div id="create-readonly-users-for-epd" class="section level3">
+<h3><span class="header-section-number">3.1.3</span> Create readonly users for EPD</h3>
+<p>Most frequently, you would like to create a new user with reads only privileges but not to modify or delete any data in the database. To create this user we need to get into the <code>PostgreSQL</code> command line again, but now specifying the <code>epd</code> database. Then, we can create the roles without any privileges and grant access only to the <code>epd</code> database and to select (or query) data from all its tables.</p>
+<pre><code>diego@server:~/epd-postgres-distribution$ psql -U postgres -h localhost -d epd
+Password for user postgres:
+psql (9.5.3)
+SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression:off)
+Type &quot;help&quot; for help.
+
+postgres=# CREATE ROLE epdr WITH PASSWORD 'epdr_password' LOGIN;
+CREATE ROLE
+postgres=# GRANT CONNECT ON DATABASE epd TO epdr;
+GRANT
+postgres=# GRANT USAGE ON SCHEMA public TO epdr;
+GRANT
+postgres=# GRANT SELECT ON ALL TABLES IN SCHEMA public TO epdr;
+GRANT</code></pre>
+<p>Now, you should be able to query the database using the new <code>epdr</code> user and <code>epdr_password</code> but this user won’t be able to modify any of the data.</p>
 </div>
 </div>
 <div id="pgadminiii" class="section level2">
