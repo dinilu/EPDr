@@ -4,6 +4,8 @@ Title: Interact with the European Pollen Database (EPD)
 Version: 0.1
 URL: https://github.com/dinilu/EPDr
 BugReports: https://github.com/dinilu/EPDr/issues
+Author: Diego Nieto-Lugilde
+Mantainer: Diego Nieto-Lugilde <dnietolugilde@gmail.com>
 Authors@R: person("Diego", "Nieto-Lugilde", email="dnietolugilde@gmail.com", role=c("aut", "cre"))
 Description: Package to interact with the European Pollen Database (EPD):
     Connecto to the database, get data, recalibrate ages, etc.
@@ -19,7 +21,7 @@ Imports:
     utils,
     sp,
     reshape2,
-    ggplot2,
+    ggplot2
 Suggests:
     knitr,
     rmarkdown,

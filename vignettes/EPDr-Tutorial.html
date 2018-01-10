@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Diego Nieto Lugilde" />
+
+<meta name="date" content="2017-12-04" />
+
+<title>Using the EPDr package</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Using the EPDr package</h1>
+<h4 class="author"><em>Diego Nieto Lugilde</em></h4>
+<h4 class="date"><em>2017-12-04</em></h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#installing-the-epdr-package"><span class="toc-section-number">1</span> Installing the EPDr package</a></li>
+<li><a href="#setting-up-the-epd-database"><span class="toc-section-number">2</span> Setting up the EPD database</a></li>
+<li><a href="#loading-the-epdr-package"><span class="toc-section-number">3</span> Loading the EPDr package</a></li>
+<li><a href="#connecting-to-the-epd-database"><span class="toc-section-number">4</span> Connecting to the EPD database</a></li>
+<li><a href="#querying-data-from-the-database"><span class="toc-section-number">5</span> Querying data from the database</a><ul>
+<li><a href="#listing-fields-from-the-epd-list-functions"><span class="toc-section-number">5.1</span> Listing fields from the EPD (<code>list</code> functions)</a></li>
+<li><a href="#retrieving-information-for-particular-entities-get-functions"><span class="toc-section-number">5.2</span> Retrieving information for particular entities (<code>get</code> functions)</a></li>
+</ul></li>
+<li><a href="#working-with-data-from-the-epd"><span class="toc-section-number">6</span> Working with data from the EPD</a><ul>
+<li><a href="#exporting-data-for-clam-or-bacon"><span class="toc-section-number">6.1</span> Exporting data for CLAM or BACON</a></li>
+<li><a href="#standardizing-data"><span class="toc-section-number">6.2</span> Standardizing data</a><ul>
+<li><a href="#reformat-data-into-matrices-epd.entity.df"><span class="toc-section-number">6.2.1</span> Reformat data into matrices (<code>epd.entity.df</code>)</a></li>
+<li><a href="#navigating-taxonomy-in-the-epd"><span class="toc-section-number">6.2.2</span> Navigating taxonomy in the EPD</a></li>
+<li><a href="#filtering-taxa"><span class="toc-section-number">6.2.3</span> Filtering taxa</a></li>
+<li><a href="#calculating-percentages"><span class="toc-section-number">6.2.4</span> Calculating percentages</a></li>
+<li><a href="#using-updated-ages-from-giesecke-et-al.--giesecke_2013"><span class="toc-section-number">6.2.5</span> Using updated ages from Giesecke <em>et al.</em> <span class="citation">(2013)</span></a></li>
+<li><a href="#interpolating-counts-data-to-specific-time-periods"><span class="toc-section-number">6.2.6</span> Interpolating counts data to specific time periods</a></li>
+<li><a href="#average-counts-data-to-specific-time-ranges"><span class="toc-section-number">6.2.7</span> Average counts data to specific time ranges</a></li>
+<li><a href="#calculating-data-quality-using-blois_2011"><span class="toc-section-number">6.2.8</span> Calculating data quality using <span class="citation">(Blois et al. 2011)</span></a></li>
+</ul></li>
+<li><a href="#extracting-data-in-a-table-for-specific-taxa-and-age"><span class="toc-section-number">6.3</span> Extracting data in a table for specific taxa and age</a></li>
+<li><a href="#plotting-pollen-diagrams-from-data-in-epd.entity.df-objects"><span class="toc-section-number">6.4</span> Plotting pollen diagrams from data in <code>epd.entity.df</code> objects</a></li>
+</ul></li>
+<li><a href="#disconnecting-from-the-epd-server"><span class="toc-section-number">7</span> Disconnecting from the EPD server</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+
+<p>In this vignette we will illustrate the use of EPDr package, from installing the package to retrieving data from a local server of the European Pollen Database (EPD) and how to use those data to perform some basic analysis and produce most common plots in paleopalynology, like palynograms or maps.</p>
+<div id="installing-the-epdr-package" class="section level1">
+<h1><span class="header-section-number">1</span> Installing the EPDr package</h1>
+<p>User can choose to install the latest development version from github or the latest released version from CRAN.</p>
+<p>The development version from github can be installed using the <code>install_github</code> function from the <code>devtools</code>package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
+<span class="kw">install_github</span>(<span class="st">&quot;dinilu/EPDr&quot;</span>, <span class="dt">force =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>Alternatively, the last released version can be installed from CRAN using the usual <code>install.package</code> function</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;EPDr&quot;</span>)</code></pre></div>
+</div>
+<div id="setting-up-the-epd-database" class="section level1">
+<h1><span class="header-section-number">2</span> Setting up the EPD database</h1>
+<p>Before moving on with this vignette, it is important that the user have access to a running PostgreSQL server with the EPD database. This is where the data are going to be pulled out. Detailed, and step by step, instructions to do so in a local-host are in a specific vignette along with the EPDr package. Check the vignette in the following code if you have not yet.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vignette</span>(<span class="st">&quot;EPD-PostgreSQL&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;EPDr&quot;</span>)</code></pre></div>
+</div>
+<div id="loading-the-epdr-package" class="section level1">
+<h1><span class="header-section-number">3</span> Loading the EPDr package</h1>
+<p>As any other R-package, <code>ÈPDr</code> is loaded in the working environment with the <code>library</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(EPDr)</code></pre></div>
+</div>
+<div id="connecting-to-the-epd-database" class="section level1">
+<h1><span class="header-section-number">4</span> Connecting to the EPD database</h1>
+<p>The <code>EPDr</code> package uses the <code>RPostgreSQL</code> package to establish a connection between the R session and the EPD database in the PostgreSQL server. Although this can be done to a online server, we assume most users do not have the expertise to setup an online server and most are thus running the server and the R session in the same computer (localhost configuration).</p>
+<p>To establish the connection we use the <code>connect_to_epd</code> function, which requires the following arguments: <em><code>database</code>: database name. No default database name is specified in the function. </em><code>user</code>: user name. Name of the user with privileges to access the database. No default user name is specified in the function. <em><code>password</code>: user’s password. Password of the user to access the database. </em><code>host</code>: address to the server. “localhost” is the default value indicating that the server is running in the local computer.</p>
+<p>If the function is called with no arguments <code>connect_to_epd()</code>, the function assume the server is running in the local computer (“locahost”), and interactively ask for the necessary arguments to connect with the database: <code>database</code>, <code>user</code>, and <code>password</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.connection &lt;-<span class="st"> </span><span class="kw">connect_to_epd</span>(<span class="dt">database =</span> <span class="st">&quot;epd&quot;</span>,
+                                 <span class="dt">user =</span> <span class="st">&quot;epdr&quot;</span>,
+                                 <span class="dt">password =</span> <span class="st">&quot;epdrpw&quot;</span>)</code></pre></div>
+<p>In case you have access to a remote EPD server, you only have to provide the online address to the server using the argument <code>host</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.connection &lt;-<span class="st"> </span><span class="kw">connect_to_epd</span>(<span class="dt">database =</span> <span class="st">&quot;epd&quot;</span>,
+                                 <span class="dt">user =</span> <span class="st">&quot;epdr&quot;</span>,
+                                 <span class="dt">password =</span> <span class="st">&quot;epdrpw&quot;</span>,
+                                 <span class="dt">host =</span> <span class="st">&quot;http://remote.epd.server&quot;</span>)</code></pre></div>
+<p>Now, we are ready to check the connection with some of the functions in the <code>RPostgreSQL</code> and/or <code>DBI</code> packages. For instance, we can use the <code>dbListTables</code> function to get a list of all the tables in the database. The function should return a list of 45 tables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DBI)
+<span class="kw">dbListTables</span>(epd.connection)</code></pre></div>
+<pre><code>##  [1] &quot;descr&quot;    &quot;chron&quot;    &quot;entity&quot;   &quot;authors&quot;  &quot;groups&quot;   &quot;coredriv&quot;
+##  [7] &quot;geochron&quot; &quot;esr&quot;      &quot;p_counts&quot; &quot;c14&quot;      &quot;ft&quot;       &quot;p_entity&quot;
+## [13] &quot;kar&quot;      &quot;event&quot;    &quot;p_group&quot;  &quot;infotype&quot; &quot;litholgy&quot; &quot;loi&quot;     
+## [19] &quot;alsegs&quot;   &quot;igcptype&quot; &quot;p_sample&quot; &quot;agebound&quot; &quot;p_anldpt&quot; &quot;p_agedpt&quot;
+## [25] &quot;p_vtrans&quot; &quot;poldiv1&quot;  &quot;section&quot;  &quot;poldiv2&quot;  &quot;tl&quot;       &quot;siteloc&quot; 
+## [31] &quot;si32&quot;     &quot;useries&quot;  &quot;publ&quot;     &quot;synevent&quot; &quot;siteinfo&quot; &quot;syntype&quot; 
+## [37] &quot;sitedesc&quot; &quot;aar&quot;      &quot;rational&quot; &quot;agebasis&quot; &quot;pb210&quot;    &quot;p_vars&quot;  
+## [43] &quot;workers&quot;  &quot;publent&quot;  &quot;poldiv3&quot;</code></pre>
+</div>
+<div id="querying-data-from-the-database" class="section level1">
+<h1><span class="header-section-number">5</span> Querying data from the database</h1>
+<p>The EPDr package provide several ways to retrieve data from the database: Listing information from different fields in the database with <code>list</code> functions, or extracting specific data for a particular entity (pollen core, polster sample, etc.) with <code>get</code> functions.</p>
+<div id="listing-fields-from-the-epd-list-functions" class="section level2">
+<h2><span class="header-section-number">5.1</span> Listing fields from the EPD (<code>list</code> functions)</h2>
+<p>For users unfamiliar with the database it might be useful to list elements in the database, for instance to know which countries are represented or which publications are associated with the entities in the database. To do so, the package provides a series of <code>list</code> functions that return specific tables from the database where important information can be looked at.</p>
+<p>Some of these functions (<code>list_countries</code> and <code>list_taxagroups</code>) only accept one argument (<code>connection</code>), which must be a valid connection to the EPD database.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_countries</span>(epd.connection)</code></pre></div>
+<pre><code>##    poldiv1                                   name
+## 1      ADS                           Adriatic Sea
+## 2      AFG                            Afghanistan
+## 3      ALA                         Ãland Islands
+## 4      ALB                                Albania
+## 5      AND                                Andorra
+## 6      ARE                   United Arab Emirates
+## 7      ARM                                Armenia
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 84 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_taxagroups</span>(epd.connection)</code></pre></div>
+<pre><code>##    groupid groupcode                             groupname
+## 1     ACRI         ?                            Acritarchs
+## 2     ALGA         L                                 Algae
+## 3     AQPT         K                  Aquatic Pteridophyta
+## 4     AQUA         Q                              Aquatics
+## 5     BRYO         M                            Bryophytes
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 24 rows ]</code></pre>
+<p>However, other <code>list</code> functions accept several arguments to further filter the result of the query. For instance, <code>list_regions</code> accepts an extra argument (<code>country</code>) to limit the query to particular countries.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_regions</span>(epd.connection)</code></pre></div>
+<pre><code>##      poldiv2 poldiv1                             regionname
+## 1         00     ADS                                   &lt;NA&gt;
+## 2         00     AFG                                   &lt;NA&gt;
+## 3         00     ALA                                   &lt;NA&gt;
+## 4         00     ALB                                   &lt;NA&gt;
+## 5         01     ALB                        Qarku i Beratit
+## 6         02     ALB                         Qarku i Dibres
+## 7         03     ALB                       Qarku i Durresit
+## 8         04     ALB                      Qarku i Elbasanit
+## 9         05     ALB                         Qarku i Fierit
+## 10        06     ALB                   Qarku i Gjirokastres
+##                                 countryname
+## 1                              Adriatic Sea
+## 2                               Afghanistan
+## 3                            Ãland Islands
+## 4                                   Albania
+## 5                                   Albania
+## 6                                   Albania
+## 7                                   Albania
+## 8                                   Albania
+## 9                                   Albania
+## 10                                  Albania
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 2040 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_regions</span>(epd.connection, <span class="dt">country =</span> <span class="st">&quot;Spain&quot;</span>)</code></pre></div>
+<pre><code>##    poldiv2 poldiv1            regionname countryname
+## 1       00     ESP                  &lt;NA&gt;       Spain
+## 2       01     ESP             Andalucia       Spain
+## 3       02     ESP                Aragon       Spain
+## 4       03     ESP              Asturias       Spain
+## 5       04     ESP              Baleares       Spain
+## 6       05     ESP              Canarias       Spain
+## 7       06     ESP             Cantabria       Spain
+## 8       07     ESP    Castilla-La Mancha       Spain
+## 9       08     ESP       Castilla y Leon       Spain
+## 10      09     ESP              Cataluna       Spain
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 10 rows ]</code></pre>
+<p>Each function has their own relevant parameters. For instance, <code>list_taxa</code> accepts the argument <code>group_id</code>, which refers to the taxa groups from <code>list_taxagroups</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_taxa</span>(epd.connection)</code></pre></div>
+<pre><code>##      var_                                            varname   varcode
+## 1       1                                              Abies       Abi
+## 2    1987                                         Abies alba     Abi.a
+## 3    2644                                     Abies marocana     Abi.m
+## 4    2493                                 Abies nordmanniana     Abi.n
+##      mhvar_ groupid
+## 1         1    TRSH
+## 2         1    TRSH
+## 3         1    TRSH
+## 4         1    TRSH
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 5630 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_taxa</span>(epd.connection, <span class="dt">group_id =</span> <span class="st">&quot;HERB&quot;</span>)</code></pre></div>
+<pre><code>##      var_                                            varname   varcode
+## 1    1869                                           Abutilon       Abu
+## 2    2721                                        Acanthaceae  Acanteae
+## 3    1852                                       Acantholimon       Alm
+## 4    1763                                           Acanthus       Atu
+##      mhvar_ groupid
+## 1      1869    HERB
+## 2      2721    HERB
+## 3       595    HERB
+## 4      2721    HERB
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 2650 rows ]</code></pre>
+<p>Other <code>list</code> functions accept more arguments. Sample sites, for instance, can be listed specifying the <code>country</code> and <code>region</code> of interest, but also a set of four geographical coordinates (longitude and latitude) encompassing the area of interest (xmin, xmax, ymin, ymax).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_sites</span>(epd.connection)</code></pre></div>
+<pre><code>##      site_                               sitename        sitecode    latdd
+## 1        1                                 Adange  GEO-01000-ADAN 43.30556
+## 2        2                         AgerÃ¶ds Mosse  SWE-13000-AGER 55.83333
+##            londd elevation areaofsite
+## 1      41.333333      1750 2.5000e-01
+## 2      13.416667        58 1.5000e+02
+##                                                          sitedescript
+## 1                                             Meander of Adange river
+## 2                                               Forested Sphagnum bog
+##                                      physiography
+## 1               Fluvial terrace above flood-plain
+## 2                                            till
+##                                                                       surroundveg
+## 1                                            Subalpine tall herbaceous vegetation
+## 2                                                         pasture and arable land
+##                                   vegformation
+## 1                                         &lt;NA&gt;
+## 2                                         &lt;NA&gt;
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 1991 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_sites</span>(epd.connection, <span class="dt">country =</span> <span class="st">&quot;Spain&quot;</span>, <span class="dt">region =</span> <span class="st">&quot;Andalucia&quot;</span>)</code></pre></div>
+<pre><code>##   site_        sitename       sitecode    latdd     londd elevation
+## 1    65           Antas ESP-01000-ANTA 37.20833 -1.823611         0
+## 2   306   Laguna Grande ESP-01000-LAGU 37.10833 -4.316667       800
+##   areaofsite                sitedescript
+## 1         NA                   Sea shore
+## 2          4             Spring-fed lake
+##                                 physiography
+## 1                                       flat
+## 2                         in limestone hills
+##                               surroundveg vegformation
+## 1                                    &lt;NA&gt;         &lt;NA&gt;
+## 2                                    &lt;NA&gt;         &lt;NA&gt;
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 7 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_sites</span>(epd.connection, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span>, <span class="dv">10</span>, <span class="dv">36</span>, <span class="dv">40</span>))</code></pre></div>
+<pre><code>##    site_           sitename       sitecode    latdd     londd elevation
+## 1     55           Algendar ESP-04000-ALGE 39.94056  3.958611        21
+## 2     65              Antas ESP-01000-ANTA 37.20833 -1.823611         0
+##    areaofsite                  sitedescript
+## 1          NA South coast of Minorca Island
+## 2          NA                     Sea shore
+##                                physiography
+## 1                             littoral core
+## 2                                      flat
+##                                 surroundveg                 vegformation
+## 1                              Quercus ilex                         &lt;NA&gt;
+## 2                                      &lt;NA&gt;                         &lt;NA&gt;
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 23 rows ]</code></pre>
+<p>Biological counts and datation data in the EPD database are referred to entities. This account for the fact that multiple samples can be taken in the same site. For instance, several cores drilled in the the same lake, or a core and a surface sample (moss polster or pollen trap) being collected in a peat-bog.</p>
+<p>Entities thus can be listed according to many different criteria: site name or site ID (<code>site</code>), geographical coordinates (<code>coords</code>), last name of the author (<code>lastname</code>), first name of the author (<code>firstname</code>), initials of the author (<code>initials</code>), publication number (<code>publ</code>), country (<code>country</code>) and region (<code>region</code>), and restriction on the use of data (<code>restrictions</code>). If multiple criteria are going to be used, the author can decide to use a logical operator to control for an additive (<code>AND</code>) or alternative (<code>OR</code>) interaction between criteria.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_e</span>(epd.connection)</code></pre></div>
+<pre><code>##        e_ site_    sigle                            name iscore issect
+## 1       1     1   ADANGE                            &lt;NA&gt;      Y      N
+## 2       2     2      AGE                            &lt;NA&gt;      Y      N
+##      isssamp descriptor hasanlam
+## 1          Y       RFLU        N
+## 2          Y       PBRA        N
+##                                                          entloc
+## 1                                           left coast of river
+## 2                                             Center of the bog
+##                                                                                                                                                                                          localveg
+## 1                                                                                                                                                                                  Cyperaceae fen
+## 2                                                                                                                                                                                            &lt;NA&gt;
+##      coll_   sampdate depthatloc icethickcm
+## 1       65 1984-08-00      210.0         NA
+## 2       70 1960-00-00         NA         NA
+##                                  sampdevice corediamcm c14depthadj
+## 1                                     spade      10.00          NA
+## 2                              piston corer       6.00          NA
+##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        notes
+## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       &lt;NA&gt;
+## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       &lt;NA&gt;
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 2568 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_e</span>(epd.connection, <span class="dt">site =</span> <span class="st">&quot;Adange&quot;</span>)</code></pre></div>
+<pre><code>##   e_ site_  sigle name iscore issect isssamp descriptor hasanlam
+## 1  1     1 ADANGE &lt;NA&gt;      Y      N       Y       RFLU        N
+##                entloc       localveg coll_   sampdate depthatloc
+## 1 left coast of river Cyperaceae fen    65 1984-08-00        210
+##   icethickcm sampdevice corediamcm c14depthadj notes site_ sitename
+## 1         NA      spade         10          NA  &lt;NA&gt;     1   Adange
+##         sitecode siteexists poldiv1 poldiv2 poldiv3 latdeg latmin latsec
+## 1 GEO-01000-ADAN       &lt;NA&gt;     GEO      01     000     43     18     20
+##   latns    latdd    latdms londeg lonmin lonsec lonew    londd     londms
+## 1     N 43.30556 43.18.20N     41     20      0     E 41.33333  41.20.00E
+##   elevation areaofsite
+## 1      1750       0.25</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_e</span>(epd.connection, <span class="dt">lastname =</span> <span class="st">&quot;Tzedakis&quot;</span>)</code></pre></div>
+<pre><code>##    e_ site_   sigle     name iscore issect isssamp descriptor hasanlam
+## 1 294   249 IOAN249 core 249      Y      N       Y       UNKN        N
+##                                     entloc localveg coll_   sampdate
+## 1 Southeast of Lake Pamvotis near Kastrits     &lt;NA&gt;   415 0000-00-00
+##   depthatloc icethickcm         sampdevice corediamcm c14depthadj notes
+## 1         NA         NA Unspecified device         NA          NA  &lt;NA&gt;
+##   worker_ workeris_ status lastname initials  firstname suffix title
+## 1     415       415      A Tzedakis     P.C. P. Chronis   &lt;NA&gt;   Dr.
+##   country phone  fax                emailaddr
+## 1     GBR  &lt;NA&gt; &lt;NA&gt; p.c.tzedakis@leeds.ac.uk
+##                                                                                                                                               address
+## 1 Subdepartment of Quaternary Research\\nDepartment of Plant sciences\\nUniversity of Cambridge\\nDowning Street\\nCambridge CB2 3EA\\nUNITED KINGDOM</code></pre>
+<p>When using any of these <code>list</code> functions with arguments to filter the query, we can specify multiple values. That means for instance that we can pass a vector of names as the argument <code>country</code> to the <code>list_e</code> function to get information about all the entities in all those countries.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_e</span>(epd.connection, <span class="dt">country =</span> <span class="kw">c</span>(<span class="st">&quot;Spain&quot;</span>, <span class="st">&quot;Portugal&quot;</span>, <span class="st">&quot;France&quot;</span>,
+                                   <span class="st">&quot;Switzerland&quot;</span>, <span class="st">&quot;Austria&quot;</span>, <span class="st">&quot;Italy&quot;</span>,
+                                   <span class="st">&quot;Malta&quot;</span>, <span class="st">&quot;Algeria&quot;</span>, <span class="st">&quot;Tunisia&quot;</span>,
+                                   <span class="st">&quot;Morocco&quot;</span>, <span class="st">&quot;Atlantic ocean&quot;</span>,
+                                   <span class="st">&quot;Mediterranean Sea&quot;</span>))</code></pre></div>
+<pre><code>##        e_ site_    sigle                            name iscore issect
+## 1      10    10  CARNINO                          core I      Y      N
+##      isssamp descriptor hasanlam
+## 1          Y       PMIR        N
+##                                                          entloc
+## 1                                                          &lt;NA&gt;
+##                                                                                                                                                                                          localveg
+## 1                                                                                                                                                                                            &lt;NA&gt;
+##      coll_   sampdate depthatloc icethickcm                     sampdevice
+## 1       88 0000-00-00         NA         NA             Unspecified device
+##      corediamcm c14depthadj
+## 1            NA          NA
+##                                                                                                                                                                                                                                                             notes
+## 1                                                                                                                                                                                                                                                            &lt;NA&gt;
+##      site_                               sitename        sitecode
+## 1       10                       Selle di Carnino  ITA-08000-SELL
+##      siteexists poldiv1 poldiv2 poldiv3 latdeg latmin latsec latns
+## 1          &lt;NA&gt;     ITA      08     000     44      9      0     N
+##         latdd    latdms londeg lonmin lonsec lonew      londd     londms
+## 1    44.15000 44.09.00N      7     41     40     E   7.694444   7.41.40E
+##      elevation areaofsite poldiv1              name
+## 1         1905      5.000     ITA             Italy
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 1017 rows ]</code></pre>
+<p>Finally, the <code>list_publ</code> function allow to search the publications we need to cite if are going to use any of the data-sets in the database. This function thus allow to search publications for several criteria, including entity number (<code>e_</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_publ</span>(epd.connection)</code></pre></div>
+<pre><code>##      publ_   e_ acc_ yearofpubl
+## 1        1   40   NA       1994
+## 2        1   41   NA       1994
+##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         citation
+## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Kremenetski, C.V., P.E. Tarasov, and A.E. Cherkinsky. 1994. Istoriva ostrovnykh borov Kazakhstana v golotsene [Holocene history of the Kazakhstan &quot;island&quot; pine forests]. Botanicheski Zhurial [Botanical Journal], 79(3):13-29.
+## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Kremenetski, C.V., P.E. Tarasov, and A.E. Cherkinsky. 1994. Istoriva ostrovnykh borov Kazakhstana v golotsene [Holocene history of the Kazakhstan &quot;island&quot; pine forests]. Botanicheski Zhurial [Botanical Journal], 79(3):13-29.
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 3371 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list_publ</span>(epd.connection, <span class="dt">e_ =</span> <span class="dv">1</span>)</code></pre></div>
+<pre><code>##   publ_ e_ acc_ yearofpubl
+## 1    16  1   NA       1989
+##                                                                                                                                         citation
+## 1 Kvavadze, E.V., and L.P. Rukhadze. 1989. Vegetation and climate of the Holocene of Abkhazia. Metsniereba, Tbilisi, Georgia, 138p (in Russian).</code></pre>
+</div>
+<div id="retrieving-information-for-particular-entities-get-functions" class="section level2">
+<h2><span class="header-section-number">5.2</span> Retrieving information for particular entities (<code>get</code> functions)</h2>
+<p>So far, we have been able to look for metadata information (details on country, region, or site) to which entities of the database belong to, but most times we are interested in extracting biological information, along with chronological information that allows us to dating the corresponding biological information, for those particular entities. The <code>EPDr</code> package provide a set of <code>get</code> functions specially designed for this task.</p>
+<p>All these <code>get</code> functions have been designed to query data for a particular entity in the database. Hence, most of them (but <code>get_taxonomy_epd</code> and some others) accept two arguments: entity ID (<code>e_</code>) and a valid connection to the EPD database (<code>connection</code>). Note that entities has to be referred by their ID number and not by their sigle name. If you know the sigle of a particular entity, you need to use the <code>list_e</code> function and look for the <code>e_</code> number for that particular <code>sigle</code>.</p>
+<p>These functions are divided in two groups. The first one is comprised by a set of <code>get</code> functions that returns single data frames that resemble the tables in the EPD in which information is restricted for the queried entity (<code>e_</code>). All these functions are called <code>.get_</code> functions followed by a reference to the table they query. Because the standard user usually won’t use these functions we do not provide here any example. These functions works also behind the hook in other <code>get_</code> functions.</p>
+<p>The second group of functions, named as <code>get_</code> functions followed by a small descriptor, retrieve information from different tables (using <code>.get_</code> functions) for related data in an entity. Although most user won’t need these functions, it is good for them to get familiar with the data structure they return, because they are the same in other more common functions and objects they return. These functions are: <code>get_ent</code>, <code>get_site</code>, <code>get_geochron</code>, <code>get_chron</code>, or <code>get_samples</code>. Because these wrapping functions query information from different tables, they return especial S4 class objects that have been designed for the package. Different tables are stored in different slots of the objects.</p>
+<p>For instance, <code>get_ent</code> retrieves information that describe the entity that is queried. It returns a specific object, that has several data frames each one corresponding with one table in the EPD related with the description of the entity.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ent.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">get_ent</span>(<span class="dv">1</span>, epd.connection)
+<span class="kw">class</span>(ent.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;entity&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;EPDr&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(ent.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##  [1] &quot;entity&quot;    &quot;pentity&quot;   &quot;contact&quot;   &quot;coredrive&quot; &quot;descr&quot;    
+##  [6] &quot;lithology&quot; &quot;loi&quot;       &quot;section&quot;   &quot;publent&quot;   &quot;publ&quot;</code></pre>
+<p>Similarly, <code>get_site</code> returns a new object that has several tables describing the site where the entity was sampled.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">site.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">get_site</span>(<span class="dv">1</span>, epd.connection)
+<span class="kw">class</span>(site.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;site&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;EPDr&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(site.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;siteloc&quot;   &quot;sitedesc&quot;  &quot;siteinfo&quot;  &quot;country&quot;   &quot;region&quot;    &quot;region3rd&quot;
+## [7] &quot;igcptype&quot;  &quot;infotype&quot;  &quot;publ&quot;</code></pre>
+<p>The <code>get_geochron</code> function returns all geochronological data for a particular entity. This is a description of the geochronological samples (sample id, depth, thickness, etc.) as well as the details of the analytical results from different techniques (C<sup>14</sup>, aminoacid racemization, etc.)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">geochron.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">get_geochron</span>(<span class="dv">1</span>, epd.connection)
+<span class="kw">class</span>(geochron.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;geochron&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;EPDr&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(geochron.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##  [1] &quot;geochron&quot; &quot;aar&quot;      &quot;c14&quot;      &quot;esr&quot;      &quot;ft&quot;       &quot;kar&quot;     
+##  [7] &quot;pb210&quot;    &quot;si32&quot;     &quot;tl&quot;       &quot;useries&quot;  &quot;publ&quot;</code></pre>
+<p>However, <code>get_chron</code> retrieves all data relative to the chronologies stored in the EPD for a particular entity.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chron.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">get_chron</span>(<span class="dv">1</span>, epd.connection)
+<span class="kw">class</span>(chron.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;chron&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;EPDr&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(chron.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;chron&quot;    &quot;agebound&quot; &quot;agebasis&quot; &quot;rational&quot; &quot;alsegs&quot;   &quot;panldpt&quot; 
+## [7] &quot;synevent&quot; &quot;event&quot;    &quot;publ&quot;</code></pre>
+<p>Similarly, <code>get_samples</code> retrieves information from all tables about biological samples for the entity.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">samples.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">get_samples</span>(<span class="dv">1</span>, epd.connection)
+<span class="kw">class</span>(samples.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;samples&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;EPDr&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(samples.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;psamples&quot; &quot;analysts&quot; &quot;pagedpt&quot;  &quot;pcounts&quot;  &quot;pvars&quot;    &quot;syntype&quot; 
+## [7] &quot;pvtrans&quot;  &quot;pgroup&quot;   &quot;groups&quot;</code></pre>
+<p>Above these functions, there is a special one (<code>get_entity</code>), which in turns retrieve all possible information from the different tables and <code>get_</code> functions for an entity. Most user, will only need <code>get_entity</code> in their working flow, because the <code>epd.entity</code> objects it returns include all the objects from the previous <code>get_</code> functions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">get_entity</span>(<span class="dv">1</span>, epd.connection)
+<span class="kw">class</span>(epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;epd.entity&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;EPDr&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##  [1] &quot;e_&quot;            &quot;postbombzone&quot;  &quot;numberofchron&quot; &quot;isingiesecke&quot; 
+##  [5] &quot;defaultchron&quot;  &quot;entity&quot;        &quot;site&quot;          &quot;geochron&quot;     
+##  [9] &quot;chron&quot;         &quot;samples&quot;</code></pre>
+<p>As you can see in the previous code, epd.1 is an <code>epd.entity</code> object, with 10 different slots. The first five slots, contain some basic information: the entity number that was retrieved (<code>e_</code>), the post-bomb zone in which this entity is (<code>postbombzone</code>), the number of chronologies that are available for that entity in the EPD (<code>numberofchron</code>), whether the entity has datation information in Giesecke <em>et al.</em> <span class="citation">(2013)</span> (<code>isingiesecke</code>), and which one is the default chronology (<code>defaultchron</code>) to look for ages in the EPD. Then, the object has five slots (<code>entity</code>, <code>site</code>, <code>geochron</code>, <code>chron</code>, and <code>samples</code>) that store information from the previous <code>get_</code> functions. Hence, <code>epd.entity</code> objects store all available information from a particular entity in the EPD. This is the basic object in the package, and most methods works in the base of this object or the <code>epd.entity.df</code> object that expand it (we will see that later). Each one of the slots can be looked at using the symbol <code>@</code> or the <code>slot</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>e_</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slot</span>(epd.<span class="dv">1</span>, <span class="st">&quot;e_&quot;</span>)</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>postbombzone</code></pre></div>
+<pre><code>## [1] NH1
+## Levels: NH1 NH2 NH3 SH12 SH3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>numberofchron</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>isingiesecke</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>defaultchron</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(epd.<span class="dv">1</span><span class="op">@</span>entity)</code></pre></div>
+<pre><code>##  [1] &quot;entity&quot;    &quot;pentity&quot;   &quot;contact&quot;   &quot;coredrive&quot; &quot;descr&quot;    
+##  [6] &quot;lithology&quot; &quot;loi&quot;       &quot;section&quot;   &quot;publent&quot;   &quot;publ&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(epd.<span class="dv">1</span><span class="op">@</span>site)</code></pre></div>
+<pre><code>## [1] &quot;siteloc&quot;   &quot;sitedesc&quot;  &quot;siteinfo&quot;  &quot;country&quot;   &quot;region&quot;    &quot;region3rd&quot;
+## [7] &quot;igcptype&quot;  &quot;infotype&quot;  &quot;publ&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(epd.<span class="dv">1</span><span class="op">@</span>geochron)</code></pre></div>
+<pre><code>##  [1] &quot;geochron&quot; &quot;aar&quot;      &quot;c14&quot;      &quot;esr&quot;      &quot;ft&quot;       &quot;kar&quot;     
+##  [7] &quot;pb210&quot;    &quot;si32&quot;     &quot;tl&quot;       &quot;useries&quot;  &quot;publ&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(epd.<span class="dv">1</span><span class="op">@</span>chron)</code></pre></div>
+<pre><code>## [1] &quot;chron&quot;    &quot;agebound&quot; &quot;agebasis&quot; &quot;rational&quot; &quot;alsegs&quot;   &quot;panldpt&quot; 
+## [7] &quot;synevent&quot; &quot;event&quot;    &quot;publ&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(epd.<span class="dv">1</span><span class="op">@</span>samples)</code></pre></div>
+<pre><code>## [1] &quot;psamples&quot; &quot;analysts&quot; &quot;pagedpt&quot;  &quot;pcounts&quot;  &quot;pvars&quot;    &quot;syntype&quot; 
+## [7] &quot;pvtrans&quot;  &quot;pgroup&quot;   &quot;groups&quot;</code></pre>
+<p>Some of the relevant information can be also queried with specific functions from the <code>EPDr</code> package. In general, these functions use the name <code>check_</code> plus a descriptor of the information they check in the <code>epd.entity</code> object. For instance, <code>check_restriction</code> looks into the specific slots and tables that contains information on the use restrictions that apply to the data-set, and returns TRUE or FALSE depending on the case. However, <code>check_defaultchron</code> returns also a logical (<code>TRUE</code> or <code>FALSE</code>) indicating whether the entity has a default chronology.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">check_restriction</span>(epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">check_defaultchron</span>(epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+</div>
+<div id="working-with-data-from-the-epd" class="section level1">
+<h1><span class="header-section-number">6</span> Working with data from the EPD</h1>
+<p>Once the user have find the data set he want to work with and have downloaded the data for that particular entity, there are several thinks he can do: Export data for (re-)calibration in CLAM or BACON, apply several transformations and standardization, and, finally, rearrange the data for further analysis or plotting.</p>
+<div id="exporting-data-for-clam-or-bacon" class="section level2">
+<h2><span class="header-section-number">6.1</span> Exporting data for CLAM or BACON</h2>
+<p><code>EPDr</code> package provides several functions to reformat and export data to comply with format requirements from CLAM or BACON. These functions are named <code>export_</code> functions. There are five <code>export_</code> functions: <code>export_c14</code>, <code>export_agebasis</code>, <code>export_events</code>, <code>export_depths</code>, and <code>export_entity</code>.</p>
+<p><code>export_c14</code> exports data from the C14 and GEOCHRON tables, which store information for samples and radiocarbon dates. <code>export_c14</code> requires a character string indicating the output format (“clam” or “bacon”), the C14 table (<code>x</code>) and the GEOCHRON table (<code>y</code>). Alternatively, it can be passed only a <code>epd.entity</code> object (<code>x</code> and <code>y</code> missing) and the function will look for both tables automatically on it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_c14</span>(<span class="st">&quot;clam&quot;</span>, epd.<span class="dv">1</span><span class="op">@</span>geochron<span class="op">@</span>c14, epd.<span class="dv">1</span><span class="op">@</span>geochron<span class="op">@</span>geochron)</code></pre></div>
+<pre><code>##         ID C14_age cal_BP error reservoir depth thickness
+## 1 KIGI-350     910     NA    20        NA    83         5
+## 2 KIGI-349    2420     NA   200        NA   118         5
+## 3 KIGI-348    2900     NA   190        NA   140        10</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_c14</span>(<span class="st">&quot;bacon&quot;</span>, epd.<span class="dv">1</span><span class="op">@</span>geochron<span class="op">@</span>c14, epd.<span class="dv">1</span><span class="op">@</span>geochron<span class="op">@</span>geochron)</code></pre></div>
+<pre><code>##      labID  age error depth
+## 1 KIGI-350  910    20    83
+## 2 KIGI-349 2420   200   118
+## 3 KIGI-348 2900   190   140</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_c14</span>(<span class="st">&quot;clam&quot;</span>, epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##         ID C14_age cal_BP error reservoir depth thickness
+## 1 KIGI-350     910     NA    20        NA    83         5
+## 2 KIGI-349    2420     NA   200        NA   118         5
+## 3 KIGI-348    2900     NA   190        NA   140        10</code></pre>
+<p>Another function (<code>export_agebasis</code>) export the table AGEBASIS, which stores information on the data used to calibrate the different chronologies. <code>export_agebasis</code> takes also as arguments a character vector with output format, and an AGEBASIS table or an <code>epd.entity</code> object to look for it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_agebasis</span>(<span class="st">&quot;clam&quot;</span>, epd.<span class="dv">1</span><span class="op">@</span>chron<span class="op">@</span>agebasis)</code></pre></div>
+<pre><code>##             ID C14_age cal_BP error reservoir depth thickness
+## 1    E1_CH1_S1       0     NA     1        NA     2         1
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 8 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_agebasis</span>(<span class="st">&quot;bacon&quot;</span>, epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##          labID  age error depth
+## 1    E1_CH1_S1    0     1     2
+## 2    E1_CH1_S2  910     1    83
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 7 rows ]</code></pre>
+<p><code>export_events</code> function re-formats and exports the data stored in the EVENTS and SYNEVENT tables, which refer to geological events registered in the entity (e.g., tephra, etc.). Similarly to <code>export_c14</code>, <code>export_events</code> requires two tables (SYNEVENT and EVENT) or the <code>epd.entity</code> objects in which to look for them.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_events</span>(<span class="st">&quot;clam&quot;</span>, epd.<span class="dv">1</span><span class="op">@</span>chron<span class="op">@</span>synevent, epd.<span class="dv">1</span><span class="op">@</span>chron<span class="op">@</span>event)</code></pre></div>
+<pre><code>## [1] ID        C14_age   cal_BP    error     reservoir depth     thickness
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_events</span>(<span class="st">&quot;bacon&quot;</span>, epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] labID age   error depth
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<p>Because, depths has the same output format in CLAM and BACON, <code>export_depths</code> do not require to specify the output format, and only needs a PSAMPLES or an <code>epd.entity</code> to look for that data of biological samples depth and export them.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_depths</span>(epd.<span class="dv">1</span><span class="op">@</span>samples<span class="op">@</span>psamples)</code></pre></div>
+<pre><code>##  [1]  2  5  6  9 15 20 25 34 38 42
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 30 entries ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_depths</span>(epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##  [1]  2  5  6  9 15 20 25 34 38 42
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 30 entries ]</code></pre>
+<p>Finally, <code>export_entity</code> function is a wrapping function that sequentially call all previous <code>export_</code> functions and combine the information to prepare a set of data ready for CLAM or BACON. Because, some data might be duplicated or may have conflicts between them (especially between AGEBASIS and C14), <code>export_entity</code> have several arguments to control how to resolve these conflicts. If that arguments are not called, the function runs interactively and request input from the user to resolve the conflicts on the way. <code>export_entity</code> requires the output format and an <code>epd.entity</code> object to look for all the necessary data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">export_entity</span>(<span class="st">&quot;clam&quot;</span>, epd.<span class="dv">1</span>)
+
+##  Chronology has coincident data with C14 data and, hence, the later will
+##  be used
+##  C14 data:
+##  lab_ID  C14_age cal_age error   reserv. depth   thickn.
+##  KIGI-350     910    NA   20 NA   83  5  
+##  KIGI-349    2420    NA  200 NA  118  5  
+##  KIGI-348    2900    NA  190 NA  140 10  
+##  
+##  Chronology data:
+##  lab_ID  C14_age cal_age error   reserv. depth   thickn.
+##  E1_CH1_S2    910    NA  1   NA   83 NA  
+##  E1_CH1_S3   2420    NA  1   NA  118 NA  
+##  E1_CH1_S4   2900    NA  1   NA  140 NA  
+##  
+##  Chronology has additional no-C14 data.
+##  Chronology data:
+##  lab_ID  C14_age cal_age error   reserv. depth   thickn.
+##  E1_CH1_S1      0    NA  1   NA    2 NA  
+##  E1_CH1_S5   4000    NA  1   NA  200 NA
+##  
+##  Incorporate these data to the chronology? (Yes: TRUE then Intro,
+##  No: FALSE then Intro)TRUE
+##  
+##        lab_ID C14_age cal_age error reservoir depth thickness
+##  11 E1_CH1_S1       0      NA     1        NA     2        NA
+##  1   KIGI-350     910      NA    20        NA    83         5
+##  2   KIGI-349    2420      NA   200        NA   118         5
+##  3   KIGI-348    2900      NA   190        NA   140        10
+##  5  E1_CH1_S5    4000      NA     1        NA   200        NA</code></pre></div>
+<p>The function, besides returning the data.frame with the right output format, write files in the working directory. It creates a different folder structure for CLAM or BACON files and then stores the files with the entity number (<code>e_</code>) and the appropriate extensions. If you are running the examples, just check your working directory (<code>getwd()</code>)</p>
+</div>
+<div id="standardizing-data" class="section level2">
+<h2><span class="header-section-number">6.2</span> Standardizing data</h2>
+<p>Because the data stored in the EPD are in the original format with minimal standardization, the user will need to run several manipulation and standardization steps depending on the goal of their analysis. <code>EPDr</code> package provides a set of functions to run some of these standardizations on the top of <code>epd.entity</code> objects.</p>
+<div id="reformat-data-into-matrices-epd.entity.df" class="section level3">
+<h3><span class="header-section-number">6.2.1</span> Reformat data into matrices (<code>epd.entity.df</code>)</h3>
+<p>As already explained, <code>epd.entity</code> objects store a copy of the EPD tables for a specific entity. Hence, the data format are the same than in the PostgreSQL database, which is very convenient for database management and optimization, but not so much for data visualization and interpretation. The function <code>entity_to_matrices</code> transform several tables in the <code>epd.entity</code> objects and transform then into matrices that are more interpretable for normal use. For instance, ages are returned in the form of <code>samples</code>x<code>chronologies</code> matrix, while counts of biological particles are transformed into <code>samples</code>x<code>taxa</code> matrices. In order to keep a backup copy of the original data and another copy of the data in the matrices formats the function returns an object of the class <code>epd.entity.df</code>. This object inherit all properties (and data) of <code>epd.entity</code> objects and expand them with new slots: <code>@countstype</code>, <code>@countsprocessing</code>, <code>@taxatype</code>, <code>@taxaprocessing</code>, <code>@samplesdf</code>, <code>@agesdf</code>, <code>@commdf</code>, and <code>@nopodf</code>. In this way, the new object always have a backup copy of the original data and a copy of the transformed data in a more handy format.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">entity_to_matrices</span>(epd.<span class="dv">1</span>)
+<span class="kw">slotNames</span>(epd.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##  [1] &quot;e_&quot;               &quot;postbombzone&quot;     &quot;numberofchron&quot;   
+##  [4] &quot;isingiesecke&quot;     &quot;defaultchron&quot;     &quot;entity&quot;          
+##  [7] &quot;site&quot;             &quot;geochron&quot;         &quot;chron&quot;           
+## [10] &quot;samples&quot;          &quot;countstype&quot;       &quot;countsprocessing&quot;
+## [13] &quot;taxatype&quot;         &quot;taxaprocessing&quot;   &quot;samplesdf&quot;       
+## [16] &quot;agesdf&quot;           &quot;commdf&quot;           &quot;nopodf&quot;</code></pre>
+<p>The four first slots trace information on data modification and standardizations from other functions (see later).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>countstype</code></pre></div>
+<pre><code>## [1] Counts
+## Levels: Counts Percentages</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>countsprocessing</code></pre></div>
+<pre><code>## [1] Raw
+## Levels: Raw Interpolated Ranged means</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>taxatype</code></pre></div>
+<pre><code>## [1] Default
+## Levels: Default Accepted Higher</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>taxaprocessing</code></pre></div>
+<pre><code>## [1] Original
+## Levels: Original Expanded</code></pre>
+<p>The four last store the data in the matrix (or data.frame) format. <code>@samplesdf</code> has information on the biological samples id and labels.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(epd.<span class="dv">1</span><span class="op">@</span>samplesdf)</code></pre></div>
+<pre><code>## [1] &quot;sample_&quot;     &quot;samplelabel&quot;</code></pre>
+<p><code>@agesdf</code> stores information on the depth, ages and data quality of the samples.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(epd.<span class="dv">1</span><span class="op">@</span>agesdf)</code></pre></div>
+<pre><code>## [1] &quot;depthcm&quot;     &quot;depthages&quot;   &quot;dataquality&quot;</code></pre>
+<p><code>@commdf</code> stores taxa names, taxa ids, accepted taxa ids, higher taxa ids, taxa groups, and counts for each taxa.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(epd.<span class="dv">1</span><span class="op">@</span>commdf)</code></pre></div>
+<pre><code>## [1] &quot;taxanames&quot;    &quot;taxa_&quot;        &quot;taxaaccepted&quot; &quot;taxamhvar&quot;   
+## [5] &quot;taxagroupid&quot;  &quot;counts&quot;</code></pre>
+<p>Finally <code>@nopodf</code> stores the same information than <code>@commdf</code> but for no-biological particles in the samples (e.g., added particles, total sums, etc.)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(epd.<span class="dv">1</span><span class="op">@</span>nopodf)</code></pre></div>
+<pre><code>## [1] &quot;varnames&quot;    &quot;var_&quot;        &quot;varaccepted&quot; &quot;varmhvar&quot;    &quot;vargroupid&quot; 
+## [6] &quot;counts&quot;</code></pre>
+</div>
+<div id="navigating-taxonomy-in-the-epd" class="section level3">
+<h3><span class="header-section-number">6.2.2</span> Navigating taxonomy in the EPD</h3>
+<p>Using the <code>get_taxonomy_epd</code> function the user can get a complete table for the taxonomy of the EPD. This table is useful for consulting but also it is fundamental for other functions to modify the taxonomy in certain tables of <code>epd.entity.df</code> objects.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.taxonomy &lt;-<span class="st"> </span><span class="kw">get_taxonomy_epd</span>(epd.connection)
+epd.taxonomy</code></pre></div>
+<pre><code>##      var_ accvar_ syntype   varcode
+## 1       1       1    &lt;NA&gt;       Abi
+## 2       2       1       N    Abi.ud
+## 3       3       3    &lt;NA&gt;       Aca
+## 4       4    1489    &lt;NA&gt;       Ace
+## 5       5    1489       M  Ace.cf.c
+##                                                 varname hvar_ mhvar_ auth_
+## 1                                                 Abies    NA      1    NA
+## 2                                         Abies undiff.    NA      1    NA
+## 3                                                Acacia    NA      3    NA
+## 4                                                  Acer    NA   1489    NA
+## 5                                 Acer cf. A. campestre    NA   1489    NA
+##                                                                     notes
+## 1                                                                   B2004
+## 2                                                                   B2004
+## 3                                                                  FI1989
+## 4                                                                    NEPF
+## 5                                                                    NEPF
+##      set_ groupid
+## 1       1    TRSH
+## 2       1    TRSH
+## 3       1    TRSH
+## 4       1    TRSH
+## 5       1    TRSH
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 5629 rows ]</code></pre>
+<p>In the previous table, for each of the variables in the EPD there are several information of interest to correct, modify, or standardize taxonomy of an entity. More importantly in the columns <code>accvar</code>, <code>mhvar</code>, and <code>groupid</code>. <code>accvar</code> indicates the <code>var_</code> number of the accepted taxa for that variable. This is relevant, because the data stored in the EPD are those reported by the original author. Hence, this column allows to unify the taxonomy across entities from different authors, regions and/or time periods, in which identification skills may have changed. The <code>taxa_to_acceptedtaxa</code> modify all information in the <code>@commdf</code> object to change taxa to the accepted taxa according to the <code>accvar</code> column in the taxonomy table.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>commdf<span class="op">@</span>taxanames</code></pre></div>
+<pre><code>##  [1] &quot;Alnus&quot;                    &quot;Artemisia&quot;               
+##  [3] &quot;Aster&quot;                    &quot;Betula&quot;                  
+##  [5] &quot;Carpinus betulus&quot;         &quot;Caryophyllaceae&quot;         
+##  [7] &quot;Castanea sativa&quot;          &quot;Cerealia-type&quot;           
+##  [9] &quot;Chenopodiaceae&quot;           &quot;Corylus&quot;                 
+## [11] &quot;Cyperaceae&quot;               &quot;Dipsacaceae&quot;             
+## [13] &quot;Gramineae&quot;                &quot;Labiatae&quot;                
+## [15] &quot;Leguminosae&quot;              &quot;Malvaceae&quot;               
+## [17] &quot;Onagraceae&quot;               &quot;Pinus&quot;                   
+## [19] &quot;Plantaginaceae&quot;           &quot;Plumbaginaceae&quot;          
+## [21] &quot;Polygonaceae&quot;             &quot;Quercus&quot;                 
+## [23] &quot;Ranunculaceae&quot;            &quot;Rhododendron&quot;            
+## [25] &quot;Tilia&quot;                    &quot;Ulmus&quot;                   
+## [27] &quot;Umbelliferae&quot;             &quot;Vaccinium&quot;               
+## [29] &quot;Botrychium lunaria&quot;       &quot;Cryptogramma crispa&quot;     
+## [31] &quot;Diphasium alpinum&quot;        &quot;Huperzia selago&quot;         
+## [33] &quot;Polypodium vulgare&quot;       &quot;Selaginella selaginoides&quot;
+## [35] &quot;Indeterminable: unknown&quot;  &quot;Compositae&quot;              
+## [37] &quot;Carpinus orientalis&quot;      &quot;Geraniaceae&quot;             
+## [39] &quot;Juglans regia&quot;            &quot;Polypodiaceae undiff.&quot;   
+## [41] &quot;Cichorium&quot;                &quot;Pteridium undiff.&quot;       
+## [43] &quot;Abies nordmanniana&quot;       &quot;Picea orientalis&quot;        
+## [45] &quot;Pterocarya pterocarpa&quot;    &quot;Fagus orientalis&quot;        
+## [47] &quot;Athyrium distentifolium&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">taxa_to_acceptedtaxa</span>(epd.<span class="dv">1</span>, epd.taxonomy)
+epd.<span class="dv">1</span><span class="op">@</span>commdf<span class="op">@</span>taxanames</code></pre></div>
+<pre><code>##  [1] &quot;Alnus&quot;                                             
+##  [2] &quot;Artemisia&quot;                                         
+##  [3] &quot;Aster-type&quot;                                        
+##  [4] &quot;Betula&quot;                                            
+##  [5] &quot;Carpinus betulus&quot;                                  
+##  [6] &quot;Caryophyllaceae (periporate excl. Paronychioideae)&quot;
+##  [7] &quot;Castanea sativa&quot;                                   
+##  [8] &quot;Cerealia-type&quot;                                     
+##  [9] &quot;Chenopodiaceae/Amaranthaceae&quot;                      
+## [10] &quot;Corylus&quot;                                           
+## [11] &quot;Cyperaceae&quot;                                        
+## [12] &quot;Dipsacaceae&quot;                                       
+## [13] &quot;Poaceae&quot;                                           
+## [14] &quot;Lamiaceae&quot;                                         
+## [15] &quot;Fabaceae&quot;                                          
+## [16] &quot;Malvaceae&quot;                                         
+## [17] &quot;Onagraceae&quot;                                        
+## [18] &quot;Pinus&quot;                                             
+## [19] &quot;Plantaginaceae&quot;                                    
+## [20] &quot;Plumbaginaceae&quot;                                    
+## [21] &quot;Polygonaceae&quot;                                      
+## [22] &quot;Quercus&quot;                                           
+## [23] &quot;Ranunculaceae&quot;                                     
+## [24] &quot;Rhododendron&quot;                                      
+## [25] &quot;Tilia&quot;                                             
+## [26] &quot;Ulmus/Zelkova&quot;                                     
+## [27] &quot;Apiaceae&quot;                                          
+## [28] &quot;Vaccinium&quot;                                         
+## [29] &quot;Botrychium lunaria-type&quot;                           
+## [30] &quot;Cryptogramma crispa&quot;                               
+## [31] &quot;Lycopodium clavatum-type&quot;                          
+## [32] &quot;Huperzia selago&quot;                                   
+## [33] &quot;Polypodium&quot;                                        
+## [34] &quot;Selaginella selaginoides&quot;                          
+## [35] &quot;Indeterminable: unknown&quot;                           
+## [36] &quot;Asteraceae&quot;                                        
+## [37] &quot;Ostrya/Carpinus orientalis&quot;                        
+## [38] &quot;Geraniaceae&quot;                                       
+## [39] &quot;Juglans regia&quot;                                     
+## [40] &quot;Monolete fern spores&quot;                              
+## [41] &quot;Crepis-type&quot;                                       
+## [42] &quot;Pteridium aquilinum&quot;                               
+## [43] &quot;Abies&quot;                                             
+## [44] &quot;Picea omorika-type&quot;                                
+## [45] &quot;Pterocarya&quot;                                        
+## [46] &quot;Fagus&quot;                                             
+## [47] &quot;Woodsia-type&quot;</code></pre>
+<blockquote>
+<p>Check how the two <code>taxanames</code> lists have changed.</p>
+</blockquote>
+<p>Another column in the taxonomy table of the EPD (<code>mhvar</code>) has the <code>var_</code> numbers of the taxon higher taxonomic level, allowing to switch each variable to the higher taxonomic variable (or name).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>commdf<span class="op">@</span>taxanames</code></pre></div>
+<pre><code>##  [1] &quot;Alnus&quot;                                             
+##  [2] &quot;Artemisia&quot;                                         
+##  [3] &quot;Aster-type&quot;                                        
+##  [4] &quot;Betula&quot;                                            
+##  [5] &quot;Carpinus betulus&quot;                                  
+##  [6] &quot;Caryophyllaceae (periporate excl. Paronychioideae)&quot;
+##  [7] &quot;Castanea sativa&quot;                                   
+##  [8] &quot;Cerealia-type&quot;                                     
+##  [9] &quot;Chenopodiaceae/Amaranthaceae&quot;                      
+## [10] &quot;Corylus&quot;                                           
+## [11] &quot;Cyperaceae&quot;                                        
+## [12] &quot;Dipsacaceae&quot;                                       
+## [13] &quot;Poaceae&quot;                                           
+## [14] &quot;Lamiaceae&quot;                                         
+## [15] &quot;Fabaceae&quot;                                          
+## [16] &quot;Malvaceae&quot;                                         
+## [17] &quot;Onagraceae&quot;                                        
+## [18] &quot;Pinus&quot;                                             
+## [19] &quot;Plantaginaceae&quot;                                    
+## [20] &quot;Plumbaginaceae&quot;                                    
+## [21] &quot;Polygonaceae&quot;                                      
+## [22] &quot;Quercus&quot;                                           
+## [23] &quot;Ranunculaceae&quot;                                     
+## [24] &quot;Rhododendron&quot;                                      
+## [25] &quot;Tilia&quot;                                             
+## [26] &quot;Ulmus/Zelkova&quot;                                     
+## [27] &quot;Apiaceae&quot;                                          
+## [28] &quot;Vaccinium&quot;                                         
+## [29] &quot;Botrychium lunaria-type&quot;                           
+## [30] &quot;Cryptogramma crispa&quot;                               
+## [31] &quot;Lycopodium clavatum-type&quot;                          
+## [32] &quot;Huperzia selago&quot;                                   
+## [33] &quot;Polypodium&quot;                                        
+## [34] &quot;Selaginella selaginoides&quot;                          
+## [35] &quot;Indeterminable: unknown&quot;                           
+## [36] &quot;Asteraceae&quot;                                        
+## [37] &quot;Ostrya/Carpinus orientalis&quot;                        
+## [38] &quot;Geraniaceae&quot;                                       
+## [39] &quot;Juglans regia&quot;                                     
+## [40] &quot;Monolete fern spores&quot;                              
+## [41] &quot;Crepis-type&quot;                                       
+## [42] &quot;Pteridium aquilinum&quot;                               
+## [43] &quot;Abies&quot;                                             
+## [44] &quot;Picea omorika-type&quot;                                
+## [45] &quot;Pterocarya&quot;                                        
+## [46] &quot;Fagus&quot;                                             
+## [47] &quot;Woodsia-type&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="fl">1.</span>ht &lt;-<span class="st"> </span><span class="kw">taxa_to_highertaxa</span>(epd.<span class="dv">1</span>, epd.taxonomy)
+epd.<span class="fl">1.</span>ht<span class="op">@</span>commdf<span class="op">@</span>taxanames</code></pre></div>
+<pre><code>##  [1] &quot;Alnus&quot;                                             
+##  [2] &quot;Artemisia&quot;                                         
+##  [3] &quot;Senecio-type&quot;                                      
+##  [4] &quot;Betula&quot;                                            
+##  [5] &quot;Carpinus betulus&quot;                                  
+##  [6] &quot;Caryophyllaceae (periporate excl. Paronychioideae)&quot;
+##  [7] &quot;Castanea sativa&quot;                                   
+##  [8] &quot;Cerealia-type&quot;                                     
+##  [9] &quot;Chenopodiaceae/Amaranthaceae&quot;                      
+## [10] &quot;Corylus&quot;                                           
+## [11] &quot;Cyperaceae&quot;                                        
+## [12] &quot;Dipsacaceae&quot;                                       
+## [13] &quot;Poaceae&quot;                                           
+## [14] &quot;Lamiaceae&quot;                                         
+## [15] &quot;Fabaceae&quot;                                          
+## [16] &quot;Malvaceae&quot;                                         
+## [17] &quot;Onagraceae&quot;                                        
+## [18] &quot;Pinus&quot;                                             
+## [19] &quot;Plantaginaceae&quot;                                    
+## [20] &quot;Plumbaginaceae&quot;                                    
+## [21] &quot;Polygonaceae&quot;                                      
+## [22] &quot;Quercus&quot;                                           
+## [23] &quot;Ranunculaceae&quot;                                     
+## [24] &quot;Vaccinium-type&quot;                                    
+## [25] &quot;Tilia&quot;                                             
+## [26] &quot;Ulmus/Zelkova&quot;                                     
+## [27] &quot;Apiaceae&quot;                                          
+## [28] &quot;Botrychium&quot;                                        
+## [29] &quot;Cryptogramma crispa&quot;                               
+## [30] &quot;Lycopodium clavatum-type&quot;                          
+## [31] &quot;Huperzia selago&quot;                                   
+## [32] &quot;Polypodium&quot;                                        
+## [33] &quot;Selaginella selaginoides&quot;                          
+## [34] &quot;Indeterminable: unknown&quot;                           
+## [35] &quot;Asteraceae&quot;                                        
+## [36] &quot;Ostrya/Carpinus orientalis&quot;                        
+## [37] &quot;Geraniaceae&quot;                                       
+## [38] &quot;Juglans&quot;                                           
+## [39] &quot;Monolete fern spores&quot;                              
+## [40] &quot;Asteraceae subf. Cichorioideae&quot;                    
+## [41] &quot;Pteridium aquilinum&quot;                               
+## [42] &quot;Abies&quot;                                             
+## [43] &quot;Picea&quot;                                             
+## [44] &quot;Pterocarya&quot;                                        
+## [45] &quot;Fagus&quot;                                             
+## [46] &quot;Woodsia-type&quot;</code></pre>
+<blockquote>
+<p>Check how ‘Castanea sativa’ have changed to ‘Castanea’.</p>
+</blockquote>
+<p>These two functions control for the fact that original data can include two or more variables (taxa) that after standardizing the taxonomy may belong to the same taxa. In this case the function sum the counts of the respective variables and modify the <code>@commdf@counts</code> in the object.</p>
+<blockquote>
+<p>Note in the previous example how the number of taxa have been reduced from 47 to 44.</p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rowSums</span>(epd.<span class="dv">1</span><span class="op">@</span>commdf<span class="op">@</span>counts)</code></pre></div>
+<pre><code>##   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18 
+## 191 179 319 354 246 222 356 239 366 332 239 286 293 292 347 402 347 310 
+##  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36 
+## 329 212 257 285 203 231 310 225 305 258 183 277 383 270 248 261 432 356 
+##  37  38  39  40 
+## 155 433 595 431</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rowSums</span>(epd.<span class="fl">1.</span>ht<span class="op">@</span>commdf<span class="op">@</span>counts)</code></pre></div>
+<pre><code>##   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18 
+## 191 179 319 354 246 222 356 239 366 332 239 286 293 292 347 402 347 310 
+##  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36 
+## 329 212 257 285 203 231 310 225 305 258 183 277 383 270 248 261 432 356 
+##  37  38  39  40 
+## 155 433 595 431</code></pre>
+<p>This is the only way that EPD allow to upscale taxonomy. This implementation is however quite limited because it does not allow to standardize taxonomy at a specific taxonomic range (e.g., genus level). Further developments in the package may explore how to combine data from the entities with taxonomic databases, like those mined by packages like <code>taxize</code>.</p>
+</div>
+<div id="filtering-taxa" class="section level3">
+<h3><span class="header-section-number">6.2.3</span> Filtering taxa</h3>
+<p>Despite its name, entities in the EPD can contain data from different taxonomic groups, and not only for pollen or spores. Some entities can contain data for algae, acritarchs, etc (check <code>list_taxagroup</code> for the whole list). Hence, if one is interested in a particular biological group, he has to filter and remove the data from the rest of the groups. This is accomplished with the <code>filter_taxagroups</code> function. It takes two arguments. The first one must be an <code>epd.entity.df</code> object (or an <code>epd.entity</code> that is automatically transformed into an <code>epd.entity.df</code>) to be filtered. The second one is a character vector with the groups ids of interest to be retained. For instance, <code>DWAR</code> , <code>HERB</code>, <code>LIAN</code>, <code>TRSH</code>, <code>UPHE</code>, and <code>INUN</code> are all groups of pollen. So, if you want to work with upland plants pollen you can run the following code:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">filter_taxagroups</span>(epd.<span class="dv">1</span>, <span class="kw">c</span>(<span class="st">&quot;DWAR&quot;</span>, <span class="st">&quot;HERB&quot;</span>, <span class="st">&quot;LIAN&quot;</span>,
+                                    <span class="st">&quot;TRSH&quot;</span>, <span class="st">&quot;UPHE&quot;</span>, <span class="st">&quot;INUN&quot;</span>))
+epd.<span class="dv">1</span><span class="op">@</span>commdf<span class="op">@</span>taxanames</code></pre></div>
+<pre><code>##  [1] &quot;Alnus&quot;                                             
+##  [2] &quot;Artemisia&quot;                                         
+##  [3] &quot;Aster-type&quot;                                        
+##  [4] &quot;Betula&quot;                                            
+##  [5] &quot;Carpinus betulus&quot;                                  
+##  [6] &quot;Caryophyllaceae (periporate excl. Paronychioideae)&quot;
+##  [7] &quot;Castanea sativa&quot;                                   
+##  [8] &quot;Cerealia-type&quot;                                     
+##  [9] &quot;Chenopodiaceae/Amaranthaceae&quot;                      
+## [10] &quot;Corylus&quot;                                           
+## [11] &quot;Cyperaceae&quot;                                        
+## [12] &quot;Dipsacaceae&quot;                                       
+## [13] &quot;Poaceae&quot;                                           
+## [14] &quot;Lamiaceae&quot;                                         
+## [15] &quot;Fabaceae&quot;                                          
+## [16] &quot;Malvaceae&quot;                                         
+## [17] &quot;Onagraceae&quot;                                        
+## [18] &quot;Pinus&quot;                                             
+## [19] &quot;Plantaginaceae&quot;                                    
+## [20] &quot;Plumbaginaceae&quot;                                    
+## [21] &quot;Polygonaceae&quot;                                      
+## [22] &quot;Quercus&quot;                                           
+## [23] &quot;Ranunculaceae&quot;                                     
+## [24] &quot;Rhododendron&quot;                                      
+## [25] &quot;Tilia&quot;                                             
+## [26] &quot;Ulmus/Zelkova&quot;                                     
+## [27] &quot;Apiaceae&quot;                                          
+## [28] &quot;Vaccinium&quot;                                         
+## [29] &quot;Indeterminable: unknown&quot;                           
+## [30] &quot;Asteraceae&quot;                                        
+## [31] &quot;Ostrya/Carpinus orientalis&quot;                        
+## [32] &quot;Geraniaceae&quot;                                       
+## [33] &quot;Juglans regia&quot;                                     
+## [34] &quot;Crepis-type&quot;                                       
+## [35] &quot;Abies&quot;                                             
+## [36] &quot;Picea omorika-type&quot;                                
+## [37] &quot;Pterocarya&quot;                                        
+## [38] &quot;Fagus&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rowSums</span>(epd.<span class="dv">1</span><span class="op">@</span>commdf<span class="op">@</span>counts)</code></pre></div>
+<pre><code>##   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18 
+## 167 156 301 330 235 218 343 218 344 320 234 272 275 271 326 366 334 295 
+##  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36 
+## 311 206 250 270 189 215 294 216 284 241 168 263 337 247 234 236 398 324 
+##  37  38  39  40 
+## 142 394 554 379</code></pre>
+<blockquote>
+<p>Note that we have filtered out Pteridophytes spores: “Botrychium”, “Cryptogramma crispa”, “Lycopodiaceae”, “Huperzia selago”, “Dryopteris-type”, “Selaginella”, “Trilete spore(s)”, “Pterocarya fraxinifolia”, “Fagus”.</p>
+</blockquote>
+<p>While the <code>filter_taxagroups</code> function use the groups defined in the EPD, the user may want to run a more personalized filtering. To do so, the <code>filter_taxa</code> allow filter taxa directly by their names. This function allows great versatility, but it also require great caution, because you need to specify the names exactly in the same way they are spelled in the EPD and thus in the <code>epd.entity.df</code> object.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="fl">1.</span>ft &lt;-<span class="st"> </span><span class="kw">filter_taxa</span>(epd.<span class="dv">1</span>, <span class="kw">c</span>(<span class="st">&quot;Alnus&quot;</span>, <span class="st">&quot;Artemisia&quot;</span>, <span class="st">&quot;Betula&quot;</span>,
+                                 <span class="st">&quot;Carpinus betulus&quot;</span>, <span class="st">&quot;Corylus&quot;</span>),
+                        epd.taxonomy)
+<span class="kw">head</span>(epd.<span class="fl">1.</span>ft<span class="op">@</span>commdf<span class="op">@</span>counts)</code></pre></div>
+<pre><code>##   Alnus Artemisia Betula Carpinus betulus Corylus
+## 1    32         1      0                0       4
+## 2    35         5      0                0       1
+## 3    47        10      0                0       2
+## 4    45        19      0                1       2
+## 5    24        15      0                0       0
+## 6     9        21      0                0       1</code></pre>
+<p>Caution has to be paid, because if you specify a taxon that is not in the <code>epd.entity.df</code> object, the function will create a new column with <code>NA</code> values. This is intentional, because when working with multiple entities you may still need to unify their taxonomy. However, if you misspell a name, the data will be withdrawn and a new column with a wrong name will be created.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="fl">1.</span>ft &lt;-<span class="st"> </span><span class="kw">filter_taxa</span>(epd.<span class="dv">1</span>, <span class="kw">c</span>(<span class="st">&quot;Aluns&quot;</span>, <span class="st">&quot;Artemisia&quot;</span>, <span class="st">&quot;Betula&quot;</span>,
+                                 <span class="st">&quot;Carpinus betulus&quot;</span>, <span class="st">&quot;Carylus&quot;</span>),
+                        epd.taxonomy)
+<span class="kw">head</span>(epd.<span class="fl">1.</span>ft<span class="op">@</span>commdf<span class="op">@</span>counts)</code></pre></div>
+<pre><code>##   Aluns Artemisia Betula Carpinus betulus Carylus
+## 1     0         1      0                0       0
+## 2     0         5      0                0       0
+## 3     0        10      0                0       0
+## 4     0        19      0                1       0
+## 5     0        15      0                0       0
+## 6     0        21      0                0       0</code></pre>
+<blockquote>
+<p>Note how we misspelled “Alnus” and “Corylus” and the intended data were withdrawn and new columns with the misspelled names are created with <code>NA</code> values on them.</p>
+</blockquote>
+</div>
+<div id="calculating-percentages" class="section level3">
+<h3><span class="header-section-number">6.2.4</span> Calculating percentages</h3>
+<p>Once, the data are reduced to those taxa of interest, the raw counts stored in the EPD can be transformed into percentages using the <code>counts_to_percentages</code> functions. This function only requires one argument with the <code>epd.entity.df</code> from which counts will be transformed into percentages relative to the complete sum of particles in each sample. It is thus important to previously properly filter the taxa to the taxa groups of interest to get meaningful percentages.</p>
+<p>The function also modifies the slot <code>@countstype</code> to reflect that now the function has percentages and no raw counts.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>countstype</code></pre></div>
+<pre><code>## [1] Counts
+## Levels: Counts Percentages</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">counts_to_percentages</span>(epd.<span class="dv">1</span>)
+epd.<span class="dv">1</span><span class="op">@</span>countstype</code></pre></div>
+<pre><code>## [1] Percentages
+## Levels: Counts Percentages</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(epd.<span class="dv">1</span><span class="op">@</span>commdf<span class="op">@</span>counts)</code></pre></div>
+<pre><code>##      Alnus Artemisia Aster-type Betula Carpinus betulus
+## 1 19.16168 0.5988024  0.5988024      0        0.0000000
+##   Caryophyllaceae (periporate excl. Paronychioideae) Castanea sativa
+## 1                                          0.5988024       1.1976048
+##   Cerealia-type Chenopodiaceae/Amaranthaceae   Corylus Cyperaceae
+## 1             0                     4.191617 2.3952096   9.580838
+##   Dipsacaceae  Poaceae Lamiaceae  Fabaceae Malvaceae Onagraceae    Pinus
+## 1           0 8.383234         0 0.0000000 12.574850          0 0.000000
+##   Plantaginaceae Plumbaginaceae Polygonaceae  Quercus Ranunculaceae
+## 1      0.0000000              0    0.5988024 0.000000     0.0000000
+##   Rhododendron Tilia Ulmus/Zelkova Apiaceae Vaccinium
+## 1            0     0      0.000000        0         0
+##   Indeterminable: unknown Asteraceae Ostrya/Carpinus orientalis
+## 1                       0          0                          0
+##   Geraniaceae Juglans regia Crepis-type     Abies Picea omorika-type
+## 1           0             0   0.0000000 0.0000000          0.0000000
+##   Pterocarya     Fagus
+## 1   39.52096 0.5988024
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 5 rows ]</code></pre>
+<p>Now, the sum of the counts for each sample should be 100 for all samples.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rowSums</span>(epd.<span class="dv">1</span><span class="op">@</span>commdf<span class="op">@</span>counts)</code></pre></div>
+<pre><code>##   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18 
+## 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 
+##  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36 
+## 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 
+##  37  38  39  40 
+## 100 100 100 100</code></pre>
+</div>
+<div id="using-updated-ages-from-giesecke-et-al.--giesecke_2013" class="section level3">
+<h3><span class="header-section-number">6.2.5</span> Using updated ages from Giesecke <em>et al.</em> <span class="citation">(2013)</span></h3>
+<p>In a publication from 2013, Giesecke <em>et al.</em> <span class="citation">(2013)</span> updated the chronologies (ages-depth models) for more than 800 entities in the database. Although the database itself was not updated with these new chronologies, they released all the information in four different tables in the <a href="https://doi.pangaea.de/10.1594/PANGAEA.804597">data repository Pagaea</a>, under <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported</a>. The EPDr package provide a copy of these tables, and import the data from some of them into the <code>epd.entity</code> and <code>epd.entity.df</code> objects. When Giesecke <em>et al.</em> <span class="citation">(2013)</span> provide a chronology for an entity, the slot <code>@isingiesecke</code> is <code>TRUE</code>, and <code>FALSE</code> if they do not. However, the default chronology for each entity is recorded as in the original EPD. So, if you want to use ages estimated by Giesecke <em>et al.</em> <span class="citation">(2013)</span> you need to modified the slot <code>@defaultchron</code>. Most entities in the EPD have one or few chronologies, so <code>@defaultchron</code> is usually a number between <code>1</code> and <code>2(3)</code>, unless the entity has no chronologies at all and thus it is <code>0</code> or <code>NA</code>. To specify that other functions should use ages estimated by Giesecke <em>et al.</em> <span class="citation">(2013)</span> <code>@defaultchron</code> has to be <code>9999</code>.</p>
+<p>We provide a function <code>giesecke_default_chron</code> that automatically check if the entity has updated ages in Giesecke <em>et al.</em> <span class="citation">(2013)</span> and, if so, update <code>@defaultchron</code> to <code>9999</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>defaultchron</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>numberofchron</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>isingiesecke</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">giesecke_default_chron</span>(epd.<span class="dv">1</span>)
+epd.<span class="dv">1</span><span class="op">@</span>defaultchron</code></pre></div>
+<pre><code>## [1] 9999</code></pre>
+<blockquote>
+<p>Note that <code>@numberofchron</code> reflect the total number of chronologies in the EPD without including those in Giesecke <em>et al.</em> <span class="citation">(2013)</span></p>
+</blockquote>
+</div>
+<div id="interpolating-counts-data-to-specific-time-periods" class="section level3">
+<h3><span class="header-section-number">6.2.6</span> Interpolating counts data to specific time periods</h3>
+<p>Each EPD entity has counts data for samples at different depths, which combined with the different stratigraphy of each site (e.g., differential sedimentation rates among lakes), make that each counting data correspond to no particular and pre-established ages. Some times the user may need to estimate the counts data for a particular time period (and this can be important when comparing data from multiple entities and sites, but we will cover that later). The <code>interpolate_counts</code> function allow to interpolate counts in an <code>epd.entity.df</code> object (if an <code>epd.entity</code> object is provided this is previously transformed into an <code>edp.entity.df</code>) to those particular time periods specified by the user. The interpolation can be accomplished with three different methods: “linear”, “loess”, and “smooth spline”.</p>
+<p>The function takes two mandatory arguments: <code>x</code> and <code>time</code>. <code>x</code> has to be an object of class <code>epd.entity.df</code> to be interpolated, and <code>time</code> has to be a numeric vector indicating the ages to which interpolate the counts. Other arguments are <code>chronology</code>, indicating the chronology that should be used to look for ages of the actual samples (if not provided the function use the default chronology according to the one specified in <code>x</code>), <code>method</code>, indicating the interpolation method to be used, <code>rep_negt</code> that should be <code>TRUE</code> or <code>FALSE</code>, indicating whether negative interpolated values should be replaced by <code>0</code>, and further arguments (e.g., <code>span</code>, <code>df</code>, and <code>...</code>) to control loess and smooth spline interpolation methods.</p>
+<p>The function, in addition to calculate the</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="fl">1.</span>int &lt;-<span class="st"> </span><span class="kw">interpolate_counts</span>(epd.<span class="dv">1</span>,
+                                <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1000</span>, <span class="dv">2000</span>, <span class="dv">3000</span>, <span class="dv">4000</span>, <span class="dv">5000</span>),
+                                <span class="dt">method =</span> <span class="st">&quot;linear&quot;</span>)</code></pre></div>
+<p>The new <code>epd.entity.df</code> object returned by the function has been modified in several ways. In the first place the countings now reflect those estimated for the desired time periods.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>commdf<span class="op">@</span>counts[, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</code></pre></div>
+<pre><code>##         Alnus  Artemisia Aster-type   Betula Carpinus betulus
+## 1  19.1616766  0.5988024  0.5988024 0.000000        0.0000000
+## 2  22.4358974  3.2051282  0.0000000 0.000000        0.0000000
+## 3  15.6146179  3.3222591  0.0000000 0.000000        0.0000000
+## 4  13.6363636  5.7575758  0.0000000 0.000000        0.3030303
+## 5  10.2127660  6.3829787  0.0000000 0.000000        0.0000000
+## 6   4.1284404  9.6330275  0.4587156 0.000000        0.0000000
+## 7   9.3294461  5.2478134  0.2915452 0.000000        0.0000000
+## 8   9.6330275  7.3394495  0.0000000 0.000000        0.0000000
+## 9   9.5930233  4.9418605  0.0000000 0.000000        0.0000000
+## 10 12.5000000  5.0000000  0.3125000 0.000000        0.0000000
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 30 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="fl">1.</span>int<span class="op">@</span>commdf<span class="op">@</span>counts[, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</code></pre></div>
+<pre><code>##       Alnus Artemisia Aster-type    Betula Carpinus betulus
+## 1 12.704252  5.927848 0.00000000 0.0000000        0.2205270
+## 2  4.151447 15.997020 0.82740884 0.0000000        0.2579112
+## 3 19.591209 21.386732 0.59167010 0.0000000        0.0000000
+## 4  2.925141 29.024498 1.15638229 0.2722993        0.0000000
+## 5  3.968873 35.478873 0.26333528 0.0000000        0.0000000
+## 6  2.175832 15.594821 0.03531301 0.0000000        0.0000000</code></pre>
+<p>Hence, the slot <code>@countsprocessing</code> is also modified to reflect the fact that data have been interpolated.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>countsprocessing</code></pre></div>
+<pre><code>## [1] Raw
+## Levels: Raw Interpolated Ranged means</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="fl">1.</span>int<span class="op">@</span>countsprocessing</code></pre></div>
+<pre><code>## [1] Interpolated
+## Levels: Samples Interpolated Ranged means</code></pre>
+<p>Because the new ages are based in one of the chronologies, the function modifies also the tables with the ages (<code>@depthages</code>) and depths (<code>@depthcm</code>) to report the new ages (one column only with the chronology in which they were based) and estimated depths .</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>agesdf</code></pre></div>
+<pre><code>## An object of class &quot;agesdf&quot;
+## Slot &quot;depthcm&quot;:
+##  [1]  2.0  5.0  6.0  9.0 15.0 20.0 25.0 34.0 38.0 42.0 46.0 50.0 53.5 56.5
+## [15] 58.5 62.0 66.5 70.0
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 22 entries ]
+## 
+## Slot &quot;depthages&quot;:
+##       1 giesecke
+## 1     0   -45.70
+## 2    34   -30.10
+## 3    45   -24.88
+## 4    79    -9.02
+## 5   146    24.11
+## 6   202    54.00
+## 7   258    86.86
+## 8   360   156.10
+## 9   404   192.08
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 31 rows ]
+## 
+## Slot &quot;dataquality&quot;:
+## data frame with 0 columns and 0 rows</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="fl">1.</span>int<span class="op">@</span>agesdf</code></pre></div>
+<pre><code>## An object of class &quot;agesdf&quot;
+## Slot &quot;depthcm&quot;:
+## [1]  10.63356  84.43726 114.53597 141.35469 168.02686 194.69913
+## 
+## Slot &quot;depthages&quot;:
+##   giesecke
+## 1        0
+## 2     1000
+## 3     2000
+## 4     3000
+## 5     4000
+## 6     5000
+## 
+## Slot &quot;dataquality&quot;:
+## data frame with 0 columns and 0 rows</code></pre>
+<blockquote>
+<p>Note that argument <code>chronology</code> was not specified and the default chronology (“giesecke”) was used here.</p>
+</blockquote>
+<p>Accordingly, the samples ids and labels are also modified.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span><span class="op">@</span>samplesdf</code></pre></div>
+<pre><code>## An object of class &quot;samplesdf&quot;
+## Slot &quot;sample_&quot;:
+##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 20 entries ]
+## 
+## Slot &quot;samplelabel&quot;:
+##  [1] &quot;1&quot;  &quot;2&quot;  &quot;3&quot;  &quot;4&quot;  &quot;5&quot;  &quot;6&quot;  &quot;7&quot;  &quot;8&quot;  &quot;9&quot;  &quot;10&quot; &quot;11&quot; &quot;12&quot; &quot;13&quot; &quot;14&quot;
+## [15] &quot;15&quot; &quot;16&quot; &quot;17&quot; &quot;18&quot; &quot;19&quot; &quot;20&quot;
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 20 entries ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="fl">1.</span>int<span class="op">@</span>samplesdf</code></pre></div>
+<pre><code>## An object of class &quot;samplesdf&quot;
+## Slot &quot;sample_&quot;:
+## [1] 10001 10002 10003 10004 10005 10006
+## 
+## Slot &quot;samplelabel&quot;:
+## [1] &quot;0&quot;    &quot;1000&quot; &quot;2000&quot; &quot;3000&quot; &quot;4000&quot; &quot;5000&quot;</code></pre>
+<blockquote>
+<p>Note that samples ids (<code>samples_</code>) start now from 10001 onwards, instead from 1 (which are reserved for original –not interpolated– data). This can be used as an extra warning flag.</p>
+</blockquote>
+</div>
+<div id="average-counts-data-to-specific-time-ranges" class="section level3">
+<h3><span class="header-section-number">6.2.7</span> Average counts data to specific time ranges</h3>
+<p>Another approach to standardize counts through time is calculating average countings in particular time ranges (e.g., mean <em>Cedrus</em> pollen concentration between 1000 and 2000 cal BP). This can be carried out with the <code>intervals_counts</code> function. The function is quite similar to <code>interpolate_counts</code>, but it requires to arguments to specify time ranges (or intervals). The first one (<code>tmin</code>) is a numeric vector with starting values of the intervals and the second one (<code>tmax</code>) another numeric vector with the ending values of the intervals. It also requires an <code>epd.entity.df</code> object (as argument <code>x</code>), a chronology number (argument <code>chronology</code>), and accept a vector with labels for the new sample labels (argument <code>newlabels</code>). If <code>chronology</code> is not specified it use the default one for that entity, as specified in <code>x@defaultchron</code>. If <code>newlabels</code>is not specified the function creates new labels with the ranges definition.</p>
+<p>Similarly to <code>interpolate_counts</code>, the new <code>epd.entity.df</code> object returned by the function is modified in several ways. In the first place the countings now reflect those estimated for the desired time ranges.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="fl">1.</span>ran &lt;-<span class="st"> </span><span class="kw">intervals_counts</span>(epd.<span class="dv">1</span>,
+                              <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1000</span>, <span class="dv">2000</span>, <span class="dv">3000</span>, <span class="dv">4000</span>, <span class="dv">5000</span>),
+                              <span class="kw">c</span>(<span class="dv">999</span>, <span class="dv">1999</span>, <span class="dv">2999</span>, <span class="dv">3999</span>, <span class="dv">4999</span>, <span class="dv">5999</span>))
+epd.<span class="fl">1.</span>ran<span class="op">@</span>commdf<span class="op">@</span>counts[, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</code></pre></div>
+<pre><code>##       Alnus Artemisia Aster-type   Betula Carpinus betulus
+## 1  7.297954  8.567232  0.3697138 0.000000       0.05953462
+## 2 10.524881 14.766812  0.3941138 0.000000       0.07558579
+## 3  6.138658 18.887812  0.5438718 0.000000       0.17804154
+## 4  2.953812 32.911471  0.0000000 1.507538       0.00000000
+## 5  4.929577 22.535211  0.7042254 0.000000       0.00000000
+## 6  1.033226 20.512610  0.5045261 0.000000       0.14811922</code></pre>
+<blockquote>
+<p>Compare the values with those from percentages in the samples or as those interpolated for particular time periods.</p>
+</blockquote>
+<p>The slot <code>@countsprocessing</code> was also modified to reflect the fact that data have been averaged at time intervals.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="fl">1.</span>ran<span class="op">@</span>countsprocessing</code></pre></div>
+<pre><code>## [1] Ranged means
+## Levels: Samples Interpolated Ranged means</code></pre>
+<p>Because the new ages are based in one of the chronologies, the function modifies also the tables with the ages (<code>@depthages</code>) and depths (<code>@depthcm</code>) to report the new ages (one column only with the chronology in which they were based) and estimated depths .</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="fl">1.</span>ran<span class="op">@</span>agesdf</code></pre></div>
+<pre><code>## An object of class &quot;agesdf&quot;
+## Slot &quot;depthcm&quot;:
+## [1]  52.5000 101.4286 129.3000 155.2500 189.0000 197.3333
+## 
+## Slot &quot;depthages&quot;:
+##    giesecke
+## 1  419.7783
+## 2 1543.0571
+## 3 2548.9440
+## 4 3520.9650
+## 5 4786.3300
+## 6 5098.7633
+## 
+## Slot &quot;dataquality&quot;:
+## data frame with 0 columns and 0 rows</code></pre>
+<blockquote>
+<p>Note that argument <code>chronology</code> was not specified and the default chronology (“giesecke”) was used here. Also note that ages do not exactly match the intervals midpoint, they represent the average age of the samples used to calculate the average counts for each time range. Same thing happen with depth of the samples.</p>
+</blockquote>
+<p>Accordingly, the samples ids and labels are also modified.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="fl">1.</span>ran<span class="op">@</span>samplesdf</code></pre></div>
+<pre><code>## An object of class &quot;samplesdf&quot;
+## Slot &quot;sample_&quot;:
+## [1] 20001 20002 20003 20004 20005 20006
+## 
+## Slot &quot;samplelabel&quot;:
+## [1] &quot;0-999&quot;     &quot;1000-1999&quot; &quot;2000-2999&quot; &quot;3000-3999&quot; &quot;4000-4999&quot; &quot;5000-5999&quot;</code></pre>
+<blockquote>
+<p>Note that samples ids (<code>samples_</code>) start now from 20001 onwards, instead from 1 (which are reserved for original –not interpolated– data). This can be used as an extra warning flag. Note also the samples labels indicating the right ranges.</p>
+</blockquote>
+</div>
+<div id="calculating-data-quality-using-blois_2011" class="section level3">
+<h3><span class="header-section-number">6.2.8</span> Calculating data quality using <span class="citation">(Blois et al. 2011)</span></h3>
+<p>Because datations of counting samples rely on age-depth models fitted with radiocarbon ages from datation samples there are some uncertainty on the exact ages they belong to. Furthermore, if counts are interpolated or mean values are calculated for time intervals, the uncertainty of the counts increase because of the interpolation methods. Blois <em>et al.</em> <span class="citation">(2011)</span> proposed an algorithm to calculate an uncertainty (or quality) index. This method basically measure the distance (in time) from any count to the closest control data in the chronology and from any count to the closest counting sample. These two distances are standardized by certain thresholds that can be modified. Finally, the complementary of these distances are averaged to calculate the final quality index.</p>
+<p>The <code>blois_quality</code> function implement this calculation on <code>epd.entity.df</code> objects. The function takes the following arguments: <code>x</code> an <code>epd.entity.df</code> object to be used for make the calculations, <code>chronology</code> a number indicating the chronology to be used for ages of the samples and the control points, <code>max_sample_dist</code> a number indicating the maximum distance to actual counting samples to standardize the samples distance, and <code>max_control_dist</code> a number indicating the maximum distance to geochronological control points to standardize the control distances. If <code>chronology</code> is not specified, the function use the default one from <code>x</code>. If <code>max_sample_dist</code> and <code>max_control_dist</code> are not specified the default values are 2000 and 5000, respectively <span class="citation">(Blois et al. 2011)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">blois_quality</span>(epd.<span class="dv">1</span>)
+epd.<span class="fl">1.</span>int &lt;-<span class="st"> </span><span class="kw">blois_quality</span>(epd.<span class="fl">1.</span>int)
+epd.<span class="dv">1</span><span class="op">@</span>agesdf<span class="op">@</span>dataquality</code></pre></div>
+<pre><code>##       blois
+## 1  0.995430
+## 2  0.996990
+## 3  0.997512
+## 4  0.999098
+## 5  0.997589
+## 6  0.994600
+## 7  0.991314
+## 8  0.984390
+## 9  0.980792
+## 10 0.976813
+## 11 0.972411
+## 12 0.967543
+## 13 0.962868
+## 14 0.958530
+## 15 0.955459
+## 16 0.959279
+## 17 0.967375
+## 18 0.974267
+## 19 0.980613
+## 20 0.987381
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 20 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epd.<span class="fl">1.</span>int<span class="op">@</span>agesdf<span class="op">@</span>dataquality</code></pre></div>
+<pre><code>##       blois
+## 1 0.9977450
+## 2 0.9741500
+## 3 0.9576675
+## 4 0.9773025
+## 5 0.7725850
+## 6 0.7871800</code></pre>
+</div>
+</div>
+<div id="extracting-data-in-a-table-for-specific-taxa-and-age" class="section level2">
+<h2><span class="header-section-number">6.3</span> Extracting data in a table for specific taxa and age</h2>
+<p>Once, the data are standardized in the desired manner, you can tabulate data to be used in analysis or for exporting to other softwares. One of the functions that help with this is <code>table_by_taxa_age</code>. The function requires the following arguments: <code>x</code> an <code>epd.entity.df</code> object to extract the data from, <code>taxa</code>a character vector with the taxa names that are of interest, and <code>sample_label</code> indicating the sample that are desired to be exported.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table_by_taxa_age</span>(epd.<span class="dv">1</span>, <span class="kw">c</span>(<span class="st">&quot;Pinus&quot;</span>, <span class="st">&quot;Quercus&quot;</span>), <span class="kw">as.character</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)))</code></pre></div>
+<pre><code>##    e_    londd    latdd     count sample_label  taxa
+## 1   1 41.33333 43.30556 0.0000000            1 Pinus
+## 2   1 41.33333 43.30556 0.0000000            2 Pinus
+## 3   1 41.33333 43.30556 0.0000000            3 Pinus
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 7 rows ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table_by_taxa_age</span>(epd.<span class="fl">1.</span>int, <span class="st">&quot;Quercus&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;1000&quot;</span>, <span class="st">&quot;2000&quot;</span>, <span class="st">&quot;3000&quot;</span>))</code></pre></div>
+<pre><code>##   e_    londd    latdd     count sample_label    taxa
+## 1  1 41.33333 43.30556 0.1898326         1000 Quercus
+## 2  1 41.33333 43.30556 0.5916701         2000 Quercus
+## 3  1 41.33333 43.30556 0.9070712         3000 Quercus</code></pre>
+</div>
+<div id="plotting-pollen-diagrams-from-data-in-epd.entity.df-objects" class="section level2">
+<h2><span class="header-section-number">6.4</span> Plotting pollen diagrams from data in <code>epd.entity.df</code> objects</h2>
+<p>One of the most useful tools in palynology are the pollen diagrams, where particles concetrations are plotted againts depth/age. We have implemented a function to plot pollen diagrams in ggplot. Which allow for a great variaty of customization using semi-automatically information in the objects that are being plotted. Check <code>?plot_diagram</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_diagram</span>(epd.<span class="dv">1</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_diagram</span>(epd.<span class="fl">1.</span>int)</code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /> &gt; Note that plots are shrinked to fit in the tutorial width.</p>
+</div>
+</div>
+<div id="disconnecting-from-the-epd-server" class="section level1">
+<h1><span class="header-section-number">7</span> Disconnecting from the EPD server</h1>
+<p>Finally and although it is not mandatory, it might be convenient to close the connection to the EPD server. That is accomplished with the <code>disconnec_from_epd</code> function. It only requires one argument with a valid connection object to the database.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">disconnect_from_epd</span>(epd.connection)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-blois_2011">
+<p>Blois, Jessica L., John W. (Jack) Williams, Eric C. Grimm, Stephen T. Jackson, and Russell W. Graham. 2011. “A Methodological Framework for Assessing and Reducing Temporal Uncertainty in Paleovegetation Mapping from Late-Quaternary Pollen Records.” <em>Quaternary Science Reviews</em> 30 (15): 1926–39. doi:<a href="https://doi.org/10.1016/j.quascirev.2011.04.017">10.1016/j.quascirev.2011.04.017</a>.</p>
+</div>
+<div id="ref-giesecke_2013">
+<p>Giesecke, Thomas, Basil Davis, Simon Brewer, Walter Finsinger, Steffen Wolters, Maarten Blaauw, Jacques-Louis de Beaulieu, et al. 2013. “Towards Mapping the Late Quaternary Vegetation Change of Europe.” <em>Vegetation History and Archaeobotany</em> 23 (1): 75–86. doi:<a href="https://doi.org/10.1007/s00334-012-0390-y">10.1007/s00334-012-0390-y</a>.</p>
+</div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -6,7 +6,8 @@
 \usage{
 list_e(connection, site = NULL, coords = NULL, lastname = NULL,
   firstname = NULL, initials = NULL, publ = NULL, country = NULL,
-  region = NULL, restrictions = NULL, logical_operator = "AND")
+  region = NULL, shapefile = NULL, restrictions = NULL,
+  logical_operator = "AND")
 }
 \arguments{
 \item{connection}{PostgreSQLConnection A valid connection to the 
@@ -38,6 +39,9 @@ entities are desired.}
 code or the full name for the regions to which entities are desired. 
 To specify a region you have to specify one, and only one, country. 
 You can specify multiple countries but the results  can be funky.}
+
+\item{shapefile}{SpatialPolygonsDataFrame SpatialPolygonsDataFrame object to which the
+query is going to be restricted.}
 
 \item{restrictions}{character Character letter ("U" or "R") specifying 
 the usestatus of the data for the entities that are searched. U is 

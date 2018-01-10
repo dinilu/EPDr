@@ -58,6 +58,8 @@ list_countries <- function(connection){
 #' code or the full name for the regions to which entities are desired. 
 #' To specify a region you have to specify one, and only one, country. 
 #' You can specify multiple countries but the results  can be funky.
+#' @param shapefile SpatialPolygonsDataFrame SpatialPolygonsDataFrame object to which the
+#' query is going to be restricted. 
 #' @param restrictions character Character letter ("U" or "R") specifying 
 #' the usestatus of the data for the entities that are searched. U is 
 #' for unrestricted and R is for restricted. 
@@ -92,8 +94,8 @@ list_countries <- function(connection){
 #' }
 list_e <- function(connection, site = NULL, coords = NULL, lastname = NULL,
                    firstname = NULL, initials = NULL, publ = NULL,
-                   country = NULL, region = NULL, restrictions = NULL,
-                   logical_operator = "AND"){
+                   country = NULL, region = NULL, shapefile = NULL,
+                   restrictions = NULL, logical_operator = "AND"){
   if (all(is.null(country), !is.null(region))){
     stop(paste0("Because regions are not unique in the database you need to ",
                 "specify a country in which to look for specific regions."))
@@ -117,9 +119,13 @@ list_e <- function(connection, site = NULL, coords = NULL, lastname = NULL,
     join_query <- append(join_query, workers_join)
   }
   if (!is.null(publ)){
-    publent_join <- paste0("JOIN publent d ON a.e_ = d.e_ JOIN publ e ON",
+    publent_join <- paste0("JOIN publent d ON a.e_ = d.e_ JOIN publ e ON ",
                            "d.publ_ = e.publ_")
     join_query <- append(join_query, publent_join)
+  }
+  if (!is.null(shapefile)){
+    shapefile_select <- "JOIN siteloc j ON a.site_ = j.site_"
+    join_query <- append(join_query, shapefile_select)
   }
   if (!is.null(restrictions)){
     restrictions_select <- "JOIN p_entity h ON a.e_ = h.e_"
@@ -218,6 +224,26 @@ list_e <- function(connection, site = NULL, coords = NULL, lastname = NULL,
       select_query <- append(select_query, region_select)
     }
     }
+  if (!is.null(shapefile)){
+    if (class(shapefile) != "SpatialPolygons"){
+      stop("shapefile has to be a 'SpatialPolygons' object.")
+    }
+    sql_query <- "SELECT site_, latdd, londd FROM siteloc"
+    sql_result <- RPostgreSQL::dbGetQuery(connection, sql_query)
+    sql_spatial <- sp::SpatialPointsDataFrame(sql_result[, c("londd", "latdd")],
+                                              sql_result["site_"])
+    sp::proj4string(sql_spatial) <- sp::CRS("+proj=longlat")
+    new_crs <- sp::proj4string(shapefile)
+    new_crs <- sp::CRS(new_crs)
+    sql_spatial <- sp::spTransform(sql_spatial, new_crs)
+    sites_overlap <- sp::over(sql_spatial, shapefile)
+    sites_overlap <- sql_spatial[!is.na(sites_overlap),]
+    sites_overlap <- sites_overlap$site_
+    sites_overlap <- paste(sites_overlap, collapse = "','")
+    shapefile_select <- paste("j.site_ IN ('", sites_overlap, "')",
+                              sep = "")
+    select_query <- append(select_query, shapefile_select)
+  }
   if (!is.null(restrictions)){
     if (class(restrictions) != "character"){
       stop("restrictions has to be a character 'U' or 'R'.")
