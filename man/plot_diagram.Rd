@@ -16,7 +16,7 @@ plot_diagram(x, chronology = NULL, use_ages = TRUE, exag_low_values = 10,
   legend_position = NULL, legend_title = "Legend")
 }
 \arguments{
-\item{x}{epd.entity.df An object of class \code{\link[EPDr]{epd.entity.df}}.}
+\item{x}{epd.entity.df An object of class \code{\link[EPDr]{epd.entity.df-class}}.}
 
 \item{chronology}{numeric A number indicating the chronology to be used in 
 the pollen diagram. If not specified the default chronology specified in
@@ -60,7 +60,7 @@ The function returns a ggplot object with the pollen diagram. It
 can be stored and plotted afterwards.
 }
 \description{
-The function takes information on an \code{\link[EPDr]{epd.entity.df}} object
+The function takes information on an \code{\link[EPDr]{epd.entity.df-class}} object
 and plot a pollen diagram. The function also return the ggplot object, so the 
 object can be stored and afterward combined with other plots.
 }

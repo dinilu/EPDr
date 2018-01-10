@@ -16,7 +16,7 @@ intervals_counts(x, tmin, tmax, chronology = NULL, newlabels = NULL)
   chronology = NULL, newlabels = NULL)
 }
 \arguments{
-\item{x}{epd.entity.df An \code{\link[EPDr]{epd.entity.df}} object as 
+\item{x}{epd.entity.df An \code{\link[EPDr]{epd.entity.df-class}} object as 
 returned by the \code{\link[EPDr]{entity_to_matrices}} function.}
 
 \item{tmin}{numeric Numeric vector indicating the lower limits 
@@ -35,13 +35,13 @@ intervals, if none are provided the functions generate them with the
 following format \code{tmin}-\code{tmax}.}
 }
 \value{
-The function returns a \code{\link[EPDr]{epd.entity.df}} object, 
+The function returns a \code{\link[EPDr]{epd.entity.df-class}} object, 
 similar to \code{epd.entity.df} in which ages and counts has been modified
 to the time intervarls specified and the counts estimated for these periods.
 }
 \description{
 This function uses data (sample ages and sample counts) from an
-\code{\link[EPDr]{epd.entity.df}} object to calculate mean counts
+\code{\link[EPDr]{epd.entity.df-class}} object to calculate mean counts
 for samples within specific time intervals defined by the user. This can be
 used to estimate mean counts for the same time intervals for multiple 
 entities or cores in the database, standardizing them for 

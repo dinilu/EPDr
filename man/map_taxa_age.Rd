@@ -12,7 +12,7 @@ map_taxa_age(x, taxa, sample_label, pres_abse = FALSE, pollen_thres = NULL,
   countries_fill_colour = "grey80", countries_border_colour = "grey90")
 }
 \arguments{
-\item{x}{List of \code{\link[EPDr]{epd.entity.df}} objects that are 
+\item{x}{List of \code{\link[EPDr]{epd.entity.df-class}} objects that are 
 going to be included in the map.}
 
 \item{taxa}{Character string indicating the taxa that are going to 
@@ -87,7 +87,7 @@ representing countries.}
 The function displays a ggplot map with countries in the background and counts for particular taxa and age (or time periods) as points in the foreground.
 }
 \description{
-This function uses information on multiple \code{\link[EPDr]{epd.entity.df}}
+This function uses information on multiple \code{\link[EPDr]{epd.entity.df-class}}
 objects to map counts for a particular taxa in a particular age (or time 
 period). The function use ggplot function and allow for multiple 
 parameters to further tune the resulting map. Each entity in the map 

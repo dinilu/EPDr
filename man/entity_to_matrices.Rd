@@ -4,14 +4,14 @@
 \name{entity_to_matrices}
 \alias{entity_to_matrices}
 \alias{entity_to_matrices,epd.entity-method}
-\title{Calculate data matrices from \code{\link[EPDr]{epd.entity}} objects}
+\title{Calculate data matrices from \code{\link[EPDr]{epd.entity-class}} objects}
 \usage{
 entity_to_matrices(x)
 
 \S4method{entity_to_matrices}{epd.entity}(x)
 }
 \arguments{
-\item{x}{epd.entity Object of class \code{\link[EPDr]{epd.entity}} to be 
+\item{x}{epd.entity Object of class \code{\link[EPDr]{epd.entity-class}} to be 
 modified.}
 }
 \value{
@@ -19,7 +19,7 @@ epd.entity.df object. Expanded version of \code{x} with certain data
 reformated into data matrices instead of the native EPD format.
 }
 \description{
-This function takes an \code{\link[EPDr]{epd.entity}} object and transforms
+This function takes an \code{\link[EPDr]{epd.entity-class}} object and transforms
 data from tables in the object to new tables in the form of matrices. 
 Information in the new tables, are easier to understand and manipulate than
 those in the native format of the EPD. Transformed data include samples,
@@ -27,11 +27,11 @@ ages of that samples, and counts for that samples (both biological and
 no-biological particles).
 }
 \details{
-The function return a \code{\link[EPDr]{epd.entity.df}} object, which 
-is an expanded version of \code{\link[EPDr]{epd.entity}} objects with
+The function return a \code{\link[EPDr]{epd.entity.df-class}} object, which 
+is an expanded version of \code{\link[EPDr]{epd.entity-class}} objects with
 eight new slots. This new object are intended to be modified for 
 standardizations but keeping an unmodified version of the data and
-structure of the \code{\link[EPDr]{epd.entity}} object.
+structure of the \code{\link[EPDr]{epd.entity-class}} object.
 Four slots contains the data in the new format, while four others store
 information to track changes made from standardization and modification
 functions (e.g., \code{\link[EPDr]{counts_to_percentages}}.

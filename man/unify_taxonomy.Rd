@@ -7,7 +7,7 @@
 unify_taxonomy(list, epd.taxonomy, na_value = 0)
 }
 \arguments{
-\item{list}{List of \code{\link[EPDr]{epd.entity.df}} objects to be modified.}
+\item{list}{List of \code{\link[EPDr]{epd.entity.df-class}} objects to be modified.}
 
 \item{epd.taxonomy}{Data frame with the taxonomy from the EPD as from the
 \code{\link[EPDr]{get_taxonomy_epd}} function.}
@@ -16,12 +16,12 @@ unify_taxonomy(list, epd.taxonomy, na_value = 0)
 taxa not previously present in the entities.}
 }
 \value{
-list of \code{\link[EPDr]{epd.entity.df}} objects with taxonomy
+list of \code{\link[EPDr]{epd.entity.df-class}} objects with taxonomy
 modified.
 }
 \description{
 This function compares the taxa registered in a list of
-\code{\link[EPDr]{epd.entity.df}} objects and expand their taxonomy (using
+\code{\link[EPDr]{epd.entity.df-class}} objects and expand their taxonomy (using
 \code{\link[EPDr]{filter_taxa}}) to make them match. When neccesary the
 function add empty columns (with \code{NA} values).
 }

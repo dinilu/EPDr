@@ -15,15 +15,15 @@ export_depths(x)
 }
 \arguments{
 \item{x}{data.frame Data frame with at least a column called \code{depthcm}
-or \code{\link[EPDr]{epd.entity}} object to extract this information from.}
+or \code{\link[EPDr]{epd.entity-class}} object to extract this information from.}
 }
 \value{
 Vector with depths in ascending order.
 }
 \description{
 This function takes depths data, as returned by 
-\code{\link[EPDr]{.get_psamples}} or extracted from a 
-\code{\link[EPDr]{epd.entity}} object, and transforms them
+\code{\link[EPDr]{get_samples}} or extracted from a 
+\code{\link[EPDr]{epd.entity-class}} object, and transforms them
 to comply with CLAM or BACON format.
 }
 \examples{

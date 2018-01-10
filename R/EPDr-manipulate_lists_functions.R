@@ -4,12 +4,12 @@
 #' Remove restricted data from a list of objects
 #'
 #' This function is designed to work with list of EPDr objects
-#' (\code{\link[EPDr]{epd.entity.df}}). The function parses all the elements
+#' (\code{\link[EPDr]{epd.entity.df-class}}). The function parses all the elements
 #' on the list and remove those with restriction on their use. See
 #' \code{\link[EPDr]{check_restriction}}.
 #'
-#' @param list List of EPDr objects (\code{\link[EPDr]{epd.entity.df}}, or
-#' \code{\link[EPDr]{epd.entity}}).
+#' @param list List of EPDr objects (\code{\link[EPDr]{epd.entity.df-class}}, or
+#' \code{\link[EPDr]{epd.entity-class}}).
 #'
 #' @return List of EPDr objects.
 #' 
@@ -39,13 +39,13 @@ remove_restricted <- function(list){
 #' Remove data without ages from a list of objects
 #' 
 #' This function is designed to work with list of EPDr objects
-#' (\code{\link[EPDr]{epd.entity.df}}, or
-#' \code{\link[EPDr]{epd.entity}}).
+#' (\code{\link[EPDr]{epd.entity.df-class}}, or
+#' \code{\link[EPDr]{epd.entity-class}}).
 #' The function parses all the elements on the list and remove those without a default
 #' chronology (see \code{\link[EPDr]{check_defaultchron}}).
 #'
-#' @param list List of EPDr objects (\code{\link[EPDr]{epd.entity.df}},
-#' or \code{\link[EPDr]{epd.entity}})
+#' @param list List of EPDr objects (\code{\link[EPDr]{epd.entity.df-class}},
+#' or \code{\link[EPDr]{epd.entity-class}})
 #'
 #' @return List of EPDr objects.
 #' 
@@ -74,13 +74,13 @@ remove_wo_ages <- function(list){
 #' Remove data without counts from a list of objects
 #' 
 #' This function is designed to work with list of
-#' \code{\link[EPDr]{epd.entity.df}} objects.
+#' \code{\link[EPDr]{epd.entity.df-class}} objects.
 #' The function parses all the elements on the list and remove those without 
 #' counts data for any taxa.
 #'
-#' @param list List of \code{\link[EPDr]{epd.entity.df}} objects.
+#' @param list List of \code{\link[EPDr]{epd.entity.df-class}} objects.
 #'
-#' @return List of \code{\link[EPDr]{epd.entity.df}} objects, which is a 
+#' @return List of \code{\link[EPDr]{epd.entity.df-class}} objects, which is a 
 #' subset of 'list' with counts data.
 #' 
 #' @export
@@ -107,17 +107,17 @@ remove_wo_counts <- function(list){
 #' Unify taxonomy of counts in multiple objects
 #' 
 #' This function compares the taxa registered in a list of
-#' \code{\link[EPDr]{epd.entity.df}} objects and expand their taxonomy (using
+#' \code{\link[EPDr]{epd.entity.df-class}} objects and expand their taxonomy (using
 #' \code{\link[EPDr]{filter_taxa}}) to make them match. When neccesary the
 #' function add empty columns (with \code{NA} values).
 #'
-#' @param list List of \code{\link[EPDr]{epd.entity.df}} objects to be modified.
+#' @param list List of \code{\link[EPDr]{epd.entity.df-class}} objects to be modified.
 #' @param epd.taxonomy Data frame with the taxonomy from the EPD as from the
 #' \code{\link[EPDr]{get_taxonomy_epd}} function.
 #' @param na_value numeric Number indicating the value to be used for
 #' taxa not previously present in the entities.
 #'
-#' @return list of \code{\link[EPDr]{epd.entity.df}} objects with taxonomy
+#' @return list of \code{\link[EPDr]{epd.entity.df-class}} objects with taxonomy
 #' modified.
 #' 
 #' @export

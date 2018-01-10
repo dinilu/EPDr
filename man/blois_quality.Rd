@@ -17,8 +17,8 @@ blois_quality(x, chronology = NULL, max_sample_dist = 2000,
   max_sample_dist = 2000, max_control_dist = 5000, overwrite = FALSE)
 }
 \arguments{
-\item{x}{epd.entity \code{\link[EPDr]{epd.entity.df}} or a
-\code{\link[EPDr]{epd.entity}} object.}
+\item{x}{epd.entity \code{\link[EPDr]{epd.entity.df-class}} or a
+\code{\link[EPDr]{epd.entity-class}} object.}
 
 \item{chronology}{numeric Chronology number to look for samples and control points ages.
 This value become the default chronology in the new object. If not 
@@ -36,7 +36,7 @@ to the control points (e.g., C14, top, bottom, etc.).}
 blois index in @agesdf@dataquality if it already has a 'blois' column.}
 }
 \value{
-\code{\link[EPDr]{epd.entity.df}} object with no empty
+\code{\link[EPDr]{epd.entity.df-class}} object with no empty
 \code{@agesdf@dataquality} slot. The default chronology in \code{x@defaultchron}
 is changed to the one specified in \code{chronology}.
 }
@@ -61,8 +61,8 @@ To replicate the calculation the function allows to specify different maximum
 distances as parameters of the function.
 }
 \details{
-When \code{x} is an \code{\link[EPDr]{epd.entity}} object, it is
-first transformed into a \code{\link[EPDr]{epd.entity.df}} 
+When \code{x} is an \code{\link[EPDr]{epd.entity-class}} object, it is
+first transformed into a \code{\link[EPDr]{epd.entity.df-class}} 
 object by \code{\link[EPDr]{entity_to_matrices}} function.
 }
 \examples{

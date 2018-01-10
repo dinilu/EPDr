@@ -18,9 +18,9 @@ export_agebasis(format, x)
 \item{format}{character Character string indicating whether to export 
 to "clam" or to "bacon" format.}
 
-\item{x}{data.frame Data frame or \code{\link[EPDr]{epd.entity}} with
+\item{x}{data.frame Data frame or \code{\link[EPDr]{epd.entity-class}} with
 agebasis data as those in an agebasis table returned by 
-\code{\link[EPDr]{.get_agebasis}} or \code{\link[EPDr]{get_entity}}.}
+\code{\link[EPDr]{get_chron}} or \code{\link[EPDr]{get_entity}}.}
 }
 \value{
 Data frame with no-C14 data in CLAM or BACON format. This 
@@ -29,7 +29,7 @@ data frame can be easily combined with C14 data from
 }
 \description{
 This function takes agebasis data, as those from 
-\code{\link[EPDr]{.get_agebasis}} or from an \code{\link[EPDr]{epd.entity}},
+\code{\link[EPDr]{get_chron}} or from an \code{\link[EPDr]{epd.entity-class}},
 used to calibrate chronologies of that entity in the EPD, and modifies
 them to fit into a new table that complies with CLAM or BACON format.
 }

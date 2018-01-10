@@ -11,8 +11,8 @@ check_valid_defaultchron(x)
 \S4method{check_valid_defaultchron}{epd.entity}(x)
 }
 \arguments{
-\item{x}{epd.entity \code{\link[EPDr]{epd.entity}} or
-\code{\link[EPDr]{epd.entity.df}} objects.}
+\item{x}{epd.entity \code{\link[EPDr]{epd.entity-class}} or
+\code{\link[EPDr]{epd.entity.df-class}} objects.}
 }
 \value{
 Logical value indicating whether the default chronology has ages 
@@ -20,8 +20,8 @@ Logical value indicating whether the default chronology has ages
 }
 \description{
 The function check EPDr objects with slot @defaultchron 
-(\code{\link[EPDr]{epd.entity}}, and
-\code{\link[EPDr]{epd.entity.df}}) to see if that chronology
+(\code{\link[EPDr]{epd.entity-class}}, and
+\code{\link[EPDr]{epd.entity.df-class}}) to see if that chronology
 has ages for the counts samples.
 }
 \examples{

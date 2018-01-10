@@ -11,8 +11,8 @@ check_defaultchron(x)
 \S4method{check_defaultchron}{epd.entity}(x)
 }
 \arguments{
-\item{x}{epd.entity \code{\link[EPDr]{epd.entity}} or
-\code{\link[EPDr]{epd.entity.df}} objects.}
+\item{x}{epd.entity \code{\link[EPDr]{epd.entity-class}} or
+\code{\link[EPDr]{epd.entity.df-class}} objects.}
 }
 \value{
 Logical value indicating whether the object has a default 
@@ -20,8 +20,8 @@ chronology (TRUE) or not (FALSE).
 }
 \description{
 The function check EPDr objects with slot @defaultchron 
-(\code{\link[EPDr]{epd.entity}}, and
-\code{\link[EPDr]{epd.entity.df}}) to see if there are a default
+(\code{\link[EPDr]{epd.entity-class}}, and
+\code{\link[EPDr]{epd.entity.df-class}}) to see if there are a default
 chronology specified.
 }
 \examples{

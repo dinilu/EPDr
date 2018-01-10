@@ -21,8 +21,8 @@ interpolate_counts(x, time, chronology = NULL, method = c("linear", "loess",
   df = min(20, nrow(x@commdf@counts) * 0.7), ...)
 }
 \arguments{
-\item{x}{epd.entity.df An \code{\link[EPDr]{epd.entity.df}} or
-\code{\link[EPDr]{epd.entity}} object as returned by
+\item{x}{epd.entity.df An \code{\link[EPDr]{epd.entity.df-class}} or
+\code{\link[EPDr]{epd.entity-class}} object as returned by
 \code{\link[EPDr]{get_entity}} or
 \code{\link[EPDr]{entity_to_matrices}} functions.}
 
@@ -50,13 +50,13 @@ the lower of 20 or 0.7 * number of samples.}
 \item{...}{additional arguments to loess and smooth.spline.}
 }
 \value{
-The function returns an \code{\link[EPDr]{epd.entity.df}} object,
+The function returns an \code{\link[EPDr]{epd.entity.df-class}} object,
 similar to \code{x} in which ages and counts has been modified to the
 time periods specified in time and the counts estimated for these periods.
 }
 \description{
 This function uses data (sample ages and sample counts) from an
-\code{\link[EPDr]{epd.entity.df}} object to estimate by linear 
+\code{\link[EPDr]{epd.entity.df-class}} object to estimate by linear 
 interpolation, loess or smooth splines the counts at specific time 
 periods defined by the user. This can be used to estimate counts for 
 the same time periods for multiple entities in the database, 
@@ -69,7 +69,7 @@ carried out with multiple entities.
 
 Interpolation can be done using linear interpolation between 
 data points in the original series (default) using 
-\code{\link[stats]{approx}}, using a fitted 
+\code{\link[stats]{approxfun}}, using a fitted 
 \code{\link[stats]{loess}} locally weighted regression, or by 
 \code{\link[stats]{smooth.spline}}. The latter two methods 
 will also smooth the data and additional arguments may be passed to 

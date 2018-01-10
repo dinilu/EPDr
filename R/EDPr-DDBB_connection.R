@@ -62,7 +62,7 @@ connect_to_epd <- function(database=NULL, user=NULL, password=NULL,
 #' 
 #' @param connection PostgreSQLConnection The connection object created with 
 #' \code{\link[EPDr]{connect_to_epd}} to stablish the connection
-#' @param ... Other arguments to \code{\link[RPostgreSQL]{dbDisconnect-methods}}.
+#' @param ... Other arguments to \code{\link[RPostgreSQL]{dbConnect-methods}}.
 #' 
 #' @return NULL It just disconnects from the EPD DDBB server and modifies 
 #' the connection object to reflect the new status.

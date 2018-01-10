@@ -42,7 +42,7 @@ the database that want to be queried.}
 description of the entity.}
 }
 \value{
-\code{\link[EPDr]{entity}} object. This is an EPDr object 
+\code{\link[EPDr]{entity-class}} object. This is an EPDr object 
 with information from different tables. See documentation of the EPD: 
 \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 }
@@ -56,7 +56,7 @@ depending on the piece of information they retrieve.
 }
 \section{get_entity}{
 
-This function returns an \code{\link[EPDr]{entity}} object with several 
+This function returns an \code{\link[EPDr]{entity-class}} object with several 
 information from the rest of the functions for a particular entity.
 }
 

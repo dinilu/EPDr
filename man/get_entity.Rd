@@ -15,7 +15,7 @@ retrieves data only for the first one.}
 the EPD database server.}
 }
 \value{
-The function returns an \code{\link[EPDr]{epd.entity}} object, which
+The function returns an \code{\link[EPDr]{epd.entity-class}} object, which
 countains several objects with several tables.
 }
 \description{

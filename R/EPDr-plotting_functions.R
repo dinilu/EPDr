@@ -2,7 +2,7 @@
 
 #' Map pollen counts from a list of epd.entity.df objects
 #' 
-#' This function uses information on multiple \code{\link[EPDr]{epd.entity.df}}
+#' This function uses information on multiple \code{\link[EPDr]{epd.entity.df-class}}
 #' objects to map counts for a particular taxa in a particular age (or time 
 #' period). The function use ggplot function and allow for multiple 
 #' parameters to further tune the resulting map. Each entity in the map 
@@ -12,7 +12,7 @@
 #' are represented diferently to reflect \code{NA}, avoiding confusion 
 #' with \code{0} (zero) values.
 #'
-#' @param x List of \code{\link[EPDr]{epd.entity.df}} objects that are 
+#' @param x List of \code{\link[EPDr]{epd.entity.df-class}} objects that are 
 #' going to be included in the map.
 #' @param taxa Character string indicating the taxa that are going to 
 #' be mapped.
@@ -257,11 +257,11 @@ map_taxa_age <- function(x, taxa, sample_label, pres_abse = FALSE,
 
 #' Plot pollen diagram of an entity
 #'
-#' The function takes information on an \code{\link[EPDr]{epd.entity.df}} object
+#' The function takes information on an \code{\link[EPDr]{epd.entity.df-class}} object
 #' and plot a pollen diagram. The function also return the ggplot object, so the 
 #' object can be stored and afterward combined with other plots.
 #'
-#' @param x epd.entity.df An object of class \code{\link[EPDr]{epd.entity.df}}.
+#' @param x epd.entity.df An object of class \code{\link[EPDr]{epd.entity.df-class}}.
 #' @param chronology numeric A number indicating the chronology to be used in 
 #' the pollen diagram. If not specified the default chronology specified in
 #' \code{x} is used.

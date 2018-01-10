@@ -17,20 +17,20 @@ export_c14(format, x, y)
 \item{format}{character Character string indicating whether to export to 
 "clam" or to "bacon" format.}
 
-\item{x}{data.frame Data frame or \code{\link[EPDr]{epd.entity}} object 
-with C14 data as those extracted from \code{\link[EPDr]{.get_c14}} or
+\item{x}{data.frame Data frame or \code{\link[EPDr]{epd.entity-class}} object 
+with C14 data as those extracted from \code{\link[EPDr]{get_geochron}} or
 \code{\link[EPDr]{get_entity}}.}
 
 \item{y}{data.frame Data frame with geochron table, as the one extracted with
-\code{\link[EPDr]{.get_geochron}}. If x is an
-\code{\link[EPDr]{epd.entity}} object, y is not used.}
+\code{\link[EPDr]{get_geochron}}. If x is an
+\code{\link[EPDr]{epd.entity-class}} object, y is not used.}
 }
 \value{
 Data frame with C14 data in CLAM or BACON format.
 }
 \description{
 This function takes C14 table (data.frame), as those extracted from
-\code{\link[EPDr]{.get_c14}} or from an \code{\link[EPDr]{epd.entity}} 
+\code{\link[EPDr]{get_geochron}} or from an \code{\link[EPDr]{epd.entity-class}} 
 object, and modifies it to fit into a new table that complies with CLAM
 or BACON format.
 }

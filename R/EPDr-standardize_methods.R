@@ -22,12 +22,12 @@
 #' To replicate the calculation the function allows to specify different maximum
 #' distances as parameters of the function.
 #' 
-#' When \code{x} is an \code{\link[EPDr]{epd.entity}} object, it is
-#' first transformed into a \code{\link[EPDr]{epd.entity.df}} 
+#' When \code{x} is an \code{\link[EPDr]{epd.entity-class}} object, it is
+#' first transformed into a \code{\link[EPDr]{epd.entity.df-class}} 
 #' object by \code{\link[EPDr]{entity_to_matrices}} function.
 #' 
-#' @param x epd.entity \code{\link[EPDr]{epd.entity.df}} or a
-#' \code{\link[EPDr]{epd.entity}} object.
+#' @param x epd.entity \code{\link[EPDr]{epd.entity.df-class}} or a
+#' \code{\link[EPDr]{epd.entity-class}} object.
 #' @param chronology numeric Chronology number to look for samples and control points ages.
 #' This value become the default chronology in the new object. If not 
 #' specified the function check the default chronology in  
@@ -40,7 +40,7 @@
 #' @param overwrite logical TRUE or FALSE indicating whether to overwrite
 #' blois index in @@agesdf@@dataquality if it already has a 'blois' column.
 #'
-#' @return \code{\link[EPDr]{epd.entity.df}} object with no empty
+#' @return \code{\link[EPDr]{epd.entity.df-class}} object with no empty
 #' \code{@@agesdf@@dataquality} slot. The default chronology in \code{x@@defaultchron}
 #' is changed to the one specified in \code{chronology}. 
 #' 
@@ -186,13 +186,13 @@ setMethod("blois_quality", signature(x = "epd.entity"),
 
 #' Check restrictions on EPDr objects
 #' 
-#' This function check EPDr objects (\code{\link[EPDr]{epd.entity}},
-#' and \code{\link[EPDr]{epd.entity.df}}), 
+#' This function check EPDr objects (\code{\link[EPDr]{epd.entity-class}},
+#' and \code{\link[EPDr]{epd.entity.df-class}}), 
 #' and return a logical value indicating whether the data are restricted (TRUE) or
 #' unrestricted (FALSE).
 #'
-#' @param x epd.entity \code{\link[EPDr]{epd.entity}} or
-#' \code{\link[EPDr]{epd.entity.df}} object.
+#' @param x epd.entity \code{\link[EPDr]{epd.entity-class}} or
+#' \code{\link[EPDr]{epd.entity.df-class}} object.
 #'
 #' @return logical value indicating whether the data are restricted (TRUE) or
 #' unrestricted (FALSE).
@@ -226,12 +226,12 @@ setMethod("check_restriction", signature(x = "epd.entity"), function(x){
 #' Check default chronology on EPDr objects
 #' 
 #' The function check EPDr objects with slot @@defaultchron 
-#' (\code{\link[EPDr]{epd.entity}}, and
-#' \code{\link[EPDr]{epd.entity.df}}) to see if there are a default
+#' (\code{\link[EPDr]{epd.entity-class}}, and
+#' \code{\link[EPDr]{epd.entity.df-class}}) to see if there are a default
 #' chronology specified.
 #'
-#' @param x epd.entity \code{\link[EPDr]{epd.entity}} or
-#' \code{\link[EPDr]{epd.entity.df}} objects.
+#' @param x epd.entity \code{\link[EPDr]{epd.entity-class}} or
+#' \code{\link[EPDr]{epd.entity.df-class}} objects.
 #'
 #' @return Logical value indicating whether the object has a default 
 #' chronology (TRUE) or not (FALSE).
@@ -267,12 +267,12 @@ setMethod("check_defaultchron", signature(x = "epd.entity"), function(x){
 #' Check that default chronology on EPDr objects is valid
 #' 
 #' The function check EPDr objects with slot @@defaultchron 
-#' (\code{\link[EPDr]{epd.entity}}, and
-#' \code{\link[EPDr]{epd.entity.df}}) to see if that chronology
+#' (\code{\link[EPDr]{epd.entity-class}}, and
+#' \code{\link[EPDr]{epd.entity.df-class}}) to see if that chronology
 #' has ages for the counts samples.
 #'
-#' @param x epd.entity \code{\link[EPDr]{epd.entity}} or
-#' \code{\link[EPDr]{epd.entity.df}} objects.
+#' @param x epd.entity \code{\link[EPDr]{epd.entity-class}} or
+#' \code{\link[EPDr]{epd.entity.df-class}} objects.
 #'
 #' @return Logical value indicating whether the default chronology has ages 
 #' (TRUE) or not (FALSE).
@@ -301,10 +301,10 @@ setMethod("check_valid_defaultchron", signature(x = "epd.entity"), function(x){
 
 #' Check counts data on EPDr objects
 #' 
-#' The function check \code{\link[EPDr]{epd.entity.df}} objects (with
+#' The function check \code{\link[EPDr]{epd.entity.df-class}} objects (with
 #' slot @@commdf@@counts) to see if there are counts data on it.
 #'
-#' @param x epd.entity.df \code{\link[EPDr]{epd.entity.df}} object.
+#' @param x epd.entity.df \code{\link[EPDr]{epd.entity.df-class}} object.
 #'
 #' @return Logical value indicating whether the object has a default 
 #' chronology (TRUE) or not (FALSE).
@@ -342,20 +342,20 @@ setMethod("check_counts", signature(x = "epd.entity.df"), function(x){
 #' Calculate counts percentages
 #'
 #' This function transforms the counts matrix (samples x taxa) in
-#' the @@commdf@@counts slot of a \code{\link[EPDr]{epd.entity.df}}
+#' the @@commdf@@counts slot of a \code{\link[EPDr]{epd.entity.df-class}}
 #' object to percentages relative to the total amount of particles 
 #' in each sample (row).
 #' 
-#' Although the function work with \code{\link[EPDr]{epd.entity.df}} and
-#' \code{\link[EPDr]{epd.entity}} objects, the later are previously 
+#' Although the function work with \code{\link[EPDr]{epd.entity.df-class}} and
+#' \code{\link[EPDr]{epd.entity-class}} objects, the later are previously 
 #' transformed using \code{\link[EPDr]{entity_to_matrices}} without any
 #' posterior data manipulation and transformation. A lot of entities have
 #' information from different taxonomical groups (terrestrial plants pollen 
 #' and algae or fungi spores). Hence, percentages calculated in this base
 #' may be meaningless and its use is unrecommended.
 #'
-#' @param x epd.entity \code{\link[EPDr]{epd.entity.df}} or 
-#' \code{\link[EPDr]{epd.entity}} objects.
+#' @param x epd.entity \code{\link[EPDr]{epd.entity.df-class}} or 
+#' \code{\link[EPDr]{epd.entity-class}} objects.
 #' @param offset numeric Numeric value to avoid dividing by zero 
 #' if the total of particles is zero for a particular sample. This may 
 #' happen when \code{x} has been filtered by taxa groups. For instance, 
@@ -368,9 +368,9 @@ setMethod("check_counts", signature(x = "epd.entity.df"), function(x){
 #' times combinations where pollen counts are not available (NA) and not
 #' numerically zero.
 #' 
-#' @return The function returns a \code{\link[EPDr]{epd.entity.df}} object, 
+#' @return The function returns a \code{\link[EPDr]{epd.entity.df-class}} object, 
 #' which is a modified version of \code{x} (or \code{entity_to_matrices(x)}
-#' if x is a \code{\link[EPDr]{epd.entity}} object), in which
+#' if x is a \code{\link[EPDr]{epd.entity-class}} object), in which
 #' values in @@counts slot represent percentages instead of raw counts.
 #' 
 #' @examples
@@ -418,25 +418,25 @@ setMethod("counts_to_percentages",
 
 # entity_to_matrices --------------------------------------------------------
 
-#' Calculate data matrices from \code{\link[EPDr]{epd.entity}} objects 
+#' Calculate data matrices from \code{\link[EPDr]{epd.entity-class}} objects 
 #' 
-#' This function takes an \code{\link[EPDr]{epd.entity}} object and transforms
+#' This function takes an \code{\link[EPDr]{epd.entity-class}} object and transforms
 #' data from tables in the object to new tables in the form of matrices. 
 #' Information in the new tables, are easier to understand and manipulate than
 #' those in the native format of the EPD. Transformed data include samples,
 #' ages of that samples, and counts for that samples (both biological and 
 #' no-biological particles).
 #' 
-#' The function return a \code{\link[EPDr]{epd.entity.df}} object, which 
-#' is an expanded version of \code{\link[EPDr]{epd.entity}} objects with
+#' The function return a \code{\link[EPDr]{epd.entity.df-class}} object, which 
+#' is an expanded version of \code{\link[EPDr]{epd.entity-class}} objects with
 #' eight new slots. This new object are intended to be modified for 
 #' standardizations but keeping an unmodified version of the data and
-#' structure of the \code{\link[EPDr]{epd.entity}} object.
+#' structure of the \code{\link[EPDr]{epd.entity-class}} object.
 #' Four slots contains the data in the new format, while four others store
 #' information to track changes made from standardization and modification
 #' functions (e.g., \code{\link[EPDr]{counts_to_percentages}}. 
 #' 
-#' @param x epd.entity Object of class \code{\link[EPDr]{epd.entity}} to be 
+#' @param x epd.entity Object of class \code{\link[EPDr]{epd.entity-class}} to be 
 #' modified.
 #' 
 #' @return epd.entity.df object. Expanded version of \code{x} with certain data
@@ -567,14 +567,14 @@ setMethod("entity_to_matrices", signature(x = "epd.entity"), function(x){
 #' Expand EPDr objects with new taxa
 #' 
 #' This function modifies \code{@@commdf@@counts} slot of
-#' (\code{\link[EPDr]{epd.entity.df}} objects to filter taxa columns
+#' (\code{\link[EPDr]{epd.entity.df-class}} objects to filter taxa columns
 #' to match \code{taxa}. The function adds empty columns (\code{NA}) if a new taxa is
 #' defined in \code{taxa} or removes columns for the taxa not included in \code{taxa}.
 #' The function may look useless for a single entity but it is useful when standardizing
 #' data across multiple entities.
 #'
-#' @param x epd.entity \code{\link[EPDr]{epd.entity.df}} or
-#' \code{\link[EPDr]{epd.entity}} object to be modified.
+#' @param x epd.entity \code{\link[EPDr]{epd.entity.df-class}} or
+#' \code{\link[EPDr]{epd.entity-class}} object to be modified.
 #' @param taxa character Character vector indicating the new 
 #' taxa in the \code{@@epd.entity.df} slot. 
 #' @param epd.taxonomy data.frame Data frame with the taxonomy from the 
@@ -582,7 +582,7 @@ setMethod("entity_to_matrices", signature(x = "epd.entity"), function(x){
 #' @param na_value numeric Number indicating the value to be used for
 #' taxa not previously present in the entity.
 #' 
-#' @return \code{\link[EPDr]{epd.entity.df}} object with the modified
+#' @return \code{\link[EPDr]{epd.entity.df-class}} object with the modified
 #' \code{@@commdf@@counts} slot.
 #' 
 #' @examples
@@ -650,19 +650,19 @@ setMethod("filter_taxa", signature(x = "epd.entity", taxa = "character",
 #' Filter Taxa Groups
 #' 
 #' This function removes taxa from the slot @@commdf@@counts in the 
-#' \code{\link[EPDr]{epd.entity.df}} object based on specific groups of taxa.
+#' \code{\link[EPDr]{epd.entity.df-class}} object based on specific groups of taxa.
 #' For example, the user can select to work only with pollen from trees and 
 #' shrubs (TRSH) or with algae (ALGA). If \code{x} is an 
-#' \code{\link[EPDr]{epd.entity}} object, this is first converted into a 
-#' \code{\link[EPDr]{epd.entity.df}} with 
+#' \code{\link[EPDr]{epd.entity-class}} object, this is first converted into a 
+#' \code{\link[EPDr]{epd.entity.df-class}} with 
 #' \code{\link[EPDr]{entity_to_matrices}}.
 #'
-#' @param x epd.entity Object of class \code{\link[EPDr]{epd.entity.df}}
-#' or \code{\link[EPDr]{epd.entity}} object.
+#' @param x epd.entity Object of class \code{\link[EPDr]{epd.entity.df-class}}
+#' or \code{\link[EPDr]{epd.entity-class}} object.
 #' @param taxagroups character Character vector indicating taxa groups 
 #' to be selected.
 #' 
-#' @return The function returns a \code{\link[EPDr]{epd.entity.df}} 
+#' @return The function returns a \code{\link[EPDr]{epd.entity.df-class}} 
 #' with information on \code{@@commdf@@counts} slot 
 #' only for taxa belonging to the specified taxa groups.
 #' 
@@ -713,7 +713,7 @@ setMethod("filter_taxagroups", signature(x = "epd.entity",
 #' Make Giesecke the default chronology
 #' 
 #' This function makes chronologies from Giesecke the default to be used in
-#' \code{\link[EPDr]{epd.entity}} and \code{\link[EPDr]{epd.entity.df}}
+#' \code{\link[EPDr]{epd.entity-class}} and \code{\link[EPDr]{epd.entity.df-class}}
 #' objects if they are available for that particular entity.
 #'
 #' Details The function first check whether that entity has chronological
@@ -721,8 +721,8 @@ setMethod("filter_taxagroups", signature(x = "epd.entity",
 #' default chronology number from the EPD to the one provided by Giesecke
 #' (i.e., x@@defaultchron == 9999)
 #'
-#' @param x epd.entity \code{\link[EPDr]{epd.entity}} or 
-#' \code{\link[EPDr]{epd.entity.df}} objects.
+#' @param x epd.entity \code{\link[EPDr]{epd.entity-class}} or 
+#' \code{\link[EPDr]{epd.entity.df-class}} objects.
 #'
 #' @return The function returns a modified version of the 
 #' \code{epd.entity} in which the slot @@defaultchron is changed to 
@@ -768,14 +768,14 @@ setMethod("giesecke_default_chron",
 #' Interpolate counts to specific time periods
 #'
 #' This function uses data (sample ages and sample counts) from an
-#' \code{\link[EPDr]{epd.entity.df}} object to estimate by linear 
+#' \code{\link[EPDr]{epd.entity.df-class}} object to estimate by linear 
 #' interpolation, loess or smooth splines the counts at specific time 
 #' periods defined by the user. This can be used to estimate counts for 
 #' the same time periods for multiple entities in the database, 
 #' standardizing them for integrative analysis.
 #' 
-#' @param x epd.entity.df An \code{\link[EPDr]{epd.entity.df}} or
-#' \code{\link[EPDr]{epd.entity}} object as returned by
+#' @param x epd.entity.df An \code{\link[EPDr]{epd.entity.df-class}} or
+#' \code{\link[EPDr]{epd.entity-class}} object as returned by
 #' \code{\link[EPDr]{get_entity}} or
 #' \code{\link[EPDr]{entity_to_matrices}} functions.
 #' @param time numeric Vector with time periods, in the same system 
@@ -801,14 +801,14 @@ setMethod("giesecke_default_chron",
 #' 
 #' Interpolation can be done using linear interpolation between 
 #' data points in the original series (default) using 
-#' \code{\link[stats]{approx}}, using a fitted 
+#' \code{\link[stats]{approxfun}}, using a fitted 
 #' \code{\link[stats]{loess}} locally weighted regression, or by 
 #' \code{\link[stats]{smooth.spline}}. The latter two methods 
 #' will also smooth the data and additional arguments may be passed to 
 #' these functions to control the amount of smoothing, or to force replacing
 #' negative values with zeros.
 #'
-#' @return The function returns an \code{\link[EPDr]{epd.entity.df}} object,
+#' @return The function returns an \code{\link[EPDr]{epd.entity.df-class}} object,
 #' similar to \code{x} in which ages and counts has been modified to the
 #' time periods specified in time and the counts estimated for these periods.
 #' 
@@ -984,7 +984,7 @@ setMethod("interpolate_counts", signature(x = "epd.entity", time = "numeric"),
 #' Mean counts for specific time intervals
 #'
 #' This function uses data (sample ages and sample counts) from an
-#' \code{\link[EPDr]{epd.entity.df}} object to calculate mean counts
+#' \code{\link[EPDr]{epd.entity.df-class}} object to calculate mean counts
 #' for samples within specific time intervals defined by the user. This can be
 #' used to estimate mean counts for the same time intervals for multiple 
 #' entities or cores in the database, standardizing them for 
@@ -994,7 +994,7 @@ setMethod("interpolate_counts", signature(x = "epd.entity", time = "numeric"),
 #' \code{NA}. This is convenient if analysis are carried out with 
 #' multiple entities.
 #'
-#' @param x epd.entity.df An \code{\link[EPDr]{epd.entity.df}} object as 
+#' @param x epd.entity.df An \code{\link[EPDr]{epd.entity.df-class}} object as 
 #' returned by the \code{\link[EPDr]{entity_to_matrices}} function.
 #' @param tmin numeric Numeric vector indicating the lower limits 
 #' (in years cal. BP) for the time intervals.
@@ -1008,7 +1008,7 @@ setMethod("interpolate_counts", signature(x = "epd.entity", time = "numeric"),
 #' the function uses the default chronology from the object (see
 #' \code{\link[EPDr]{giesecke_default_chron}}).
 #'
-#' @return The function returns a \code{\link[EPDr]{epd.entity.df}} object, 
+#' @return The function returns a \code{\link[EPDr]{epd.entity.df-class}} object, 
 #' similar to \code{epd.entity.df} in which ages and counts has been modified
 #' to the time intervarls specified and the counts estimated for these periods.
 #' 
@@ -1144,16 +1144,16 @@ setMethod("intervals_counts", signature(x = "epd.entity",
 #' Tabulate counts by taxa and age
 #' 
 #' This function tabulates data from the \code{@@commdf@@counts} slot 
-#' in EPDr objects (\code{\link[EPDr]{epd.entity.df}} or calculated 
-#' them from a \code{\link[EPDr]{epd.entity}}) to summarize information 
+#' in EPDr objects (\code{\link[EPDr]{epd.entity.df-class}} or calculated 
+#' them from a \code{\link[EPDr]{epd.entity-class}}) to summarize information 
 #' for particular taxa at particular age or time intervals (samples). 
 #' This function is useful to reshape the data to be plotted and mapped 
 #' by \code{link[ggplot2]{ggplot}}. It was written to be used by 
 #' \code{\link[EPDr]{map_taxa_age}} function.
 #' 
-#' @param x epd.entity.df \code{\link[EPDr]{epd.entity.df}} object where 
-#' to extract the data from, or a \code{\link[EPDr]{epd.entity}} that is 
-#' automatically transformed into a \code{\link[EPDr]{epd.entity.df}} and 
+#' @param x epd.entity.df \code{\link[EPDr]{epd.entity.df-class}} object where 
+#' to extract the data from, or a \code{\link[EPDr]{epd.entity-class}} that is 
+#' automatically transformed into a \code{\link[EPDr]{epd.entity.df-class}} and 
 #' then tabulated.
 #' @param taxa character Character vector indicating the taxa to be included 
 #' in the table. Several taxa can be specified but the function returns data 
@@ -1246,17 +1246,17 @@ setMethod("table_by_taxa_age", signature(x = "epd.entity",
 #' Change taxa to accepted taxa names
 #' 
 #' This function modifies the taxa names in the \code{@@commdf@@counts} slot 
-#' of \code{\link[EPDr]{epd.entity.df}} objects. More specifically, this 
+#' of \code{\link[EPDr]{epd.entity.df-class}} objects. More specifically, this 
 #' function compares the taxa name with the taxonomy of the EPD
 #' to use the accepted names. If these changes result in duplicated columns 
 #' of the same taxa their values are unified by summing them.
 #'
-#' @param x epd.entity.df Object of class \code{\link[EPDr]{epd.entity.df}} 
+#' @param x epd.entity.df Object of class \code{\link[EPDr]{epd.entity.df-class}} 
 #' with a \code{@@commdf@@counts} slot.
 #' @param epd.taxonomy data.frame Data frame with the taxonomy 
 #' from the EPD as from the \code{\link[EPDr]{get_taxonomy_epd}} function.
 #'
-#' @return \code{\link[EPDr]{epd.entity.df}} object with new taxa names.
+#' @return \code{\link[EPDr]{epd.entity.df-class}} object with new taxa names.
 #' 
 #' @examples
 #' \dontrun{
@@ -1329,18 +1329,18 @@ setMethod("taxa_to_acceptedtaxa", signature(x = "epd.entity",
 #' Change taxa to higher taxa level
 #' 
 #' This function modifies the taxa names in the \code{@commdf@@counts} slot
-#' of \code{\link[EPDr]{epd.entity.df}} objects. More specifically, this 
+#' of \code{\link[EPDr]{epd.entity.df-class}} objects. More specifically, this 
 #' function compares the taxa name with the taxonomy of the EPD to use 
 #' the higher taxa names. If these changes result in duplicated columns of 
 #' the same taxa their values are unified by summing them.
 #'
-#' @param x epd.entity \code{\link[EPDr]{epd.entity.df}} object.
+#' @param x epd.entity \code{\link[EPDr]{epd.entity.df-class}} object.
 #' @param epd.taxonomy data.frame Data frame with the taxonomy from 
 #' the EPD as from the \code{\link[EPDr]{get_taxonomy_epd}} function.
 #' @param rm_null_mhvar logical Logical value indicating whether to remove
 #' or not those taxa that has no value for higher level taxa.
 #'
-#' @return Object of class \code{\link[EPDr]{epd.entity.df}} with new 
+#' @return Object of class \code{\link[EPDr]{epd.entity.df-class}} with new 
 #' taxa names.
 #' 
 #' @examples

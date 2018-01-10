@@ -14,24 +14,24 @@ filter_taxagroups(x, taxagroups)
 \S4method{filter_taxagroups}{epd.entity,character}(x, taxagroups)
 }
 \arguments{
-\item{x}{epd.entity Object of class \code{\link[EPDr]{epd.entity.df}}
-or \code{\link[EPDr]{epd.entity}} object.}
+\item{x}{epd.entity Object of class \code{\link[EPDr]{epd.entity.df-class}}
+or \code{\link[EPDr]{epd.entity-class}} object.}
 
 \item{taxagroups}{character Character vector indicating taxa groups 
 to be selected.}
 }
 \value{
-The function returns a \code{\link[EPDr]{epd.entity.df}} 
+The function returns a \code{\link[EPDr]{epd.entity.df-class}} 
 with information on \code{@commdf@counts} slot 
 only for taxa belonging to the specified taxa groups.
 }
 \description{
 This function removes taxa from the slot @commdf@counts in the 
-\code{\link[EPDr]{epd.entity.df}} object based on specific groups of taxa.
+\code{\link[EPDr]{epd.entity.df-class}} object based on specific groups of taxa.
 For example, the user can select to work only with pollen from trees and 
 shrubs (TRSH) or with algae (ALGA). If \code{x} is an 
-\code{\link[EPDr]{epd.entity}} object, this is first converted into a 
-\code{\link[EPDr]{epd.entity.df}} with 
+\code{\link[EPDr]{epd.entity-class}} object, this is first converted into a 
+\code{\link[EPDr]{epd.entity.df-class}} with 
 \code{\link[EPDr]{entity_to_matrices}}.
 }
 \examples{

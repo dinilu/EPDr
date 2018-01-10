@@ -9,14 +9,14 @@
 This object stores information regarding the particles counts
 for no biological particles of an entity but in vector or table 
 format rather than the original format in the EPD database. This
-is similar, to \code{\link[EPDr]{commdf}} objects but only, 
+is similar, to \code{\link[EPDr]{commdf-class}} objects but only, 
 for not biological particles. This may include total pollen counts, 
 added particles to calculate pollen concentrations, sedimentation 
 rates, etc. Check \code{list_taxa(epd.connection, "NOPO")} for the
 whole list. Note, however, that data here comes from the table 
 \code{SAMPLES} from the database or an 
-\code{\link[EPDr]{epd.entity}} object. Contrary to data 
-in \code{\link[EPDr]{epd.entity}} objects, this are 
+\code{\link[EPDr]{epd.entity-class}} object. Contrary to data 
+in \code{\link[EPDr]{epd.entity-class}} objects, this are 
 intended to be manipulated and modified if necessary.
 }
 \section{Slots}{

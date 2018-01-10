@@ -19,7 +19,7 @@
 #' \code{PostgreSQLConnection} as returned by function 
 #' \code{\link[EPDr]{connect_to_epd}}.
 #'
-#' @return \code{\link[EPDr]{chron}} object. This is an EPDr object 
+#' @return \code{\link[EPDr]{chron-class}} object. This is an EPDr object 
 #' with information from different tables. See documentation of the EPD: 
 #' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #'
@@ -31,7 +31,7 @@
 #' chron.400
 #' }
 #' @section get_chron:
-#' This function returns a \code{\link[EPDr]{chron}} object with several 
+#' This function returns a \code{\link[EPDr]{chron-class}} object with several 
 #' information from the rest of the functions for a particular entity.
 #' @rdname get_chron
 #' @export
@@ -285,7 +285,7 @@ get_chron <- function(e_, connection){
 #' \code{PostgreSQLConnection} as returned by function 
 #' \code{\link[EPDr]{connect_to_epd}}.
 #'
-#' @return \code{\link[EPDr]{entity}} object. This is an EPDr object 
+#' @return \code{\link[EPDr]{entity-class}} object. This is an EPDr object 
 #' with information from different tables. See documentation of the EPD: 
 #' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #'
@@ -297,7 +297,7 @@ get_chron <- function(e_, connection){
 #' ent.400
 #' }
 #' @section get_entity:
-#' This function returns an \code{\link[EPDr]{entity}} object with several 
+#' This function returns an \code{\link[EPDr]{entity-class}} object with several 
 #' information from the rest of the functions for a particular entity.
 #' @rdname get_ent
 #' @export
@@ -578,7 +578,7 @@ get_ent <- function(e_, connection){
 #' get_geochron(400, epd.connection)
 #' }
 #' @section get_geochron:
-#' This function returns a \code{\link[EPDr]{geochron}} object, that store 
+#' This function returns a \code{\link[EPDr]{geochron-class}} object, that store 
 #' information from different tables for a particular entity.
 #' @rdname get_geochron
 #' 
@@ -895,7 +895,7 @@ get_geochron <- function(e_, connection) {
 #' \code{PostgreSQLConnection} as returned by function 
 #' \code{\link[EPDr]{connect_to_epd}}.
 #'
-#' @return \code{\link[EPDr]{samples}} object. This is an EPDr object 
+#' @return \code{\link[EPDr]{samples-class}} object. This is an EPDr object 
 #' with information from different tables. See documentation of the EPD: 
 #' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #'
@@ -907,7 +907,7 @@ get_geochron <- function(e_, connection) {
 #' chron.400
 #' }
 #' @section get_samples:
-#' This function returns a \code{\link[EPDr]{samples}} object with several 
+#' This function returns a \code{\link[EPDr]{samples-class}} object with several 
 #' information from the rest of the functions in the group for a 
 #' particular entity.
 #' @rdname get_samples
@@ -1173,7 +1173,7 @@ get_samples <- function(e_, connection){
 #' \code{PostgreSQLConnection} as returned by function 
 #' \code{\link[EPDr]{connect_to_epd}}.
 #'
-#' @return \code{\link[EPDr]{site}} object. This is an EPDr object 
+#' @return \code{\link[EPDr]{site-class}} object. This is an EPDr object 
 #' with information from different tables. See documentation of the EPD: 
 #' \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 #'
@@ -1185,7 +1185,7 @@ get_samples <- function(e_, connection){
 #' site.400
 #' }
 #' @section get_site:
-#' This function returns a \code{\link[EPDr]{site}} object with several 
+#' This function returns a \code{\link[EPDr]{site-class}} object with several 
 #' information from the rest of the functions in the group for a 
 #' particular entity.
 #' @rdname get_site
@@ -1575,7 +1575,7 @@ get_taxonomy_epd <- function(connection){
 #' @param connection PostgreSQLConnection A valid PostgreSQL connection to
 #' the EPD database server.
 #'
-#' @return The function returns an \code{\link[EPDr]{epd.entity}} object, which
+#' @return The function returns an \code{\link[EPDr]{epd.entity-class}} object, which
 #' countains several objects with several tables.
 #' 
 #' @references Giesecke, T., Davis, B., Brewer, S., Finsinger, W., 

@@ -9,8 +9,8 @@
 This object stores information regarding the biological samples in an
 entity but in vector format rather than the original format in the 
 EPD database. Note, however, that data here comes from the table
-\code{psamples} in the database or an \code{\link[EPDr]{epd.entity}} 
-object. Contrary to data in \code{\link[EPDr]{epd.entity}} objects, 
+\code{psamples} in the database or an \code{\link[EPDr]{epd.entity-class}} 
+object. Contrary to data in \code{\link[EPDr]{epd.entity-class}} objects, 
 this are intended to be manipulated and modified if necessary.
 }
 \section{Slots}{

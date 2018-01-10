@@ -16,8 +16,8 @@ filter_taxa(x, taxa, epd.taxonomy, na_value = 0)
   na_value = 0)
 }
 \arguments{
-\item{x}{epd.entity \code{\link[EPDr]{epd.entity.df}} or
-\code{\link[EPDr]{epd.entity}} object to be modified.}
+\item{x}{epd.entity \code{\link[EPDr]{epd.entity.df-class}} or
+\code{\link[EPDr]{epd.entity-class}} object to be modified.}
 
 \item{taxa}{character Character vector indicating the new 
 taxa in the \code{@epd.entity.df} slot.}
@@ -29,12 +29,12 @@ EPD as from the \code{\link[EPDr]{get_taxonomy_epd}} function.}
 taxa not previously present in the entity.}
 }
 \value{
-\code{\link[EPDr]{epd.entity.df}} object with the modified
+\code{\link[EPDr]{epd.entity.df-class}} object with the modified
 \code{@commdf@counts} slot.
 }
 \description{
 This function modifies \code{@commdf@counts} slot of
-(\code{\link[EPDr]{epd.entity.df}} objects to filter taxa columns
+(\code{\link[EPDr]{epd.entity.df-class}} objects to filter taxa columns
 to match \code{taxa}. The function adds empty columns (\code{NA}) if a new taxa is
 defined in \code{taxa} or removes columns for the taxa not included in \code{taxa}.
 The function may look useless for a single entity but it is useful when standardizing

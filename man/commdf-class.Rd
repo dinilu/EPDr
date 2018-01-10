@@ -11,8 +11,8 @@ in each biological sample of an entity but in vector or table
 format rather than the original format in the EPD database. 
 Note, however, that data here comes from the table 
 \code{SAMPLES} from the database or an 
-\code{\link[EPDr]{epd.entity}} object. Contrary to data 
-in \code{\link[EPDr]{epd.entity}} objects, this are 
+\code{\link[EPDr]{epd.entity-class}} object. Contrary to data 
+in \code{\link[EPDr]{epd.entity-class}} objects, this are 
 intended to be manipulated and modified if necessary.
 }
 \section{Slots}{

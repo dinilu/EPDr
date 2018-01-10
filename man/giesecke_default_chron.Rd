@@ -11,8 +11,8 @@ giesecke_default_chron(x)
 \S4method{giesecke_default_chron}{epd.entity}(x)
 }
 \arguments{
-\item{x}{epd.entity \code{\link[EPDr]{epd.entity}} or 
-\code{\link[EPDr]{epd.entity.df}} objects.}
+\item{x}{epd.entity \code{\link[EPDr]{epd.entity-class}} or 
+\code{\link[EPDr]{epd.entity.df-class}} objects.}
 }
 \value{
 The function returns a modified version of the 
@@ -23,7 +23,7 @@ values is used in other functions to grab the right ages from Giesecke.
 }
 \description{
 This function makes chronologies from Giesecke the default to be used in
-\code{\link[EPDr]{epd.entity}} and \code{\link[EPDr]{epd.entity.df}}
+\code{\link[EPDr]{epd.entity-class}} and \code{\link[EPDr]{epd.entity.df-class}}
 objects if they are available for that particular entity.
 }
 \details{

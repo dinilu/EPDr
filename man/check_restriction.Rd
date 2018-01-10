@@ -11,16 +11,16 @@ check_restriction(x)
 \S4method{check_restriction}{epd.entity}(x)
 }
 \arguments{
-\item{x}{epd.entity \code{\link[EPDr]{epd.entity}} or
-\code{\link[EPDr]{epd.entity.df}} object.}
+\item{x}{epd.entity \code{\link[EPDr]{epd.entity-class}} or
+\code{\link[EPDr]{epd.entity.df-class}} object.}
 }
 \value{
 logical value indicating whether the data are restricted (TRUE) or
 unrestricted (FALSE).
 }
 \description{
-This function check EPDr objects (\code{\link[EPDr]{epd.entity}},
-and \code{\link[EPDr]{epd.entity.df}}), 
+This function check EPDr objects (\code{\link[EPDr]{epd.entity-class}},
+and \code{\link[EPDr]{epd.entity.df-class}}), 
 and return a logical value indicating whether the data are restricted (TRUE) or
 unrestricted (FALSE).
 }

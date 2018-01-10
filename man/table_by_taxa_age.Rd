@@ -16,9 +16,9 @@ table_by_taxa_age(x, taxa, sample_label)
   sample_label)
 }
 \arguments{
-\item{x}{epd.entity.df \code{\link[EPDr]{epd.entity.df}} object where 
-to extract the data from, or a \code{\link[EPDr]{epd.entity}} that is 
-automatically transformed into a \code{\link[EPDr]{epd.entity.df}} and 
+\item{x}{epd.entity.df \code{\link[EPDr]{epd.entity.df-class}} object where 
+to extract the data from, or a \code{\link[EPDr]{epd.entity-class}} that is 
+automatically transformed into a \code{\link[EPDr]{epd.entity.df-class}} and 
 then tabulated.}
 
 \item{taxa}{character Character vector indicating the taxa to be included 
@@ -47,8 +47,8 @@ particulates were counted.}
 }
 \description{
 This function tabulates data from the \code{@commdf@counts} slot 
-in EPDr objects (\code{\link[EPDr]{epd.entity.df}} or calculated 
-them from a \code{\link[EPDr]{epd.entity}}) to summarize information 
+in EPDr objects (\code{\link[EPDr]{epd.entity.df-class}} or calculated 
+them from a \code{\link[EPDr]{epd.entity-class}}) to summarize information 
 for particular taxa at particular age or time intervals (samples). 
 This function is useful to reshape the data to be plotted and mapped 
 by \code{link[ggplot2]{ggplot}}. It was written to be used by 

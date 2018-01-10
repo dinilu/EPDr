@@ -3,12 +3,12 @@
 
 #' Extract Entity number from EPDr objects
 #' 
-#' This function looks into EPDr objects (i.e., \code{\link[EPDr]{epd.entity}}
-#' or \code{\link[EPDr]{epd.entity.df}} classes), returning the entity 
+#' This function looks into EPDr objects (i.e., \code{\link[EPDr]{epd.entity-class}}
+#' or \code{\link[EPDr]{epd.entity.df-class}} classes), returning the entity 
 #' number of the objects.
 #'
-#' @param x epd.entity Any object of classes \code{\link[EPDr:epd.entity]{epd.entity}} or
-#' \code{\link[EPDr:epd.entity.df]{epd.entity.df}}.
+#' @param x epd.entity Any object of classes \code{\link[EPDr]{epd.entity-class}} or
+#' \code{\link[EPDr]{epd.entity.df-class}}.
 #'
 #' @return numeric. Value of the entity number.
 #' @examples

@@ -16,23 +16,23 @@ export_events(format, x, y)
 \arguments{
 \item{format}{character Character string indicating whether to export to "clam" or to "bacon" format.}
 
-\item{x}{data.frame Data frame or \code{\link[EPDr]{epd.entity}} object with event data as
-those extracted from \code{\link[EPDr]{.get_synevent}} or \code{\link[EPDr]{get_entity}}}
+\item{x}{data.frame Data frame or \code{\link[EPDr]{epd.entity-class}} object with event data as
+those extracted from \code{\link[EPDr]{get_chron}} or \code{\link[EPDr]{get_entity}}}
 
-\item{y}{data.frame Data frame with event data as those extracted from \code{\link[EPDr]{.get_event}}.}
+\item{y}{data.frame Data frame with event data as those extracted from \code{\link[EPDr]{get_chron}}.}
 }
 \value{
 Data frame with event data in CLAM or BACON format.
 }
 \description{
 This function takes event data, as those queried by 
-\code{\link[EPDr]{.get_synevent}} or stored in a 
-\code{\link[EPDr]{epd.entity}} object, and modifies them to fit into a new 
+\code{\link[EPDr]{get_chron}} or stored in a 
+\code{\link[EPDr]{epd.entity-class}} object, and modifies them to fit into a new 
 table that complies with CLAM or BACON format.
 }
 \details{
-If \code{x} is an \code{\link[EPDr]{epd.entity}} or an 
-\code{\link[EPDr]{epd.entity.df}} object, \code{y} is not used.
+If \code{x} is an \code{\link[EPDr]{epd.entity-class}} or an 
+\code{\link[EPDr]{epd.entity.df-class}} object, \code{y} is not used.
 }
 \examples{
 \dontrun{

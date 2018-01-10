@@ -7,15 +7,15 @@
 remove_wo_counts(list)
 }
 \arguments{
-\item{list}{List of \code{\link[EPDr]{epd.entity.df}} objects.}
+\item{list}{List of \code{\link[EPDr]{epd.entity.df-class}} objects.}
 }
 \value{
-List of \code{\link[EPDr]{epd.entity.df}} objects, which is a 
+List of \code{\link[EPDr]{epd.entity.df-class}} objects, which is a 
 subset of 'list' with counts data.
 }
 \description{
 This function is designed to work with list of
-\code{\link[EPDr]{epd.entity.df}} objects.
+\code{\link[EPDr]{epd.entity.df-class}} objects.
 The function parses all the elements on the list and remove those without 
 counts data for any taxa.
 }

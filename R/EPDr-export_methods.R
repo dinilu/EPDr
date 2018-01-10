@@ -3,15 +3,15 @@
 #' Reshape agebasis table to CLAM or BACON format
 #' 
 #' This function takes agebasis data, as those from 
-#' \code{\link[EPDr]{.get_agebasis}} or from an \code{\link[EPDr]{epd.entity}},
+#' \code{\link[EPDr]{get_chron}} or from an \code{\link[EPDr]{epd.entity-class}},
 #' used to calibrate chronologies of that entity in the EPD, and modifies
 #' them to fit into a new table that complies with CLAM or BACON format.
 #'
 #' @param format character Character string indicating whether to export 
 #' to "clam" or to "bacon" format.
-#' @param x data.frame Data frame or \code{\link[EPDr]{epd.entity}} with
+#' @param x data.frame Data frame or \code{\link[EPDr]{epd.entity-class}} with
 #' agebasis data as those in an agebasis table returned by 
-#' \code{\link[EPDr]{.get_agebasis}} or \code{\link[EPDr]{get_entity}}.
+#' \code{\link[EPDr]{get_chron}} or \code{\link[EPDr]{get_entity}}.
 #'
 #' @return Data frame with no-C14 data in CLAM or BACON format. This 
 #' data frame can be easily combined with C14 data from
@@ -98,18 +98,18 @@ setMethod("export_agebasis", signature(format = "character", x = "epd.entity"),
 #' Reshape C14 table to CLAM or BACON format
 #' 
 #' This function takes C14 table (data.frame), as those extracted from
-#' \code{\link[EPDr]{.get_c14}} or from an \code{\link[EPDr]{epd.entity}} 
+#' \code{\link[EPDr]{get_geochron}} or from an \code{\link[EPDr]{epd.entity-class}} 
 #' object, and modifies it to fit into a new table that complies with CLAM
 #' or BACON format. 
 #'
 #' @param format character Character string indicating whether to export to 
 #' "clam" or to "bacon" format.
-#' @param x data.frame Data frame or \code{\link[EPDr]{epd.entity}} object 
-#' with C14 data as those extracted from \code{\link[EPDr]{.get_c14}} or
+#' @param x data.frame Data frame or \code{\link[EPDr]{epd.entity-class}} object 
+#' with C14 data as those extracted from \code{\link[EPDr]{get_geochron}} or
 #' \code{\link[EPDr]{get_entity}}.
 #' @param y data.frame Data frame with geochron table, as the one extracted with
-#' \code{\link[EPDr]{.get_geochron}}. If x is an
-#' \code{\link[EPDr]{epd.entity}} object, y is not used.
+#' \code{\link[EPDr]{get_geochron}}. If x is an
+#' \code{\link[EPDr]{epd.entity-class}} object, y is not used.
 #'
 #' @return Data frame with C14 data in CLAM or BACON format.
 #' 
@@ -188,12 +188,12 @@ setMethod("export_c14", signature(format = "character", x = "epd.entity",
 #' Reshape depths of biological samples to CLAM or BACON format
 #'
 #' This function takes depths data, as returned by 
-#' \code{\link[EPDr]{.get_psamples}} or extracted from a 
-#' \code{\link[EPDr]{epd.entity}} object, and transforms them
+#' \code{\link[EPDr]{get_samples}} or extracted from a 
+#' \code{\link[EPDr]{epd.entity-class}} object, and transforms them
 #' to comply with CLAM or BACON format.
 #'
 #' @param x data.frame Data frame with at least a column called \code{depthcm}
-#' or \code{\link[EPDr]{epd.entity}} object to extract this information from.
+#' or \code{\link[EPDr]{epd.entity-class}} object to extract this information from.
 #'
 #' @return Vector with depths in ascending order.
 #' 
@@ -232,8 +232,8 @@ setMethod("export_depths", signature(x = "epd.entity"), function(x){
 
 #' Reshape epd.entity objects to CLAM or BACON format
 #' 
-#' This function takes \code{\link[EPDr]{epd.entity}} or
-#' \code{\link[EPDr]{epd.entity.df}} objects, as those returned by
+#' This function takes \code{\link[EPDr]{epd.entity-class}} or
+#' \code{\link[EPDr]{epd.entity.df-class}} objects, as those returned by
 #' \code{\link[EPDr]{get_entity}} or \code{\link[EPDr]{entity_to_matrices}},
 #' extracts datation information and reshapes it to complies with
 #' CLAM or BACON format.
@@ -247,8 +247,8 @@ setMethod("export_depths", signature(x = "epd.entity"), function(x){
 #'
 #' @param format character Character string indicating whether to export to "clam" 
 #' or to "bacon" format.
-#' @param x epd.entity \code{\link[EPDr]{epd.entity}} or 
-#' \code{\link[EPDr]{epd.entity.df}} objects from which all information 
+#' @param x epd.entity \code{\link[EPDr]{epd.entity-class}} or 
+#' \code{\link[EPDr]{epd.entity.df-class}} objects from which all information 
 #' will be extracted to compose the clam or bacon table and file.
 #' @param chronology numeric Number indicating the chronology from which 
 #' to extract the agebasis for the "clam" or "bacon" file. If 
@@ -664,17 +664,17 @@ setMethod("export_entity", signature(format = "character", x = "epd.entity"),
 #' Reshape events data to CLAM or BACON format
 #' 
 #' This function takes event data, as those queried by 
-#' \code{\link[EPDr]{.get_synevent}} or stored in a 
-#' \code{\link[EPDr]{epd.entity}} object, and modifies them to fit into a new 
+#' \code{\link[EPDr]{get_chron}} or stored in a 
+#' \code{\link[EPDr]{epd.entity-class}} object, and modifies them to fit into a new 
 #' table that complies with CLAM or BACON format.
 #' 
-#' If \code{x} is an \code{\link[EPDr]{epd.entity}} or an 
-#' \code{\link[EPDr]{epd.entity.df}} object, \code{y} is not used.
+#' If \code{x} is an \code{\link[EPDr]{epd.entity-class}} or an 
+#' \code{\link[EPDr]{epd.entity.df-class}} object, \code{y} is not used.
 #'
 #' @param format character Character string indicating whether to export to "clam" or to "bacon" format.
-#' @param x data.frame Data frame or \code{\link[EPDr]{epd.entity}} object with event data as
-#' those extracted from \code{\link[EPDr]{.get_synevent}} or \code{\link[EPDr]{get_entity}} 
-#' @param y data.frame Data frame with event data as those extracted from \code{\link[EPDr]{.get_event}}.
+#' @param x data.frame Data frame or \code{\link[EPDr]{epd.entity-class}} object with event data as
+#' those extracted from \code{\link[EPDr]{get_chron}} or \code{\link[EPDr]{get_entity}} 
+#' @param y data.frame Data frame with event data as those extracted from \code{\link[EPDr]{get_chron}}.
 #'
 #' @return Data frame with event data in CLAM or BACON format.
 #' 

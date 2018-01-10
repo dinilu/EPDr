@@ -44,7 +44,7 @@ database that want to be queried.}
 the database of the requested event.}
 }
 \value{
-\code{\link[EPDr]{chron}} object. This is an EPDr object 
+\code{\link[EPDr]{chron-class}} object. This is an EPDr object 
 with information from different tables. See documentation of the EPD: 
 \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 }
@@ -58,7 +58,7 @@ different arguments depending on the piece of information they retrieve.
 }
 \section{get_chron}{
 
-This function returns a \code{\link[EPDr]{chron}} object with several 
+This function returns a \code{\link[EPDr]{chron-class}} object with several 
 information from the rest of the functions for a particular entity.
 }
 

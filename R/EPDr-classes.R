@@ -7,8 +7,8 @@
 #' samples in an entity but in vector or table format rather than 
 #' the original format of the EPD database. Note, however, that data 
 #' here comes from the tables \code{pagedpt} and \code{psamples} from
-#' the database or an \code{\link[EPDr]{epd.entity}} object. 
-#' Contrary to data in \code{\link[EPDr]{epd.entity}} objects, 
+#' the database or an \code{\link[EPDr]{epd.entity-class}} object. 
+#' Contrary to data in \code{\link[EPDr]{epd.entity-class}} objects, 
 #' this are intended to be manipulated and modified if necessary.
 #'
 #' @slot depthcm numeric. Depth of the samples in cm.
@@ -612,8 +612,8 @@ site <- setClass("site",
 #' format rather than the original format in the EPD database. 
 #' Note, however, that data here comes from the table 
 #' \code{SAMPLES} from the database or an 
-#' \code{\link[EPDr]{epd.entity}} object. Contrary to data 
-#' in \code{\link[EPDr]{epd.entity}} objects, this are 
+#' \code{\link[EPDr]{epd.entity-class}} object. Contrary to data 
+#' in \code{\link[EPDr]{epd.entity-class}} objects, this are 
 #' intended to be manipulated and modified if necessary.
 #'
 #' @slot taxanames character. Names of the taxa included in the object.
@@ -664,14 +664,14 @@ commdf <- setClass("commdf",
 #' This object stores information regarding the particles counts
 #' for no biological particles of an entity but in vector or table 
 #' format rather than the original format in the EPD database. This
-#' is similar, to \code{\link[EPDr]{commdf}} objects but only, 
+#' is similar, to \code{\link[EPDr]{commdf-class}} objects but only, 
 #' for not biological particles. This may include total pollen counts, 
 #' added particles to calculate pollen concentrations, sedimentation 
 #' rates, etc. Check \code{list_taxa(epd.connection, "NOPO")} for the
 #' whole list. Note, however, that data here comes from the table 
 #' \code{SAMPLES} from the database or an 
-#' \code{\link[EPDr]{epd.entity}} object. Contrary to data 
-#' in \code{\link[EPDr]{epd.entity}} objects, this are 
+#' \code{\link[EPDr]{epd.entity-class}} object. Contrary to data 
+#' in \code{\link[EPDr]{epd.entity-class}} objects, this are 
 #' intended to be manipulated and modified if necessary.
 #'
 #' @slot varnames character. Names of the taxa included in the object.
@@ -722,8 +722,8 @@ nopodf <- setClass("nopodf",
 #' This object stores information regarding the biological samples in an
 #' entity but in vector format rather than the original format in the 
 #' EPD database. Note, however, that data here comes from the table
-#' \code{psamples} in the database or an \code{\link[EPDr]{epd.entity}} 
-#' object. Contrary to data in \code{\link[EPDr]{epd.entity}} objects, 
+#' \code{psamples} in the database or an \code{\link[EPDr]{epd.entity-class}} 
+#' object. Contrary to data in \code{\link[EPDr]{epd.entity-class}} objects, 
 #' this are intended to be manipulated and modified if necessary.
 #'
 #' @slot sample_ numeric. Identification numbers for each sample.
@@ -826,10 +826,10 @@ prototype = list(
 
 #' Class for epd.entity.df objects
 #' 
-#' This is an expansion of \code{\link[EPDr]{epd.entity}} class,
+#' This is an expansion of \code{\link[EPDr]{epd.entity-class}} class,
 #' in which certain data have been reformated and included in the object. 
 #' Hence, the first slots are the same as in a
-#' \code{\link[EPDr]{epd.entity}}. Then, additional data
+#' \code{\link[EPDr]{epd.entity-class}}. Then, additional data
 #' include four slots (\code{@@countstype}, \code{@@countsprocessing},
 #' \code{@@taxatype}, and \code{@@taxaprocessing}) for information on
 #' the processing and transformation of the data, and for slots 
@@ -837,33 +837,33 @@ prototype = list(
 #' \code{@@nopodf}) for reformated data.
 #'
 #' @slot e_ numeric. Number indicating the entity number (e_) of the
-#' stored entity. Same as in an \code{\link[EPDr]{epd.entity}} 
+#' stored entity. Same as in an \code{\link[EPDr]{epd.entity-class}} 
 #' object.
 #' @slot postbombzone factor. It indicate the code of the postbombzone of
 #' the world where the entity is located. This is not used yet, but
 #' might be handy for further implementations for datations with CLAM
-#' or BACON. Same as in an \code{\link[EPDr]{epd.entity}} 
+#' or BACON. Same as in an \code{\link[EPDr]{epd.entity-class}} 
 #' object.
 #' @slot numberofchron numeric. The number of chronologies available
 #' for the data in that entity. Same as in an
-#' \code{\link[EPDr]{epd.entity}} object.
+#' \code{\link[EPDr]{epd.entity-class}} object.
 #' @slot isingiesecke logical. Indicating whether this entity was
 #' revised in Giesecke et al. (2013) and, hence, additional datations
-#' are available. Same as in an \code{\link[EPDr]{epd.entity}} 
+#' are available. Same as in an \code{\link[EPDr]{epd.entity-class}} 
 #' object.
 #' @slot defaultchron numeric. The number of the default chronology
-#' according to the EPD. Same as in an \code{\link[EPDr]{epd.entity}} 
+#' according to the EPD. Same as in an \code{\link[EPDr]{epd.entity-class}} 
 #' object.
 #' @slot entity entity. Entity object for the entity. Same as in 
-#' an \code{\link[EPDr]{epd.entity}} object.
+#' an \code{\link[EPDr]{epd.entity-class}} object.
 #' @slot site site. Site object for the entity. Same as in an 
-#' \code{\link[EPDr]{epd.entity}} object.
+#' \code{\link[EPDr]{epd.entity-class}} object.
 #' @slot geochron geochron. Geochron object for the entity. Same as in 
-#' an \code{\link[EPDr]{epd.entity}} object.
+#' an \code{\link[EPDr]{epd.entity-class}} object.
 #' @slot chron chron. Chron object for the entity. Same as in 
-#' an \code{\link[EPDr]{epd.entity}} object.
+#' an \code{\link[EPDr]{epd.entity-class}} object.
 #' @slot samples samples. Samples object for the entity. Same as in 
-#' an \code{\link[EPDr]{epd.entity}} object.
+#' an \code{\link[EPDr]{epd.entity-class}} object.
 #' @slot countstype factor. Indicating if counts in \code{@@commdf@@counts}
 #' slot are in raw counts or percentages. See 
 #' \code{\link[EPDr]{counts_to_percentages}}.
@@ -881,13 +881,13 @@ prototype = list(
 #' \code{commdf} slot are those originally present in the database, or 
 #' they have been expanded or filtered. See \code{\link[EPDr]{filter_taxa}} 
 #' or \code{\link[EPDr]{unify_taxonomy}}.
-#' @slot samplesdf samplesdf Object of class \code{\link[EPDr]{samplesdf}}. 
+#' @slot samplesdf samplesdf Object of class \code{\link[EPDr]{samplesdf-class}}. 
 #' Samples in vector format.
-#' @slot agesdf agesdf Object of class \code{\link[EPDr]{agesdf}}. Ages 
+#' @slot agesdf agesdf Object of class \code{\link[EPDr]{agesdf-class}}. Ages 
 #' in vector and table format.
-#' @slot commdf commdf Object of class \code{\link[EPDr]{commdf}}. Counts 
+#' @slot commdf commdf Object of class \code{\link[EPDr]{commdf-class}}. Counts 
 #' of biological particles in vector and table format.
-#' @slot nopodf nopodf Object of class \code{\link[EPDr]{nopodf}}. Counts 
+#' @slot nopodf nopodf Object of class \code{\link[EPDr]{nopodf-class}}. Counts 
 #' of no-biological particles in vector and table format.
 #' 
 #' @references Giesecke, T., Davis, B., Brewer, S., Finsinger, W., 

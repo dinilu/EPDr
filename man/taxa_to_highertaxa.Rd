@@ -16,7 +16,7 @@ taxa_to_highertaxa(x, epd.taxonomy, rm_null_mhvar = FALSE)
   rm_null_mhvar = FALSE)
 }
 \arguments{
-\item{x}{epd.entity \code{\link[EPDr]{epd.entity.df}} object.}
+\item{x}{epd.entity \code{\link[EPDr]{epd.entity.df-class}} object.}
 
 \item{epd.taxonomy}{data.frame Data frame with the taxonomy from 
 the EPD as from the \code{\link[EPDr]{get_taxonomy_epd}} function.}
@@ -25,12 +25,12 @@ the EPD as from the \code{\link[EPDr]{get_taxonomy_epd}} function.}
 or not those taxa that has no value for higher level taxa.}
 }
 \value{
-Object of class \code{\link[EPDr]{epd.entity.df}} with new 
+Object of class \code{\link[EPDr]{epd.entity.df-class}} with new 
 taxa names.
 }
 \description{
 This function modifies the taxa names in the \code{@commdf@counts} slot
-of \code{\link[EPDr]{epd.entity.df}} objects. More specifically, this 
+of \code{\link[EPDr]{epd.entity.df-class}} objects. More specifically, this 
 function compares the taxa name with the taxonomy of the EPD to use 
 the higher taxa names. If these changes result in duplicated columns of 
 the same taxa their values are unified by summing them.

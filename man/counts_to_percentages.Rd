@@ -14,8 +14,8 @@ counts_to_percentages(x, offset = 1e-04)
 \S4method{counts_to_percentages}{epd.entity}(x, offset = 1e-04)
 }
 \arguments{
-\item{x}{epd.entity \code{\link[EPDr]{epd.entity.df}} or 
-\code{\link[EPDr]{epd.entity}} objects.}
+\item{x}{epd.entity \code{\link[EPDr]{epd.entity.df-class}} or 
+\code{\link[EPDr]{epd.entity-class}} objects.}
 
 \item{offset}{numeric Numeric value to avoid dividing by zero 
 if the total of particles is zero for a particular sample. This may 
@@ -30,20 +30,20 @@ times combinations where pollen counts are not available (NA) and not
 numerically zero.}
 }
 \value{
-The function returns a \code{\link[EPDr]{epd.entity.df}} object, 
+The function returns a \code{\link[EPDr]{epd.entity.df-class}} object, 
 which is a modified version of \code{x} (or \code{entity_to_matrices(x)}
-if x is a \code{\link[EPDr]{epd.entity}} object), in which
+if x is a \code{\link[EPDr]{epd.entity-class}} object), in which
 values in @counts slot represent percentages instead of raw counts.
 }
 \description{
 This function transforms the counts matrix (samples x taxa) in
-the @commdf@counts slot of a \code{\link[EPDr]{epd.entity.df}}
+the @commdf@counts slot of a \code{\link[EPDr]{epd.entity.df-class}}
 object to percentages relative to the total amount of particles 
 in each sample (row).
 }
 \details{
-Although the function work with \code{\link[EPDr]{epd.entity.df}} and
-\code{\link[EPDr]{epd.entity}} objects, the later are previously 
+Although the function work with \code{\link[EPDr]{epd.entity.df-class}} and
+\code{\link[EPDr]{epd.entity-class}} objects, the later are previously 
 transformed using \code{\link[EPDr]{entity_to_matrices}} without any
 posterior data manipulation and transformation. A lot of entities have
 information from different taxonomical groups (terrestrial plants pollen 

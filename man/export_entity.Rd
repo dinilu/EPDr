@@ -19,8 +19,8 @@ export_entity(format, x, chronology = NULL, incl_chron_not_in_c14 = NULL,
 \item{format}{character Character string indicating whether to export to "clam" 
 or to "bacon" format.}
 
-\item{x}{epd.entity \code{\link[EPDr]{epd.entity}} or 
-\code{\link[EPDr]{epd.entity.df}} objects from which all information 
+\item{x}{epd.entity \code{\link[EPDr]{epd.entity-class}} or 
+\code{\link[EPDr]{epd.entity.df-class}} objects from which all information 
 will be extracted to compose the clam or bacon table and file.}
 
 \item{chronology}{numeric Number indicating the chronology from which 
@@ -80,8 +80,8 @@ and \code{{entity_number}_depthsID.txt}). The last one is not used by
 CLAM or BACON but it might be useful to follow track of samples depths.
 }
 \description{
-This function takes \code{\link[EPDr]{epd.entity}} or
-\code{\link[EPDr]{epd.entity.df}} objects, as those returned by
+This function takes \code{\link[EPDr]{epd.entity-class}} or
+\code{\link[EPDr]{epd.entity.df-class}} objects, as those returned by
 \code{\link[EPDr]{get_entity}} or \code{\link[EPDr]{entity_to_matrices}},
 extracts datation information and reshapes it to complies with
 CLAM or BACON format.

@@ -6,10 +6,10 @@
 \alias{epd.entity.df}
 \title{Class for epd.entity.df objects}
 \description{
-This is an expansion of \code{\link[EPDr]{epd.entity}} class,
+This is an expansion of \code{\link[EPDr]{epd.entity-class}} class,
 in which certain data have been reformated and included in the object. 
 Hence, the first slots are the same as in a
-\code{\link[EPDr]{epd.entity}}. Then, additional data
+\code{\link[EPDr]{epd.entity-class}}. Then, additional data
 include four slots (\code{@countstype}, \code{@countsprocessing},
 \code{@taxatype}, and \code{@taxaprocessing}) for information on
 the processing and transformation of the data, and for slots 
@@ -20,42 +20,42 @@ the processing and transformation of the data, and for slots
 
 \describe{
 \item{\code{e_}}{numeric. Number indicating the entity number (e_) of the
-stored entity. Same as in an \code{\link[EPDr]{epd.entity}} 
+stored entity. Same as in an \code{\link[EPDr]{epd.entity-class}} 
 object.}
 
 \item{\code{postbombzone}}{factor. It indicate the code of the postbombzone of
 the world where the entity is located. This is not used yet, but
 might be handy for further implementations for datations with CLAM
-or BACON. Same as in an \code{\link[EPDr]{epd.entity}} 
+or BACON. Same as in an \code{\link[EPDr]{epd.entity-class}} 
 object.}
 
 \item{\code{numberofchron}}{numeric. The number of chronologies available
 for the data in that entity. Same as in an
-\code{\link[EPDr]{epd.entity}} object.}
+\code{\link[EPDr]{epd.entity-class}} object.}
 
 \item{\code{isingiesecke}}{logical. Indicating whether this entity was
 revised in Giesecke et al. (2013) and, hence, additional datations
-are available. Same as in an \code{\link[EPDr]{epd.entity}} 
+are available. Same as in an \code{\link[EPDr]{epd.entity-class}} 
 object.}
 
 \item{\code{defaultchron}}{numeric. The number of the default chronology
-according to the EPD. Same as in an \code{\link[EPDr]{epd.entity}} 
+according to the EPD. Same as in an \code{\link[EPDr]{epd.entity-class}} 
 object.}
 
 \item{\code{entity}}{entity. Entity object for the entity. Same as in 
-an \code{\link[EPDr]{epd.entity}} object.}
+an \code{\link[EPDr]{epd.entity-class}} object.}
 
 \item{\code{site}}{site. Site object for the entity. Same as in an 
-\code{\link[EPDr]{epd.entity}} object.}
+\code{\link[EPDr]{epd.entity-class}} object.}
 
 \item{\code{geochron}}{geochron. Geochron object for the entity. Same as in 
-an \code{\link[EPDr]{epd.entity}} object.}
+an \code{\link[EPDr]{epd.entity-class}} object.}
 
 \item{\code{chron}}{chron. Chron object for the entity. Same as in 
-an \code{\link[EPDr]{epd.entity}} object.}
+an \code{\link[EPDr]{epd.entity-class}} object.}
 
 \item{\code{samples}}{samples. Samples object for the entity. Same as in 
-an \code{\link[EPDr]{epd.entity}} object.}
+an \code{\link[EPDr]{epd.entity-class}} object.}
 
 \item{\code{countstype}}{factor. Indicating if counts in \code{@commdf@counts}
 slot are in raw counts or percentages. See 
@@ -78,16 +78,16 @@ accepted taxa or higher taxonomical level. See
 they have been expanded or filtered. See \code{\link[EPDr]{filter_taxa}} 
 or \code{\link[EPDr]{unify_taxonomy}}.}
 
-\item{\code{samplesdf}}{samplesdf Object of class \code{\link[EPDr]{samplesdf}}. 
+\item{\code{samplesdf}}{samplesdf Object of class \code{\link[EPDr]{samplesdf-class}}. 
 Samples in vector format.}
 
-\item{\code{agesdf}}{agesdf Object of class \code{\link[EPDr]{agesdf}}. Ages 
+\item{\code{agesdf}}{agesdf Object of class \code{\link[EPDr]{agesdf-class}}. Ages 
 in vector and table format.}
 
-\item{\code{commdf}}{commdf Object of class \code{\link[EPDr]{commdf}}. Counts 
+\item{\code{commdf}}{commdf Object of class \code{\link[EPDr]{commdf-class}}. Counts 
 of biological particles in vector and table format.}
 
-\item{\code{nopodf}}{nopodf Object of class \code{\link[EPDr]{nopodf}}. Counts 
+\item{\code{nopodf}}{nopodf Object of class \code{\link[EPDr]{nopodf-class}}. Counts 
 of no-biological particles in vector and table format.}
 }}
 

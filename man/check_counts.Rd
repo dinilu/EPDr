@@ -11,14 +11,14 @@ check_counts(x)
 \S4method{check_counts}{epd.entity.df}(x)
 }
 \arguments{
-\item{x}{epd.entity.df \code{\link[EPDr]{epd.entity.df}} object.}
+\item{x}{epd.entity.df \code{\link[EPDr]{epd.entity.df-class}} object.}
 }
 \value{
 Logical value indicating whether the object has a default 
 chronology (TRUE) or not (FALSE).
 }
 \description{
-The function check \code{\link[EPDr]{epd.entity.df}} objects (with
+The function check \code{\link[EPDr]{epd.entity.df-class}} objects (with
 slot @commdf@counts) to see if there are counts data on it.
 }
 \examples{

@@ -62,7 +62,7 @@ table or set of tables that are conveniently combined if necessary.
 }
 \section{get_geochron}{
 
-This function returns a \code{\link[EPDr]{geochron}} object, that store 
+This function returns a \code{\link[EPDr]{geochron-class}} object, that store 
 information from different tables for a particular entity.
 }
 

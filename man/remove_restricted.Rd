@@ -7,15 +7,15 @@
 remove_restricted(list)
 }
 \arguments{
-\item{list}{List of EPDr objects (\code{\link[EPDr]{epd.entity.df}}, or
-\code{\link[EPDr]{epd.entity}}).}
+\item{list}{List of EPDr objects (\code{\link[EPDr]{epd.entity.df-class}}, or
+\code{\link[EPDr]{epd.entity-class}}).}
 }
 \value{
 List of EPDr objects.
 }
 \description{
 This function is designed to work with list of EPDr objects
-(\code{\link[EPDr]{epd.entity.df}}). The function parses all the elements
+(\code{\link[EPDr]{epd.entity.df-class}}). The function parses all the elements
 on the list and remove those with restriction on their use. See
 \code{\link[EPDr]{check_restriction}}.
 }

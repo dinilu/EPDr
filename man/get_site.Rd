@@ -63,7 +63,7 @@ and 3rd level region code (poldiv3_).}
 information code.}
 }
 \value{
-\code{\link[EPDr]{site}} object. This is an EPDr object 
+\code{\link[EPDr]{site-class}} object. This is an EPDr object 
 with information from different tables. See documentation of the EPD: 
 \url{http://www.europeanpollendatabase.net/data/downloads/image/pollen-database-manual-20071011.doc}).
 }
@@ -77,7 +77,7 @@ depending on the piece of information they retrieve.
 }
 \section{get_site}{
 
-This function returns a \code{\link[EPDr]{site}} object with several 
+This function returns a \code{\link[EPDr]{site-class}} object with several 
 information from the rest of the functions in the group for a 
 particular entity.
 }
